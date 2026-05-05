@@ -15,6 +15,8 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DivisionsIndexRouteImport } from './routes/divisions.index'
+import { Route as PortalSignupRouteImport } from './routes/portal.signup'
+import { Route as PortalLoginRouteImport } from './routes/portal.login'
 import { Route as DivisionsTechnologyRouteImport } from './routes/divisions.technology'
 import { Route as DivisionsRealEstateRouteImport } from './routes/divisions.real-estate'
 import { Route as DivisionsLogisticsRouteImport } from './routes/divisions.logistics'
@@ -52,6 +54,16 @@ const DivisionsIndexRoute = DivisionsIndexRouteImport.update({
   path: '/divisions/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PortalSignupRoute = PortalSignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => PortalRoute,
+} as any)
+const PortalLoginRoute = PortalLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => PortalRoute,
+} as any)
 const DivisionsTechnologyRoute = DivisionsTechnologyRouteImport.update({
   id: '/divisions/technology',
   path: '/divisions/technology',
@@ -87,7 +99,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
-  '/portal': typeof PortalRoute
+  '/portal': typeof PortalRouteWithChildren
   '/services': typeof ServicesRoute
   '/divisions/agritech': typeof DivisionsAgritechRoute
   '/divisions/innovation-lab': typeof DivisionsInnovationLabRoute
@@ -95,13 +107,15 @@ export interface FileRoutesByFullPath {
   '/divisions/logistics': typeof DivisionsLogisticsRoute
   '/divisions/real-estate': typeof DivisionsRealEstateRoute
   '/divisions/technology': typeof DivisionsTechnologyRoute
+  '/portal/login': typeof PortalLoginRoute
+  '/portal/signup': typeof PortalSignupRoute
   '/divisions/': typeof DivisionsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
-  '/portal': typeof PortalRoute
+  '/portal': typeof PortalRouteWithChildren
   '/services': typeof ServicesRoute
   '/divisions/agritech': typeof DivisionsAgritechRoute
   '/divisions/innovation-lab': typeof DivisionsInnovationLabRoute
@@ -109,6 +123,8 @@ export interface FileRoutesByTo {
   '/divisions/logistics': typeof DivisionsLogisticsRoute
   '/divisions/real-estate': typeof DivisionsRealEstateRoute
   '/divisions/technology': typeof DivisionsTechnologyRoute
+  '/portal/login': typeof PortalLoginRoute
+  '/portal/signup': typeof PortalSignupRoute
   '/divisions': typeof DivisionsIndexRoute
 }
 export interface FileRoutesById {
@@ -116,7 +132,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
-  '/portal': typeof PortalRoute
+  '/portal': typeof PortalRouteWithChildren
   '/services': typeof ServicesRoute
   '/divisions/agritech': typeof DivisionsAgritechRoute
   '/divisions/innovation-lab': typeof DivisionsInnovationLabRoute
@@ -124,6 +140,8 @@ export interface FileRoutesById {
   '/divisions/logistics': typeof DivisionsLogisticsRoute
   '/divisions/real-estate': typeof DivisionsRealEstateRoute
   '/divisions/technology': typeof DivisionsTechnologyRoute
+  '/portal/login': typeof PortalLoginRoute
+  '/portal/signup': typeof PortalSignupRoute
   '/divisions/': typeof DivisionsIndexRoute
 }
 export interface FileRouteTypes {
@@ -140,6 +158,8 @@ export interface FileRouteTypes {
     | '/divisions/logistics'
     | '/divisions/real-estate'
     | '/divisions/technology'
+    | '/portal/login'
+    | '/portal/signup'
     | '/divisions/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -154,6 +174,8 @@ export interface FileRouteTypes {
     | '/divisions/logistics'
     | '/divisions/real-estate'
     | '/divisions/technology'
+    | '/portal/login'
+    | '/portal/signup'
     | '/divisions'
   id:
     | '__root__'
@@ -168,6 +190,8 @@ export interface FileRouteTypes {
     | '/divisions/logistics'
     | '/divisions/real-estate'
     | '/divisions/technology'
+    | '/portal/login'
+    | '/portal/signup'
     | '/divisions/'
   fileRoutesById: FileRoutesById
 }
@@ -175,7 +199,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   ContactRoute: typeof ContactRoute
-  PortalRoute: typeof PortalRoute
+  PortalRoute: typeof PortalRouteWithChildren
   ServicesRoute: typeof ServicesRoute
   DivisionsAgritechRoute: typeof DivisionsAgritechRoute
   DivisionsInnovationLabRoute: typeof DivisionsInnovationLabRoute
@@ -230,6 +254,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DivisionsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/portal/signup': {
+      id: '/portal/signup'
+      path: '/signup'
+      fullPath: '/portal/signup'
+      preLoaderRoute: typeof PortalSignupRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/portal/login': {
+      id: '/portal/login'
+      path: '/login'
+      fullPath: '/portal/login'
+      preLoaderRoute: typeof PortalLoginRouteImport
+      parentRoute: typeof PortalRoute
+    }
     '/divisions/technology': {
       id: '/divisions/technology'
       path: '/divisions/technology'
@@ -275,11 +313,24 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface PortalRouteChildren {
+  PortalLoginRoute: typeof PortalLoginRoute
+  PortalSignupRoute: typeof PortalSignupRoute
+}
+
+const PortalRouteChildren: PortalRouteChildren = {
+  PortalLoginRoute: PortalLoginRoute,
+  PortalSignupRoute: PortalSignupRoute,
+}
+
+const PortalRouteWithChildren =
+  PortalRoute._addFileChildren(PortalRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   ContactRoute: ContactRoute,
-  PortalRoute: PortalRoute,
+  PortalRoute: PortalRouteWithChildren,
   ServicesRoute: ServicesRoute,
   DivisionsAgritechRoute: DivisionsAgritechRoute,
   DivisionsInnovationLabRoute: DivisionsInnovationLabRoute,
