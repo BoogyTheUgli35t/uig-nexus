@@ -9,38 +9,301 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ServicesRouteImport } from './routes/services'
+import { Route as PortalRouteImport } from './routes/portal'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as PortalRouteImport } from './routes/_portal'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DivisionsIndexRouteImport } from './routes/divisions.index'
+import { Route as PortalSignupRouteImport } from './routes/portal.signup'
+import { Route as PortalLoginRouteImport } from './routes/portal.login'
+import { Route as DivisionsTechnologyRouteImport } from './routes/divisions.technology'
+import { Route as DivisionsRealEstateRouteImport } from './routes/divisions.real-estate'
+import { Route as DivisionsLogisticsRouteImport } from './routes/divisions.logistics'
+import { Route as DivisionsIntelligenceRouteImport } from './routes/divisions.intelligence'
+import { Route as DivisionsInnovationLabRouteImport } from './routes/divisions.innovation-lab'
+import { Route as DivisionsAgritechRouteImport } from './routes/divisions.agritech'
+import { Route as PortalPortalSettingsRouteImport } from './routes/_portal.portal.settings'
+import { Route as PortalPortalDashboardRouteImport } from './routes/_portal.portal.dashboard'
+import { Route as PortalPortalProjectsIndexRouteImport } from './routes/_portal.portal.projects.index'
+import { Route as PortalPortalProjectsIdRouteImport } from './routes/_portal.portal.projects.$id'
 
+const ServicesRoute = ServicesRouteImport.update({
+  id: '/services',
+  path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortalRoute = PortalRouteImport.update({
+  id: '/portal',
+  path: '/portal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortalRoute = PortalRouteImport.update({
+  id: '/_portal',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DivisionsIndexRoute = DivisionsIndexRouteImport.update({
+  id: '/divisions/',
+  path: '/divisions/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortalSignupRoute = PortalSignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => PortalRoute,
+} as any)
+const PortalLoginRoute = PortalLoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => PortalRoute,
+} as any)
+const DivisionsTechnologyRoute = DivisionsTechnologyRouteImport.update({
+  id: '/divisions/technology',
+  path: '/divisions/technology',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DivisionsRealEstateRoute = DivisionsRealEstateRouteImport.update({
+  id: '/divisions/real-estate',
+  path: '/divisions/real-estate',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DivisionsLogisticsRoute = DivisionsLogisticsRouteImport.update({
+  id: '/divisions/logistics',
+  path: '/divisions/logistics',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DivisionsIntelligenceRoute = DivisionsIntelligenceRouteImport.update({
+  id: '/divisions/intelligence',
+  path: '/divisions/intelligence',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DivisionsInnovationLabRoute = DivisionsInnovationLabRouteImport.update({
+  id: '/divisions/innovation-lab',
+  path: '/divisions/innovation-lab',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DivisionsAgritechRoute = DivisionsAgritechRouteImport.update({
+  id: '/divisions/agritech',
+  path: '/divisions/agritech',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortalPortalSettingsRoute = PortalPortalSettingsRouteImport.update({
+  id: '/portal/settings',
+  path: '/portal/settings',
+  getParentRoute: () => PortalRoute,
+} as any)
+const PortalPortalDashboardRoute = PortalPortalDashboardRouteImport.update({
+  id: '/portal/dashboard',
+  path: '/portal/dashboard',
+  getParentRoute: () => PortalRoute,
+} as any)
+const PortalPortalProjectsIndexRoute =
+  PortalPortalProjectsIndexRouteImport.update({
+    id: '/portal/projects/',
+    path: '/portal/projects/',
+    getParentRoute: () => PortalRoute,
+  } as any)
+const PortalPortalProjectsIdRoute = PortalPortalProjectsIdRouteImport.update({
+  id: '/portal/projects/$id',
+  path: '/portal/projects/$id',
+  getParentRoute: () => PortalRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
+  '/portal': typeof PortalRouteWithChildren
+  '/services': typeof ServicesRoute
+  '/divisions/agritech': typeof DivisionsAgritechRoute
+  '/divisions/innovation-lab': typeof DivisionsInnovationLabRoute
+  '/divisions/intelligence': typeof DivisionsIntelligenceRoute
+  '/divisions/logistics': typeof DivisionsLogisticsRoute
+  '/divisions/real-estate': typeof DivisionsRealEstateRoute
+  '/divisions/technology': typeof DivisionsTechnologyRoute
+  '/portal/login': typeof PortalLoginRoute
+  '/portal/signup': typeof PortalSignupRoute
+  '/divisions/': typeof DivisionsIndexRoute
+  '/portal/dashboard': typeof PortalPortalDashboardRoute
+  '/portal/settings': typeof PortalPortalSettingsRoute
+  '/portal/projects/$id': typeof PortalPortalProjectsIdRoute
+  '/portal/projects/': typeof PortalPortalProjectsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
+  '/portal': typeof PortalRouteWithChildren
+  '/services': typeof ServicesRoute
+  '/divisions/agritech': typeof DivisionsAgritechRoute
+  '/divisions/innovation-lab': typeof DivisionsInnovationLabRoute
+  '/divisions/intelligence': typeof DivisionsIntelligenceRoute
+  '/divisions/logistics': typeof DivisionsLogisticsRoute
+  '/divisions/real-estate': typeof DivisionsRealEstateRoute
+  '/divisions/technology': typeof DivisionsTechnologyRoute
+  '/portal/login': typeof PortalLoginRoute
+  '/portal/signup': typeof PortalSignupRoute
+  '/divisions': typeof DivisionsIndexRoute
+  '/portal/dashboard': typeof PortalPortalDashboardRoute
+  '/portal/settings': typeof PortalPortalSettingsRoute
+  '/portal/projects/$id': typeof PortalPortalProjectsIdRoute
+  '/portal/projects': typeof PortalPortalProjectsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_portal': typeof PortalRouteWithChildren
+  '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
+  '/portal': typeof PortalRouteWithChildren
+  '/services': typeof ServicesRoute
+  '/divisions/agritech': typeof DivisionsAgritechRoute
+  '/divisions/innovation-lab': typeof DivisionsInnovationLabRoute
+  '/divisions/intelligence': typeof DivisionsIntelligenceRoute
+  '/divisions/logistics': typeof DivisionsLogisticsRoute
+  '/divisions/real-estate': typeof DivisionsRealEstateRoute
+  '/divisions/technology': typeof DivisionsTechnologyRoute
+  '/portal/login': typeof PortalLoginRoute
+  '/portal/signup': typeof PortalSignupRoute
+  '/divisions/': typeof DivisionsIndexRoute
+  '/_portal/portal/dashboard': typeof PortalPortalDashboardRoute
+  '/_portal/portal/settings': typeof PortalPortalSettingsRoute
+  '/_portal/portal/projects/$id': typeof PortalPortalProjectsIdRoute
+  '/_portal/portal/projects/': typeof PortalPortalProjectsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/contact'
+    | '/portal'
+    | '/services'
+    | '/divisions/agritech'
+    | '/divisions/innovation-lab'
+    | '/divisions/intelligence'
+    | '/divisions/logistics'
+    | '/divisions/real-estate'
+    | '/divisions/technology'
+    | '/portal/login'
+    | '/portal/signup'
+    | '/divisions/'
+    | '/portal/dashboard'
+    | '/portal/settings'
+    | '/portal/projects/$id'
+    | '/portal/projects/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/about'
+    | '/contact'
+    | '/portal'
+    | '/services'
+    | '/divisions/agritech'
+    | '/divisions/innovation-lab'
+    | '/divisions/intelligence'
+    | '/divisions/logistics'
+    | '/divisions/real-estate'
+    | '/divisions/technology'
+    | '/portal/login'
+    | '/portal/signup'
+    | '/divisions'
+    | '/portal/dashboard'
+    | '/portal/settings'
+    | '/portal/projects/$id'
+    | '/portal/projects'
+  id:
+    | '__root__'
+    | '/'
+    | '/_portal'
+    | '/about'
+    | '/contact'
+    | '/portal'
+    | '/services'
+    | '/divisions/agritech'
+    | '/divisions/innovation-lab'
+    | '/divisions/intelligence'
+    | '/divisions/logistics'
+    | '/divisions/real-estate'
+    | '/divisions/technology'
+    | '/portal/login'
+    | '/portal/signup'
+    | '/divisions/'
+    | '/_portal/portal/dashboard'
+    | '/_portal/portal/settings'
+    | '/_portal/portal/projects/$id'
+    | '/_portal/portal/projects/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  PortalRoute: typeof PortalRouteWithChildren
+  AboutRoute: typeof AboutRoute
+  ContactRoute: typeof ContactRoute
+  PortalRoute: typeof PortalRouteWithChildren
+  ServicesRoute: typeof ServicesRoute
+  DivisionsAgritechRoute: typeof DivisionsAgritechRoute
+  DivisionsInnovationLabRoute: typeof DivisionsInnovationLabRoute
+  DivisionsIntelligenceRoute: typeof DivisionsIntelligenceRoute
+  DivisionsLogisticsRoute: typeof DivisionsLogisticsRoute
+  DivisionsRealEstateRoute: typeof DivisionsRealEstateRoute
+  DivisionsTechnologyRoute: typeof DivisionsTechnologyRoute
+  DivisionsIndexRoute: typeof DivisionsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/services': {
+      id: '/services'
+      path: '/services'
+      fullPath: '/services'
+      preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portal': {
+      id: '/portal'
+      path: '/portal'
+      fullPath: '/portal'
+      preLoaderRoute: typeof PortalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_portal': {
+      id: '/_portal'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof PortalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,11 +311,144 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/divisions/': {
+      id: '/divisions/'
+      path: '/divisions'
+      fullPath: '/divisions/'
+      preLoaderRoute: typeof DivisionsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portal/signup': {
+      id: '/portal/signup'
+      path: '/signup'
+      fullPath: '/portal/signup'
+      preLoaderRoute: typeof PortalSignupRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/portal/login': {
+      id: '/portal/login'
+      path: '/login'
+      fullPath: '/portal/login'
+      preLoaderRoute: typeof PortalLoginRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/divisions/technology': {
+      id: '/divisions/technology'
+      path: '/divisions/technology'
+      fullPath: '/divisions/technology'
+      preLoaderRoute: typeof DivisionsTechnologyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/divisions/real-estate': {
+      id: '/divisions/real-estate'
+      path: '/divisions/real-estate'
+      fullPath: '/divisions/real-estate'
+      preLoaderRoute: typeof DivisionsRealEstateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/divisions/logistics': {
+      id: '/divisions/logistics'
+      path: '/divisions/logistics'
+      fullPath: '/divisions/logistics'
+      preLoaderRoute: typeof DivisionsLogisticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/divisions/intelligence': {
+      id: '/divisions/intelligence'
+      path: '/divisions/intelligence'
+      fullPath: '/divisions/intelligence'
+      preLoaderRoute: typeof DivisionsIntelligenceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/divisions/innovation-lab': {
+      id: '/divisions/innovation-lab'
+      path: '/divisions/innovation-lab'
+      fullPath: '/divisions/innovation-lab'
+      preLoaderRoute: typeof DivisionsInnovationLabRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/divisions/agritech': {
+      id: '/divisions/agritech'
+      path: '/divisions/agritech'
+      fullPath: '/divisions/agritech'
+      preLoaderRoute: typeof DivisionsAgritechRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_portal/portal/settings': {
+      id: '/_portal/portal/settings'
+      path: '/portal/settings'
+      fullPath: '/portal/settings'
+      preLoaderRoute: typeof PortalPortalSettingsRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/_portal/portal/dashboard': {
+      id: '/_portal/portal/dashboard'
+      path: '/portal/dashboard'
+      fullPath: '/portal/dashboard'
+      preLoaderRoute: typeof PortalPortalDashboardRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/_portal/portal/projects/': {
+      id: '/_portal/portal/projects/'
+      path: '/portal/projects'
+      fullPath: '/portal/projects/'
+      preLoaderRoute: typeof PortalPortalProjectsIndexRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/_portal/portal/projects/$id': {
+      id: '/_portal/portal/projects/$id'
+      path: '/portal/projects/$id'
+      fullPath: '/portal/projects/$id'
+      preLoaderRoute: typeof PortalPortalProjectsIdRouteImport
+      parentRoute: typeof PortalRoute
+    }
   }
 }
 
+interface PortalRouteChildren {
+  PortalPortalDashboardRoute: typeof PortalPortalDashboardRoute
+  PortalPortalSettingsRoute: typeof PortalPortalSettingsRoute
+  PortalPortalProjectsIdRoute: typeof PortalPortalProjectsIdRoute
+  PortalPortalProjectsIndexRoute: typeof PortalPortalProjectsIndexRoute
+}
+
+const PortalRouteChildren: PortalRouteChildren = {
+  PortalPortalDashboardRoute: PortalPortalDashboardRoute,
+  PortalPortalSettingsRoute: PortalPortalSettingsRoute,
+  PortalPortalProjectsIdRoute: PortalPortalProjectsIdRoute,
+  PortalPortalProjectsIndexRoute: PortalPortalProjectsIndexRoute,
+}
+
+const PortalRouteWithChildren =
+  PortalRoute._addFileChildren(PortalRouteChildren)
+
+interface PortalRouteChildren {
+  PortalLoginRoute: typeof PortalLoginRoute
+  PortalSignupRoute: typeof PortalSignupRoute
+}
+
+const PortalRouteChildren: PortalRouteChildren = {
+  PortalLoginRoute: PortalLoginRoute,
+  PortalSignupRoute: PortalSignupRoute,
+}
+
+const PortalRouteWithChildren =
+  PortalRoute._addFileChildren(PortalRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  PortalRoute: PortalRouteWithChildren,
+  AboutRoute: AboutRoute,
+  ContactRoute: ContactRoute,
+  PortalRoute: PortalRouteWithChildren,
+  ServicesRoute: ServicesRoute,
+  DivisionsAgritechRoute: DivisionsAgritechRoute,
+  DivisionsInnovationLabRoute: DivisionsInnovationLabRoute,
+  DivisionsIntelligenceRoute: DivisionsIntelligenceRoute,
+  DivisionsLogisticsRoute: DivisionsLogisticsRoute,
+  DivisionsRealEstateRoute: DivisionsRealEstateRoute,
+  DivisionsTechnologyRoute: DivisionsTechnologyRoute,
+  DivisionsIndexRoute: DivisionsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
