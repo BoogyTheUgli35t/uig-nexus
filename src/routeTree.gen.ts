@@ -9,10 +9,34 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as ServicesRouteImport } from './routes/services'
+import { Route as PortalRouteImport } from './routes/portal'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DivisionsIndexRouteImport } from './routes/divisions.index'
+import { Route as DivisionsTechnologyRouteImport } from './routes/divisions.technology'
+import { Route as DivisionsRealEstateRouteImport } from './routes/divisions.real-estate'
+import { Route as DivisionsLogisticsRouteImport } from './routes/divisions.logistics'
+import { Route as DivisionsIntelligenceRouteImport } from './routes/divisions.intelligence'
+import { Route as DivisionsInnovationLabRouteImport } from './routes/divisions.innovation-lab'
+import { Route as DivisionsAgritechRouteImport } from './routes/divisions.agritech'
 
+const ServicesRoute = ServicesRouteImport.update({
+  id: '/services',
+  path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortalRoute = PortalRouteImport.update({
+  id: '/portal',
+  path: '/portal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -28,39 +52,163 @@ const DivisionsIndexRoute = DivisionsIndexRouteImport.update({
   path: '/divisions/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DivisionsTechnologyRoute = DivisionsTechnologyRouteImport.update({
+  id: '/divisions/technology',
+  path: '/divisions/technology',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DivisionsRealEstateRoute = DivisionsRealEstateRouteImport.update({
+  id: '/divisions/real-estate',
+  path: '/divisions/real-estate',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DivisionsLogisticsRoute = DivisionsLogisticsRouteImport.update({
+  id: '/divisions/logistics',
+  path: '/divisions/logistics',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DivisionsIntelligenceRoute = DivisionsIntelligenceRouteImport.update({
+  id: '/divisions/intelligence',
+  path: '/divisions/intelligence',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DivisionsInnovationLabRoute = DivisionsInnovationLabRouteImport.update({
+  id: '/divisions/innovation-lab',
+  path: '/divisions/innovation-lab',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DivisionsAgritechRoute = DivisionsAgritechRouteImport.update({
+  id: '/divisions/agritech',
+  path: '/divisions/agritech',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
+  '/portal': typeof PortalRoute
+  '/services': typeof ServicesRoute
+  '/divisions/agritech': typeof DivisionsAgritechRoute
+  '/divisions/innovation-lab': typeof DivisionsInnovationLabRoute
+  '/divisions/intelligence': typeof DivisionsIntelligenceRoute
+  '/divisions/logistics': typeof DivisionsLogisticsRoute
+  '/divisions/real-estate': typeof DivisionsRealEstateRoute
+  '/divisions/technology': typeof DivisionsTechnologyRoute
   '/divisions/': typeof DivisionsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
+  '/portal': typeof PortalRoute
+  '/services': typeof ServicesRoute
+  '/divisions/agritech': typeof DivisionsAgritechRoute
+  '/divisions/innovation-lab': typeof DivisionsInnovationLabRoute
+  '/divisions/intelligence': typeof DivisionsIntelligenceRoute
+  '/divisions/logistics': typeof DivisionsLogisticsRoute
+  '/divisions/real-estate': typeof DivisionsRealEstateRoute
+  '/divisions/technology': typeof DivisionsTechnologyRoute
   '/divisions': typeof DivisionsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
+  '/portal': typeof PortalRoute
+  '/services': typeof ServicesRoute
+  '/divisions/agritech': typeof DivisionsAgritechRoute
+  '/divisions/innovation-lab': typeof DivisionsInnovationLabRoute
+  '/divisions/intelligence': typeof DivisionsIntelligenceRoute
+  '/divisions/logistics': typeof DivisionsLogisticsRoute
+  '/divisions/real-estate': typeof DivisionsRealEstateRoute
+  '/divisions/technology': typeof DivisionsTechnologyRoute
   '/divisions/': typeof DivisionsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/divisions/'
+  fullPaths:
+    | '/'
+    | '/about'
+    | '/contact'
+    | '/portal'
+    | '/services'
+    | '/divisions/agritech'
+    | '/divisions/innovation-lab'
+    | '/divisions/intelligence'
+    | '/divisions/logistics'
+    | '/divisions/real-estate'
+    | '/divisions/technology'
+    | '/divisions/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/divisions'
-  id: '__root__' | '/' | '/about' | '/divisions/'
+  to:
+    | '/'
+    | '/about'
+    | '/contact'
+    | '/portal'
+    | '/services'
+    | '/divisions/agritech'
+    | '/divisions/innovation-lab'
+    | '/divisions/intelligence'
+    | '/divisions/logistics'
+    | '/divisions/real-estate'
+    | '/divisions/technology'
+    | '/divisions'
+  id:
+    | '__root__'
+    | '/'
+    | '/about'
+    | '/contact'
+    | '/portal'
+    | '/services'
+    | '/divisions/agritech'
+    | '/divisions/innovation-lab'
+    | '/divisions/intelligence'
+    | '/divisions/logistics'
+    | '/divisions/real-estate'
+    | '/divisions/technology'
+    | '/divisions/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  ContactRoute: typeof ContactRoute
+  PortalRoute: typeof PortalRoute
+  ServicesRoute: typeof ServicesRoute
+  DivisionsAgritechRoute: typeof DivisionsAgritechRoute
+  DivisionsInnovationLabRoute: typeof DivisionsInnovationLabRoute
+  DivisionsIntelligenceRoute: typeof DivisionsIntelligenceRoute
+  DivisionsLogisticsRoute: typeof DivisionsLogisticsRoute
+  DivisionsRealEstateRoute: typeof DivisionsRealEstateRoute
+  DivisionsTechnologyRoute: typeof DivisionsTechnologyRoute
   DivisionsIndexRoute: typeof DivisionsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/services': {
+      id: '/services'
+      path: '/services'
+      fullPath: '/services'
+      preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portal': {
+      id: '/portal'
+      path: '/portal'
+      fullPath: '/portal'
+      preLoaderRoute: typeof PortalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
@@ -82,12 +230,63 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DivisionsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/divisions/technology': {
+      id: '/divisions/technology'
+      path: '/divisions/technology'
+      fullPath: '/divisions/technology'
+      preLoaderRoute: typeof DivisionsTechnologyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/divisions/real-estate': {
+      id: '/divisions/real-estate'
+      path: '/divisions/real-estate'
+      fullPath: '/divisions/real-estate'
+      preLoaderRoute: typeof DivisionsRealEstateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/divisions/logistics': {
+      id: '/divisions/logistics'
+      path: '/divisions/logistics'
+      fullPath: '/divisions/logistics'
+      preLoaderRoute: typeof DivisionsLogisticsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/divisions/intelligence': {
+      id: '/divisions/intelligence'
+      path: '/divisions/intelligence'
+      fullPath: '/divisions/intelligence'
+      preLoaderRoute: typeof DivisionsIntelligenceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/divisions/innovation-lab': {
+      id: '/divisions/innovation-lab'
+      path: '/divisions/innovation-lab'
+      fullPath: '/divisions/innovation-lab'
+      preLoaderRoute: typeof DivisionsInnovationLabRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/divisions/agritech': {
+      id: '/divisions/agritech'
+      path: '/divisions/agritech'
+      fullPath: '/divisions/agritech'
+      preLoaderRoute: typeof DivisionsAgritechRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  ContactRoute: ContactRoute,
+  PortalRoute: PortalRoute,
+  ServicesRoute: ServicesRoute,
+  DivisionsAgritechRoute: DivisionsAgritechRoute,
+  DivisionsInnovationLabRoute: DivisionsInnovationLabRoute,
+  DivisionsIntelligenceRoute: DivisionsIntelligenceRoute,
+  DivisionsLogisticsRoute: DivisionsLogisticsRoute,
+  DivisionsRealEstateRoute: DivisionsRealEstateRoute,
+  DivisionsTechnologyRoute: DivisionsTechnologyRoute,
   DivisionsIndexRoute: DivisionsIndexRoute,
 }
 export const routeTree = rootRouteImport
