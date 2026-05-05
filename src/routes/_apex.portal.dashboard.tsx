@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { getDashboard } from "@/server/portal.functions";
 import { FolderKanban, CheckSquare, FileText, Sparkles, ArrowRight } from "lucide-react";
 
-export const Route = createFileRoute("/_portal/portal/dashboard")({
+export const Route = createFileRoute("/_apex/portal/dashboard")({
   head: () => ({ meta: [{ title: "Dashboard — UIG Apex" }, { name: "robots", content: "noindex" }] }),
   component: DashboardPage,
 });
