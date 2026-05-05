@@ -3,7 +3,7 @@ import { ArrowRight, Cpu, Sprout, Building2, Truck, Brain, Beaker } from "lucide
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { PageHero, Section, CTABand } from "@/components/site/sections";
 
-export const Route = createFileRoute("/divisions")({
+export const Route = createFileRoute("/divisions/")({
   head: () => ({
     meta: [
       { title: "UIG Divisions — Six Divisions, One Vision" },
