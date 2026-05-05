@@ -13,6 +13,7 @@ import { Route as ServicesRouteImport } from './routes/services'
 import { Route as PortalRouteImport } from './routes/portal'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as PortalRouteImport } from './routes/_portal'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DivisionsIndexRouteImport } from './routes/divisions.index'
 import { Route as PortalSignupRouteImport } from './routes/portal.signup'
@@ -23,6 +24,10 @@ import { Route as DivisionsLogisticsRouteImport } from './routes/divisions.logis
 import { Route as DivisionsIntelligenceRouteImport } from './routes/divisions.intelligence'
 import { Route as DivisionsInnovationLabRouteImport } from './routes/divisions.innovation-lab'
 import { Route as DivisionsAgritechRouteImport } from './routes/divisions.agritech'
+import { Route as PortalPortalSettingsRouteImport } from './routes/_portal.portal.settings'
+import { Route as PortalPortalDashboardRouteImport } from './routes/_portal.portal.dashboard'
+import { Route as PortalPortalProjectsIndexRouteImport } from './routes/_portal.portal.projects.index'
+import { Route as PortalPortalProjectsIdRouteImport } from './routes/_portal.portal.projects.$id'
 
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
@@ -42,6 +47,10 @@ const ContactRoute = ContactRouteImport.update({
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortalRoute = PortalRouteImport.update({
+  id: '/_portal',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -94,6 +103,27 @@ const DivisionsAgritechRoute = DivisionsAgritechRouteImport.update({
   path: '/divisions/agritech',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PortalPortalSettingsRoute = PortalPortalSettingsRouteImport.update({
+  id: '/portal/settings',
+  path: '/portal/settings',
+  getParentRoute: () => PortalRoute,
+} as any)
+const PortalPortalDashboardRoute = PortalPortalDashboardRouteImport.update({
+  id: '/portal/dashboard',
+  path: '/portal/dashboard',
+  getParentRoute: () => PortalRoute,
+} as any)
+const PortalPortalProjectsIndexRoute =
+  PortalPortalProjectsIndexRouteImport.update({
+    id: '/portal/projects/',
+    path: '/portal/projects/',
+    getParentRoute: () => PortalRoute,
+  } as any)
+const PortalPortalProjectsIdRoute = PortalPortalProjectsIdRouteImport.update({
+  id: '/portal/projects/$id',
+  path: '/portal/projects/$id',
+  getParentRoute: () => PortalRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -110,6 +140,10 @@ export interface FileRoutesByFullPath {
   '/portal/login': typeof PortalLoginRoute
   '/portal/signup': typeof PortalSignupRoute
   '/divisions/': typeof DivisionsIndexRoute
+  '/portal/dashboard': typeof PortalPortalDashboardRoute
+  '/portal/settings': typeof PortalPortalSettingsRoute
+  '/portal/projects/$id': typeof PortalPortalProjectsIdRoute
+  '/portal/projects/': typeof PortalPortalProjectsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -126,10 +160,15 @@ export interface FileRoutesByTo {
   '/portal/login': typeof PortalLoginRoute
   '/portal/signup': typeof PortalSignupRoute
   '/divisions': typeof DivisionsIndexRoute
+  '/portal/dashboard': typeof PortalPortalDashboardRoute
+  '/portal/settings': typeof PortalPortalSettingsRoute
+  '/portal/projects/$id': typeof PortalPortalProjectsIdRoute
+  '/portal/projects': typeof PortalPortalProjectsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_portal': typeof PortalRouteWithChildren
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/portal': typeof PortalRouteWithChildren
@@ -143,6 +182,10 @@ export interface FileRoutesById {
   '/portal/login': typeof PortalLoginRoute
   '/portal/signup': typeof PortalSignupRoute
   '/divisions/': typeof DivisionsIndexRoute
+  '/_portal/portal/dashboard': typeof PortalPortalDashboardRoute
+  '/_portal/portal/settings': typeof PortalPortalSettingsRoute
+  '/_portal/portal/projects/$id': typeof PortalPortalProjectsIdRoute
+  '/_portal/portal/projects/': typeof PortalPortalProjectsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -161,6 +204,10 @@ export interface FileRouteTypes {
     | '/portal/login'
     | '/portal/signup'
     | '/divisions/'
+    | '/portal/dashboard'
+    | '/portal/settings'
+    | '/portal/projects/$id'
+    | '/portal/projects/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -177,9 +224,14 @@ export interface FileRouteTypes {
     | '/portal/login'
     | '/portal/signup'
     | '/divisions'
+    | '/portal/dashboard'
+    | '/portal/settings'
+    | '/portal/projects/$id'
+    | '/portal/projects'
   id:
     | '__root__'
     | '/'
+    | '/_portal'
     | '/about'
     | '/contact'
     | '/portal'
@@ -193,10 +245,15 @@ export interface FileRouteTypes {
     | '/portal/login'
     | '/portal/signup'
     | '/divisions/'
+    | '/_portal/portal/dashboard'
+    | '/_portal/portal/settings'
+    | '/_portal/portal/projects/$id'
+    | '/_portal/portal/projects/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  PortalRoute: typeof PortalRouteWithChildren
   AboutRoute: typeof AboutRoute
   ContactRoute: typeof ContactRoute
   PortalRoute: typeof PortalRouteWithChildren
@@ -238,6 +295,13 @@ declare module '@tanstack/react-router' {
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_portal': {
+      id: '/_portal'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof PortalRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -310,8 +374,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DivisionsAgritechRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_portal/portal/settings': {
+      id: '/_portal/portal/settings'
+      path: '/portal/settings'
+      fullPath: '/portal/settings'
+      preLoaderRoute: typeof PortalPortalSettingsRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/_portal/portal/dashboard': {
+      id: '/_portal/portal/dashboard'
+      path: '/portal/dashboard'
+      fullPath: '/portal/dashboard'
+      preLoaderRoute: typeof PortalPortalDashboardRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/_portal/portal/projects/': {
+      id: '/_portal/portal/projects/'
+      path: '/portal/projects'
+      fullPath: '/portal/projects/'
+      preLoaderRoute: typeof PortalPortalProjectsIndexRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/_portal/portal/projects/$id': {
+      id: '/_portal/portal/projects/$id'
+      path: '/portal/projects/$id'
+      fullPath: '/portal/projects/$id'
+      preLoaderRoute: typeof PortalPortalProjectsIdRouteImport
+      parentRoute: typeof PortalRoute
+    }
   }
 }
+
+interface PortalRouteChildren {
+  PortalPortalDashboardRoute: typeof PortalPortalDashboardRoute
+  PortalPortalSettingsRoute: typeof PortalPortalSettingsRoute
+  PortalPortalProjectsIdRoute: typeof PortalPortalProjectsIdRoute
+  PortalPortalProjectsIndexRoute: typeof PortalPortalProjectsIndexRoute
+}
+
+const PortalRouteChildren: PortalRouteChildren = {
+  PortalPortalDashboardRoute: PortalPortalDashboardRoute,
+  PortalPortalSettingsRoute: PortalPortalSettingsRoute,
+  PortalPortalProjectsIdRoute: PortalPortalProjectsIdRoute,
+  PortalPortalProjectsIndexRoute: PortalPortalProjectsIndexRoute,
+}
+
+const PortalRouteWithChildren =
+  PortalRoute._addFileChildren(PortalRouteChildren)
 
 interface PortalRouteChildren {
   PortalLoginRoute: typeof PortalLoginRoute
@@ -328,6 +437,7 @@ const PortalRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  PortalRoute: PortalRouteWithChildren,
   AboutRoute: AboutRoute,
   ContactRoute: ContactRoute,
   PortalRoute: PortalRouteWithChildren,
