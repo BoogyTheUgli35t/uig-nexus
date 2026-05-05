@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Logo } from "@/components/site/Logo";
 import { Button } from "@/components/ui/button";
 
-export const Route = createFileRoute("/_portal")({
+export const Route = createFileRoute("/_apex")({
   beforeLoad: async () => {
     if (typeof window === "undefined") return;
     const { data } = await supabase.auth.getSession();

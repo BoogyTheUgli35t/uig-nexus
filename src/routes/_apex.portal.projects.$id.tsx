@@ -12,7 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/_portal/portal/projects/$id")({
+export const Route = createFileRoute("/_apex/portal/projects/$id")({
   head: () => ({ meta: [{ title: "Project — UIG Apex" }, { name: "robots", content: "noindex" }] }),
   component: ProjectDetail,
 });

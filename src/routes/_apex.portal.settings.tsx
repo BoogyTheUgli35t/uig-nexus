@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/_portal/portal/settings")({
+export const Route = createFileRoute("/_apex/portal/settings")({
   head: () => ({ meta: [{ title: "Settings — UIG Apex" }, { name: "robots", content: "noindex" }] }),
   component: SettingsPage,
 });
