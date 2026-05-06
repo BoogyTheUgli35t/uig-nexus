@@ -33,8 +33,11 @@ function SignupPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
-      if (session) navigate({ to: "/portal/dashboard" });
+    const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_IN" && session) {
+        logPortalEvent({ data: { event_type: "sign_in", user_id: session.user.id, email: session.user.email ?? null, metadata: { via: "signup" } } }).catch(() => {});
+        navigate({ to: "/portal/dashboard" });
+      }
     });
     return () => sub.subscription.unsubscribe();
   }, [navigate]);
