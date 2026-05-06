@@ -126,9 +126,6 @@ export const updateTaskStatus = createServerFn({ method: "POST" })
 
 // =============== Audit log ===============
 
-import { supabaseAdmin } from "@/integrations/supabase/client.server";
-import { getRequestHeader, getRequestIP } from "@tanstack/react-start/server";
-
 const AuditEventSchema = z.object({
   event_type: z.enum([
     "sign_in",
