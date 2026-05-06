@@ -121,3 +121,107 @@ export const updateTaskStatus = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
+// =============== Audit log ===============
+
+import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import { getRequestHeader, getRequestIP } from "@tanstack/react-start/server";
+
+const AuditEventSchema = z.object({
+  event_type: z.enum([
+    "sign_in",
+    "sign_out",
+    "access_denied",
+    "role_change",
+    "session_expired",
+    "access_request_submitted",
+  ]),
+  email: z.string().email().optional().nullable(),
+  user_id: z.string().uuid().optional().nullable(),
+  metadata: z.record(z.string(), z.any()).optional(),
+});
+
+export const logPortalEvent = createServerFn({ method: "POST" })
+  .inputValidator((i: unknown) => AuditEventSchema.parse(i))
+  .handler(async ({ data }) => {
+    let ip: string | null = null;
+    let ua: string | null = null;
+    try {
+      ip = getRequestIP({ xForwardedFor: true }) ?? null;
+      ua = getRequestHeader("user-agent") ?? null;
+    } catch {
+      // ignore
+    }
+    const { error } = await supabaseAdmin.from("portal_audit_log").insert({
+      user_id: data.user_id ?? null,
+      email: data.email ?? null,
+      event_type: data.event_type,
+      metadata: data.metadata ?? {},
+      ip_address: ip,
+      user_agent: ua,
+    });
+    if (error) {
+      console.error("[audit] insert failed", error.message);
+      return { ok: false };
+    }
+    return { ok: true };
+  });
+
+export const listAuditLog = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data: roles } = await context.supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", context.userId);
+    if (!roles?.some((r) => r.role === "admin")) {
+      throw new Error("Admins only");
+    }
+    const { data, error } = await supabaseAdmin
+      .from("portal_audit_log")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(200);
+    if (error) throw new Error(error.message);
+    return data ?? [];
+  });
+
+// =============== Access requests ===============
+
+const AccessRequestSchema = z.object({
+  name: z.string().trim().min(1).max(120),
+  email: z.string().trim().email().max(200),
+  requested_role: z.enum(["admin", "staff", "client"]).default("client"),
+  reason: z.string().trim().max(2000).optional().or(z.literal("")),
+  user_id: z.string().uuid().optional().nullable(),
+});
+
+export const submitAccessRequest = createServerFn({ method: "POST" })
+  .inputValidator((i: unknown) => AccessRequestSchema.parse(i))
+  .handler(async ({ data }) => {
+    const { error } = await supabaseAdmin.from("access_requests").insert({
+      user_id: data.user_id ?? null,
+      name: data.name,
+      email: data.email,
+      requested_role: data.requested_role,
+      reason: data.reason || null,
+    });
+    if (error) throw new Error(error.message);
+    await supabaseAdmin.from("portal_audit_log").insert({
+      user_id: data.user_id ?? null,
+      email: data.email,
+      event_type: "access_request_submitted",
+      metadata: { requested_role: data.requested_role },
+    });
+    return { ok: true };
+  });
+
+export const getMyRoles = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data } = await context.supabase
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", context.userId);
+    return { roles: (data ?? []).map((r) => r.role as string), userId: context.userId };
+  });
