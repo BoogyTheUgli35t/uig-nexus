@@ -32,8 +32,11 @@ function LoginPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const { data: sub } = supabase.auth.onAuthStateChange((_e, session) => {
-      if (session) navigate({ to: "/portal/dashboard" });
+    const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "SIGNED_IN" && session) {
+        logPortalEvent({ data: { event_type: "sign_in", user_id: session.user.id, email: session.user.email ?? null } }).catch(() => {});
+        navigate({ to: "/portal/dashboard" });
+      }
     });
     return () => sub.subscription.unsubscribe();
   }, [navigate]);
@@ -43,7 +46,10 @@ function LoginPage() {
     setLoading(true);
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     setLoading(false);
-    if (error) return toast.error(error.message);
+    if (error) {
+      logPortalEvent({ data: { event_type: "access_denied", email, metadata: { reason: error.message, stage: "password_sign_in" } } }).catch(() => {});
+      return toast.error(error.message);
+    }
   }
 
   async function onGoogle() {
