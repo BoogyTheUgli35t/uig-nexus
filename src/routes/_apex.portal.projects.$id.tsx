@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { ArrowLeft, Plus, Upload, FileText, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { getProject, createTask, updateTaskStatus } from "@/server/portal.functions";
+import { getProject, createTask, updateTaskStatus } from "@/lib/portal.functions";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
