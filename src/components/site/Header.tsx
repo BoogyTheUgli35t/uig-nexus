@@ -52,9 +52,12 @@ export function Header() {
           <Link to="/portal" className="text-muted-foreground hover:text-foreground transition" activeProps={{ className: "text-foreground" }}>Portal</Link>
           <Link to="/contact" className="text-muted-foreground hover:text-foreground transition" activeProps={{ className: "text-foreground" }}>Contact</Link>
         </nav>
-        <div className="hidden lg:flex items-center gap-3">
+        <div className="hidden lg:flex items-center gap-2">
           <Button asChild variant="ghost" size="sm">
             <Link to="/portal/login">Sign in</Link>
+          </Button>
+          <Button asChild variant="outline" size="sm">
+            <Link to="/portal/signup">Sign up</Link>
           </Button>
           <Button asChild size="sm" className="bg-gold text-gold-foreground hover:bg-gold/90">
             <Link to="/contact">Partner with UIG</Link>
@@ -88,12 +91,15 @@ export function Header() {
                 {l.label}
               </Link>
             ))}
-            <div className="pt-3 flex gap-2">
-              <Button asChild variant="outline" size="sm" className="flex-1">
+            <div className="pt-3 grid grid-cols-2 gap-2">
+              <Button asChild variant="outline" size="sm">
                 <Link to="/portal/login" onClick={() => setOpen(false)}>Sign in</Link>
               </Button>
-              <Button asChild size="sm" className="flex-1 bg-gold text-gold-foreground hover:bg-gold/90">
-                <Link to="/contact" onClick={() => setOpen(false)}>Partner</Link>
+              <Button asChild variant="outline" size="sm">
+                <Link to="/portal/signup" onClick={() => setOpen(false)}>Sign up</Link>
+              </Button>
+              <Button asChild size="sm" className="col-span-2 bg-gold text-gold-foreground hover:bg-gold/90">
+                <Link to="/contact" onClick={() => setOpen(false)}>Partner with UIG</Link>
               </Button>
             </div>
           </div>

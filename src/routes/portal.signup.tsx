@@ -45,7 +45,7 @@ function SignupPage() {
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -55,7 +55,12 @@ function SignupPage() {
     });
     setLoading(false);
     if (error) return toast.error(error.message);
-    toast.success("Account created. You're signed in.");
+    if (data.session) {
+      toast.success("Account created. Welcome to Apex.");
+      navigate({ to: "/portal/dashboard" });
+    } else {
+      toast.success("Check your email to confirm your account.");
+    }
   }
 
   async function onGoogle() {
