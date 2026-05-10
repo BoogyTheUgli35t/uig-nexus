@@ -26,9 +26,12 @@ function PortalEntry() {
       >
         <div className="flex flex-wrap gap-3">
           <Button asChild size="lg" className="bg-gold text-gold-foreground hover:bg-gold/90 shadow-gold">
-            <Link to="/portal/login">Login to Portal</Link>
+            <Link to="/portal/login">Sign in to Apex</Link>
           </Button>
           <Button asChild size="lg" variant="outline">
+            <Link to="/portal/signup">Create an account</Link>
+          </Button>
+          <Button asChild size="lg" variant="ghost">
             <Link to="/contact">Request Portal Access</Link>
           </Button>
         </div>
