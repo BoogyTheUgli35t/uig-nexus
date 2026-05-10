@@ -91,12 +91,15 @@ export function Header() {
                 {l.label}
               </Link>
             ))}
-            <div className="pt-3 flex gap-2">
-              <Button asChild variant="outline" size="sm" className="flex-1">
+            <div className="pt-3 grid grid-cols-2 gap-2">
+              <Button asChild variant="outline" size="sm">
                 <Link to="/portal/login" onClick={() => setOpen(false)}>Sign in</Link>
               </Button>
-              <Button asChild size="sm" className="flex-1 bg-gold text-gold-foreground hover:bg-gold/90">
-                <Link to="/contact" onClick={() => setOpen(false)}>Partner</Link>
+              <Button asChild variant="outline" size="sm">
+                <Link to="/portal/signup" onClick={() => setOpen(false)}>Sign up</Link>
+              </Button>
+              <Button asChild size="sm" className="col-span-2 bg-gold text-gold-foreground hover:bg-gold/90">
+                <Link to="/contact" onClick={() => setOpen(false)}>Partner with UIG</Link>
               </Button>
             </div>
           </div>
