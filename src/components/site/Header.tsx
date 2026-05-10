@@ -52,9 +52,12 @@ export function Header() {
           <Link to="/portal" className="text-muted-foreground hover:text-foreground transition" activeProps={{ className: "text-foreground" }}>Portal</Link>
           <Link to="/contact" className="text-muted-foreground hover:text-foreground transition" activeProps={{ className: "text-foreground" }}>Contact</Link>
         </nav>
-        <div className="hidden lg:flex items-center gap-3">
+        <div className="hidden lg:flex items-center gap-2">
           <Button asChild variant="ghost" size="sm">
             <Link to="/portal/login">Sign in</Link>
+          </Button>
+          <Button asChild variant="outline" size="sm">
+            <Link to="/portal/signup">Sign up</Link>
           </Button>
           <Button asChild size="sm" className="bg-gold text-gold-foreground hover:bg-gold/90">
             <Link to="/contact">Partner with UIG</Link>
