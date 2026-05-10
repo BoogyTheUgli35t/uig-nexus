@@ -15,6 +15,7 @@ import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as ApexRouteImport } from './routes/_apex'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PortalIndexRouteImport } from './routes/portal.index'
 import { Route as DivisionsIndexRouteImport } from './routes/divisions.index'
 import { Route as PortalSignupRouteImport } from './routes/portal.signup'
 import { Route as PortalLoginRouteImport } from './routes/portal.login'
@@ -57,6 +58,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const PortalIndexRoute = PortalIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PortalRoute,
 } as any)
 const DivisionsIndexRoute = DivisionsIndexRouteImport.update({
   id: '/divisions/',
@@ -139,6 +145,7 @@ export interface FileRoutesByFullPath {
   '/portal/login': typeof PortalLoginRoute
   '/portal/signup': typeof PortalSignupRoute
   '/divisions/': typeof DivisionsIndexRoute
+  '/portal/': typeof PortalIndexRoute
   '/portal/dashboard': typeof ApexPortalDashboardRoute
   '/portal/settings': typeof ApexPortalSettingsRoute
   '/portal/projects/$id': typeof ApexPortalProjectsIdRoute
@@ -148,7 +155,6 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
-  '/portal': typeof PortalRouteWithChildren
   '/services': typeof ServicesRoute
   '/divisions/agritech': typeof DivisionsAgritechRoute
   '/divisions/innovation-lab': typeof DivisionsInnovationLabRoute
@@ -159,6 +165,7 @@ export interface FileRoutesByTo {
   '/portal/login': typeof PortalLoginRoute
   '/portal/signup': typeof PortalSignupRoute
   '/divisions': typeof DivisionsIndexRoute
+  '/portal': typeof PortalIndexRoute
   '/portal/dashboard': typeof ApexPortalDashboardRoute
   '/portal/settings': typeof ApexPortalSettingsRoute
   '/portal/projects/$id': typeof ApexPortalProjectsIdRoute
@@ -181,6 +188,7 @@ export interface FileRoutesById {
   '/portal/login': typeof PortalLoginRoute
   '/portal/signup': typeof PortalSignupRoute
   '/divisions/': typeof DivisionsIndexRoute
+  '/portal/': typeof PortalIndexRoute
   '/_apex/portal/dashboard': typeof ApexPortalDashboardRoute
   '/_apex/portal/settings': typeof ApexPortalSettingsRoute
   '/_apex/portal/projects/$id': typeof ApexPortalProjectsIdRoute
@@ -203,6 +211,7 @@ export interface FileRouteTypes {
     | '/portal/login'
     | '/portal/signup'
     | '/divisions/'
+    | '/portal/'
     | '/portal/dashboard'
     | '/portal/settings'
     | '/portal/projects/$id'
@@ -212,7 +221,6 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/contact'
-    | '/portal'
     | '/services'
     | '/divisions/agritech'
     | '/divisions/innovation-lab'
@@ -223,6 +231,7 @@ export interface FileRouteTypes {
     | '/portal/login'
     | '/portal/signup'
     | '/divisions'
+    | '/portal'
     | '/portal/dashboard'
     | '/portal/settings'
     | '/portal/projects/$id'
@@ -244,6 +253,7 @@ export interface FileRouteTypes {
     | '/portal/login'
     | '/portal/signup'
     | '/divisions/'
+    | '/portal/'
     | '/_apex/portal/dashboard'
     | '/_apex/portal/settings'
     | '/_apex/portal/projects/$id'
@@ -309,6 +319,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/portal/': {
+      id: '/portal/'
+      path: '/'
+      fullPath: '/portal/'
+      preLoaderRoute: typeof PortalIndexRouteImport
+      parentRoute: typeof PortalRoute
     }
     '/divisions/': {
       id: '/divisions/'
@@ -423,11 +440,13 @@ const ApexRouteWithChildren = ApexRoute._addFileChildren(ApexRouteChildren)
 interface PortalRouteChildren {
   PortalLoginRoute: typeof PortalLoginRoute
   PortalSignupRoute: typeof PortalSignupRoute
+  PortalIndexRoute: typeof PortalIndexRoute
 }
 
 const PortalRouteChildren: PortalRouteChildren = {
   PortalLoginRoute: PortalLoginRoute,
   PortalSignupRoute: PortalSignupRoute,
+  PortalIndexRoute: PortalIndexRoute,
 }
 
 const PortalRouteWithChildren =

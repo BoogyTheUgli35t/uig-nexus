@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { getDashboard } from "@/server/portal.functions";
+import { getDashboard } from "@/lib/portal.functions";
 import { FolderKanban, CheckSquare, FileText, Sparkles, ArrowRight } from "lucide-react";
 
 export const Route = createFileRoute("/_apex/portal/dashboard")({
