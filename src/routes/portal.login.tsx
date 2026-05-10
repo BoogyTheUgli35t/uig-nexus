@@ -44,11 +44,15 @@ function LoginPage() {
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     setLoading(false);
     if (error) {
       logPortalEvent({ data: { event_type: "access_denied", email, metadata: { reason: error.message, stage: "password_sign_in" } } }).catch(() => {});
       return toast.error(error.message);
+    }
+    if (data.session) {
+      toast.success("Welcome back.");
+      navigate({ to: "/portal/dashboard" });
     }
   }
 
