@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Logo } from "@/components/site/Logo";
 import { toast } from "sonner";
-import { logPortalEvent } from "@/server/portal.functions";
+import { logPortalEvent } from "@/lib/portal.functions";
 
 export const Route = createFileRoute("/portal/login")({
   head: () => ({

@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { logPortalEvent, submitAccessRequest } from "@/server/portal.functions";
+import { logPortalEvent, submitAccessRequest } from "@/lib/portal.functions";
 import { toast } from "sonner";
 
 type AppRole = "admin" | "staff" | "client";
