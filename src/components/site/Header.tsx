@@ -9,7 +9,7 @@ const divisions = [
   { to: "/divisions/agritech", label: "UIG AgriTech" },
   { to: "/divisions/real-estate", label: "UIG Real Estate" },
   { to: "/divisions/logistics", label: "UIG Logistics" },
-  { to: "/divisions/intelligence", label: "UIG Intelligence" },
+  { to: "/divisions/intelligence", label: "UIG Intelligence (AI & ML)" },
   { to: "/divisions/innovation-lab", label: "UIG Innovation Lab" },
 ] as const;
 
@@ -21,26 +21,18 @@ export function Header() {
     <header className="sticky top-0 z-50 border-b border-border/60 backdrop-blur-xl bg-background/70">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         <Logo />
-        <nav className="hidden lg:flex items-center gap-8 text-sm">
+        <nav className="hidden lg:flex items-center gap-7 text-sm">
           <Link to="/" className="text-muted-foreground hover:text-foreground transition" activeProps={{ className: "text-foreground" }} activeOptions={{ exact: true }}>Home</Link>
           <Link to="/about" className="text-muted-foreground hover:text-foreground transition" activeProps={{ className: "text-foreground" }}>About</Link>
-          <div
-            className="relative"
-            onMouseEnter={() => setDivOpen(true)}
-            onMouseLeave={() => setDivOpen(false)}
-          >
+          <div className="relative" onMouseEnter={() => setDivOpen(true)} onMouseLeave={() => setDivOpen(false)}>
             <Link to="/divisions" className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground transition" activeProps={{ className: "text-foreground" }}>
               Divisions <ChevronDown className="h-3.5 w-3.5" />
             </Link>
             {divOpen && (
-              <div className="absolute left-0 top-full pt-3 w-64">
+              <div className="absolute left-0 top-full pt-3 w-72">
                 <div className="rounded-xl border border-border bg-surface shadow-elevated p-2">
                   {divisions.map((d) => (
-                    <Link
-                      key={d.to}
-                      to={d.to}
-                      className="block px-3 py-2 rounded-md text-sm text-muted-foreground hover:bg-surface-elevated hover:text-foreground transition"
-                    >
+                    <Link key={d.to} to={d.to} className="block px-3 py-2 rounded-md text-sm text-muted-foreground hover:bg-surface-elevated hover:text-foreground transition">
                       {d.label}
                     </Link>
                   ))}
@@ -49,25 +41,17 @@ export function Header() {
             )}
           </div>
           <Link to="/services" className="text-muted-foreground hover:text-foreground transition" activeProps={{ className: "text-foreground" }}>Services</Link>
-          <Link to="/portal" className="text-muted-foreground hover:text-foreground transition" activeProps={{ className: "text-foreground" }}>Portal</Link>
+          <Link to="/careers" className="text-muted-foreground hover:text-foreground transition" activeProps={{ className: "text-foreground" }}>Careers</Link>
+          <Link to="/insights" className="text-muted-foreground hover:text-foreground transition" activeProps={{ className: "text-foreground" }}>News</Link>
           <Link to="/contact" className="text-muted-foreground hover:text-foreground transition" activeProps={{ className: "text-foreground" }}>Contact</Link>
         </nav>
         <div className="hidden lg:flex items-center gap-2">
-          <Button asChild variant="ghost" size="sm">
-            <Link to="/portal/login">Sign in</Link>
-          </Button>
-          <Button asChild variant="outline" size="sm">
-            <Link to="/portal/signup">Sign up</Link>
-          </Button>
-          <Button asChild size="sm" className="bg-gold text-gold-foreground hover:bg-gold/90">
-            <Link to="/contact">Partner with UIG</Link>
+          <Button asChild variant="ghost" size="sm"><Link to="/portal/login">Sign in</Link></Button>
+          <Button asChild size="sm" className="bg-gold text-gold-foreground hover:bg-gold/90 shadow-gold">
+            <Link to="/portal/signup">Get Started</Link>
           </Button>
         </div>
-        <button
-          className="lg:hidden p-2 -mr-2"
-          onClick={() => setOpen(!open)}
-          aria-label="Menu"
-        >
+        <button className="lg:hidden p-2 -mr-2" onClick={() => setOpen(!open)} aria-label="Menu">
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
       </div>
@@ -79,28 +63,15 @@ export function Header() {
               { to: "/about", label: "About" },
               { to: "/divisions", label: "Divisions" },
               { to: "/services", label: "Services" },
-              { to: "/portal", label: "Portal" },
+              { to: "/careers", label: "Careers" },
+              { to: "/insights", label: "News & Insights" },
               { to: "/contact", label: "Contact" },
             ].map((l) => (
-              <Link
-                key={l.to}
-                to={l.to}
-                className="block px-3 py-2 rounded-md hover:bg-surface-elevated"
-                onClick={() => setOpen(false)}
-              >
-                {l.label}
-              </Link>
+              <Link key={l.to} to={l.to} className="block px-3 py-2 rounded-md hover:bg-surface-elevated" onClick={() => setOpen(false)}>{l.label}</Link>
             ))}
             <div className="pt-3 grid grid-cols-2 gap-2">
-              <Button asChild variant="outline" size="sm">
-                <Link to="/portal/login" onClick={() => setOpen(false)}>Sign in</Link>
-              </Button>
-              <Button asChild variant="outline" size="sm">
-                <Link to="/portal/signup" onClick={() => setOpen(false)}>Sign up</Link>
-              </Button>
-              <Button asChild size="sm" className="col-span-2 bg-gold text-gold-foreground hover:bg-gold/90">
-                <Link to="/contact" onClick={() => setOpen(false)}>Partner with UIG</Link>
-              </Button>
+              <Button asChild variant="outline" size="sm"><Link to="/portal/login" onClick={() => setOpen(false)}>Sign in</Link></Button>
+              <Button asChild size="sm" className="bg-gold text-gold-foreground hover:bg-gold/90"><Link to="/portal/signup" onClick={() => setOpen(false)}>Get Started</Link></Button>
             </div>
           </div>
         </div>

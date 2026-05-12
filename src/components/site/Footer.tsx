@@ -4,12 +4,15 @@ import { Logo } from "./Logo";
 export function Footer() {
   return (
     <footer className="mt-32 border-t border-border bg-surface/40">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 grid gap-10 md:grid-cols-4">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 grid gap-10 md:grid-cols-6">
         <div className="md:col-span-2">
           <Logo />
           <p className="mt-4 text-sm text-muted-foreground max-w-md">
-            Unified Innovations Group — a multi-division, AI-first group building
-            the next generation of infrastructure for Africa and the world.
+            Unified Innovations Group — Nigeria's leading multi-sector innovation conglomerate. Two Steps Ahead.
+          </p>
+          <p className="mt-4 text-xs text-muted-foreground">
+            HQ: Victoria Island, Lagos, Nigeria<br />
+            Operations: Nigeria-wide · Pan-African · Global
           </p>
         </div>
         <div>
@@ -28,9 +31,24 @@ export function Footer() {
           <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
             <li><Link to="/about" className="hover:text-gold transition">About</Link></li>
             <li><Link to="/services" className="hover:text-gold transition">Services</Link></li>
-            <li><Link to="/contact" className="hover:text-gold transition">Contact</Link></li>
+            <li><Link to="/careers" className="hover:text-gold transition">Careers</Link></li>
+            <li><Link to="/insights" className="hover:text-gold transition">News & Insights</Link></li>
+          </ul>
+        </div>
+        <div>
+          <h4 className="text-sm font-semibold text-foreground">Contact</h4>
+          <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
+            <li><Link to="/contact" className="hover:text-gold transition">Get in touch</Link></li>
+            <li><a href="mailto:hello@unifiedinnovationsgroup.online" className="hover:text-gold transition break-all">hello@unifiedinnovationsgroup.online</a></li>
             <li><Link to="/portal" className="hover:text-gold transition">Apex Portal</Link></li>
-            <li><a href="mailto:hello@uig.africa" className="hover:text-gold transition">hello@uig.africa</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 className="text-sm font-semibold text-foreground">Legal</h4>
+          <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
+            <li><a href="#" className="hover:text-gold transition">Privacy Policy</a></li>
+            <li><a href="#" className="hover:text-gold transition">Terms of Service</a></li>
+            <li><a href="#" className="hover:text-gold transition">Cookie Policy</a></li>
           </ul>
         </div>
       </div>
@@ -38,9 +56,9 @@ export function Footer() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
           <p>© {new Date().getFullYear()} Unified Innovations Group. All rights reserved.</p>
           <div className="flex gap-4">
-            <a href="#" className="hover:text-gold transition">Twitter</a>
-            <a href="#" className="hover:text-gold transition">LinkedIn</a>
-            <a href="#" className="hover:text-gold transition">Instagram</a>
+            <a href="#" className="hover:text-gold transition" aria-label="LinkedIn">LinkedIn</a>
+            <a href="#" className="hover:text-gold transition" aria-label="Twitter / X">Twitter</a>
+            <a href="#" className="hover:text-gold transition" aria-label="Instagram">Instagram</a>
           </div>
         </div>
       </div>
