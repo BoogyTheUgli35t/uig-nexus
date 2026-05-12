@@ -14,6 +14,9 @@ export type DivisionPageProps = {
   why?: { title: string; points: string[] };
   outcome?: string;
   extra?: { title: string; items: { name: string; description: string }[] };
+  realtime?: string[];
+  targetClients?: string[];
+  metrics?: { value: string; label: string }[];
   ctaTitle: string;
   ctaButton: string;
 };
@@ -101,6 +104,49 @@ export function DivisionPage(props: DivisionPageProps) {
               <div key={i.name} className="rounded-xl border border-border bg-surface/60 p-6">
                 <h3 className="font-semibold">{i.name}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{i.description}</p>
+              </div>
+            ))}
+          </div>
+        </Section>
+      )}
+
+      {props.realtime && props.realtime.length > 0 && (
+        <Section>
+          <Eyebrow>Real-time capabilities</Eyebrow>
+          <h2 className="mt-5 text-3xl sm:text-4xl font-bold">Live, always on.</h2>
+          <ul className="mt-8 grid gap-3 sm:grid-cols-2 max-w-4xl">
+            {props.realtime.map((r) => (
+              <li key={r} className="flex gap-3 items-start rounded-lg border border-border bg-surface/40 p-4 text-sm">
+                <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-gold shrink-0" />
+                <span className="text-muted-foreground">{r}</span>
+              </li>
+            ))}
+          </ul>
+        </Section>
+      )}
+
+      {props.targetClients && props.targetClients.length > 0 && (
+        <Section>
+          <Eyebrow>Who we serve</Eyebrow>
+          <h2 className="mt-5 text-3xl sm:text-4xl font-bold">Built for serious operators.</h2>
+          <div className="mt-8 flex flex-wrap gap-2 max-w-4xl">
+            {props.targetClients.map((c) => (
+              <span key={c} className="inline-flex items-center rounded-full border border-border bg-surface/60 px-3 py-1.5 text-xs text-muted-foreground">
+                {c}
+              </span>
+            ))}
+          </div>
+        </Section>
+      )}
+
+      {props.metrics && props.metrics.length > 0 && (
+        <Section>
+          <Eyebrow>By the numbers</Eyebrow>
+          <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {props.metrics.map((m) => (
+              <div key={m.label} className="rounded-xl border border-gold/20 bg-gold/5 p-6">
+                <div className="text-3xl font-bold text-gradient-gold">{m.value}</div>
+                <div className="mt-2 text-xs text-muted-foreground uppercase tracking-wider">{m.label}</div>
               </div>
             ))}
           </div>
