@@ -76,7 +76,7 @@ function InsightArticle() {
 
         <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-16 space-y-6 text-lg leading-relaxed text-muted-foreground">
           <p className="text-xl text-foreground">{post.excerpt}</p>
-          {body.map((p, i) => (
+          {body.map((p: string, i: number) => (
             <p key={i}>{p}</p>
           ))}
         </div>
