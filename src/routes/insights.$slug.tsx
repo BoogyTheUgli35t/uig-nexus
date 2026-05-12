@@ -26,7 +26,7 @@ const bodies: Record<string, string[]> = {
 };
 
 export const Route = createFileRoute("/insights/$slug")({
-  loader: ({ params }) => {
+  loader: ({ params }): { post: (typeof insights)[number]; body: string[] } => {
     const post = insights.find((p) => p.slug === params.slug);
     if (!post) throw notFound();
     return { post, body: bodies[post.slug] ?? [] };
