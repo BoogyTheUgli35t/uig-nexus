@@ -11,7 +11,9 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as PortalRouteImport } from './routes/portal'
+import { Route as InsightsRouteImport } from './routes/insights'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CareersRouteImport } from './routes/careers'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as ApexRouteImport } from './routes/_apex'
 import { Route as IndexRouteImport } from './routes/index'
@@ -19,6 +21,7 @@ import { Route as PortalIndexRouteImport } from './routes/portal.index'
 import { Route as DivisionsIndexRouteImport } from './routes/divisions.index'
 import { Route as PortalSignupRouteImport } from './routes/portal.signup'
 import { Route as PortalLoginRouteImport } from './routes/portal.login'
+import { Route as InsightsSlugRouteImport } from './routes/insights.$slug'
 import { Route as DivisionsTechnologyRouteImport } from './routes/divisions.technology'
 import { Route as DivisionsRealEstateRouteImport } from './routes/divisions.real-estate'
 import { Route as DivisionsLogisticsRouteImport } from './routes/divisions.logistics'
@@ -40,9 +43,19 @@ const PortalRoute = PortalRouteImport.update({
   path: '/portal',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InsightsRoute = InsightsRouteImport.update({
+  id: '/insights',
+  path: '/insights',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CareersRoute = CareersRouteImport.update({
+  id: '/careers',
+  path: '/careers',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AboutRoute = AboutRouteImport.update({
@@ -78,6 +91,11 @@ const PortalLoginRoute = PortalLoginRouteImport.update({
   id: '/login',
   path: '/login',
   getParentRoute: () => PortalRoute,
+} as any)
+const InsightsSlugRoute = InsightsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => InsightsRoute,
 } as any)
 const DivisionsTechnologyRoute = DivisionsTechnologyRouteImport.update({
   id: '/divisions/technology',
@@ -133,7 +151,9 @@ const ApexPortalProjectsIdRoute = ApexPortalProjectsIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
+  '/insights': typeof InsightsRouteWithChildren
   '/portal': typeof PortalRouteWithChildren
   '/services': typeof ServicesRoute
   '/divisions/agritech': typeof DivisionsAgritechRoute
@@ -142,6 +162,7 @@ export interface FileRoutesByFullPath {
   '/divisions/logistics': typeof DivisionsLogisticsRoute
   '/divisions/real-estate': typeof DivisionsRealEstateRoute
   '/divisions/technology': typeof DivisionsTechnologyRoute
+  '/insights/$slug': typeof InsightsSlugRoute
   '/portal/login': typeof PortalLoginRoute
   '/portal/signup': typeof PortalSignupRoute
   '/divisions/': typeof DivisionsIndexRoute
@@ -154,7 +175,9 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
+  '/insights': typeof InsightsRouteWithChildren
   '/services': typeof ServicesRoute
   '/divisions/agritech': typeof DivisionsAgritechRoute
   '/divisions/innovation-lab': typeof DivisionsInnovationLabRoute
@@ -162,6 +185,7 @@ export interface FileRoutesByTo {
   '/divisions/logistics': typeof DivisionsLogisticsRoute
   '/divisions/real-estate': typeof DivisionsRealEstateRoute
   '/divisions/technology': typeof DivisionsTechnologyRoute
+  '/insights/$slug': typeof InsightsSlugRoute
   '/portal/login': typeof PortalLoginRoute
   '/portal/signup': typeof PortalSignupRoute
   '/divisions': typeof DivisionsIndexRoute
@@ -176,7 +200,9 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_apex': typeof ApexRouteWithChildren
   '/about': typeof AboutRoute
+  '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
+  '/insights': typeof InsightsRouteWithChildren
   '/portal': typeof PortalRouteWithChildren
   '/services': typeof ServicesRoute
   '/divisions/agritech': typeof DivisionsAgritechRoute
@@ -185,6 +211,7 @@ export interface FileRoutesById {
   '/divisions/logistics': typeof DivisionsLogisticsRoute
   '/divisions/real-estate': typeof DivisionsRealEstateRoute
   '/divisions/technology': typeof DivisionsTechnologyRoute
+  '/insights/$slug': typeof InsightsSlugRoute
   '/portal/login': typeof PortalLoginRoute
   '/portal/signup': typeof PortalSignupRoute
   '/divisions/': typeof DivisionsIndexRoute
@@ -199,7 +226,9 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/about'
+    | '/careers'
     | '/contact'
+    | '/insights'
     | '/portal'
     | '/services'
     | '/divisions/agritech'
@@ -208,6 +237,7 @@ export interface FileRouteTypes {
     | '/divisions/logistics'
     | '/divisions/real-estate'
     | '/divisions/technology'
+    | '/insights/$slug'
     | '/portal/login'
     | '/portal/signup'
     | '/divisions/'
@@ -220,7 +250,9 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/about'
+    | '/careers'
     | '/contact'
+    | '/insights'
     | '/services'
     | '/divisions/agritech'
     | '/divisions/innovation-lab'
@@ -228,6 +260,7 @@ export interface FileRouteTypes {
     | '/divisions/logistics'
     | '/divisions/real-estate'
     | '/divisions/technology'
+    | '/insights/$slug'
     | '/portal/login'
     | '/portal/signup'
     | '/divisions'
@@ -241,7 +274,9 @@ export interface FileRouteTypes {
     | '/'
     | '/_apex'
     | '/about'
+    | '/careers'
     | '/contact'
+    | '/insights'
     | '/portal'
     | '/services'
     | '/divisions/agritech'
@@ -250,6 +285,7 @@ export interface FileRouteTypes {
     | '/divisions/logistics'
     | '/divisions/real-estate'
     | '/divisions/technology'
+    | '/insights/$slug'
     | '/portal/login'
     | '/portal/signup'
     | '/divisions/'
@@ -264,7 +300,9 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ApexRoute: typeof ApexRouteWithChildren
   AboutRoute: typeof AboutRoute
+  CareersRoute: typeof CareersRoute
   ContactRoute: typeof ContactRoute
+  InsightsRoute: typeof InsightsRouteWithChildren
   PortalRoute: typeof PortalRouteWithChildren
   ServicesRoute: typeof ServicesRoute
   DivisionsAgritechRoute: typeof DivisionsAgritechRoute
@@ -292,11 +330,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PortalRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/insights': {
+      id: '/insights'
+      path: '/insights'
+      fullPath: '/insights'
+      preLoaderRoute: typeof InsightsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact': {
       id: '/contact'
       path: '/contact'
       fullPath: '/contact'
       preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/careers': {
+      id: '/careers'
+      path: '/careers'
+      fullPath: '/careers'
+      preLoaderRoute: typeof CareersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/about': {
@@ -347,6 +399,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/portal/login'
       preLoaderRoute: typeof PortalLoginRouteImport
       parentRoute: typeof PortalRoute
+    }
+    '/insights/$slug': {
+      id: '/insights/$slug'
+      path: '/$slug'
+      fullPath: '/insights/$slug'
+      preLoaderRoute: typeof InsightsSlugRouteImport
+      parentRoute: typeof InsightsRoute
     }
     '/divisions/technology': {
       id: '/divisions/technology'
@@ -437,6 +496,18 @@ const ApexRouteChildren: ApexRouteChildren = {
 
 const ApexRouteWithChildren = ApexRoute._addFileChildren(ApexRouteChildren)
 
+interface InsightsRouteChildren {
+  InsightsSlugRoute: typeof InsightsSlugRoute
+}
+
+const InsightsRouteChildren: InsightsRouteChildren = {
+  InsightsSlugRoute: InsightsSlugRoute,
+}
+
+const InsightsRouteWithChildren = InsightsRoute._addFileChildren(
+  InsightsRouteChildren,
+)
+
 interface PortalRouteChildren {
   PortalLoginRoute: typeof PortalLoginRoute
   PortalSignupRoute: typeof PortalSignupRoute
@@ -456,7 +527,9 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ApexRoute: ApexRouteWithChildren,
   AboutRoute: AboutRoute,
+  CareersRoute: CareersRoute,
   ContactRoute: ContactRoute,
+  InsightsRoute: InsightsRouteWithChildren,
   PortalRoute: PortalRouteWithChildren,
   ServicesRoute: ServicesRoute,
   DivisionsAgritechRoute: DivisionsAgritechRoute,
@@ -470,12 +543,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { createStart } from '@tanstack/react-start'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-  }
-}

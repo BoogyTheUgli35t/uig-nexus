@@ -1,58 +1,46 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Cpu, Workflow, Plug, Rocket } from "lucide-react";
+import { Cpu, Workflow, Plug, Rocket, Cloud, Shield, ShoppingCart, Wrench } from "lucide-react";
 import { DivisionPage } from "@/components/site/DivisionPage";
 
 export const Route = createFileRoute("/divisions/technology")({
   head: () => ({
     meta: [
-      { title: "UIG Technology — AI-Powered Software, Portals & Automation" },
-      { name: "description", content: "UIG Technology builds intelligent systems that help businesses operate faster, smarter and with less overhead." },
-      { property: "og:title", content: "UIG Technology" },
-      { property: "og:description", content: "AI-driven portals, dashboards and automations that unify your operation." },
+      { title: "UIG Technology — Engineering Nigeria's Digital Future" },
+      { name: "description", content: "Custom software, SaaS, cloud, cybersecurity and digital transformation for Nigerian and African businesses." },
+      { property: "og:title", content: "UIG Technology — Engineering Nigeria's Digital Future" },
+      { property: "og:description", content: "We build the software that runs modern Africa." },
     ],
   }),
   component: () => (
     <DivisionPage
       eyebrow="UIG Technology"
-      title={<>AI-Powered Software, <span className="text-gradient-gold">Portals & Automation.</span></>}
-      subtitle="UIG Technology designs AI-driven portals, dashboards and automations that replace manual work and unify your entire operation."
-      problem={{
-        title: "Manual processes, scattered tools, no visibility.",
-        points: [
-          "Operations spread across disconnected spreadsheets and SaaS tools",
-          "Repetitive manual work eating up your team's hours",
-          "No single source of truth for projects, clients or data",
-          "Founders forced to hire a tech team before they're ready",
-        ],
-      }}
+      title={<>Engineering Nigeria's <span className="text-gradient-gold">Digital Future.</span></>}
+      subtitle="UIG Technology is the digital transformation arm of the group. We design, build and deploy the software systems that help Nigerian and African businesses compete in a technology-driven world."
       solutions={[
-        { title: "Custom portals & internal tools", description: "Tailor-made client and operations portals that match how your business actually works.", icon: Cpu },
-        { title: "AI workflow automation", description: "Replace manual handoffs with intelligent agents and automated pipelines.", icon: Workflow },
-        { title: "API integrations & system unification", description: "Connect every tool you use into one coherent system with real-time data flow.", icon: Plug },
-        { title: "SaaS & product development", description: "Take founders from idea to shipped product with senior engineering and design.", icon: Rocket },
+        { title: "Custom Software Development", description: "Web, iOS and Android apps and enterprise platforms — stack-agnostic, scalable, built to last.", icon: Cpu },
+        { title: "SaaS Product Design & Build", description: "Full product lifecycle from wireframe to paying customers for clients entering new digital markets.", icon: Rocket },
+        { title: "Digital Transformation Consulting", description: "We audit legacy systems, design transformation roadmaps and execute them — retail, manufacturing, finance, healthcare.", icon: Workflow },
+        { title: "Cloud Infrastructure & DevOps", description: "AWS, GCP and Azure setup, CI/CD, containerisation and monitoring — fast, secure, cost-efficient.", icon: Cloud },
+        { title: "API Development & Systems Integration", description: "Robust APIs that connect ERPs, CRMs, payment gateways and third-party tools — no more data silos.", icon: Plug },
+        { title: "Cybersecurity Advisory", description: "Vulnerability assessments, security architecture review and staff awareness — built for Nigerian compliance.", icon: Shield },
+        { title: "IT Consulting for SMEs", description: "Practical, affordable strategy: stack recommendations, vendor selection and implementation support.", icon: Wrench },
+        { title: "E-Commerce Development", description: "Online stores with Paystack, Flutterwave and Stripe, inventory and delivery API integration.", icon: ShoppingCart },
       ]}
-      outcome="A modern, automated business that scales without hiring a full tech team."
-      process={{
-        title: "Five steps. From idea to live system.",
-        steps: [
-          { name: "Discovery", description: "We map your operation, surface the bottlenecks and define success metrics." },
-          { name: "Blueprint", description: "Architecture, UX flows and a clear delivery plan — signed off before we build." },
-          { name: "Build", description: "Senior engineering teams ship fast, with weekly demos and tight feedback loops." },
-          { name: "Launch", description: "Go-live, training and rollout to your team and clients." },
-          { name: "Optimize", description: "Continuous improvement with analytics, AI tuning and feature iteration." },
-        ],
-      }}
-      why={{
-        title: "Why UIG Technology.",
-        points: [
-          "AI-first by design — every system ships with intelligence baked in",
-          "Business-focused — we measure ROI, not lines of code",
-          "Multi-division insight — patterns from real estate, agri and logistics inform your build",
-          "Senior team, no offshoring — you talk to the people building",
-        ],
-      }}
-      ctaTitle="Ready to automate your business?"
-      ctaButton="Book a Strategy Call"
+      realtime={[
+        "Live project dashboards for clients",
+        "Real-time deployment monitoring",
+        "Uptime guarantees and SLA management",
+        "24/7 technical support tier for enterprise clients",
+      ]}
+      targetClients={["Nigerian SMEs", "Banks & Fintechs", "Government Agencies", "Healthcare Providers", "Retail Chains", "Startups", "International market entrants"]}
+      metrics={[
+        { value: "40+", label: "Products delivered" },
+        { value: "12", label: "Industries served" },
+        { value: "98%", label: "Client retention" },
+        { value: "6 wks", label: "Avg. deployment" },
+      ]}
+      ctaTitle="Start your digital transformation."
+      ctaButton="Talk to UIG Technology"
     />
   ),
 });

@@ -1,39 +1,46 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Brain, BarChart3, Database, Bot } from "lucide-react";
+import { Brain, MessageSquare, BarChart3, LineChart, Zap, Compass, Landmark, FlaskConical } from "lucide-react";
 import { DivisionPage } from "@/components/site/DivisionPage";
 
 export const Route = createFileRoute("/divisions/intelligence")({
   head: () => ({
     meta: [
-      { title: "UIG Intelligence — AI Models & Data Products for African Realities" },
-      { name: "description", content: "UIG Intelligence develops AI models and data products built for African realities: automation, analytics and predictive systems." },
-      { property: "og:title", content: "UIG Intelligence" },
-      { property: "og:description", content: "Custom AI models, predictive analytics and intelligent automation." },
+      { title: "UIG Intelligence — AI Built for Africa" },
+      { name: "description", content: "Native African language LLMs, business AI, predictive analytics and machine learning solutions for Nigerian and African enterprises." },
+      { property: "og:title", content: "UIG Intelligence — AI Built for Africa" },
+      { property: "og:description", content: "AI that understands Nigeria. Models that speak your language." },
     ],
   }),
   component: () => (
     <DivisionPage
       eyebrow="UIG Intelligence"
-      title={<>AI Models & Data Products <span className="text-gradient-gold">for African Realities.</span></>}
-      subtitle="UIG Intelligence helps organizations automate decisions, analyze data and deploy intelligent systems that create real impact."
+      title={<>Intelligence, Built for <span className="text-gradient-gold">Africa.</span></>}
+      subtitle="Global AI is built on Western data, Western languages and Western contexts. When a Yoruba farmer, an Igbo trader or a Hausa student interacts with mainstream AI, they're an afterthought. UIG Intelligence exists to fix that — permanently."
       solutions={[
-        { title: "Custom AI models", description: "Models trained on local data, languages and use cases — not generic GPT calls.", icon: Brain },
-        { title: "Predictive analytics", description: "Forecasting and risk scoring across logistics, real estate and agriculture.", icon: BarChart3 },
-        { title: "Data engineering & dashboards", description: "Pipelines, warehouses and live dashboards that make data usable.", icon: Database },
-        { title: "AI assistants & automation tools", description: "Internal copilots and customer-facing assistants that actually work.", icon: Bot },
+        { title: "Native African Language AI Models", description: "Proprietary LLMs trained on Yoruba, Igbo, Hausa, Pidgin and other African languages — local context, idiom, culture.", icon: Brain },
+        { title: "AI Chatbots for Nigerian Businesses", description: "Customer service, sales and support bots trained on your products and language. WhatsApp, web and mobile.", icon: MessageSquare },
+        { title: "Machine Learning Solutions", description: "Custom ML for fraud, demand forecasting, crop disease prediction and patient triage assistance.", icon: BarChart3 },
+        { title: "Predictive Analytics Dashboards", description: "Sales forecasting, churn, inventory and financial anomaly detection — surfaced from your operational data.", icon: LineChart },
+        { title: "Business Process Automation", description: "Document processing, data entry, invoice matching, report generation and email triage at scale.", icon: Zap },
+        { title: "AI Integration Consulting", description: "From vendor selection to custom models — we guide the entire AI integration journey.", icon: Compass },
+        { title: "AI for Government & Public Sector", description: "AI tax filing, smart procurement, predictive infrastructure maintenance and population analytics.", icon: Landmark },
+        { title: "AI Research & Development", description: "Open contributions to African datasets and ongoing R&D pushing the field forward.", icon: FlaskConical },
       ]}
-      outcome="Smarter operations powered by AI that understands your market, your data and your customers."
-      why={{
-        title: "Africa-rooted, multilingual, local data focus.",
-        points: [
-          "Models tuned to African languages, names and addresses",
-          "Trained on local market data — not Silicon Valley defaults",
-          "Built for low-bandwidth, mobile-first environments",
-          "Engineered to comply with local data and privacy norms",
-        ],
-      }}
-      ctaTitle="Ready to put AI to work?"
-      ctaButton="Explore AI Opportunities"
+      realtime={[
+        "Live AI model API endpoints for enterprise clients",
+        "Real-time analytics dashboard updates",
+        "Live chatbot performance monitoring",
+        "Model retraining pipelines on new data",
+      ]}
+      targetClients={["Banks & fintechs", "Telecoms", "Government agencies", "Media companies", "Healthcare providers", "Retail & e-commerce", "Education platforms"]}
+      metrics={[
+        { value: "3", label: "Native NG-language models in dev" },
+        { value: "8", label: "Enterprise AI integrations live" },
+        { value: "94%", label: "Yoruba intent recognition" },
+        { value: "500K+", label: "Hausa training tokens" },
+      ]}
+      ctaTitle="Explore AI solutions for your business."
+      ctaButton="Request an AI Audit"
     />
   ),
 });
