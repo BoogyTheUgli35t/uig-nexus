@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as PortalRouteImport } from './routes/portal'
 import { Route as InsightsRouteImport } from './routes/insights'
@@ -30,9 +31,15 @@ import { Route as DivisionsInnovationLabRouteImport } from './routes/divisions.i
 import { Route as DivisionsAgritechRouteImport } from './routes/divisions.agritech'
 import { Route as ApexPortalSettingsRouteImport } from './routes/_apex.portal.settings'
 import { Route as ApexPortalDashboardRouteImport } from './routes/_apex.portal.dashboard'
+import { Route as ApexPortalAuditRouteImport } from './routes/_apex.portal.audit'
 import { Route as ApexPortalProjectsIndexRouteImport } from './routes/_apex.portal.projects.index'
 import { Route as ApexPortalProjectsIdRouteImport } from './routes/_apex.portal.projects.$id'
 
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
@@ -137,6 +144,11 @@ const ApexPortalDashboardRoute = ApexPortalDashboardRouteImport.update({
   path: '/portal/dashboard',
   getParentRoute: () => ApexRoute,
 } as any)
+const ApexPortalAuditRoute = ApexPortalAuditRouteImport.update({
+  id: '/portal/audit',
+  path: '/portal/audit',
+  getParentRoute: () => ApexRoute,
+} as any)
 const ApexPortalProjectsIndexRoute = ApexPortalProjectsIndexRouteImport.update({
   id: '/portal/projects/',
   path: '/portal/projects/',
@@ -156,6 +168,7 @@ export interface FileRoutesByFullPath {
   '/insights': typeof InsightsRouteWithChildren
   '/portal': typeof PortalRouteWithChildren
   '/services': typeof ServicesRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/divisions/agritech': typeof DivisionsAgritechRoute
   '/divisions/innovation-lab': typeof DivisionsInnovationLabRoute
   '/divisions/intelligence': typeof DivisionsIntelligenceRoute
@@ -167,6 +180,7 @@ export interface FileRoutesByFullPath {
   '/portal/signup': typeof PortalSignupRoute
   '/divisions/': typeof DivisionsIndexRoute
   '/portal/': typeof PortalIndexRoute
+  '/portal/audit': typeof ApexPortalAuditRoute
   '/portal/dashboard': typeof ApexPortalDashboardRoute
   '/portal/settings': typeof ApexPortalSettingsRoute
   '/portal/projects/$id': typeof ApexPortalProjectsIdRoute
@@ -179,6 +193,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/insights': typeof InsightsRouteWithChildren
   '/services': typeof ServicesRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/divisions/agritech': typeof DivisionsAgritechRoute
   '/divisions/innovation-lab': typeof DivisionsInnovationLabRoute
   '/divisions/intelligence': typeof DivisionsIntelligenceRoute
@@ -190,6 +205,7 @@ export interface FileRoutesByTo {
   '/portal/signup': typeof PortalSignupRoute
   '/divisions': typeof DivisionsIndexRoute
   '/portal': typeof PortalIndexRoute
+  '/portal/audit': typeof ApexPortalAuditRoute
   '/portal/dashboard': typeof ApexPortalDashboardRoute
   '/portal/settings': typeof ApexPortalSettingsRoute
   '/portal/projects/$id': typeof ApexPortalProjectsIdRoute
@@ -205,6 +221,7 @@ export interface FileRoutesById {
   '/insights': typeof InsightsRouteWithChildren
   '/portal': typeof PortalRouteWithChildren
   '/services': typeof ServicesRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/divisions/agritech': typeof DivisionsAgritechRoute
   '/divisions/innovation-lab': typeof DivisionsInnovationLabRoute
   '/divisions/intelligence': typeof DivisionsIntelligenceRoute
@@ -216,6 +233,7 @@ export interface FileRoutesById {
   '/portal/signup': typeof PortalSignupRoute
   '/divisions/': typeof DivisionsIndexRoute
   '/portal/': typeof PortalIndexRoute
+  '/_apex/portal/audit': typeof ApexPortalAuditRoute
   '/_apex/portal/dashboard': typeof ApexPortalDashboardRoute
   '/_apex/portal/settings': typeof ApexPortalSettingsRoute
   '/_apex/portal/projects/$id': typeof ApexPortalProjectsIdRoute
@@ -231,6 +249,7 @@ export interface FileRouteTypes {
     | '/insights'
     | '/portal'
     | '/services'
+    | '/sitemap.xml'
     | '/divisions/agritech'
     | '/divisions/innovation-lab'
     | '/divisions/intelligence'
@@ -242,6 +261,7 @@ export interface FileRouteTypes {
     | '/portal/signup'
     | '/divisions/'
     | '/portal/'
+    | '/portal/audit'
     | '/portal/dashboard'
     | '/portal/settings'
     | '/portal/projects/$id'
@@ -254,6 +274,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/insights'
     | '/services'
+    | '/sitemap.xml'
     | '/divisions/agritech'
     | '/divisions/innovation-lab'
     | '/divisions/intelligence'
@@ -265,6 +286,7 @@ export interface FileRouteTypes {
     | '/portal/signup'
     | '/divisions'
     | '/portal'
+    | '/portal/audit'
     | '/portal/dashboard'
     | '/portal/settings'
     | '/portal/projects/$id'
@@ -279,6 +301,7 @@ export interface FileRouteTypes {
     | '/insights'
     | '/portal'
     | '/services'
+    | '/sitemap.xml'
     | '/divisions/agritech'
     | '/divisions/innovation-lab'
     | '/divisions/intelligence'
@@ -290,6 +313,7 @@ export interface FileRouteTypes {
     | '/portal/signup'
     | '/divisions/'
     | '/portal/'
+    | '/_apex/portal/audit'
     | '/_apex/portal/dashboard'
     | '/_apex/portal/settings'
     | '/_apex/portal/projects/$id'
@@ -305,6 +329,7 @@ export interface RootRouteChildren {
   InsightsRoute: typeof InsightsRouteWithChildren
   PortalRoute: typeof PortalRouteWithChildren
   ServicesRoute: typeof ServicesRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   DivisionsAgritechRoute: typeof DivisionsAgritechRoute
   DivisionsInnovationLabRoute: typeof DivisionsInnovationLabRoute
   DivisionsIntelligenceRoute: typeof DivisionsIntelligenceRoute
@@ -316,6 +341,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/services': {
       id: '/services'
       path: '/services'
@@ -463,6 +495,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApexPortalDashboardRouteImport
       parentRoute: typeof ApexRoute
     }
+    '/_apex/portal/audit': {
+      id: '/_apex/portal/audit'
+      path: '/portal/audit'
+      fullPath: '/portal/audit'
+      preLoaderRoute: typeof ApexPortalAuditRouteImport
+      parentRoute: typeof ApexRoute
+    }
     '/_apex/portal/projects/': {
       id: '/_apex/portal/projects/'
       path: '/portal/projects'
@@ -481,6 +520,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface ApexRouteChildren {
+  ApexPortalAuditRoute: typeof ApexPortalAuditRoute
   ApexPortalDashboardRoute: typeof ApexPortalDashboardRoute
   ApexPortalSettingsRoute: typeof ApexPortalSettingsRoute
   ApexPortalProjectsIdRoute: typeof ApexPortalProjectsIdRoute
@@ -488,6 +528,7 @@ interface ApexRouteChildren {
 }
 
 const ApexRouteChildren: ApexRouteChildren = {
+  ApexPortalAuditRoute: ApexPortalAuditRoute,
   ApexPortalDashboardRoute: ApexPortalDashboardRoute,
   ApexPortalSettingsRoute: ApexPortalSettingsRoute,
   ApexPortalProjectsIdRoute: ApexPortalProjectsIdRoute,
@@ -532,6 +573,7 @@ const rootRouteChildren: RootRouteChildren = {
   InsightsRoute: InsightsRouteWithChildren,
   PortalRoute: PortalRouteWithChildren,
   ServicesRoute: ServicesRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   DivisionsAgritechRoute: DivisionsAgritechRoute,
   DivisionsInnovationLabRoute: DivisionsInnovationLabRoute,
   DivisionsIntelligenceRoute: DivisionsIntelligenceRoute,
@@ -543,3 +585,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}

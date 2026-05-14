@@ -47,8 +47,14 @@ function LoginPage() {
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     setLoading(false);
     if (error) {
-      logPortalEvent({ data: { event_type: "access_denied", email, metadata: { reason: error.message, stage: "password_sign_in" } } }).catch(() => {});
-      return toast.error(error.message);
+      const refId = "UIG-" + Math.random().toString(36).slice(2, 8).toUpperCase();
+      logPortalEvent({ data: { event_type: "access_denied", email, metadata: { reason: error.message, stage: "password_sign_in", ref_id: refId } } }).catch(() => {});
+      const friendly = /invalid login credentials/i.test(error.message)
+        ? "Email or password is incorrect."
+        : /email not confirmed/i.test(error.message)
+        ? "Please confirm your email before signing in."
+        : "We couldn't sign you in. Please try again.";
+      return toast.error(`${friendly} Reference: ${refId}`);
     }
     if (data.session) {
       toast.success("Welcome back.");

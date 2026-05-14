@@ -1,6 +1,6 @@
 import { Outlet, createFileRoute, redirect, Link, useNavigate, useRouter } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { LayoutDashboard, FolderKanban, Settings, LogOut, ChevronRight, AlertTriangle, ShieldAlert, ShieldCheck } from "lucide-react";
+import { LayoutDashboard, FolderKanban, Settings, LogOut, ChevronRight, AlertTriangle, ShieldAlert, ShieldCheck, ScrollText } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Logo } from "@/components/site/Logo";
 import { Button } from "@/components/ui/button";
@@ -189,6 +189,7 @@ type NavItem = { to: string; label: string; icon: typeof LayoutDashboard; roles:
 const NAV_ITEMS: NavItem[] = [
   { to: "/portal/dashboard", label: "Dashboard", icon: LayoutDashboard, roles: ["admin", "staff", "client"] },
   { to: "/portal/projects", label: "Projects", icon: FolderKanban, roles: ["admin", "staff", "client"] },
+  { to: "/portal/audit", label: "Audit log", icon: ScrollText, roles: ["admin"] },
   { to: "/portal/settings", label: "Settings", icon: Settings, roles: ["admin", "staff", "client"] },
 ];
 
