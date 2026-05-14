@@ -31,6 +31,7 @@ import { Route as DivisionsInnovationLabRouteImport } from './routes/divisions.i
 import { Route as DivisionsAgritechRouteImport } from './routes/divisions.agritech'
 import { Route as ApexPortalSettingsRouteImport } from './routes/_apex.portal.settings'
 import { Route as ApexPortalDashboardRouteImport } from './routes/_apex.portal.dashboard'
+import { Route as ApexPortalAuditRouteImport } from './routes/_apex.portal.audit'
 import { Route as ApexPortalProjectsIndexRouteImport } from './routes/_apex.portal.projects.index'
 import { Route as ApexPortalProjectsIdRouteImport } from './routes/_apex.portal.projects.$id'
 
@@ -143,6 +144,11 @@ const ApexPortalDashboardRoute = ApexPortalDashboardRouteImport.update({
   path: '/portal/dashboard',
   getParentRoute: () => ApexRoute,
 } as any)
+const ApexPortalAuditRoute = ApexPortalAuditRouteImport.update({
+  id: '/portal/audit',
+  path: '/portal/audit',
+  getParentRoute: () => ApexRoute,
+} as any)
 const ApexPortalProjectsIndexRoute = ApexPortalProjectsIndexRouteImport.update({
   id: '/portal/projects/',
   path: '/portal/projects/',
@@ -174,6 +180,7 @@ export interface FileRoutesByFullPath {
   '/portal/signup': typeof PortalSignupRoute
   '/divisions/': typeof DivisionsIndexRoute
   '/portal/': typeof PortalIndexRoute
+  '/portal/audit': typeof ApexPortalAuditRoute
   '/portal/dashboard': typeof ApexPortalDashboardRoute
   '/portal/settings': typeof ApexPortalSettingsRoute
   '/portal/projects/$id': typeof ApexPortalProjectsIdRoute
@@ -198,6 +205,7 @@ export interface FileRoutesByTo {
   '/portal/signup': typeof PortalSignupRoute
   '/divisions': typeof DivisionsIndexRoute
   '/portal': typeof PortalIndexRoute
+  '/portal/audit': typeof ApexPortalAuditRoute
   '/portal/dashboard': typeof ApexPortalDashboardRoute
   '/portal/settings': typeof ApexPortalSettingsRoute
   '/portal/projects/$id': typeof ApexPortalProjectsIdRoute
@@ -225,6 +233,7 @@ export interface FileRoutesById {
   '/portal/signup': typeof PortalSignupRoute
   '/divisions/': typeof DivisionsIndexRoute
   '/portal/': typeof PortalIndexRoute
+  '/_apex/portal/audit': typeof ApexPortalAuditRoute
   '/_apex/portal/dashboard': typeof ApexPortalDashboardRoute
   '/_apex/portal/settings': typeof ApexPortalSettingsRoute
   '/_apex/portal/projects/$id': typeof ApexPortalProjectsIdRoute
@@ -252,6 +261,7 @@ export interface FileRouteTypes {
     | '/portal/signup'
     | '/divisions/'
     | '/portal/'
+    | '/portal/audit'
     | '/portal/dashboard'
     | '/portal/settings'
     | '/portal/projects/$id'
@@ -276,6 +286,7 @@ export interface FileRouteTypes {
     | '/portal/signup'
     | '/divisions'
     | '/portal'
+    | '/portal/audit'
     | '/portal/dashboard'
     | '/portal/settings'
     | '/portal/projects/$id'
@@ -302,6 +313,7 @@ export interface FileRouteTypes {
     | '/portal/signup'
     | '/divisions/'
     | '/portal/'
+    | '/_apex/portal/audit'
     | '/_apex/portal/dashboard'
     | '/_apex/portal/settings'
     | '/_apex/portal/projects/$id'
@@ -483,6 +495,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApexPortalDashboardRouteImport
       parentRoute: typeof ApexRoute
     }
+    '/_apex/portal/audit': {
+      id: '/_apex/portal/audit'
+      path: '/portal/audit'
+      fullPath: '/portal/audit'
+      preLoaderRoute: typeof ApexPortalAuditRouteImport
+      parentRoute: typeof ApexRoute
+    }
     '/_apex/portal/projects/': {
       id: '/_apex/portal/projects/'
       path: '/portal/projects'
@@ -501,6 +520,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface ApexRouteChildren {
+  ApexPortalAuditRoute: typeof ApexPortalAuditRoute
   ApexPortalDashboardRoute: typeof ApexPortalDashboardRoute
   ApexPortalSettingsRoute: typeof ApexPortalSettingsRoute
   ApexPortalProjectsIdRoute: typeof ApexPortalProjectsIdRoute
@@ -508,6 +528,7 @@ interface ApexRouteChildren {
 }
 
 const ApexRouteChildren: ApexRouteChildren = {
+  ApexPortalAuditRoute: ApexPortalAuditRoute,
   ApexPortalDashboardRoute: ApexPortalDashboardRoute,
   ApexPortalSettingsRoute: ApexPortalSettingsRoute,
   ApexPortalProjectsIdRoute: ApexPortalProjectsIdRoute,
@@ -564,3 +585,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
