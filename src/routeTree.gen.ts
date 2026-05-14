@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as PortalRouteImport } from './routes/portal'
 import { Route as InsightsRouteImport } from './routes/insights'
@@ -33,6 +34,11 @@ import { Route as ApexPortalDashboardRouteImport } from './routes/_apex.portal.d
 import { Route as ApexPortalProjectsIndexRouteImport } from './routes/_apex.portal.projects.index'
 import { Route as ApexPortalProjectsIdRouteImport } from './routes/_apex.portal.projects.$id'
 
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
@@ -156,6 +162,7 @@ export interface FileRoutesByFullPath {
   '/insights': typeof InsightsRouteWithChildren
   '/portal': typeof PortalRouteWithChildren
   '/services': typeof ServicesRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/divisions/agritech': typeof DivisionsAgritechRoute
   '/divisions/innovation-lab': typeof DivisionsInnovationLabRoute
   '/divisions/intelligence': typeof DivisionsIntelligenceRoute
@@ -179,6 +186,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/insights': typeof InsightsRouteWithChildren
   '/services': typeof ServicesRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/divisions/agritech': typeof DivisionsAgritechRoute
   '/divisions/innovation-lab': typeof DivisionsInnovationLabRoute
   '/divisions/intelligence': typeof DivisionsIntelligenceRoute
@@ -205,6 +213,7 @@ export interface FileRoutesById {
   '/insights': typeof InsightsRouteWithChildren
   '/portal': typeof PortalRouteWithChildren
   '/services': typeof ServicesRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/divisions/agritech': typeof DivisionsAgritechRoute
   '/divisions/innovation-lab': typeof DivisionsInnovationLabRoute
   '/divisions/intelligence': typeof DivisionsIntelligenceRoute
@@ -231,6 +240,7 @@ export interface FileRouteTypes {
     | '/insights'
     | '/portal'
     | '/services'
+    | '/sitemap.xml'
     | '/divisions/agritech'
     | '/divisions/innovation-lab'
     | '/divisions/intelligence'
@@ -254,6 +264,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/insights'
     | '/services'
+    | '/sitemap.xml'
     | '/divisions/agritech'
     | '/divisions/innovation-lab'
     | '/divisions/intelligence'
@@ -279,6 +290,7 @@ export interface FileRouteTypes {
     | '/insights'
     | '/portal'
     | '/services'
+    | '/sitemap.xml'
     | '/divisions/agritech'
     | '/divisions/innovation-lab'
     | '/divisions/intelligence'
@@ -305,6 +317,7 @@ export interface RootRouteChildren {
   InsightsRoute: typeof InsightsRouteWithChildren
   PortalRoute: typeof PortalRouteWithChildren
   ServicesRoute: typeof ServicesRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   DivisionsAgritechRoute: typeof DivisionsAgritechRoute
   DivisionsInnovationLabRoute: typeof DivisionsInnovationLabRoute
   DivisionsIntelligenceRoute: typeof DivisionsIntelligenceRoute
@@ -316,6 +329,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/services': {
       id: '/services'
       path: '/services'
@@ -532,6 +552,7 @@ const rootRouteChildren: RootRouteChildren = {
   InsightsRoute: InsightsRouteWithChildren,
   PortalRoute: PortalRouteWithChildren,
   ServicesRoute: ServicesRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   DivisionsAgritechRoute: DivisionsAgritechRoute,
   DivisionsInnovationLabRoute: DivisionsInnovationLabRoute,
   DivisionsIntelligenceRoute: DivisionsIntelligenceRoute,
