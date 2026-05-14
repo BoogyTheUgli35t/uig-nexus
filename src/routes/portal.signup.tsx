@@ -54,7 +54,16 @@ function SignupPage() {
       },
     });
     setLoading(false);
-    if (error) return toast.error(error.message);
+    if (error) {
+      const refId = "UIG-" + Math.random().toString(36).slice(2, 8).toUpperCase();
+      logPortalEvent({ data: { event_type: "access_denied", email, metadata: { reason: error.message, stage: "sign_up", ref_id: refId } } }).catch(() => {});
+      const friendly = /already registered|already exists/i.test(error.message)
+        ? "An account with this email already exists. Try signing in."
+        : /password/i.test(error.message)
+        ? "Password doesn't meet requirements (min 8 characters)."
+        : "We couldn't create your account. Please try again.";
+      return toast.error(`${friendly} Reference: ${refId}`);
+    }
     if (data.session) {
       toast.success("Account created. Welcome to Apex.");
       navigate({ to: "/portal/dashboard" });
