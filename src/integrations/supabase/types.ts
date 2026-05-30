@@ -80,9 +80,37 @@ export type Database = {
         }
         Relationships: []
       }
+      divisions: {
+        Row: {
+          accent: string
+          created_at: string
+          name: string
+          slug: string
+          sort_order: number
+          tagline: string | null
+        }
+        Insert: {
+          accent?: string
+          created_at?: string
+          name: string
+          slug: string
+          sort_order?: number
+          tagline?: string | null
+        }
+        Update: {
+          accent?: string
+          created_at?: string
+          name?: string
+          slug?: string
+          sort_order?: number
+          tagline?: string | null
+        }
+        Relationships: []
+      }
       documents: {
         Row: {
           created_at: string
+          division: string | null
           file_path: string
           id: string
           mime_type: string | null
@@ -93,6 +121,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          division?: string | null
           file_path: string
           id?: string
           mime_type?: string | null
@@ -103,6 +132,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          division?: string | null
           file_path?: string
           id?: string
           mime_type?: string | null
@@ -120,6 +150,63 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      messages: {
+        Row: {
+          body: string
+          created_at: string
+          division: string
+          id: string
+          sender_id: string
+          thread_key: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          division: string
+          id?: string
+          sender_id: string
+          thread_key?: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          division?: string
+          id?: string
+          sender_id?: string
+          thread_key?: string
+        }
+        Relationships: []
+      }
+      notifications: {
+        Row: {
+          body: string | null
+          created_at: string
+          division: string | null
+          id: string
+          read_at: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          division?: string | null
+          id?: string
+          read_at?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          division?: string | null
+          id?: string
+          read_at?: string | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       organizations: {
         Row: {
@@ -301,6 +388,35 @@ export type Database = {
           },
         ]
       }
+      user_divisions: {
+        Row: {
+          created_at: string
+          division_slug: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          division_slug: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          division_slug?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_divisions_division_slug_fkey"
+            columns: ["division_slug"]
+            isOneToOne: false
+            referencedRelation: "divisions"
+            referencedColumns: ["slug"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           id: string
@@ -334,7 +450,7 @@ export type Database = {
       user_org: { Args: { _user_id: string }; Returns: string }
     }
     Enums: {
-      app_role: "admin" | "staff" | "client"
+      app_role: "admin" | "staff" | "client" | "investor" | "farmer" | "driver"
       project_status:
         | "planning"
         | "active"
@@ -470,7 +586,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "staff", "client"],
+      app_role: ["admin", "staff", "client", "investor", "farmer", "driver"],
       project_status: [
         "planning",
         "active",
