@@ -175,6 +175,31 @@
   .marquee-track {
     animation: marquee 40s linear infinite;
   }
+
+  /* Division accent system — set an accent var on a wrapper, then use acc-* */
+  .acc-gold { --acc: oklch(0.82 0.13 85); }
+  .acc-tech { --acc: oklch(0.68 0.16 240); }
+  .acc-agritech { --acc: oklch(0.72 0.17 150); }
+  .acc-realestate { --acc: oklch(0.85 0.02 260); }
+  .acc-logistics { --acc: oklch(0.7 0.19 45); }
+  .acc-intelligence { --acc: oklch(0.62 0.2 300); }
+  .acc-innovation { --acc: oklch(0.72 0.13 195); }
+
+  .acc-text { color: var(--acc, var(--gold)); }
+  .acc-bg { background-color: var(--acc, var(--gold)); }
+  .acc-border { border-color: var(--acc, var(--gold)); }
+  .acc-bg-soft { background-color: color-mix(in oklab, var(--acc, var(--gold)) 12%, transparent); }
+  .acc-border-soft { border-color: color-mix(in oklab, var(--acc, var(--gold)) 35%, transparent); }
+  .acc-glow { box-shadow: 0 10px 40px -12px color-mix(in oklab, var(--acc, var(--gold)) 40%, transparent); }
+  .acc-gradient {
+    background-image: linear-gradient(135deg, color-mix(in oklab, var(--acc, var(--gold)) 90%, transparent), color-mix(in oklab, var(--acc, var(--gold)) 55%, black));
+  }
+  .acc-text-gradient {
+    background-image: linear-gradient(135deg, var(--acc, var(--gold)), color-mix(in oklab, var(--acc, var(--gold)) 60%, white));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
 }
 
 @keyframes marquee {

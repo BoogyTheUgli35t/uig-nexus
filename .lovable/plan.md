@@ -1,121 +1,137 @@
+## UIG Divisions — Multi-Module Build
 
-# UIG — Final Pre-Phase-2 Master Build
+Turn the existing Apex Portal into a true multi-division operating system. Each division becomes its own workspace under `/portal/<division>/*`, sharing one auth layer, one sidebar shell, and shared infrastructure (notifications, messaging, documents). We build the **foundation first**, then one division per phase so each ships fully working and verified.
 
-Build the full Unified Innovations Group digital HQ to the brief's standard, harden the Apex Portal, fix Projects, promote the admin, add Playwright smoke tests, and lock in a build-verification routine.
-
----
-
-## 1. Design system lockdown
-
-`src/styles.css` tokens (oklch equivalents of brand hex):
-- `--background` deep black `#0A0A0A`, `--surface` navy `#0D0F1A`
-- `--gold` `#C9A84C`, `--gold-light` `#E8C97A`, `--shadow-gold` glow
-- `--foreground` off-white `#F5F0E8`, `--muted-foreground` `#8A8070`
-- Fonts: Playfair Display (display) + Inter (sans) via `@fontsource`
-- Utility classes: `.text-gradient-gold`, `.gradient-gold`, `.shadow-gold`, scroll-reveal helper
-
-Reusable site primitives in `src/components/site/`:
-- `Section`, `Eyebrow`, `MarqueeTicker`, `StatBar`, `DivisionCard`, `PillarGrid`, `QuoteBlock`, `LogoStrip`, `InsightCard`, `CTAStrip`, `BackToTop`, `WhatsAppFAB`, `CookieBanner`, `NewsletterForm`, `LoadingScreen`
-
-Header gets a Divisions dropdown (NavigationMenu) + Careers + News & Insights links + gold Get Started CTA.
-Footer gets the 6-column structure from the brief.
+Roles stay compact (`admin`, `staff`, `client`, plus `investor`, `farmer`, `driver`); per-division access is granted through a `user_divisions` table rather than a role explosion. The AI Model Trainer is an AI-powered placeholder using Lovable AI for live predictions/insights — no real GPU training. Hero + gallery images are generated now as branded dark/gold assets.
 
 ---
 
-## 2. Public pages (every one fully built — no lorem)
+### Phase 1 — Shared Foundation (this implementation)
 
-Routes (each with unique `head()` meta — title/description/og):
+**Database**
 
-| Route | File | Notes |
-|---|---|---|
-| `/` | `index.tsx` | 10 sections from the brief |
-| `/about` | `about.tsx` | 7 sections incl. animated counters & reach map |
-| `/divisions` | `divisions.index.tsx` | Multi-sector thesis + 6 rich cards |
-| `/divisions/technology` | existing | Rewrite to full brief copy + real-time capabilities + metrics |
-| `/divisions/agritech` | existing | Same |
-| `/divisions/real-estate` | existing | Same |
-| `/divisions/logistics` | existing | Same |
-| `/divisions/intelligence` | existing | Same |
-| `/divisions/innovation-lab` | existing | Same |
-| `/services` | `services.tsx` | 6 grouped categories + Custom Solutions block |
-| `/careers` | `careers.tsx` | 7 placeholder roles + open application form |
-| `/insights` | `insights.tsx` | 3 featured articles, listing |
-| `/insights/$slug` | `insights.$slug.tsx` | Full article template (3 seeded posts) |
-| `/contact` | `contact.tsx` | Expanded form with Country + Division + Budget + Message |
-| 404 | `__root.tsx` notFoundComponent | Branded 404 |
+- Extend `app_role` enum: add `investor`, `farmer`, `driver`.
+- `divisions` lookup table (slug, name, tagline, accent) seeded with the 6 divisions.
+- `user_divisions` (user_id, division_slug) — controls which division workspaces a user sees.
+- `notifications` (user_id, division, title, body, read_at) — cross-division alerts, RLS scoped to owner.
+- `messages` (division, thread_key, sender_id, body) — internal + client chat per division, RLS scoped to participants/org.
+- Extend `documents` with optional `division` tag column (keeps existing project link working).
+- Helper `has_division_access(uid, slug)` security-definer function; GRANTs + RLS on every new table.
 
-`DivisionPage` component extended to support: hero, problem block, services grid, real-time capabilities list, target clients, metrics bar, CTA — driven by typed props so all 6 pages stay consistent and rich.
+**Shell & shared UI**
 
-Global add-ons mounted in `__root.tsx`:
-- `LoadingScreen` (first visit only, sessionStorage flag)
-- `CookieBanner` (gold, dismiss persisted)
-- `WhatsAppFAB` (placeholder number, env-overridable)
-- `BackToTop`
-- `sitemap.xml` + `robots.txt` as server routes under `src/routes/api/public/`
+- Restructure the portal sidebar into division groups: each division a collapsible section showing its modules, filtered by `user_divisions` + role. Keep global topbar, dark/gold theme.
+- Shared building blocks reused by every division: `HeroBanner` (background image + overlay), `ImageGallery`, `KpiStat`, `DataPanel`, `EmptyState`, status badges.
+- Notifications bell + dropdown in the topbar; a shared Messaging panel component; a shared Documents center with tagging.
+- New server functions file(s) for divisions, notifications, messaging, documents.
 
-Forms (contact, careers application, newsletter) all use Zod + insert into Supabase tables with RLS allowing public insert + admin read.
+**Imagery**
+
+- Generate premium hero images (one per division) + a small gallery set per division into `src/assets/`, matching the brief's scenes (futuristic servers, drone over farmland, smart buildings, fleet/GPS, AI brain/data streams, innovation lab).
+
+**Admin**
+
+- Extend the admin area to manage divisions, assign users to divisions, and review access requests (builds on existing audit/access-request work).
+
+Verify: migration clean, build passes, sidebar renders per access, images load.
 
 ---
 
-## 3. Portal hardening
+### Phases 2–7 — One division per follow-up
 
-- **Error diagnostics with reference IDs**: helper `logPortalError({ stage, error, email })` writes a `portal_audit_log` row with `metadata.ref_id = 'UIG-' + 6char`. Login/Signup show *"Something went wrong. Reference: UIG-XXXXXX"* for unexpected errors; friendly copy for known cases (wrong password, duplicate email) still gets a ref ID.
-- **Audit view** at `/portal/admin/audit` (admin-only via `_apex.tsx` RBAC) — searchable table of recent events.
-- **Projects fix** (both empty & no create):
-  - Migration: ensure default "UIG Internal" org; backfill profiles missing `org_id` for staff/admin; update `handle_new_user` to assign default org for staff/admin.
-  - UI: `New Project` dialog on `/portal/projects` (staff/admin only) — name/type/status/description, calls `createProject` server fn (`requireSupabaseAuth` + role check). Detail page gets edit + tasks add/complete.
-  - Empty state CTA when list is empty.
-- **Sidebar/route RBAC** already in `_apex.tsx`; add the Audit entry for admins.
+Each phase = migration (tables + RLS + GRANTs) → server functions → routes under `/portal/<division>/*` → sidebar wiring → build + smoke test. All pages use real seeded sample data (no lorem ipsum), hero image, and gallery.
 
----
+**2. UIG Technology** — `tech_projects`, `tech_tasks`, `integrations`. Modules: project board (Kanban + timeline), client portal (status/invoices/documents), automation rules builder, integration hub. Roles: admin, staff(developer), client.
 
-## 4. Promote William Barber
+**3. UIG AgriTech** — `farmers`, `fields`, `sensor_data`, `yield_predictions`. Modules: farmer onboarding, field dashboard (map + sensor readings), AI yield-forecast chart. Roles: admin, farmer, staff(cooperative manager).
 
-Insert/upsert `('admin')` in `user_roles` for the user with email `boogyharry090@gmail.com` (lookup via `auth.users`). Verify with a follow-up `read_query`.
+**4. UIG Real Estate** — `properties`, `tenants`, `investors`, `leads`. Modules: property listings grid, tenant portal, investor ROI dashboard, CRM pipeline. Roles: admin, staff(agent), client(tenant), investor.
 
----
+**5. UIG Logistics** — `shipments`, `drivers`, `vehicles`, `routes`. Modules: shipment tracking (map), driver task view (mobile-friendly), fleet panel, route-optimization placeholder. Roles: admin, staff(dispatcher), driver, client(customer).
 
-## 5. Playwright smoke tests
+**6. UIG Intelligence** — `datasets`, `models`, `predictions`. Modules: AI assistant panel (chat + insights via Lovable AI), predictive-analytics dashboard, dataset upload + **UIG Model Trainer** (upload dataset → "train" model record with status/accuracy → run live AI predictions → view insights). Roles: admin, staff(data scientist/analyst).
 
-Add `@playwright/test`, config targeting the preview URL. Specs:
-- `signup.spec.ts`, `login.spec.ts`, `logout.spec.ts`
-- `rbac.spec.ts` (client vs admin nav)
-- `access-denied.spec.ts` (no-role user → access request CTA)
-- `public-links.spec.ts` (crawl every public route + every nav link, assert 200 + h1)
-- `contact-form.spec.ts`, `careers-form.spec.ts`
-
-Test users provisioned via service-role admin API in `globalSetup`; teardown deletes them. `bun run test:e2e` script.
+**7. UIG Innovation Lab** — `ideas`, `prototypes`, `partners`, `experiments`. Modules: idea submission, prototype tracker, partner collaboration, experiment log. Cross-links into Intelligence's Model Trainer for AI experiments. Roles: admin, staff(founder), partner, investor.
 
 ---
 
-## 6. Build verification routine
+### Technical notes
 
-`BUILD_CHECKLIST.md` at repo root + this order after every change:
-1. `bun run build:dev`
-2. `bun run build:prod`
-3. `bun run test:e2e`
-4. Manual spot-check (home, /divisions, one division page, /services, /careers, /insights, /contact, /portal/login → /portal/dashboard)
+- All data access via `createServerFn` + `requireSupabaseAuth` (RLS as the signed-in user); admin client only for trusted server work.
+- AI features use Lovable AI Gateway (`google/gemini-3-flash-preview` for chat/insights) — no user API key.
+- Portal stays behind the `_apex` role gate and `noindex`; public marketing site/divisions pages are untouched.
+- No new raw color literals — reuse existing dark/gold design tokens in `src/styles.css`.
+- Dataset/document uploads use the existing private storage bucket with per-user/division path scoping.
 
-Drive-by: restart dev server to clear the `virtual:tanstack-start-client-entry` stale-cache error currently in the runtime log.
+### Out of scope (stubbed as MVP placeholders)
 
----
+Real IoT sensor ingestion, live GPS/Maps SDK tracking, real ML model training/GPUs, payment processing, native driver mobile app. These render as realistic dashboards with seeded/simulated data.  
+  
+  
+🎨 Creative Enhancements (Add Below the Plan)
 
-## Out of scope (Phase 2)
+**AI Model Trainer Upgrade**
 
-Real CMS for insights, live messaging/notifications, AI insights inside portal, payments, custom domain email setup. Phase 1 finishes the public site, the portal foundation, and the verification harness.
+- Keep the Lovable AI placeholder for runtime, but design the UX as if UIG is training its own models.
+- Add a **Model Lifecycle dashboard**: Upload → Train → Evaluate → Deploy → Monitor.
+- Cross‑link this into every division (AgriTech yield models, Real Estate price prediction, Logistics route optimization).
+- Position **UIG Intelligence** as the brain of the group, with **Innovation Lab** as the sandbox.
 
----
+**Imagery as Storytelling**
 
-## Technical reference
+- Don’t just drop hero images — weave galleries into the workflow.
+- AgriTech: farmer dashboard shows live sensor data alongside drone imagery.
+- Real Estate: property listings grid includes smart building renders.
+- Logistics: shipment tracking map overlays with fleet photos.
+- This makes each division feel alive and industry‑specific.
 
-- **Counters**: `useInView` + `requestAnimationFrame` ramp; no extra deps.
-- **Marquee**: pure CSS `@keyframes` translate; pause on hover.
-- **Reach map**: SVG of Africa with Nigerian states highlighted (inline, no asset dep).
-- **Insights articles**: stored as MDX-style TS objects in `src/content/insights/`; full article pages rendered from typed data — no DB needed for Phase 1.
-- **Newsletter table**: new `newsletter_subscribers` (email unique, source, created_at) with public insert + admin read RLS.
-- **Careers table**: new `career_applications` (name, email, phone, role, location, cover, resume_url) with public insert + admin read; resumes go to a private storage bucket.
-- **Contact table**: extend `contact_submissions` with `country` + `division` (already exists) + `budget_range` (nullable text). Migration handles the additive columns.
-- **SEO files**: `src/routes/api/public/sitemap.xml.ts` and `robots.txt.ts` server routes generate from a static route registry.
-- **Auth ref ID**: `'UIG-' + crypto.randomUUID().replace(/-/g,'').slice(0,6).toUpperCase()`.
+**Division UX Personality**
 
-Ready to implement on approval.
+- Give each division its own accent color (within dark/gold theme):
+  - Technology = electric blue highlights
+  - AgriTech = green overlays
+  - Real Estate = silver/white accents
+  - Logistics = orange/red highlights
+  - Intelligence = neon purple
+  - Innovation Lab = teal
+- This makes the portal feel unified but with distinct “rooms.”
+
+**Innovation Lab as the Creative Hub**
+
+- Expand cross‑links: every division can submit ideas into the Lab.
+- Add **“Experiment with AI”** button that pipes datasets into Intelligence.
+- Add **“Prototype Showcase”** gallery with screenshots of MVPs.
+- This makes UIG look like a venture studio, not just a service provider.
+
+## ✨ Improved Build Plan (Creative Version)
+
+**Foundation**
+
+- Compact roles + division access.
+- Shared infra (notifications, messaging, docs).
+- Sidebar grouped by division, each with accent color + hero/gallery.
+- Admin panel manages divisions, users, and AI model trainer access.
+
+**Division Modules**
+
+- **Technology:** Project board, client portal, automation hub, integration gallery.
+- **AgriTech:** Farmer onboarding, field dashboard with drone imagery, yield prediction chart.
+- **Real Estate:** Property listings grid with smart renders, tenant portal, investor ROI dashboard.
+- **Logistics:** Shipment tracking map with fleet photos, driver app, route optimization.
+- **Intelligence:** AI assistant, predictive analytics, Model Lifecycle dashboard.
+- **Innovation Lab:** Idea submission, prototype tracker, partner collaboration, experiment showcase.
+
+**Imagery**
+
+- Generate premium hero + gallery images now.
+- Integrate galleries into workflows (not just static).
+- Accent colors per division for personality.
+
+**AI Model Trainer**
+
+- Placeholder runtime with Lovable AI.
+- UX designed as full lifecycle (upload → train → evaluate → deploy → monitor).
+- Cross‑linked into AgriTech, Real Estate, Logistics.
+- Innovation Lab acts as experimentation hub.
+
+🔥 This way, you keep Lovable’s **solid technical plan** intact, but directly beneath it you add the **creative upgrade layer**. Together, it reads like: *“Here’s the architecture Lovable will build, and here’s how we’ll make it visually rich, personality‑driven, and AI‑powered.”*
