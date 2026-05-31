@@ -13,6 +13,7 @@ export const Route = createFileRoute("/divisions/technology")({
   }),
   component: () => (
     <DivisionPage
+      slug="technology"
       eyebrow="UIG Technology"
       title={<>Engineering Nigeria's <span className="text-gradient-gold">Digital Future.</span></>}
       subtitle="UIG Technology is the digital transformation arm of the group. We design, build and deploy the software systems that help Nigerian and African businesses compete in a technology-driven world."

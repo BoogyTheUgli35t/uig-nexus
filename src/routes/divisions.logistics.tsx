@@ -13,6 +13,7 @@ export const Route = createFileRoute("/divisions/logistics")({
   }),
   component: () => (
     <DivisionPage
+      slug="logistics"
       eyebrow="UIG Logistics"
       title={<>Moving Nigeria <span className="text-gradient-gold">Forward.</span></>}
       subtitle="Nigeria's logistics gap costs businesses billions annually. Failed deliveries, opaque supply chains, no cold chain, untracked fleets. UIG Logistics brings intelligence, reliability and technology to every link."

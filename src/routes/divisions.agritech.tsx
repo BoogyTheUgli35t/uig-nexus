@@ -13,6 +13,7 @@ export const Route = createFileRoute("/divisions/agritech")({
   }),
   component: () => (
     <DivisionPage
+      slug="agritech"
       eyebrow="UIG AgriTech"
       title={<>Feeding Africa <span className="text-gradient-gold">Through Intelligence.</span></>}
       subtitle="Nigeria has 84 million hectares of arable land. Only a fraction is productively farmed. Farmers lose 40% of produce post-harvest. UIG AgriTech exists to change every one of these numbers."
