@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Cpu, Sprout, Building2, Truck, Brain, Beaker } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { PageHero, Section, CTABand } from "@/components/site/sections";
+import { DIVISIONS } from "@/lib/divisions";
 
 export const Route = createFileRoute("/divisions/")({
   head: () => ({
@@ -15,14 +16,14 @@ export const Route = createFileRoute("/divisions/")({
   component: DivisionsPage,
 });
 
-const divisions = [
-  { to: "/divisions/technology", title: "UIG Technology", icon: Cpu, blurb: "AI-powered software, portals & automation that replace manual work and unify your operation." },
-  { to: "/divisions/agritech", title: "UIG AgriTech", icon: Sprout, blurb: "Smart agriculture, data intelligence and predictive insights for farms and agri-enterprises." },
-  { to: "/divisions/real-estate", title: "UIG Real Estate", icon: Building2, blurb: "Property systems, real estate CRM and investor intelligence for developers and agencies." },
-  { to: "/divisions/logistics", title: "UIG Logistics", icon: Truck, blurb: "Fleet intelligence, tracking systems and route optimization for modern logistics operators." },
-  { to: "/divisions/intelligence", title: "UIG Intelligence", icon: Brain, blurb: "Custom AI models, automation and predictive systems built for African realities." },
-  { to: "/divisions/innovation-lab", title: "UIG Innovation Lab", icon: Beaker, blurb: "Venture studio and R&D — prototypes, MVPs and pilots with founders, corporates and investors." },
-] as const;
+const divisions = DIVISIONS.map((d) => ({
+  to: `/divisions/${d.slug}` as const,
+  title: d.name,
+  icon: d.icon,
+  hero: d.hero,
+  blurb: d.tagline,
+}));
+
 
 function DivisionsPage() {
   return (
