@@ -13,6 +13,7 @@ export const Route = createFileRoute("/divisions/intelligence")({
   }),
   component: () => (
     <DivisionPage
+      slug="intelligence"
       eyebrow="UIG Intelligence"
       title={<>Intelligence, Built for <span className="text-gradient-gold">Africa.</span></>}
       subtitle="Global AI is built on Western data, Western languages and Western contexts. When a Yoruba farmer, an Igbo trader or a Hausa student interacts with mainstream AI, they're an afterthought. UIG Intelligence exists to fix that — permanently."

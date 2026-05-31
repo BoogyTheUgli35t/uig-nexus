@@ -3,8 +3,10 @@ import type { LucideIcon } from "lucide-react";
 import { Check } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { PageHero, Section, Eyebrow, CTABand, FeatureCard } from "@/components/site/sections";
+import { getDivision, type DivisionSlug } from "@/lib/divisions";
 
 export type DivisionPageProps = {
+  slug?: DivisionSlug;
   eyebrow: string;
   title: ReactNode;
   subtitle: string;
@@ -22,9 +24,11 @@ export type DivisionPageProps = {
 };
 
 export function DivisionPage(props: DivisionPageProps) {
+  const division = props.slug ? getDivision(props.slug) : undefined;
   return (
     <SiteLayout>
-      <PageHero eyebrow={props.eyebrow} title={props.title} subtitle={props.subtitle} />
+      <PageHero eyebrow={props.eyebrow} title={props.title} subtitle={props.subtitle} image={division?.hero} />
+
 
       {props.problem && (
         <Section>

@@ -13,6 +13,7 @@ export const Route = createFileRoute("/divisions/real-estate")({
   }),
   component: () => (
     <DivisionPage
+      slug="real-estate"
       eyebrow="UIG Real Estate"
       title={<>Property Intelligence for a <span className="text-gradient-gold">New Nigeria.</span></>}
       subtitle="UIG Real Estate combines property expertise with technology to give investors, developers and homebuyers an edge in Nigeria's complex but lucrative real estate market."

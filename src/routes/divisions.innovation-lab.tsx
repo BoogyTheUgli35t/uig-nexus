@@ -13,6 +13,7 @@ export const Route = createFileRoute("/divisions/innovation-lab")({
   }),
   component: () => (
     <DivisionPage
+      slug="innovation-lab"
       eyebrow="UIG Innovation Lab"
       title={<>Where Nigeria's Next Big Ideas <span className="text-gradient-gold">Are Born.</span></>}
       subtitle="UIG Innovation Lab is the incubation, acceleration and R&D engine of the group. We find the most talented, hungry minds in Nigeria, back them with resources, and help them build category-defining companies."

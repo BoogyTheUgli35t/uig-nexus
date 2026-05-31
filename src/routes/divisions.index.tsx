@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Cpu, Sprout, Building2, Truck, Brain, Beaker } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { PageHero, Section, CTABand } from "@/components/site/sections";
+import { DIVISIONS } from "@/lib/divisions";
 
 export const Route = createFileRoute("/divisions/")({
   head: () => ({
@@ -15,14 +16,14 @@ export const Route = createFileRoute("/divisions/")({
   component: DivisionsPage,
 });
 
-const divisions = [
-  { to: "/divisions/technology", title: "UIG Technology", icon: Cpu, blurb: "AI-powered software, portals & automation that replace manual work and unify your operation." },
-  { to: "/divisions/agritech", title: "UIG AgriTech", icon: Sprout, blurb: "Smart agriculture, data intelligence and predictive insights for farms and agri-enterprises." },
-  { to: "/divisions/real-estate", title: "UIG Real Estate", icon: Building2, blurb: "Property systems, real estate CRM and investor intelligence for developers and agencies." },
-  { to: "/divisions/logistics", title: "UIG Logistics", icon: Truck, blurb: "Fleet intelligence, tracking systems and route optimization for modern logistics operators." },
-  { to: "/divisions/intelligence", title: "UIG Intelligence", icon: Brain, blurb: "Custom AI models, automation and predictive systems built for African realities." },
-  { to: "/divisions/innovation-lab", title: "UIG Innovation Lab", icon: Beaker, blurb: "Venture studio and R&D — prototypes, MVPs and pilots with founders, corporates and investors." },
-] as const;
+const divisions = DIVISIONS.map((d) => ({
+  to: `/divisions/${d.slug}` as const,
+  title: d.name,
+  icon: d.icon,
+  hero: d.hero,
+  blurb: d.tagline,
+}));
+
 
 function DivisionsPage() {
   return (
@@ -39,20 +40,32 @@ function DivisionsPage() {
             <Link
               key={d.to}
               to={d.to}
-              className="group relative rounded-2xl border border-border bg-surface p-8 transition hover:border-gold/40 hover:bg-surface-elevated"
+              className="group relative overflow-hidden rounded-2xl border border-border bg-surface transition hover:border-gold/40 hover:bg-surface-elevated"
             >
-              <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gold/10 text-gold">
-                <d.icon className="h-6 w-6" />
+              <div className="relative h-40 overflow-hidden">
+                <img
+                  src={d.hero}
+                  alt={d.title}
+                  loading="lazy"
+                  className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-surface via-surface/40 to-transparent" />
+                <div className="absolute bottom-3 left-4 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gold/15 text-gold backdrop-blur">
+                  <d.icon className="h-5 w-5" />
+                </div>
               </div>
-              <h3 className="font-display text-xl font-semibold">{d.title}</h3>
-              <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{d.blurb}</p>
-              <div className="mt-6 inline-flex items-center text-sm text-gold">
-                Explore <ArrowRight className="ml-1 h-4 w-4 transition group-hover:translate-x-1" />
+              <div className="p-8 pt-6">
+                <h3 className="font-display text-xl font-semibold">{d.title}</h3>
+                <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{d.blurb}</p>
+                <div className="mt-6 inline-flex items-center text-sm text-gold">
+                  Explore <ArrowRight className="ml-1 h-4 w-4 transition group-hover:translate-x-1" />
+                </div>
               </div>
             </Link>
           ))}
         </div>
       </Section>
+
 
       <CTABand title="Not sure which division fits?" subtitle="Tell us your problem — we'll route you to the right team." buttonText="Talk to UIG" />
     </SiteLayout>
