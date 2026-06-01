@@ -76,6 +76,35 @@ function DashboardPage() {
         </div>
       </div>
 
+      {myDivisions.length > 0 && (
+        <div>
+          <h2 className="text-lg font-semibold">Your divisions</h2>
+          <p className="text-sm text-muted-foreground">Jump into the workspaces you have access to.</p>
+          <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {myDivisions.map((d) => (
+              <Link
+                key={d.slug}
+                to="/portal/divisions/$slug"
+                params={{ slug: d.slug }}
+                className={`${d.accentClass} group relative overflow-hidden rounded-xl border border-border bg-surface p-5 transition hover:acc-border-soft`}
+              >
+                <div className="flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg acc-bg-soft acc-text">
+                    <d.icon className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <div className="font-semibold">{d.short}</div>
+                    <div className="text-xs text-muted-foreground">{d.tagline}</div>
+                  </div>
+                  <ArrowRight className="ml-auto h-4 w-4 text-muted-foreground transition group-hover:acc-text" />
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
+
+
       <div className="grid gap-6 lg:grid-cols-2">
         <Panel title="Recent projects" link={{ to: "/portal/projects", label: "View all" }}>
           {data.recentProjects.length === 0 ? (
