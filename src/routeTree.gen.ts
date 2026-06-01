@@ -34,6 +34,7 @@ import { Route as ApexPortalDashboardRouteImport } from './routes/_apex.portal.d
 import { Route as ApexPortalAuditRouteImport } from './routes/_apex.portal.audit'
 import { Route as ApexPortalProjectsIndexRouteImport } from './routes/_apex.portal.projects.index'
 import { Route as ApexPortalProjectsIdRouteImport } from './routes/_apex.portal.projects.$id'
+import { Route as ApexPortalDivisionsSlugRouteImport } from './routes/_apex.portal.divisions.$slug'
 
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
@@ -159,6 +160,11 @@ const ApexPortalProjectsIdRoute = ApexPortalProjectsIdRouteImport.update({
   path: '/portal/projects/$id',
   getParentRoute: () => ApexRoute,
 } as any)
+const ApexPortalDivisionsSlugRoute = ApexPortalDivisionsSlugRouteImport.update({
+  id: '/portal/divisions/$slug',
+  path: '/portal/divisions/$slug',
+  getParentRoute: () => ApexRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -183,6 +189,7 @@ export interface FileRoutesByFullPath {
   '/portal/audit': typeof ApexPortalAuditRoute
   '/portal/dashboard': typeof ApexPortalDashboardRoute
   '/portal/settings': typeof ApexPortalSettingsRoute
+  '/portal/divisions/$slug': typeof ApexPortalDivisionsSlugRoute
   '/portal/projects/$id': typeof ApexPortalProjectsIdRoute
   '/portal/projects/': typeof ApexPortalProjectsIndexRoute
 }
@@ -208,6 +215,7 @@ export interface FileRoutesByTo {
   '/portal/audit': typeof ApexPortalAuditRoute
   '/portal/dashboard': typeof ApexPortalDashboardRoute
   '/portal/settings': typeof ApexPortalSettingsRoute
+  '/portal/divisions/$slug': typeof ApexPortalDivisionsSlugRoute
   '/portal/projects/$id': typeof ApexPortalProjectsIdRoute
   '/portal/projects': typeof ApexPortalProjectsIndexRoute
 }
@@ -236,6 +244,7 @@ export interface FileRoutesById {
   '/_apex/portal/audit': typeof ApexPortalAuditRoute
   '/_apex/portal/dashboard': typeof ApexPortalDashboardRoute
   '/_apex/portal/settings': typeof ApexPortalSettingsRoute
+  '/_apex/portal/divisions/$slug': typeof ApexPortalDivisionsSlugRoute
   '/_apex/portal/projects/$id': typeof ApexPortalProjectsIdRoute
   '/_apex/portal/projects/': typeof ApexPortalProjectsIndexRoute
 }
@@ -264,6 +273,7 @@ export interface FileRouteTypes {
     | '/portal/audit'
     | '/portal/dashboard'
     | '/portal/settings'
+    | '/portal/divisions/$slug'
     | '/portal/projects/$id'
     | '/portal/projects/'
   fileRoutesByTo: FileRoutesByTo
@@ -289,6 +299,7 @@ export interface FileRouteTypes {
     | '/portal/audit'
     | '/portal/dashboard'
     | '/portal/settings'
+    | '/portal/divisions/$slug'
     | '/portal/projects/$id'
     | '/portal/projects'
   id:
@@ -316,6 +327,7 @@ export interface FileRouteTypes {
     | '/_apex/portal/audit'
     | '/_apex/portal/dashboard'
     | '/_apex/portal/settings'
+    | '/_apex/portal/divisions/$slug'
     | '/_apex/portal/projects/$id'
     | '/_apex/portal/projects/'
   fileRoutesById: FileRoutesById
@@ -516,6 +528,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApexPortalProjectsIdRouteImport
       parentRoute: typeof ApexRoute
     }
+    '/_apex/portal/divisions/$slug': {
+      id: '/_apex/portal/divisions/$slug'
+      path: '/portal/divisions/$slug'
+      fullPath: '/portal/divisions/$slug'
+      preLoaderRoute: typeof ApexPortalDivisionsSlugRouteImport
+      parentRoute: typeof ApexRoute
+    }
   }
 }
 
@@ -523,6 +542,7 @@ interface ApexRouteChildren {
   ApexPortalAuditRoute: typeof ApexPortalAuditRoute
   ApexPortalDashboardRoute: typeof ApexPortalDashboardRoute
   ApexPortalSettingsRoute: typeof ApexPortalSettingsRoute
+  ApexPortalDivisionsSlugRoute: typeof ApexPortalDivisionsSlugRoute
   ApexPortalProjectsIdRoute: typeof ApexPortalProjectsIdRoute
   ApexPortalProjectsIndexRoute: typeof ApexPortalProjectsIndexRoute
 }
@@ -531,6 +551,7 @@ const ApexRouteChildren: ApexRouteChildren = {
   ApexPortalAuditRoute: ApexPortalAuditRoute,
   ApexPortalDashboardRoute: ApexPortalDashboardRoute,
   ApexPortalSettingsRoute: ApexPortalSettingsRoute,
+  ApexPortalDivisionsSlugRoute: ApexPortalDivisionsSlugRoute,
   ApexPortalProjectsIdRoute: ApexPortalProjectsIdRoute,
   ApexPortalProjectsIndexRoute: ApexPortalProjectsIndexRoute,
 }

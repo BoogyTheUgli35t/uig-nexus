@@ -8,7 +8,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { logPortalEvent, submitAccessRequest } from "@/lib/portal.functions";
+import { getMyWorkspace } from "@/lib/divisions.functions";
+import { authHeaders } from "@/lib/auth-headers";
+import { DIVISIONS } from "@/lib/divisions";
 import { toast } from "sonner";
+
 
 type AppRole = "admin" | "staff" | "client";
 const ALLOWED_ROLES: readonly AppRole[] = ["admin", "staff", "client"];
@@ -216,6 +220,24 @@ function PortalShell() {
   const visibleNav = useMemo(() => NAV_ITEMS.filter((n) => n.roles.some((r) => roles.includes(r))), [roles]);
   const primaryRole = roles.includes("admin") ? "Admin" : roles.includes("staff") ? "Staff" : "Client";
 
+  const [divisionSlugs, setDivisionSlugs] = useState<string[]>([]);
+  useEffect(() => {
+    (async () => {
+      try {
+        const headers = await authHeaders();
+        const ws = await getMyWorkspace({ headers });
+        setDivisionSlugs(ws.divisionSlugs);
+      } catch {
+        setDivisionSlugs([]);
+      }
+    })();
+  }, []);
+  const myDivisions = useMemo(
+    () => DIVISIONS.filter((d) => divisionSlugs.includes(d.slug)),
+    [divisionSlugs],
+  );
+
+
   async function handleSignOut() {
     if (userId) await logPortalEvent({ data: { event_type: "sign_out", user_id: userId, email: ctxEmail ?? null } }).catch(() => {});
     await supabase.auth.signOut();
@@ -239,7 +261,25 @@ function PortalShell() {
               <ChevronRight className="ml-auto h-3.5 w-3.5 opacity-50" />
             </Link>
           ))}
+          {myDivisions.length > 0 && (
+            <div className="pt-4">
+              <div className="px-3 pb-1 text-[10px] uppercase tracking-wider text-muted-foreground">Divisions</div>
+              {myDivisions.map((d) => (
+                <Link
+                  key={d.slug}
+                  to="/portal/divisions/$slug"
+                  params={{ slug: d.slug }}
+                  className={`${d.accentClass} flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-surface-elevated hover:text-foreground transition`}
+                  activeProps={{ className: "bg-surface-elevated text-foreground" }}
+                >
+                  <d.icon className="h-4 w-4 acc-text" /> {d.short}
+                  <ChevronRight className="ml-auto h-3.5 w-3.5 opacity-50" />
+                </Link>
+              ))}
+            </div>
+          )}
         </nav>
+
         <div className="border-t border-border pt-4 mt-4">
           <div className="px-2 text-xs text-muted-foreground truncate">{email}</div>
           <div className="px-2 mt-1 inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-gold">
@@ -259,11 +299,17 @@ function PortalShell() {
         </header>
         <div className="lg:hidden border-b border-border bg-surface/40 px-4 py-2 flex gap-1 overflow-x-auto">
           {visibleNav.map((n) => (
-            <Link key={n.to} to={n.to} className="px-3 py-1.5 rounded-md text-sm text-muted-foreground hover:text-foreground" activeProps={{ className: "bg-surface-elevated text-foreground" }}>
+            <Link key={n.to} to={n.to} className="px-3 py-1.5 rounded-md text-sm text-muted-foreground hover:text-foreground whitespace-nowrap" activeProps={{ className: "bg-surface-elevated text-foreground" }}>
               {n.label}
             </Link>
           ))}
+          {myDivisions.map((d) => (
+            <Link key={d.slug} to="/portal/divisions/$slug" params={{ slug: d.slug }} className="px-3 py-1.5 rounded-md text-sm text-muted-foreground hover:text-foreground whitespace-nowrap" activeProps={{ className: "bg-surface-elevated text-foreground" }}>
+              {d.short}
+            </Link>
+          ))}
         </div>
+
         <main className="flex-1 p-6 sm:p-8 overflow-x-hidden"><Outlet /></main>
       </div>
     </div>
