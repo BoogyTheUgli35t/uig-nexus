@@ -299,11 +299,17 @@ function PortalShell() {
         </header>
         <div className="lg:hidden border-b border-border bg-surface/40 px-4 py-2 flex gap-1 overflow-x-auto">
           {visibleNav.map((n) => (
-            <Link key={n.to} to={n.to} className="px-3 py-1.5 rounded-md text-sm text-muted-foreground hover:text-foreground" activeProps={{ className: "bg-surface-elevated text-foreground" }}>
+            <Link key={n.to} to={n.to} className="px-3 py-1.5 rounded-md text-sm text-muted-foreground hover:text-foreground whitespace-nowrap" activeProps={{ className: "bg-surface-elevated text-foreground" }}>
               {n.label}
             </Link>
           ))}
+          {myDivisions.map((d) => (
+            <Link key={d.slug} to="/portal/divisions/$slug" params={{ slug: d.slug }} className="px-3 py-1.5 rounded-md text-sm text-muted-foreground hover:text-foreground whitespace-nowrap" activeProps={{ className: "bg-surface-elevated text-foreground" }}>
+              {d.short}
+            </Link>
+          ))}
         </div>
+
         <main className="flex-1 p-6 sm:p-8 overflow-x-hidden"><Outlet /></main>
       </div>
     </div>
