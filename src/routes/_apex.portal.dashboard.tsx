@@ -17,6 +17,7 @@ type Data = Awaited<ReturnType<typeof getDashboard>>;
 
 function DashboardPage() {
   const [data, setData] = useState<Data | null>(null);
+  const [divisionSlugs, setDivisionSlugs] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -26,8 +27,13 @@ function DashboardPage() {
         const { data: sess } = await supabase.auth.getSession();
         if (!sess.session) return;
         const headers = { authorization: `Bearer ${sess.session.access_token}` };
-        const res = await getDashboard({ headers });
+        const [res, ws] = await Promise.all([
+          getDashboard({ headers }),
+          getMyWorkspace({ headers: await authHeaders() }),
+        ]);
         setData(res);
+        setDivisionSlugs(ws.divisionSlugs);
+
       } catch (e) {
         setError(e instanceof Error ? e.message : "Failed to load");
       } finally {
