@@ -47,6 +47,8 @@ function DashboardPage() {
   if (!data) return null;
 
   const greeting = data.profile?.full_name?.split(" ")[0] ?? "there";
+  const myDivisions = DIVISIONS.filter((d) => divisionSlugs.includes(d.slug));
+
 
   return (
     <div className="space-y-8 max-w-6xl">
