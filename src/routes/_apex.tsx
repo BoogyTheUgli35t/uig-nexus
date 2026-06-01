@@ -220,6 +220,24 @@ function PortalShell() {
   const visibleNav = useMemo(() => NAV_ITEMS.filter((n) => n.roles.some((r) => roles.includes(r))), [roles]);
   const primaryRole = roles.includes("admin") ? "Admin" : roles.includes("staff") ? "Staff" : "Client";
 
+  const [divisionSlugs, setDivisionSlugs] = useState<string[]>([]);
+  useEffect(() => {
+    (async () => {
+      try {
+        const headers = await authHeaders();
+        const ws = await getMyWorkspace({ headers });
+        setDivisionSlugs(ws.divisionSlugs);
+      } catch {
+        setDivisionSlugs([]);
+      }
+    })();
+  }, []);
+  const myDivisions = useMemo(
+    () => DIVISIONS.filter((d) => divisionSlugs.includes(d.slug)),
+    [divisionSlugs],
+  );
+
+
   async function handleSignOut() {
     if (userId) await logPortalEvent({ data: { event_type: "sign_out", user_id: userId, email: ctxEmail ?? null } }).catch(() => {});
     await supabase.auth.signOut();
