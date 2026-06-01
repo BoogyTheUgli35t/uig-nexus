@@ -261,7 +261,25 @@ function PortalShell() {
               <ChevronRight className="ml-auto h-3.5 w-3.5 opacity-50" />
             </Link>
           ))}
+          {myDivisions.length > 0 && (
+            <div className="pt-4">
+              <div className="px-3 pb-1 text-[10px] uppercase tracking-wider text-muted-foreground">Divisions</div>
+              {myDivisions.map((d) => (
+                <Link
+                  key={d.slug}
+                  to="/portal/divisions/$slug"
+                  params={{ slug: d.slug }}
+                  className={`${d.accentClass} flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-surface-elevated hover:text-foreground transition`}
+                  activeProps={{ className: "bg-surface-elevated text-foreground" }}
+                >
+                  <d.icon className="h-4 w-4 acc-text" /> {d.short}
+                  <ChevronRight className="ml-auto h-3.5 w-3.5 opacity-50" />
+                </Link>
+              ))}
+            </div>
+          )}
         </nav>
+
         <div className="border-t border-border pt-4 mt-4">
           <div className="px-2 text-xs text-muted-foreground truncate">{email}</div>
           <div className="px-2 mt-1 inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-gold">
