@@ -2,7 +2,11 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { getDashboard } from "@/lib/portal.functions";
+import { getMyWorkspace } from "@/lib/divisions.functions";
+import { authHeaders } from "@/lib/auth-headers";
+import { DIVISIONS } from "@/lib/divisions";
 import { FolderKanban, CheckSquare, FileText, Sparkles, ArrowRight } from "lucide-react";
+
 
 export const Route = createFileRoute("/_apex/portal/dashboard")({
   head: () => ({ meta: [{ title: "Dashboard — UIG Apex" }, { name: "robots", content: "noindex" }] }),
