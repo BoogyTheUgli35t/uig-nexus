@@ -8,7 +8,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { logPortalEvent, submitAccessRequest } from "@/lib/portal.functions";
+import { getMyWorkspace } from "@/lib/divisions.functions";
+import { authHeaders } from "@/lib/auth-headers";
+import { DIVISIONS } from "@/lib/divisions";
 import { toast } from "sonner";
+
 
 type AppRole = "admin" | "staff" | "client";
 const ALLOWED_ROLES: readonly AppRole[] = ["admin", "staff", "client"];
