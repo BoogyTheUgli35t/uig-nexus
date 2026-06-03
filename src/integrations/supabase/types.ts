@@ -151,6 +151,44 @@ export type Database = {
           },
         ]
       }
+      integrations: {
+        Row: {
+          created_at: string
+          id: string
+          last_sync: string | null
+          name: string
+          org_id: string | null
+          provider: string | null
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          last_sync?: string | null
+          name: string
+          org_id?: string | null
+          provider?: string | null
+          status?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          last_sync?: string | null
+          name?: string
+          org_id?: string | null
+          provider?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "integrations_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       messages: {
         Row: {
           body: string
@@ -384,6 +422,85 @@ export type Database = {
             columns: ["project_id"]
             isOneToOne: false
             referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tech_projects: {
+        Row: {
+          client_name: string | null
+          created_at: string
+          id: string
+          metadata: Json
+          org_id: string | null
+          owner_id: string | null
+          progress: number
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          client_name?: string | null
+          created_at?: string
+          id?: string
+          metadata?: Json
+          org_id?: string | null
+          owner_id?: string | null
+          progress?: number
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          client_name?: string | null
+          created_at?: string
+          id?: string
+          metadata?: Json
+          org_id?: string | null
+          owner_id?: string | null
+          progress?: number
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tech_projects_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tech_tasks: {
+        Row: {
+          created_at: string
+          id: string
+          status: string
+          tech_project_id: string
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          status?: string
+          tech_project_id: string
+          title: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          status?: string
+          tech_project_id?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tech_tasks_tech_project_id_fkey"
+            columns: ["tech_project_id"]
+            isOneToOne: false
+            referencedRelation: "tech_projects"
             referencedColumns: ["id"]
           },
         ]
