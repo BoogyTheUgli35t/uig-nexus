@@ -132,7 +132,15 @@ const STATUS_STYLES: Record<string, string> = {
   in_progress: "bg-blue-500/15 text-blue-400 border-blue-500/30",
   todo: "bg-muted text-muted-foreground border-border",
   done: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
+  discovery: "bg-gold/15 text-gold border-gold/30",
+  building: "bg-blue-500/15 text-blue-400 border-blue-500/30",
+  review: "bg-violet-500/15 text-violet-400 border-violet-500/30",
+  paused: "bg-muted text-muted-foreground border-border",
+  connected: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
+  error: "bg-destructive/15 text-destructive border-destructive/30",
+  disconnected: "bg-muted text-muted-foreground border-border",
 };
+
 
 export function StatusBadge({ status }: { status: string }) {
   const key = status.toLowerCase();
