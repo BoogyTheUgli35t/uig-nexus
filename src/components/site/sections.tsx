@@ -49,13 +49,13 @@ export function PageHero({
             src={image}
             alt=""
             aria-hidden="true"
-            className="absolute inset-0 h-full w-full object-cover opacity-30"
+            className="absolute inset-0 h-full w-full object-cover opacity-80"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-background/40" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/60 to-background/10" />
         </>
       )}
-      <div className="absolute inset-0 grid-bg opacity-40" />
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background" />
+      {!image && <div className="absolute inset-0 grid-bg opacity-40" />}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background/80" />
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-20 pb-24 sm:pt-28 sm:pb-32">
         {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
         <h1 className="mt-5 text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight max-w-4xl">
