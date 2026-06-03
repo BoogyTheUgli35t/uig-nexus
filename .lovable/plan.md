@@ -41,7 +41,7 @@ Verify: migration clean, build passes, sidebar renders per access, images load.
 
 Each phase = migration (tables + RLS + GRANTs) → server functions → routes under `/portal/<division>/*` → sidebar wiring → build + smoke test. All pages use real seeded sample data (no lorem ipsum), hero image, and gallery.
 
-**2. UIG Technology** — `tech_projects`, `tech_tasks`, `integrations`. Modules: project board (Kanban + timeline), client portal (status/invoices/documents), automation rules builder, integration hub. Roles: admin, staff(developer), client.
+**2. UIG Technology** ✅ DONE — `tech_projects`, `tech_tasks`, `integrations` (RLS by division access + staff/admin, seeded). Workspace at `/portal/divisions/technology`: KPIs, project board (5-column pipeline, status moves, task toggle), new-engagement form, integration hub. Next: client portal/invoices + automation builder.
 
 **3. UIG AgriTech** — `farmers`, `fields`, `sensor_data`, `yield_predictions`. Modules: farmer onboarding, field dashboard (map + sensor readings), AI yield-forecast chart. Roles: admin, farmer, staff(cooperative manager).
 
