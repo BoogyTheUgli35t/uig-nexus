@@ -66,10 +66,10 @@ export const DIVISIONS: Division[] = [
     icon: Cpu,
     hero: heroTechnology,
     modules: [
-      { label: "Project board", description: "Kanban + timeline across every client engagement.", status: "soon" },
-      { label: "Client portal", description: "Live project status, invoices and documents.", status: "soon" },
+      { label: "Project board", description: "Kanban + timeline across every client engagement.", status: "live" },
+      { label: "Client portal", description: "Live project status, invoices and documents.", status: "live" },
       { label: "Automation engine", description: "Trigger-based workflow rules and run history.", status: "soon" },
-      { label: "Integration hub", description: "Connect and monitor third-party APIs and services.", status: "soon" },
+      { label: "Integration hub", description: "Connect and monitor third-party APIs and services.", status: "live" },
     ],
   },
   {
