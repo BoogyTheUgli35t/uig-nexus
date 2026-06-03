@@ -32,11 +32,11 @@ export function HeroBanner({
           src={division.hero}
           alt=""
           aria-hidden
-          className="absolute inset-0 h-full w-full object-cover opacity-25"
+          className="absolute inset-0 h-full w-full object-cover opacity-70"
           loading="lazy"
         />
       )}
-      <div className="absolute inset-0 bg-gradient-to-r from-background via-background/85 to-background/40" />
+      <div className="absolute inset-0 bg-gradient-to-r from-background via-background/65 to-background/15" />
       <div className="relative p-6 sm:p-10">
         {eyebrow && (
           <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] acc-text">
