@@ -43,7 +43,7 @@ Each phase = migration (tables + RLS + GRANTs) → server functions → routes u
 
 **2. UIG Technology** ✅ DONE — `tech_projects`, `tech_tasks`, `integrations` (RLS by division access + staff/admin, seeded). Workspace at `/portal/divisions/technology`: KPIs, project board (5-column pipeline, status moves, task toggle), new-engagement form, integration hub. Next: client portal/invoices + automation builder.
 
-**3. UIG AgriTech** — `farmers`, `fields`, `sensor_data`, `yield_predictions`. Modules: farmer onboarding, field dashboard (map + sensor readings), AI yield-forecast chart. Roles: admin, farmer, staff(cooperative manager).
+**3. UIG AgriTech** ✅ DONE — `farmers`, `fields`, `sensor_data`, `yield_predictions` (RLS by division access + staff/admin, seeded with Nigerian sample data). Workspace at `/portal/divisions/agritech`: KPIs (farmers, fields, hectares, avg health), farmer onboarding form, AI yield-forecast bar chart by season, field dashboard with live sensor readings (moisture/temp/humidity) and health-status moves. Next: cooperative management.
 
 **4. UIG Real Estate** — `properties`, `tenants`, `investors`, `leads`. Modules: property listings grid, tenant portal, investor ROI dashboard, CRM pipeline. Roles: admin, staff(agent), client(tenant), investor.
 
