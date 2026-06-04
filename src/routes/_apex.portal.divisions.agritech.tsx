@@ -191,19 +191,19 @@ function AgriTechWorkspace() {
           <div className="h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={yieldBySeason} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
-                <XAxis dataKey="season" tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} />
-                <YAxis tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }} axisLine={false} tickLine={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
+                <XAxis dataKey="season" tick={{ fontSize: 12, fill: "var(--muted-foreground)" }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fontSize: 12, fill: "var(--muted-foreground)" }} axisLine={false} tickLine={false} />
                 <Tooltip
-                  cursor={{ fill: "hsl(var(--muted) / 0.3)" }}
+                  cursor={{ fill: "color-mix(in oklab, var(--muted) 30%, transparent)" }}
                   contentStyle={{
-                    background: "hsl(var(--surface))",
-                    border: "1px solid hsl(var(--border))",
+                    background: "var(--surface)",
+                    border: "1px solid var(--border)",
                     borderRadius: 8,
                     fontSize: 12,
                   }}
                 />
-                <Bar dataKey="tons" radius={[6, 6, 0, 0]} fill="var(--acc, hsl(var(--gold)))" />
+                <Bar dataKey="tons" radius={[6, 6, 0, 0]} fill="var(--acc, var(--gold))" />
               </BarChart>
             </ResponsiveContainer>
           </div>
