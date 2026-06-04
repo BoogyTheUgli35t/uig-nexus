@@ -151,6 +151,103 @@ export type Database = {
           },
         ]
       }
+      farmers: {
+        Row: {
+          cooperative: string | null
+          created_at: string
+          full_name: string
+          hectares: number
+          id: string
+          location: string | null
+          org_id: string | null
+          owner_id: string | null
+          phone: string | null
+          primary_crop: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          cooperative?: string | null
+          created_at?: string
+          full_name: string
+          hectares?: number
+          id?: string
+          location?: string | null
+          org_id?: string | null
+          owner_id?: string | null
+          phone?: string | null
+          primary_crop?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          cooperative?: string | null
+          created_at?: string
+          full_name?: string
+          hectares?: number
+          id?: string
+          location?: string | null
+          org_id?: string | null
+          owner_id?: string | null
+          phone?: string | null
+          primary_crop?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "farmers_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      fields: {
+        Row: {
+          created_at: string
+          crop: string | null
+          farmer_id: string
+          health: number
+          hectares: number
+          id: string
+          name: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          crop?: string | null
+          farmer_id: string
+          health?: number
+          hectares?: number
+          id?: string
+          name: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          crop?: string | null
+          farmer_id?: string
+          health?: number
+          hectares?: number
+          id?: string
+          name?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fields_farmer_id_fkey"
+            columns: ["farmer_id"]
+            isOneToOne: false
+            referencedRelation: "farmers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       integrations: {
         Row: {
           created_at: string
@@ -379,6 +476,41 @@ export type Database = {
           },
         ]
       }
+      sensor_data: {
+        Row: {
+          field_id: string
+          humidity: number | null
+          id: string
+          recorded_at: string
+          soil_moisture: number | null
+          temperature: number | null
+        }
+        Insert: {
+          field_id: string
+          humidity?: number | null
+          id?: string
+          recorded_at?: string
+          soil_moisture?: number | null
+          temperature?: number | null
+        }
+        Update: {
+          field_id?: string
+          humidity?: number | null
+          id?: string
+          recorded_at?: string
+          soil_moisture?: number | null
+          temperature?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sensor_data_field_id_fkey"
+            columns: ["field_id"]
+            isOneToOne: false
+            referencedRelation: "fields"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tasks: {
         Row: {
           assignee_id: string | null
@@ -551,6 +683,41 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      yield_predictions: {
+        Row: {
+          confidence: number
+          created_at: string
+          field_id: string
+          id: string
+          predicted_yield_tons: number
+          season: string
+        }
+        Insert: {
+          confidence?: number
+          created_at?: string
+          field_id: string
+          id?: string
+          predicted_yield_tons?: number
+          season: string
+        }
+        Update: {
+          confidence?: number
+          created_at?: string
+          field_id?: string
+          id?: string
+          predicted_yield_tons?: number
+          season?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "yield_predictions_field_id_fkey"
+            columns: ["field_id"]
+            isOneToOne: false
+            referencedRelation: "fields"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
