@@ -1,6 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
 const ContactSchema = z.object({
   name: z.string().trim().min(1).max(100),
@@ -13,6 +12,7 @@ const ContactSchema = z.object({
 export const submitContact = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => ContactSchema.parse(input))
   .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { error } = await supabaseAdmin.from("contact_submissions").insert({
       name: data.name,
       email: data.email,
