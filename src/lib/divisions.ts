@@ -84,9 +84,9 @@ export const DIVISIONS: Division[] = [
     icon: Sprout,
     hero: heroAgritech,
     modules: [
-      { label: "Farmer onboarding", description: "Register farmers and cooperatives in minutes.", status: "soon" },
-      { label: "Field dashboard", description: "Map view with live sensor and drone data.", status: "soon" },
-      { label: "Yield prediction", description: "AI-forecasted yields by field and season.", status: "soon" },
+      { label: "Farmer onboarding", description: "Register farmers and cooperatives in minutes.", status: "live" },
+      { label: "Field dashboard", description: "Map view with live sensor and drone data.", status: "live" },
+      { label: "Yield prediction", description: "AI-forecasted yields by field and season.", status: "live" },
       { label: "Cooperative management", description: "Group farmers, share inputs, track output.", status: "soon" },
     ],
   },
