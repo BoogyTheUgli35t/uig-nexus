@@ -102,10 +102,10 @@ export const DIVISIONS: Division[] = [
     icon: Building2,
     hero: heroRealEstate,
     modules: [
-      { label: "Property listings", description: "Manage the full portfolio with rich detail.", status: "soon" },
-      { label: "Tenant portal", description: "Payments, documents and maintenance requests.", status: "soon" },
-      { label: "Investor dashboard", description: "Portfolio value, ROI and distributions.", status: "soon" },
-      { label: "CRM pipeline", description: "Track leads from enquiry to close.", status: "soon" },
+      { label: "Property listings", description: "Manage the full portfolio with rich detail.", status: "live" },
+      { label: "Tenant portal", description: "Payments, documents and maintenance requests.", status: "live" },
+      { label: "Investor dashboard", description: "Portfolio value, ROI and distributions.", status: "live" },
+      { label: "CRM pipeline", description: "Track leads from enquiry to close.", status: "live" },
     ],
   },
   {

@@ -286,6 +286,89 @@ export type Database = {
           },
         ]
       }
+      investors: {
+        Row: {
+          amount_invested: number
+          created_at: string
+          email: string | null
+          expected_roi: number
+          full_name: string
+          id: string
+          phone: string | null
+          portfolio_value: number
+          updated_at: string
+        }
+        Insert: {
+          amount_invested?: number
+          created_at?: string
+          email?: string | null
+          expected_roi?: number
+          full_name: string
+          id?: string
+          phone?: string | null
+          portfolio_value?: number
+          updated_at?: string
+        }
+        Update: {
+          amount_invested?: number
+          created_at?: string
+          email?: string | null
+          expected_roi?: number
+          full_name?: string
+          id?: string
+          phone?: string | null
+          portfolio_value?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      leads: {
+        Row: {
+          created_at: string
+          email: string | null
+          full_name: string
+          id: string
+          notes: string | null
+          owner_id: string | null
+          phone: string | null
+          property_id: string | null
+          stage: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          full_name: string
+          id?: string
+          notes?: string | null
+          owner_id?: string | null
+          phone?: string | null
+          property_id?: string | null
+          stage?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          full_name?: string
+          id?: string
+          notes?: string | null
+          owner_id?: string | null
+          phone?: string | null
+          property_id?: string | null
+          stage?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "leads_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       messages: {
         Row: {
           body: string
@@ -476,6 +559,68 @@ export type Database = {
           },
         ]
       }
+      properties: {
+        Row: {
+          address: string | null
+          area_sqm: number
+          bathrooms: number
+          bedrooms: number
+          city: string | null
+          created_at: string
+          description: string | null
+          id: string
+          org_id: string | null
+          owner_id: string | null
+          price: number
+          property_type: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          area_sqm?: number
+          bathrooms?: number
+          bedrooms?: number
+          city?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          org_id?: string | null
+          owner_id?: string | null
+          price?: number
+          property_type?: string
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          area_sqm?: number
+          bathrooms?: number
+          bedrooms?: number
+          city?: string | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          org_id?: string | null
+          owner_id?: string | null
+          price?: number
+          property_type?: string
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "properties_org_id_fkey"
+            columns: ["org_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       sensor_data: {
         Row: {
           field_id: string
@@ -633,6 +778,56 @@ export type Database = {
             columns: ["tech_project_id"]
             isOneToOne: false
             referencedRelation: "tech_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      tenants: {
+        Row: {
+          created_at: string
+          email: string | null
+          full_name: string
+          id: string
+          lease_end: string | null
+          lease_start: string | null
+          payment_status: string
+          phone: string | null
+          property_id: string | null
+          rent_amount: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          email?: string | null
+          full_name: string
+          id?: string
+          lease_end?: string | null
+          lease_start?: string | null
+          payment_status?: string
+          phone?: string | null
+          property_id?: string | null
+          rent_amount?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string | null
+          full_name?: string
+          id?: string
+          lease_end?: string | null
+          lease_start?: string | null
+          payment_status?: string
+          phone?: string | null
+          property_id?: string | null
+          rent_amount?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tenants_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
             referencedColumns: ["id"]
           },
         ]

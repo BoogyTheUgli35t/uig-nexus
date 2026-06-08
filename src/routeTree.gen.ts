@@ -35,6 +35,7 @@ import { Route as ApexPortalAuditRouteImport } from './routes/_apex.portal.audit
 import { Route as ApexPortalProjectsIndexRouteImport } from './routes/_apex.portal.projects.index'
 import { Route as ApexPortalProjectsIdRouteImport } from './routes/_apex.portal.projects.$id'
 import { Route as ApexPortalDivisionsTechnologyRouteImport } from './routes/_apex.portal.divisions.technology'
+import { Route as ApexPortalDivisionsRealEstateRouteImport } from './routes/_apex.portal.divisions.real-estate'
 import { Route as ApexPortalDivisionsAgritechRouteImport } from './routes/_apex.portal.divisions.agritech'
 import { Route as ApexPortalDivisionsSlugRouteImport } from './routes/_apex.portal.divisions.$slug'
 
@@ -168,6 +169,12 @@ const ApexPortalDivisionsTechnologyRoute =
     path: '/portal/divisions/technology',
     getParentRoute: () => ApexRoute,
   } as any)
+const ApexPortalDivisionsRealEstateRoute =
+  ApexPortalDivisionsRealEstateRouteImport.update({
+    id: '/portal/divisions/real-estate',
+    path: '/portal/divisions/real-estate',
+    getParentRoute: () => ApexRoute,
+  } as any)
 const ApexPortalDivisionsAgritechRoute =
   ApexPortalDivisionsAgritechRouteImport.update({
     id: '/portal/divisions/agritech',
@@ -205,6 +212,7 @@ export interface FileRoutesByFullPath {
   '/portal/settings': typeof ApexPortalSettingsRoute
   '/portal/divisions/$slug': typeof ApexPortalDivisionsSlugRoute
   '/portal/divisions/agritech': typeof ApexPortalDivisionsAgritechRoute
+  '/portal/divisions/real-estate': typeof ApexPortalDivisionsRealEstateRoute
   '/portal/divisions/technology': typeof ApexPortalDivisionsTechnologyRoute
   '/portal/projects/$id': typeof ApexPortalProjectsIdRoute
   '/portal/projects/': typeof ApexPortalProjectsIndexRoute
@@ -233,6 +241,7 @@ export interface FileRoutesByTo {
   '/portal/settings': typeof ApexPortalSettingsRoute
   '/portal/divisions/$slug': typeof ApexPortalDivisionsSlugRoute
   '/portal/divisions/agritech': typeof ApexPortalDivisionsAgritechRoute
+  '/portal/divisions/real-estate': typeof ApexPortalDivisionsRealEstateRoute
   '/portal/divisions/technology': typeof ApexPortalDivisionsTechnologyRoute
   '/portal/projects/$id': typeof ApexPortalProjectsIdRoute
   '/portal/projects': typeof ApexPortalProjectsIndexRoute
@@ -264,6 +273,7 @@ export interface FileRoutesById {
   '/_apex/portal/settings': typeof ApexPortalSettingsRoute
   '/_apex/portal/divisions/$slug': typeof ApexPortalDivisionsSlugRoute
   '/_apex/portal/divisions/agritech': typeof ApexPortalDivisionsAgritechRoute
+  '/_apex/portal/divisions/real-estate': typeof ApexPortalDivisionsRealEstateRoute
   '/_apex/portal/divisions/technology': typeof ApexPortalDivisionsTechnologyRoute
   '/_apex/portal/projects/$id': typeof ApexPortalProjectsIdRoute
   '/_apex/portal/projects/': typeof ApexPortalProjectsIndexRoute
@@ -295,6 +305,7 @@ export interface FileRouteTypes {
     | '/portal/settings'
     | '/portal/divisions/$slug'
     | '/portal/divisions/agritech'
+    | '/portal/divisions/real-estate'
     | '/portal/divisions/technology'
     | '/portal/projects/$id'
     | '/portal/projects/'
@@ -323,6 +334,7 @@ export interface FileRouteTypes {
     | '/portal/settings'
     | '/portal/divisions/$slug'
     | '/portal/divisions/agritech'
+    | '/portal/divisions/real-estate'
     | '/portal/divisions/technology'
     | '/portal/projects/$id'
     | '/portal/projects'
@@ -353,6 +365,7 @@ export interface FileRouteTypes {
     | '/_apex/portal/settings'
     | '/_apex/portal/divisions/$slug'
     | '/_apex/portal/divisions/agritech'
+    | '/_apex/portal/divisions/real-estate'
     | '/_apex/portal/divisions/technology'
     | '/_apex/portal/projects/$id'
     | '/_apex/portal/projects/'
@@ -561,6 +574,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApexPortalDivisionsTechnologyRouteImport
       parentRoute: typeof ApexRoute
     }
+    '/_apex/portal/divisions/real-estate': {
+      id: '/_apex/portal/divisions/real-estate'
+      path: '/portal/divisions/real-estate'
+      fullPath: '/portal/divisions/real-estate'
+      preLoaderRoute: typeof ApexPortalDivisionsRealEstateRouteImport
+      parentRoute: typeof ApexRoute
+    }
     '/_apex/portal/divisions/agritech': {
       id: '/_apex/portal/divisions/agritech'
       path: '/portal/divisions/agritech'
@@ -584,6 +604,7 @@ interface ApexRouteChildren {
   ApexPortalSettingsRoute: typeof ApexPortalSettingsRoute
   ApexPortalDivisionsSlugRoute: typeof ApexPortalDivisionsSlugRoute
   ApexPortalDivisionsAgritechRoute: typeof ApexPortalDivisionsAgritechRoute
+  ApexPortalDivisionsRealEstateRoute: typeof ApexPortalDivisionsRealEstateRoute
   ApexPortalDivisionsTechnologyRoute: typeof ApexPortalDivisionsTechnologyRoute
   ApexPortalProjectsIdRoute: typeof ApexPortalProjectsIdRoute
   ApexPortalProjectsIndexRoute: typeof ApexPortalProjectsIndexRoute
@@ -595,6 +616,7 @@ const ApexRouteChildren: ApexRouteChildren = {
   ApexPortalSettingsRoute: ApexPortalSettingsRoute,
   ApexPortalDivisionsSlugRoute: ApexPortalDivisionsSlugRoute,
   ApexPortalDivisionsAgritechRoute: ApexPortalDivisionsAgritechRoute,
+  ApexPortalDivisionsRealEstateRoute: ApexPortalDivisionsRealEstateRoute,
   ApexPortalDivisionsTechnologyRoute: ApexPortalDivisionsTechnologyRoute,
   ApexPortalProjectsIdRoute: ApexPortalProjectsIdRoute,
   ApexPortalProjectsIndexRoute: ApexPortalProjectsIndexRoute,
