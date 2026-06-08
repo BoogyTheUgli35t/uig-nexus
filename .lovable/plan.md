@@ -45,7 +45,7 @@ Each phase = migration (tables + RLS + GRANTs) → server functions → routes u
 
 **3. UIG AgriTech** ✅ DONE — `farmers`, `fields`, `sensor_data`, `yield_predictions` (RLS by division access + staff/admin, seeded with Nigerian sample data). Workspace at `/portal/divisions/agritech`: KPIs (farmers, fields, hectares, avg health), farmer onboarding form, AI yield-forecast bar chart by season, field dashboard with live sensor readings (moisture/temp/humidity) and health-status moves. Next: cooperative management.
 
-**4. UIG Real Estate** — `properties`, `tenants`, `investors`, `leads`. Modules: property listings grid, tenant portal, investor ROI dashboard, CRM pipeline. Roles: admin, staff(agent), client(tenant), investor.
+**4. UIG Real Estate** ✅ DONE — `properties`, `tenants`, `investors`, `leads` (RLS by division access + staff/admin, seeded with Lagos/Abuja/PH sample data). Workspace at `/portal/divisions/real-estate`: KPIs (properties, portfolio value, rent roll, avg investor ROI), new-listing form, property listings grid with status moves + smart-building detail, tenant portal with payment status, investor ROI dashboard, and a 5-column CRM pipeline (new→closed) with add-lead and stage moves. Roles: admin, staff(agent), client(tenant), investor.
 
 **5. UIG Logistics** — `shipments`, `drivers`, `vehicles`, `routes`. Modules: shipment tracking (map), driver task view (mobile-friendly), fleet panel, route-optimization placeholder. Roles: admin, staff(dispatcher), driver, client(customer).
 
