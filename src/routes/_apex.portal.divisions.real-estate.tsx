@@ -354,8 +354,8 @@ function RealEstateWorkspace() {
                     </div>
                   ) : (
                     items.map((l) => {
-                      const nextIdx = LEAD_STAGES.indexOf(l.stage) + 1;
-                      const next = nextIdx < LEAD_STAGES.length ? LEAD_STAGES[nextIdx] : null;
+                      const nextIdx = LEAD_STAGES.indexOf(l.stage as (typeof LEAD_STAGES)[number]) + 1;
+                      const next = nextIdx > 0 && nextIdx < LEAD_STAGES.length ? LEAD_STAGES[nextIdx] : null;
                       return (
                         <div key={l.id} className="rounded-lg border border-border bg-background p-3">
                           <div className="text-sm font-medium leading-snug">{l.full_name}</div>
