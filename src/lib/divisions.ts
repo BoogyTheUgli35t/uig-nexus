@@ -120,10 +120,10 @@ export const DIVISIONS: Division[] = [
     icon: Truck,
     hero: heroLogistics,
     modules: [
-      { label: "Shipment tracking", description: "Live status board and map view.", status: "soon" },
-      { label: "Driver tasks", description: "Mobile-friendly assignments and proof of delivery.", status: "soon" },
-      { label: "Fleet management", description: "Vehicles, capacity and maintenance records.", status: "soon" },
-      { label: "Route optimization", description: "Smart routing across multiple waypoints.", status: "soon" },
+      { label: "Shipment tracking", description: "Live status board and map view.", status: "live" },
+      { label: "Driver tasks", description: "Mobile-friendly assignments and proof of delivery.", status: "live" },
+      { label: "Fleet management", description: "Vehicles, capacity and maintenance records.", status: "live" },
+      { label: "Route optimization", description: "Smart routing across multiple waypoints.", status: "live" },
     ],
   },
   {
