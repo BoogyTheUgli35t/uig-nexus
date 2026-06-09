@@ -151,6 +151,53 @@ export type Database = {
           },
         ]
       }
+      drivers: {
+        Row: {
+          created_at: string
+          deliveries_completed: number
+          full_name: string
+          id: string
+          license_no: string | null
+          phone: string | null
+          rating: number
+          status: string
+          updated_at: string
+          vehicle_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          deliveries_completed?: number
+          full_name: string
+          id?: string
+          license_no?: string | null
+          phone?: string | null
+          rating?: number
+          status?: string
+          updated_at?: string
+          vehicle_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          deliveries_completed?: number
+          full_name?: string
+          id?: string
+          license_no?: string | null
+          phone?: string | null
+          rating?: number
+          status?: string
+          updated_at?: string
+          vehicle_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "drivers_vehicle_id_fkey"
+            columns: ["vehicle_id"]
+            isOneToOne: false
+            referencedRelation: "vehicles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       farmers: {
         Row: {
           cooperative: string | null
@@ -621,6 +668,45 @@ export type Database = {
           },
         ]
       }
+      routes: {
+        Row: {
+          created_at: string
+          destination: string
+          distance_km: number
+          est_hours: number
+          id: string
+          name: string
+          origin: string
+          status: string
+          stops: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          destination: string
+          distance_km?: number
+          est_hours?: number
+          id?: string
+          name: string
+          origin: string
+          status?: string
+          stops?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          destination?: string
+          distance_km?: number
+          est_hours?: number
+          id?: string
+          name?: string
+          origin?: string
+          status?: string
+          stops?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       sensor_data: {
         Row: {
           field_id: string
@@ -652,6 +738,75 @@ export type Database = {
             columns: ["field_id"]
             isOneToOne: false
             referencedRelation: "fields"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      shipments: {
+        Row: {
+          cargo: string | null
+          created_at: string
+          customer: string
+          driver_id: string | null
+          dropoff_city: string | null
+          eta: string | null
+          id: string
+          owner_id: string | null
+          pickup_city: string | null
+          reference: string
+          route_id: string | null
+          status: string
+          tracking_code: string | null
+          updated_at: string
+          weight_kg: number
+        }
+        Insert: {
+          cargo?: string | null
+          created_at?: string
+          customer: string
+          driver_id?: string | null
+          dropoff_city?: string | null
+          eta?: string | null
+          id?: string
+          owner_id?: string | null
+          pickup_city?: string | null
+          reference: string
+          route_id?: string | null
+          status?: string
+          tracking_code?: string | null
+          updated_at?: string
+          weight_kg?: number
+        }
+        Update: {
+          cargo?: string | null
+          created_at?: string
+          customer?: string
+          driver_id?: string | null
+          dropoff_city?: string | null
+          eta?: string | null
+          id?: string
+          owner_id?: string | null
+          pickup_city?: string | null
+          reference?: string
+          route_id?: string | null
+          status?: string
+          tracking_code?: string | null
+          updated_at?: string
+          weight_kg?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shipments_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "drivers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "shipments_route_id_fkey"
+            columns: ["route_id"]
+            isOneToOne: false
+            referencedRelation: "routes"
             referencedColumns: ["id"]
           },
         ]
@@ -876,6 +1031,45 @@ export type Database = {
           id?: string
           role?: Database["public"]["Enums"]["app_role"]
           user_id?: string
+        }
+        Relationships: []
+      }
+      vehicles: {
+        Row: {
+          capacity_kg: number
+          created_at: string
+          fuel_level: number
+          id: string
+          last_service: string | null
+          odometer_km: number
+          plate: string
+          status: string
+          updated_at: string
+          vehicle_type: string
+        }
+        Insert: {
+          capacity_kg?: number
+          created_at?: string
+          fuel_level?: number
+          id?: string
+          last_service?: string | null
+          odometer_km?: number
+          plate: string
+          status?: string
+          updated_at?: string
+          vehicle_type?: string
+        }
+        Update: {
+          capacity_kg?: number
+          created_at?: string
+          fuel_level?: number
+          id?: string
+          last_service?: string | null
+          odometer_km?: number
+          plate?: string
+          status?: string
+          updated_at?: string
+          vehicle_type?: string
         }
         Relationships: []
       }
