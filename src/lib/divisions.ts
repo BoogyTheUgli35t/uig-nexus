@@ -138,10 +138,10 @@ export const DIVISIONS: Division[] = [
     icon: BrainCircuit,
     hero: heroIntelligence,
     modules: [
-      { label: "AI assistant", description: "Chat with UIG's models for insight on demand.", status: "soon" },
-      { label: "Predictive analytics", description: "Forecasts and trends across the group.", status: "soon" },
-      { label: "Model Trainer", description: "Upload datasets, train and deploy models.", status: "soon" },
-      { label: "Datasets", description: "Secure dataset library for every division.", status: "soon" },
+      { label: "AI assistant", description: "Chat with UIG's models for insight on demand.", status: "live" },
+      { label: "Predictive analytics", description: "Forecasts and trends across the group.", status: "live" },
+      { label: "Model Trainer", description: "Upload datasets, train and deploy models.", status: "live" },
+      { label: "Datasets", description: "Secure dataset library for every division.", status: "live" },
     ],
   },
   {
