@@ -80,6 +80,45 @@ export type Database = {
         }
         Relationships: []
       }
+      datasets: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          owner_id: string | null
+          rows_count: number
+          size_mb: number
+          source_division: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          owner_id?: string | null
+          rows_count?: number
+          size_mb?: number
+          source_division?: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          owner_id?: string | null
+          rows_count?: number
+          size_mb?: number
+          source_division?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       divisions: {
         Row: {
           accent: string
@@ -443,6 +482,56 @@ export type Database = {
         }
         Relationships: []
       }
+      models: {
+        Row: {
+          accuracy: number
+          created_at: string
+          dataset_id: string | null
+          id: string
+          model_type: string
+          name: string
+          owner_id: string | null
+          status: string
+          target_division: string
+          updated_at: string
+          version: string
+        }
+        Insert: {
+          accuracy?: number
+          created_at?: string
+          dataset_id?: string | null
+          id?: string
+          model_type?: string
+          name: string
+          owner_id?: string | null
+          status?: string
+          target_division?: string
+          updated_at?: string
+          version?: string
+        }
+        Update: {
+          accuracy?: number
+          created_at?: string
+          dataset_id?: string | null
+          id?: string
+          model_type?: string
+          name?: string
+          owner_id?: string | null
+          status?: string
+          target_division?: string
+          updated_at?: string
+          version?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "models_dataset_id_fkey"
+            columns: ["dataset_id"]
+            isOneToOne: false
+            referencedRelation: "datasets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notifications: {
         Row: {
           body: string | null
@@ -523,6 +612,47 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      predictions: {
+        Row: {
+          confidence: number
+          created_at: string
+          id: string
+          model_id: string | null
+          owner_id: string | null
+          prompt: string
+          result: string | null
+          updated_at: string
+        }
+        Insert: {
+          confidence?: number
+          created_at?: string
+          id?: string
+          model_id?: string | null
+          owner_id?: string | null
+          prompt: string
+          result?: string | null
+          updated_at?: string
+        }
+        Update: {
+          confidence?: number
+          created_at?: string
+          id?: string
+          model_id?: string | null
+          owner_id?: string | null
+          prompt?: string
+          result?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "predictions_model_id_fkey"
+            columns: ["model_id"]
+            isOneToOne: false
+            referencedRelation: "models"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
