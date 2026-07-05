@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as PortalRouteImport } from './routes/portal'
+import { Route as McpRouteImport } from './routes/mcp'
 import { Route as InsightsRouteImport } from './routes/insights'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CareersRouteImport } from './routes/careers'
@@ -29,9 +30,12 @@ import { Route as DivisionsLogisticsRouteImport } from './routes/divisions.logis
 import { Route as DivisionsIntelligenceRouteImport } from './routes/divisions.intelligence'
 import { Route as DivisionsInnovationLabRouteImport } from './routes/divisions.innovation-lab'
 import { Route as DivisionsAgritechRouteImport } from './routes/divisions.agritech'
+import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
+import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as ApexPortalSettingsRouteImport } from './routes/_apex.portal.settings'
 import { Route as ApexPortalDashboardRouteImport } from './routes/_apex.portal.dashboard'
 import { Route as ApexPortalAuditRouteImport } from './routes/_apex.portal.audit'
+import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as ApexPortalProjectsIndexRouteImport } from './routes/_apex.portal.projects.index'
 import { Route as ApexPortalProjectsIdRouteImport } from './routes/_apex.portal.projects.$id'
 import { Route as ApexPortalDivisionsTechnologyRouteImport } from './routes/_apex.portal.divisions.technology'
@@ -54,6 +58,11 @@ const ServicesRoute = ServicesRouteImport.update({
 const PortalRoute = PortalRouteImport.update({
   id: '/portal',
   path: '/portal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const McpRoute = McpRouteImport.update({
+  id: '/mcp',
+  path: '/mcp',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InsightsRoute = InsightsRouteImport.update({
@@ -140,6 +149,18 @@ const DivisionsAgritechRoute = DivisionsAgritechRouteImport.update({
   path: '/divisions/agritech',
   getParentRoute: () => rootRouteImport,
 } as any)
+const Char91DotwellKnownChar93OauthProtectedResourceRoute =
+  Char91DotwellKnownChar93OauthProtectedResourceRouteImport.update({
+    id: '/.well-known/oauth-protected-resource',
+    path: '/.well-known/oauth-protected-resource',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const Char91DotmcpChar93ListToolsRoute =
+  Char91DotmcpChar93ListToolsRouteImport.update({
+    id: '/.mcp/list-tools',
+    path: '/.mcp/list-tools',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApexPortalSettingsRoute = ApexPortalSettingsRouteImport.update({
   id: '/portal/settings',
   path: '/portal/settings',
@@ -155,6 +176,12 @@ const ApexPortalAuditRoute = ApexPortalAuditRouteImport.update({
   path: '/portal/audit',
   getParentRoute: () => ApexRoute,
 } as any)
+const Char91DotmcpChar93InvokeToolToolRoute =
+  Char91DotmcpChar93InvokeToolToolRouteImport.update({
+    id: '/.mcp/invoke-tool/$tool',
+    path: '/.mcp/invoke-tool/$tool',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApexPortalProjectsIndexRoute = ApexPortalProjectsIndexRouteImport.update({
   id: '/portal/projects/',
   path: '/portal/projects/',
@@ -207,9 +234,12 @@ export interface FileRoutesByFullPath {
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
   '/insights': typeof InsightsRouteWithChildren
+  '/mcp': typeof McpRoute
   '/portal': typeof PortalRouteWithChildren
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/divisions/agritech': typeof DivisionsAgritechRoute
   '/divisions/innovation-lab': typeof DivisionsInnovationLabRoute
   '/divisions/intelligence': typeof DivisionsIntelligenceRoute
@@ -221,6 +251,7 @@ export interface FileRoutesByFullPath {
   '/portal/signup': typeof PortalSignupRoute
   '/divisions/': typeof DivisionsIndexRoute
   '/portal/': typeof PortalIndexRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/portal/audit': typeof ApexPortalAuditRoute
   '/portal/dashboard': typeof ApexPortalDashboardRoute
   '/portal/settings': typeof ApexPortalSettingsRoute
@@ -239,8 +270,11 @@ export interface FileRoutesByTo {
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
   '/insights': typeof InsightsRouteWithChildren
+  '/mcp': typeof McpRoute
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/divisions/agritech': typeof DivisionsAgritechRoute
   '/divisions/innovation-lab': typeof DivisionsInnovationLabRoute
   '/divisions/intelligence': typeof DivisionsIntelligenceRoute
@@ -252,6 +286,7 @@ export interface FileRoutesByTo {
   '/portal/signup': typeof PortalSignupRoute
   '/divisions': typeof DivisionsIndexRoute
   '/portal': typeof PortalIndexRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/portal/audit': typeof ApexPortalAuditRoute
   '/portal/dashboard': typeof ApexPortalDashboardRoute
   '/portal/settings': typeof ApexPortalSettingsRoute
@@ -272,9 +307,12 @@ export interface FileRoutesById {
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
   '/insights': typeof InsightsRouteWithChildren
+  '/mcp': typeof McpRoute
   '/portal': typeof PortalRouteWithChildren
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
+  '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/divisions/agritech': typeof DivisionsAgritechRoute
   '/divisions/innovation-lab': typeof DivisionsInnovationLabRoute
   '/divisions/intelligence': typeof DivisionsIntelligenceRoute
@@ -286,6 +324,7 @@ export interface FileRoutesById {
   '/portal/signup': typeof PortalSignupRoute
   '/divisions/': typeof DivisionsIndexRoute
   '/portal/': typeof PortalIndexRoute
+  '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/_apex/portal/audit': typeof ApexPortalAuditRoute
   '/_apex/portal/dashboard': typeof ApexPortalDashboardRoute
   '/_apex/portal/settings': typeof ApexPortalSettingsRoute
@@ -306,9 +345,12 @@ export interface FileRouteTypes {
     | '/careers'
     | '/contact'
     | '/insights'
+    | '/mcp'
     | '/portal'
     | '/services'
     | '/sitemap.xml'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/divisions/agritech'
     | '/divisions/innovation-lab'
     | '/divisions/intelligence'
@@ -320,6 +362,7 @@ export interface FileRouteTypes {
     | '/portal/signup'
     | '/divisions/'
     | '/portal/'
+    | '/.mcp/invoke-tool/$tool'
     | '/portal/audit'
     | '/portal/dashboard'
     | '/portal/settings'
@@ -338,8 +381,11 @@ export interface FileRouteTypes {
     | '/careers'
     | '/contact'
     | '/insights'
+    | '/mcp'
     | '/services'
     | '/sitemap.xml'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/divisions/agritech'
     | '/divisions/innovation-lab'
     | '/divisions/intelligence'
@@ -351,6 +397,7 @@ export interface FileRouteTypes {
     | '/portal/signup'
     | '/divisions'
     | '/portal'
+    | '/.mcp/invoke-tool/$tool'
     | '/portal/audit'
     | '/portal/dashboard'
     | '/portal/settings'
@@ -370,9 +417,12 @@ export interface FileRouteTypes {
     | '/careers'
     | '/contact'
     | '/insights'
+    | '/mcp'
     | '/portal'
     | '/services'
     | '/sitemap.xml'
+    | '/.mcp/list-tools'
+    | '/.well-known/oauth-protected-resource'
     | '/divisions/agritech'
     | '/divisions/innovation-lab'
     | '/divisions/intelligence'
@@ -384,6 +434,7 @@ export interface FileRouteTypes {
     | '/portal/signup'
     | '/divisions/'
     | '/portal/'
+    | '/.mcp/invoke-tool/$tool'
     | '/_apex/portal/audit'
     | '/_apex/portal/dashboard'
     | '/_apex/portal/settings'
@@ -404,9 +455,12 @@ export interface RootRouteChildren {
   CareersRoute: typeof CareersRoute
   ContactRoute: typeof ContactRoute
   InsightsRoute: typeof InsightsRouteWithChildren
+  McpRoute: typeof McpRoute
   PortalRoute: typeof PortalRouteWithChildren
   ServicesRoute: typeof ServicesRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
+  Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   DivisionsAgritechRoute: typeof DivisionsAgritechRoute
   DivisionsInnovationLabRoute: typeof DivisionsInnovationLabRoute
   DivisionsIntelligenceRoute: typeof DivisionsIntelligenceRoute
@@ -414,6 +468,7 @@ export interface RootRouteChildren {
   DivisionsRealEstateRoute: typeof DivisionsRealEstateRoute
   DivisionsTechnologyRoute: typeof DivisionsTechnologyRoute
   DivisionsIndexRoute: typeof DivisionsIndexRoute
+  Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -437,6 +492,13 @@ declare module '@tanstack/react-router' {
       path: '/portal'
       fullPath: '/portal'
       preLoaderRoute: typeof PortalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/mcp': {
+      id: '/mcp'
+      path: '/mcp'
+      fullPath: '/mcp'
+      preLoaderRoute: typeof McpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/insights': {
@@ -558,6 +620,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DivisionsAgritechRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/.well-known/oauth-protected-resource': {
+      id: '/.well-known/oauth-protected-resource'
+      path: '/.well-known/oauth-protected-resource'
+      fullPath: '/.well-known/oauth-protected-resource'
+      preLoaderRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/.mcp/list-tools': {
+      id: '/.mcp/list-tools'
+      path: '/.mcp/list-tools'
+      fullPath: '/.mcp/list-tools'
+      preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_apex/portal/settings': {
       id: '/_apex/portal/settings'
       path: '/portal/settings'
@@ -578,6 +654,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/portal/audit'
       preLoaderRoute: typeof ApexPortalAuditRouteImport
       parentRoute: typeof ApexRoute
+    }
+    '/.mcp/invoke-tool/$tool': {
+      id: '/.mcp/invoke-tool/$tool'
+      path: '/.mcp/invoke-tool/$tool'
+      fullPath: '/.mcp/invoke-tool/$tool'
+      preLoaderRoute: typeof Char91DotmcpChar93InvokeToolToolRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_apex/portal/projects/': {
       id: '/_apex/portal/projects/'
@@ -702,9 +785,13 @@ const rootRouteChildren: RootRouteChildren = {
   CareersRoute: CareersRoute,
   ContactRoute: ContactRoute,
   InsightsRoute: InsightsRouteWithChildren,
+  McpRoute: McpRoute,
   PortalRoute: PortalRouteWithChildren,
   ServicesRoute: ServicesRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
+  Char91DotwellKnownChar93OauthProtectedResourceRoute:
+    Char91DotwellKnownChar93OauthProtectedResourceRoute,
   DivisionsAgritechRoute: DivisionsAgritechRoute,
   DivisionsInnovationLabRoute: DivisionsInnovationLabRoute,
   DivisionsIntelligenceRoute: DivisionsIntelligenceRoute,
@@ -712,6 +799,7 @@ const rootRouteChildren: RootRouteChildren = {
   DivisionsRealEstateRoute: DivisionsRealEstateRoute,
   DivisionsTechnologyRoute: DivisionsTechnologyRoute,
   DivisionsIndexRoute: DivisionsIndexRoute,
+  Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
