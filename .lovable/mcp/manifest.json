@@ -1,0 +1,58 @@
+{
+  "version": 1,
+  "sdk_version": "0.20.0",
+  "path": "/mcp",
+  "auth": {
+    "type": "none"
+  },
+  "mcp": {
+    "server": {
+      "name": "uig-apex-mcp",
+      "version": "0.1.0",
+      "title": "UIG Apex MCP"
+    },
+    "tools": [
+      {
+        "name": "list_divisions",
+        "title": "List UIG divisions",
+        "description": "List all UIG business divisions with their tagline, short description and module count.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "get_division",
+        "title": "Get UIG division details",
+        "description": "Get full details for a single UIG division by its slug, including all of its modules and each module's status (live or soon).",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "slug": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The division slug, e.g. technology, agritech, real-estate, logistics, intelligence, innovation-lab."
+            }
+          },
+          "required": [
+            "slug"
+          ]
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
