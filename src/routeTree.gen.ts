@@ -32,6 +32,7 @@ import { Route as DivisionsInnovationLabRouteImport } from './routes/divisions.i
 import { Route as DivisionsAgritechRouteImport } from './routes/divisions.agritech'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
+import { Route as PortalSignupChooseDivisionRouteImport } from './routes/portal.signup.choose-division'
 import { Route as ApexPortalSettingsRouteImport } from './routes/_apex.portal.settings'
 import { Route as ApexPortalDashboardRouteImport } from './routes/_apex.portal.dashboard'
 import { Route as ApexPortalAuditRouteImport } from './routes/_apex.portal.audit'
@@ -161,6 +162,12 @@ const Char91DotmcpChar93ListToolsRoute =
     path: '/.mcp/list-tools',
     getParentRoute: () => rootRouteImport,
   } as any)
+const PortalSignupChooseDivisionRoute =
+  PortalSignupChooseDivisionRouteImport.update({
+    id: '/choose-division',
+    path: '/choose-division',
+    getParentRoute: () => PortalSignupRoute,
+  } as any)
 const ApexPortalSettingsRoute = ApexPortalSettingsRouteImport.update({
   id: '/portal/settings',
   path: '/portal/settings',
@@ -248,13 +255,14 @@ export interface FileRoutesByFullPath {
   '/divisions/technology': typeof DivisionsTechnologyRoute
   '/insights/$slug': typeof InsightsSlugRoute
   '/portal/login': typeof PortalLoginRoute
-  '/portal/signup': typeof PortalSignupRoute
+  '/portal/signup': typeof PortalSignupRouteWithChildren
   '/divisions/': typeof DivisionsIndexRoute
   '/portal/': typeof PortalIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/portal/audit': typeof ApexPortalAuditRoute
   '/portal/dashboard': typeof ApexPortalDashboardRoute
   '/portal/settings': typeof ApexPortalSettingsRoute
+  '/portal/signup/choose-division': typeof PortalSignupChooseDivisionRoute
   '/portal/divisions/$slug': typeof ApexPortalDivisionsSlugRoute
   '/portal/divisions/agritech': typeof ApexPortalDivisionsAgritechRoute
   '/portal/divisions/intelligence': typeof ApexPortalDivisionsIntelligenceRoute
@@ -283,13 +291,14 @@ export interface FileRoutesByTo {
   '/divisions/technology': typeof DivisionsTechnologyRoute
   '/insights/$slug': typeof InsightsSlugRoute
   '/portal/login': typeof PortalLoginRoute
-  '/portal/signup': typeof PortalSignupRoute
+  '/portal/signup': typeof PortalSignupRouteWithChildren
   '/divisions': typeof DivisionsIndexRoute
   '/portal': typeof PortalIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/portal/audit': typeof ApexPortalAuditRoute
   '/portal/dashboard': typeof ApexPortalDashboardRoute
   '/portal/settings': typeof ApexPortalSettingsRoute
+  '/portal/signup/choose-division': typeof PortalSignupChooseDivisionRoute
   '/portal/divisions/$slug': typeof ApexPortalDivisionsSlugRoute
   '/portal/divisions/agritech': typeof ApexPortalDivisionsAgritechRoute
   '/portal/divisions/intelligence': typeof ApexPortalDivisionsIntelligenceRoute
@@ -321,13 +330,14 @@ export interface FileRoutesById {
   '/divisions/technology': typeof DivisionsTechnologyRoute
   '/insights/$slug': typeof InsightsSlugRoute
   '/portal/login': typeof PortalLoginRoute
-  '/portal/signup': typeof PortalSignupRoute
+  '/portal/signup': typeof PortalSignupRouteWithChildren
   '/divisions/': typeof DivisionsIndexRoute
   '/portal/': typeof PortalIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/_apex/portal/audit': typeof ApexPortalAuditRoute
   '/_apex/portal/dashboard': typeof ApexPortalDashboardRoute
   '/_apex/portal/settings': typeof ApexPortalSettingsRoute
+  '/portal/signup/choose-division': typeof PortalSignupChooseDivisionRoute
   '/_apex/portal/divisions/$slug': typeof ApexPortalDivisionsSlugRoute
   '/_apex/portal/divisions/agritech': typeof ApexPortalDivisionsAgritechRoute
   '/_apex/portal/divisions/intelligence': typeof ApexPortalDivisionsIntelligenceRoute
@@ -366,6 +376,7 @@ export interface FileRouteTypes {
     | '/portal/audit'
     | '/portal/dashboard'
     | '/portal/settings'
+    | '/portal/signup/choose-division'
     | '/portal/divisions/$slug'
     | '/portal/divisions/agritech'
     | '/portal/divisions/intelligence'
@@ -401,6 +412,7 @@ export interface FileRouteTypes {
     | '/portal/audit'
     | '/portal/dashboard'
     | '/portal/settings'
+    | '/portal/signup/choose-division'
     | '/portal/divisions/$slug'
     | '/portal/divisions/agritech'
     | '/portal/divisions/intelligence'
@@ -438,6 +450,7 @@ export interface FileRouteTypes {
     | '/_apex/portal/audit'
     | '/_apex/portal/dashboard'
     | '/_apex/portal/settings'
+    | '/portal/signup/choose-division'
     | '/_apex/portal/divisions/$slug'
     | '/_apex/portal/divisions/agritech'
     | '/_apex/portal/divisions/intelligence'
@@ -634,6 +647,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/portal/signup/choose-division': {
+      id: '/portal/signup/choose-division'
+      path: '/choose-division'
+      fullPath: '/portal/signup/choose-division'
+      preLoaderRoute: typeof PortalSignupChooseDivisionRouteImport
+      parentRoute: typeof PortalSignupRoute
+    }
     '/_apex/portal/settings': {
       id: '/_apex/portal/settings'
       path: '/portal/settings'
@@ -763,15 +783,27 @@ const InsightsRouteWithChildren = InsightsRoute._addFileChildren(
   InsightsRouteChildren,
 )
 
+interface PortalSignupRouteChildren {
+  PortalSignupChooseDivisionRoute: typeof PortalSignupChooseDivisionRoute
+}
+
+const PortalSignupRouteChildren: PortalSignupRouteChildren = {
+  PortalSignupChooseDivisionRoute: PortalSignupChooseDivisionRoute,
+}
+
+const PortalSignupRouteWithChildren = PortalSignupRoute._addFileChildren(
+  PortalSignupRouteChildren,
+)
+
 interface PortalRouteChildren {
   PortalLoginRoute: typeof PortalLoginRoute
-  PortalSignupRoute: typeof PortalSignupRoute
+  PortalSignupRoute: typeof PortalSignupRouteWithChildren
   PortalIndexRoute: typeof PortalIndexRoute
 }
 
 const PortalRouteChildren: PortalRouteChildren = {
   PortalLoginRoute: PortalLoginRoute,
-  PortalSignupRoute: PortalSignupRoute,
+  PortalSignupRoute: PortalSignupRouteWithChildren,
   PortalIndexRoute: PortalIndexRoute,
 }
 
