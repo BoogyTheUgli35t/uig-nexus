@@ -770,6 +770,25 @@ Deno.serve(async (req) => {
       });
     }
 
+    // Create user_preferences record with division_selection_completed = true
+    const { error: prefsError } = await supabaseClient
+      .from('user_preferences')
+      .upsert({
+        user_id,
+        division_selection_completed: true,
+        primary_division: primary_division || selected_divisions[0],
+        notifications_enabled: true,
+        updated_at: new Date().toISOString()
+      });
+
+    if (prefsError) {
+      console.error('Error creating user preferences:', prefsError);
+      return new Response(JSON.stringify({ error: prefsError.message }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
     // Seed sample data for each selected division
     for (const division of selected_divisions) {
       switch (division) {
@@ -808,7 +827,7 @@ Deno.serve(async (req) => {
       console.error('Error creating welcome notification:', notificationError);
     }
 
-    return new Response(JSON.stringify({ success: true }), {
+    return new Response(JSON.stringify({ success: true, message: 'Workspaces created successfully' }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
