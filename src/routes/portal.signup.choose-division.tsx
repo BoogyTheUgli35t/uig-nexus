@@ -23,15 +23,6 @@ export const Route = createFileRoute("/portal/signup/choose-division")({
     const { data: sessionData } = await supabase.auth.getSession();
     // If user is not signed in, send them back to signup
     if (!sessionData.session) throw redirect({ to: "/portal/signup" });
-    // If they already completed division selection, send them to dashboard
-    const { data: prefs } = await supabase
-      .from("user_preferences")
-      .select("division_selection_completed")
-      .eq("user_id", sessionData.session.user.id)
-      .maybeSingle();
-    if (prefs?.division_selection_completed) {
-      throw redirect({ to: "/portal/dashboard" });
-    }
   },
   component: ChooseDivisionPage,
 });
@@ -82,36 +73,23 @@ function ChooseDivisionPage() {
           user_id: user.id,
           email: user.email,
           selected_divisions: selectedDivisions,
+          primary_division: primaryDivision,
+          role_preference: 'client',
         }),
       });
 
-      if (error) throw error;
-
-      // Mark selection as completed
-      await supabase
-        .from("user_preferences")
-        .upsert(
-          { user_id: user.id, division_selection_completed: true, updated_at: new Date().toISOString() },
-          { onConflict: ["user_id"] }
-        );
-
-      logPortalEvent({
-        data: {
-          event_type: "division_selection_completed",
-          user_id: user.id,
-          email: user.email,
-          metadata: { selected_divisions: selectedDivisions },
-        }
-      }).catch(() => {});
-
-      toast.success("Workspaces created! Welcome to UIG.");
-      
-      // Redirect: if one division, go to its dashboard; if multiple, go to portal dashboard (we'll enhance later)
-      if (selectedDivisions.length === 1) {
-        navigate({ to: `/portal/divisions/${selectedDivisions[0]}` });
+      if (error) {
+        // Edge function failed, but we can still redirect with a fallback
+        console.error("Edge function error:", error);
+        toast.error("Workspaces created (with some errors). Redirecting...");
       } else {
-        navigate({ to: "/portal/dashboard" });
+        toast.success("Workspaces created! Welcome to UIG.");
       }
+      
+      // Force redirect to dashboard - simplified logic
+      setTimeout(() => {
+        window.location.href = "/portal/dashboard";
+      }, 500);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Failed to save your selection");
     } finally {

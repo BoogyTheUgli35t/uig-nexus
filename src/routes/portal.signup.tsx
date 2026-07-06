@@ -21,7 +21,7 @@ export const Route = createFileRoute("/portal/signup")({
     if (typeof window === "undefined") return;
     const { data } = await supabase.auth.getSession();
     if (data.session) {
-      // If already signed in, go to choose-division to pick their workspaces
+      // Force redirect to choose-division - simplified
       throw redirect({ to: "/portal/signup/choose-division" });
     }
   },
@@ -36,14 +36,8 @@ function SignupPage() {
   const [emailSent, setEmailSent] = useState(false);
 
   useEffect(() => {
-    const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === "SIGNED_IN" && session) {
-        logPortalEvent({ data: { event_type: "sign_in", user_id: session.user.id, email: session.user.email ?? null, metadata: { via: "signup" } } }).catch(() => {});
-        // Go to choose-division to pick workspaces
-        window.location.href = "/portal/signup/choose-division";
-      }
-    });
-    return () => sub.subscription.unsubscribe();
+    // Only handle redirects on initial load, not on auth changes
+    // This prevents loops - auth state changes should NOT trigger navigation
   }, []);
 
   async function onSubmit(e: React.FormEvent) {
@@ -70,7 +64,9 @@ function SignupPage() {
     }
     if (data.session) {
       toast.success("Account created. Welcome to Apex.");
-      window.location.href = "/portal/signup/choose-division";
+      setTimeout(() => {
+        window.location.href = "/portal/signup/choose-division";
+      }, 1000);
     } else {
       setEmailSent(true);
       toast.success("Check your email to confirm your account.");

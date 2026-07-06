@@ -21,7 +21,7 @@ export const Route = createFileRoute("/portal/login")({
     if (typeof window === "undefined") return;
     const { data } = await supabase.auth.getSession();
     if (data.session) {
-      // If no prefs record exists, redirect to choose-division
+      // Force redirect to choose-division - simplified
       throw redirect({ to: "/portal/signup/choose-division" });
     }
   },
@@ -35,14 +35,8 @@ function LoginPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === "SIGNED_IN" && session) {
-        logPortalEvent({ data: { event_type: "sign_in", user_id: session.user.id, email: session.user.email ?? null } }).catch(() => {});
-        // Just redirect to choose-division - they'll pick their divisions first
-        window.location.href = "/portal/signup/choose-division";
-      }
-    });
-    return () => sub.subscription.unsubscribe();
+    // Only handle redirects on initial load, not on auth changes
+    // This prevents loops - auth state changes should NOT trigger navigation
   }, []);
 
   async function onSubmit(e: React.FormEvent) {
@@ -62,8 +56,10 @@ function LoginPage() {
     }
     if (data.session) {
       toast.success("Welcome back.");
-      // Use window.location for reliable redirect
-      window.location.href = "/portal/signup/choose-division";
+      // Use setTimeout to ensure toast appears before redirect
+      setTimeout(() => {
+        window.location.href = "/portal/signup/choose-division";
+      }, 1000);
     }
   }
 
