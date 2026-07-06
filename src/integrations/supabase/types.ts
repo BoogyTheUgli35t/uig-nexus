@@ -334,6 +334,36 @@ export type Database = {
           },
         ]
       }
+      ideas: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          status: string | null
+          submitted_by: string | null
+          tags: Json | null
+          title: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          status?: string | null
+          submitted_by?: string | null
+          tags?: Json | null
+          title: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          status?: string | null
+          submitted_by?: string | null
+          tags?: Json | null
+          title?: string
+        }
+        Relationships: []
+      }
       integrations: {
         Row: {
           created_at: string
@@ -580,6 +610,30 @@ export type Database = {
         }
         Relationships: []
       }
+      partners: {
+        Row: {
+          contact: string | null
+          created_at: string | null
+          id: string
+          name: string
+          type: string | null
+        }
+        Insert: {
+          contact?: string | null
+          created_at?: string | null
+          id?: string
+          name: string
+          type?: string | null
+        }
+        Update: {
+          contact?: string | null
+          created_at?: string | null
+          id?: string
+          name?: string
+          type?: string | null
+        }
+        Relationships: []
+      }
       portal_audit_log: {
         Row: {
           created_at: string
@@ -794,6 +848,44 @@ export type Database = {
             columns: ["org_id"]
             isOneToOne: false
             referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      prototypes: {
+        Row: {
+          created_at: string | null
+          demo_link: string | null
+          id: string
+          idea_id: string | null
+          repo_link: string | null
+          screenshots: Json | null
+          status: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          demo_link?: string | null
+          id?: string
+          idea_id?: string | null
+          repo_link?: string | null
+          screenshots?: Json | null
+          status?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          demo_link?: string | null
+          id?: string
+          idea_id?: string | null
+          repo_link?: string | null
+          screenshots?: Json | null
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prototypes_idea_id_fkey"
+            columns: ["idea_id"]
+            isOneToOne: false
+            referencedRelation: "ideas"
             referencedColumns: ["id"]
           },
         ]
@@ -1145,6 +1237,33 @@ export type Database = {
             referencedColumns: ["slug"]
           },
         ]
+      }
+      user_preferences: {
+        Row: {
+          created_at: string
+          division_selection_completed: boolean | null
+          notifications_enabled: boolean | null
+          primary_division: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          division_selection_completed?: boolean | null
+          notifications_enabled?: boolean | null
+          primary_division?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          division_selection_completed?: boolean | null
+          notifications_enabled?: boolean | null
+          primary_division?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       user_roles: {
         Row: {
