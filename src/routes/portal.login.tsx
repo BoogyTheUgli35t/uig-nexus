@@ -20,7 +20,17 @@ export const Route = createFileRoute("/portal/login")({
   beforeLoad: async () => {
     if (typeof window === "undefined") return;
     const { data } = await supabase.auth.getSession();
-    if (data.session) throw redirect({ to: "/portal/dashboard" });
+    if (data.session) {
+      // Check if they completed division selection
+      const { data: prefs } = await supabase
+        .from("user_preferences")
+        .select("division_selection_completed")
+        .eq("user_id", data.session.user.id)
+        .maybeSingle();
+      if (!prefs?.division_selection_completed) {
+        throw redirect({ to: "/portal/signup/choose-division" });
+      }
+    }
   },
   component: LoginPage,
 });
@@ -32,10 +42,12 @@ function LoginPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data: sub } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === "SIGNED_IN" && session) {
         logPortalEvent({ data: { event_type: "sign_in", user_id: session.user.id, email: session.user.email ?? null } }).catch(() => {});
-        navigate({ to: "/portal/dashboard" });
+        // Check division selection
+        const { data: prefs } = await supabase.from("user_preferences").select("division_selection_completed").eq("user_id", session.user.id).maybeSingle();
+        navigate({ to: prefs?.division_selection_completed ? "/portal/dashboard" : "/portal/signup/choose-division" });
       }
     });
     return () => sub.subscription.unsubscribe();
@@ -58,14 +70,16 @@ function LoginPage() {
     }
     if (data.session) {
       toast.success("Welcome back.");
-      navigate({ to: "/portal/dashboard" });
+      // Check division selection before navigating
+      const { data: prefs } = await supabase.from("user_preferences").select("division_selection_completed").eq("user_id", data.session.user.id).maybeSingle();
+      navigate({ to: prefs?.division_selection_completed ? "/portal/dashboard" : "/portal/signup/choose-division" });
     }
   }
 
   async function onGoogle() {
     setLoading(true);
     const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin + "/portal/dashboard",
+      redirect_uri: window.location.origin + "/portal/signup",
     });
     if (result.error) {
       setLoading(false);

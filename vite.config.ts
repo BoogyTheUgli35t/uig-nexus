@@ -9,6 +9,9 @@ import { mcpPlugin } from "@lovable.dev/mcp-js/stacks/tanstack/vite";
 
 export default defineConfig({
   vite: {
-    plugins: [mcpPlugin()],
+    plugins: [
+      // Only enable MCP plugin in production build, not local dev (path issue on Windows)
+      process.env.NODE_ENV === "production" ? mcpPlugin() : []
+    ],
   },
 });

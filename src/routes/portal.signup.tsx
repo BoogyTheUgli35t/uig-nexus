@@ -20,7 +20,18 @@ export const Route = createFileRoute("/portal/signup")({
   beforeLoad: async () => {
     if (typeof window === "undefined") return;
     const { data } = await supabase.auth.getSession();
-    if (data.session) throw redirect({ to: "/portal/dashboard" });
+    if (data.session) {
+      // Check if they completed division selection
+      const { data: prefs } = await supabase
+        .from("user_preferences")
+        .select("division_selection_completed")
+        .eq("user_id", data.session.user.id)
+        .maybeSingle();
+      if (!prefs?.division_selection_completed) {
+        throw redirect({ to: "/portal/signup/choose-division" });
+      }
+      throw redirect({ to: "/portal/dashboard" });
+    }
   },
   component: SignupPage,
 });
@@ -31,12 +42,15 @@ function SignupPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [emailSent, setEmailSent] = useState(false);
 
   useEffect(() => {
-    const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
+    const { data: sub } = supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === "SIGNED_IN" && session) {
         logPortalEvent({ data: { event_type: "sign_in", user_id: session.user.id, email: session.user.email ?? null, metadata: { via: "signup" } } }).catch(() => {});
-        navigate({ to: "/portal/dashboard" });
+        // Check if they need to pick divisions
+        const { data: prefs } = await supabase.from("user_preferences").select("division_selection_completed").eq("user_id", session.user.id).maybeSingle();
+        navigate({ to: prefs?.division_selection_completed ? "/portal/dashboard" : "/portal/signup/choose-division" });
       }
     });
     return () => sub.subscription.unsubscribe();
@@ -49,7 +63,7 @@ function SignupPage() {
       email,
       password,
       options: {
-        emailRedirectTo: window.location.origin + "/portal/dashboard",
+        emailRedirectTo: window.location.origin + "/portal/signup/choose-division",
         data: { full_name: name },
       },
     });
@@ -66,8 +80,9 @@ function SignupPage() {
     }
     if (data.session) {
       toast.success("Account created. Welcome to Apex.");
-      navigate({ to: "/portal/dashboard" });
+      navigate({ to: "/portal/signup/choose-division" });
     } else {
+      setEmailSent(true);
       toast.success("Check your email to confirm your account.");
     }
   }
@@ -75,12 +90,32 @@ function SignupPage() {
   async function onGoogle() {
     setLoading(true);
     const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin + "/portal/dashboard",
+      redirect_uri: window.location.origin + "/portal/signup",
     });
     if (result.error) {
       setLoading(false);
       toast.error(result.error.message ?? "Google sign-in failed");
     }
+  }
+
+  if (emailSent) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-6">
+        <div className="w-full max-w-sm text-center">
+          <Logo />
+          <h1 className="mt-8 text-2xl font-bold">Check your email</h1>
+          <p className="mt-4 text-sm text-muted-foreground">
+            We've sent a confirmation link to <strong>{email}</strong>.
+            <br />Click the link to verify your account, then you'll choose your workspace.
+          </p>
+          <div className="mt-8">
+            <Link to="/portal/login" className="text-sm text-gold hover:underline">
+              Already verified? Sign in
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
