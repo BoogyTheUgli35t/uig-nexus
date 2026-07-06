@@ -21,23 +21,14 @@ export const Route = createFileRoute("/portal/signup")({
     if (typeof window === "undefined") return;
     const { data } = await supabase.auth.getSession();
     if (data.session) {
-      // Check if they completed division selection
-      const { data: prefs } = await supabase
-        .from("user_preferences")
-        .select("division_selection_completed")
-        .eq("user_id", data.session.user.id)
-        .maybeSingle();
-      if (!prefs?.division_selection_completed) {
-        throw redirect({ to: "/portal/signup/choose-division" });
-      }
-      throw redirect({ to: "/portal/dashboard" });
+      // If already signed in, go to choose-division to pick their workspaces
+      throw redirect({ to: "/portal/signup/choose-division" });
     }
   },
   component: SignupPage,
 });
 
 function SignupPage() {
-  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -45,16 +36,15 @@ function SignupPage() {
   const [emailSent, setEmailSent] = useState(false);
 
   useEffect(() => {
-    const { data: sub } = supabase.auth.onAuthStateChange(async (event, session) => {
+    const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === "SIGNED_IN" && session) {
         logPortalEvent({ data: { event_type: "sign_in", user_id: session.user.id, email: session.user.email ?? null, metadata: { via: "signup" } } }).catch(() => {});
-        // Check if they need to pick divisions
-        const { data: prefs } = await supabase.from("user_preferences").select("division_selection_completed").eq("user_id", session.user.id).maybeSingle();
-        navigate({ to: prefs?.division_selection_completed ? "/portal/dashboard" : "/portal/signup/choose-division" });
+        // Go to choose-division to pick workspaces
+        window.location.href = "/portal/signup/choose-division";
       }
     });
     return () => sub.subscription.unsubscribe();
-  }, [navigate]);
+  }, []);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -80,7 +70,7 @@ function SignupPage() {
     }
     if (data.session) {
       toast.success("Account created. Welcome to Apex.");
-      navigate({ to: "/portal/signup/choose-division" });
+      window.location.href = "/portal/signup/choose-division";
     } else {
       setEmailSent(true);
       toast.success("Check your email to confirm your account.");

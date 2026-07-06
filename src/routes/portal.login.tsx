@@ -21,15 +21,8 @@ export const Route = createFileRoute("/portal/login")({
     if (typeof window === "undefined") return;
     const { data } = await supabase.auth.getSession();
     if (data.session) {
-      // Check if they completed division selection
-      const { data: prefs } = await supabase
-        .from("user_preferences")
-        .select("division_selection_completed")
-        .eq("user_id", data.session.user.id)
-        .maybeSingle();
-      if (!prefs?.division_selection_completed) {
-        throw redirect({ to: "/portal/signup/choose-division" });
-      }
+      // If no prefs record exists, redirect to choose-division
+      throw redirect({ to: "/portal/signup/choose-division" });
     }
   },
   component: LoginPage,
@@ -42,16 +35,15 @@ function LoginPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    const { data: sub } = supabase.auth.onAuthStateChange(async (event, session) => {
+    const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
       if (event === "SIGNED_IN" && session) {
         logPortalEvent({ data: { event_type: "sign_in", user_id: session.user.id, email: session.user.email ?? null } }).catch(() => {});
-        // Check division selection
-        const { data: prefs } = await supabase.from("user_preferences").select("division_selection_completed").eq("user_id", session.user.id).maybeSingle();
-        navigate({ to: prefs?.division_selection_completed ? "/portal/dashboard" : "/portal/signup/choose-division" });
+        // Just redirect to choose-division - they'll pick their divisions first
+        window.location.href = "/portal/signup/choose-division";
       }
     });
     return () => sub.subscription.unsubscribe();
-  }, [navigate]);
+  }, []);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -70,9 +62,8 @@ function LoginPage() {
     }
     if (data.session) {
       toast.success("Welcome back.");
-      // Check division selection before navigating
-      const { data: prefs } = await supabase.from("user_preferences").select("division_selection_completed").eq("user_id", data.session.user.id).maybeSingle();
-      navigate({ to: prefs?.division_selection_completed ? "/portal/dashboard" : "/portal/signup/choose-division" });
+      // Use window.location for reliable redirect
+      window.location.href = "/portal/signup/choose-division";
     }
   }
 
