@@ -11,14 +11,14 @@ export const seedTechnologyData = createServerFn({ method: "POST" })
     const projects = [
       {
         title: 'Pan-African Payments Platform',
-        description: 'Building a unified payment solution for African markets',
+        client_name: 'UIG Fintech',
         status: 'building',
         progress: 62,
         owner_id: userId
       },
       {
         title: 'Smart Estate Resident App',
-        description: 'Mobile application for estate residents with access control and services',
+        client_name: 'UIG Real Estate',
         status: 'live',
         progress: 100,
         owner_id: userId
@@ -65,15 +65,13 @@ export const seedTechnologyData = createServerFn({ method: "POST" })
         name: 'Stripe Payments',
         provider: 'stripe',
         status: 'connected',
-        last_sync: new Date().toISOString(),
-        owner_id: userId
+        last_sync: new Date().toISOString()
       },
       {
         name: 'Twilio SMS',
         provider: 'twilio',
         status: 'connected',
-        last_sync: new Date().toISOString(),
-        owner_id: userId
+        last_sync: new Date().toISOString()
       }
     ];
 

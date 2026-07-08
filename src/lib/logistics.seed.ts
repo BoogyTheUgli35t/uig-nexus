@@ -16,8 +16,7 @@ export const seedLogisticsData = createServerFn({ method: "POST" })
         status: 'available',
         fuel_level: 88,
         odometer_km: 184250,
-        last_service: '2026-04-12',
-        owner_id: userId
+        last_service: '2026-04-12'
       },
       {
         plate: 'ABJ-518-MNA',
@@ -26,8 +25,7 @@ export const seedLogisticsData = createServerFn({ method: "POST" })
         status: 'in_transit',
         fuel_level: 62,
         odometer_km: 92430,
-        last_service: '2026-05-02',
-        owner_id: userId
+        last_service: '2026-05-02'
       }
     ];
 
@@ -48,8 +46,7 @@ export const seedLogisticsData = createServerFn({ method: "POST" })
           license_no: 'LAG-DRV-44821',
           status: 'available',
           deliveries_completed: 1284,
-          rating: 4.8,
-          owner_id: userId
+          rating: 4.8
         },
         {
           vehicle_id: vehicleData[1].id,
@@ -58,8 +55,7 @@ export const seedLogisticsData = createServerFn({ method: "POST" })
           license_no: 'ABJ-DRV-10233',
           status: 'on_route',
           deliveries_completed: 932,
-          rating: 4.9,
-          owner_id: userId
+          rating: 4.9
         }
       ];
 
@@ -79,8 +75,7 @@ export const seedLogisticsData = createServerFn({ method: "POST" })
         distance_km: 130,
         est_hours: 2.5,
         stops: 3,
-        status: 'active',
-        owner_id: userId
+        status: 'active'
       },
       {
         name: 'Lagos – Abuja Corridor',
@@ -89,8 +84,7 @@ export const seedLogisticsData = createServerFn({ method: "POST" })
         distance_km: 760,
         est_hours: 11,
         stops: 5,
-        status: 'active',
-        owner_id: userId
+        status: 'active'
       }
     ];
 

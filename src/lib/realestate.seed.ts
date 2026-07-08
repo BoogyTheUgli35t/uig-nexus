@@ -69,8 +69,7 @@ export const seedRealEstateData = createServerFn({ method: "POST" })
           rent_amount: 9500000,
           lease_start: '2024-09-01',
           lease_end: '2025-08-31',
-          payment_status: 'due',
-          owner_id: userId
+          payment_status: 'due'
         },
         {
           property_id: propertyData[1].id,
@@ -80,8 +79,7 @@ export const seedRealEstateData = createServerFn({ method: "POST" })
           rent_amount: 48000000,
           lease_start: '2024-06-01',
           lease_end: '2025-05-31',
-          payment_status: 'overdue',
-          owner_id: userId
+          payment_status: 'overdue'
         }
       ];
 
@@ -128,8 +126,7 @@ export const seedRealEstateData = createServerFn({ method: "POST" })
         phone: '+234 803 100 2003',
         amount_invested: 500000000,
         portfolio_value: 615000000,
-        expected_roi: 14.5,
-        owner_id: userId
+        expected_roi: 14.5
       },
       {
         full_name: 'Aisha Mohammed',
@@ -137,8 +134,7 @@ export const seedRealEstateData = createServerFn({ method: "POST" })
         phone: '+234 806 332 4455',
         amount_invested: 250000000,
         portfolio_value: 287500000,
-        expected_roi: 11.0,
-        owner_id: userId
+        expected_roi: 11.0
       }
     ];
 

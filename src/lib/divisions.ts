@@ -156,10 +156,10 @@ export const DIVISIONS: Division[] = [
     icon: FlaskConical,
     hero: heroInnovationLab,
     modules: [
-      { label: "Idea submission", description: "Capture ideas from every division.", status: "soon" },
-      { label: "Prototype tracker", description: "Status board from concept to demo.", status: "soon" },
-      { label: "Partner collaboration", description: "Co-build with partners and investors.", status: "soon" },
-      { label: "Experiment log", description: "Run AI experiments via the Model Trainer.", status: "soon" },
+      { label: "Idea submission", description: "Capture ideas from every division.", status: "live" },
+      { label: "Prototype tracker", description: "Status board from concept to demo.", status: "live" },
+      { label: "Partner collaboration", description: "Co-build with partners and investors.", status: "live" },
+      { label: "Experiment log", description: "Run AI experiments via the Model Trainer.", status: "live" },
     ],
   },
 ];

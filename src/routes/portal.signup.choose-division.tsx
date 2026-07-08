@@ -6,6 +6,13 @@ import { DIVISIONS } from "@/lib/divisions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Logo } from "@/components/site/Logo";
 import { toast } from "sonner";
 import { logPortalEvent } from "@/lib/portal.functions";
