@@ -237,6 +237,56 @@ export type Database = {
           },
         ]
       }
+      experiments: {
+        Row: {
+          confidence: number
+          created_at: string
+          hypothesis: string | null
+          id: string
+          idea_id: string | null
+          owner_id: string | null
+          result: string | null
+          source_division: string
+          status: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          confidence?: number
+          created_at?: string
+          hypothesis?: string | null
+          id?: string
+          idea_id?: string | null
+          owner_id?: string | null
+          result?: string | null
+          source_division?: string
+          status?: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          confidence?: number
+          created_at?: string
+          hypothesis?: string | null
+          id?: string
+          idea_id?: string | null
+          owner_id?: string | null
+          result?: string | null
+          source_division?: string
+          status?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "experiments_idea_id_fkey"
+            columns: ["idea_id"]
+            isOneToOne: false
+            referencedRelation: "ideas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       farmers: {
         Row: {
           cooperative: string | null
