@@ -100,27 +100,7 @@ export const seedAgriTechData = createServerFn({ method: "POST" })
       if (yieldError) throw new Error(yieldError.message);
     }
 
-    // Cooperatives
-    const cooperatives = [
-      {
-        name: 'Kano Rice Growers',
-        members: JSON.stringify(['Aliyu Bello', 'Other Members']),
-        contact: '+234 803 111 2233',
-        owner_id: userId
-      },
-      {
-        name: 'Benue Yam Cooperative',
-        members: JSON.stringify(['Ngozi Okeke', 'Other Members']),
-        contact: '+234 802 445 6677',
-        owner_id: userId
-      }
-    ];
 
-    const { error: cooperativeError } = await supabase
-      .from('cooperatives')
-      .insert(cooperatives);
-    
-    if (cooperativeError) throw new Error(cooperativeError.message);
 
     return { success: true };
   });
