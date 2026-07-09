@@ -58,8 +58,8 @@ function LoginPage() {
       toast.success("Welcome back.");
       // Use setTimeout to ensure toast appears before redirect
       setTimeout(() => {
-        window.location.href = "/portal/signup/choose-division";
-      }, 1000);
+        window.location.href = "/portal/dashboard";
+      }, 800);
     }
   }
 
