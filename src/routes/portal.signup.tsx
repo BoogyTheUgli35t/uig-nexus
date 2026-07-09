@@ -21,8 +21,16 @@ export const Route = createFileRoute("/portal/signup")({
     if (typeof window === "undefined") return;
     const { data } = await supabase.auth.getSession();
     if (data.session) {
-      // Force redirect to choose-division - simplified
-      throw redirect({ to: "/portal/signup/choose-division" });
+      // Signed-in already: onboarded users go to the dashboard, otherwise
+      // continue to workspace selection.
+      const { data: divisions } = await supabase
+        .from("user_divisions")
+        .select("division_slug")
+        .eq("user_id", data.session.user.id)
+        .limit(1);
+      throw redirect({
+        to: (divisions?.length ?? 0) > 0 ? "/portal/dashboard" : "/portal/signup/choose-division",
+      });
     }
   },
   component: SignupPage,
