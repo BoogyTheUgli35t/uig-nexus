@@ -20,9 +20,9 @@ export const Route = createFileRoute("/portal/login")({
   beforeLoad: async () => {
     if (typeof window === "undefined") return;
     const { data } = await supabase.auth.getSession();
+    // Already signed in → go straight to the workspace.
     if (data.session) {
-      // Force redirect to choose-division - simplified
-      throw redirect({ to: "/portal/signup/choose-division" });
+      throw redirect({ to: "/portal/dashboard" });
     }
   },
   component: LoginPage,
