@@ -293,7 +293,7 @@ function PortalShell() {
       <div className="flex-1 flex flex-col min-w-0">
         <header className="lg:hidden border-b border-border bg-surface/80 backdrop-blur px-4 h-14 flex items-center justify-between">
           <Logo />
-          <Button onClick={handleSignOut} variant="ghost" size="sm">
+          <Button onClick={handleSignOut} variant="ghost" size="sm" aria-label="Sign out">
             <LogOut className="h-4 w-4" />
           </Button>
         </header>

@@ -20,9 +20,9 @@ export const Route = createFileRoute("/portal/login")({
   beforeLoad: async () => {
     if (typeof window === "undefined") return;
     const { data } = await supabase.auth.getSession();
+    // Already signed in → go straight to the workspace.
     if (data.session) {
-      // Force redirect to choose-division - simplified
-      throw redirect({ to: "/portal/signup/choose-division" });
+      throw redirect({ to: "/portal/dashboard" });
     }
   },
   component: LoginPage,
@@ -58,8 +58,8 @@ function LoginPage() {
       toast.success("Welcome back.");
       // Use setTimeout to ensure toast appears before redirect
       setTimeout(() => {
-        window.location.href = "/portal/signup/choose-division";
-      }, 1000);
+        window.location.href = "/portal/dashboard";
+      }, 800);
     }
   }
 
