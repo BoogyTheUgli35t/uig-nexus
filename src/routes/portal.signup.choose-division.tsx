@@ -1,10 +1,11 @@
 import { createFileRoute, Link, useNavigate, redirect } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { Check } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
-import { lovable } from "@/integrations/lovable";
+import { chooseDivisions } from "@/lib/onboarding.functions";
+import { authHeaders } from "@/lib/auth-headers";
 import { DIVISIONS } from "@/lib/divisions";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -15,7 +16,6 @@ import {
 } from "@/components/ui/select";
 import { Logo } from "@/components/site/Logo";
 import { toast } from "sonner";
-import { logPortalEvent } from "@/lib/portal.functions";
 
 export const Route = createFileRoute("/portal/signup/choose-division")({
   head: () => ({
@@ -40,25 +40,17 @@ function ChooseDivisionPage() {
   const [selectedDivisions, setSelectedDivisions] = useState<string[]>([]);
   const [primaryDivision, setPrimaryDivision] = useState<string>("");
   const [loading, setLoading] = useState(false);
-  const [step, setStep] = useState<"select" | "submit">("select");
+  const [done, setDone] = useState(false);
 
   useEffect(() => {
-    (async () => {
-      try {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (user?.email) setEmail(user.email);
-      } catch {
-        // fallback: try to get email from URL state (if passed from verify email page)
-        const urlParams = new URLSearchParams(window.location.search);
-        const emailFromUrl = urlParams.get("email");
-        if (emailFromUrl) setEmail(emailFromUrl);
-      }
-    })();
+    supabase.auth.getUser().then(({ data }) => {
+      if (data.user?.email) setEmail(data.user.email);
+    });
   }, []);
 
   const handleDivisionToggle = (slug: string) => {
     setSelectedDivisions((prev) =>
-      prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug]
+      prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug],
     );
   };
 
@@ -67,68 +59,58 @@ function ChooseDivisionPage() {
       toast.error("Please select at least one division");
       return;
     }
-    setStep("submit");
     setLoading(true);
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error("No user session");
-
-      // Call a server function to record division selection and seed sample data
-      // This assumes you have an Edge Function or server function: `signup_choose_division`
-      const { error } = await supabase.functions.invoke("signup_choose_division", {
-        body: JSON.stringify({
-          user_id: user.id,
-          email: user.email,
-          selected_divisions: selectedDivisions,
-          primary_division: primaryDivision,
-          role_preference: 'client',
-        }),
+      const headers = await authHeaders();
+      await chooseDivisions({
+        data: {
+          divisions: selectedDivisions as never,
+          primary: (primaryDivision || undefined) as never,
+        },
+        headers,
       });
-
-      if (error) {
-        // Edge function failed, but we can still redirect with a fallback
-        console.error("Edge function error:", error);
-        toast.error("Workspaces created (with some errors). Redirecting...");
-      } else {
-        toast.success("Workspaces created! Welcome to UIG.");
-      }
-      
-      // Force redirect to dashboard - simplified logic
-      setTimeout(() => {
-        window.location.href = "/portal/dashboard";
-      }, 500);
+      setDone(true);
+      toast.success("Workspaces created! Welcome to UIG.");
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Failed to save your selection");
+      // Access rows may still have been written; surface the error but let the
+      // user continue to their dashboard rather than getting stuck here.
+      toast.error(
+        err instanceof Error ? err.message : "We couldn't finish setup, taking you to your dashboard.",
+      );
     } finally {
       setLoading(false);
-      setStep("select");
+      // Always advance — routing must never depend on a background call succeeding.
+      setTimeout(() => navigate({ to: "/portal/dashboard" }), 600);
     }
   };
 
-  if (step === "submit") {
+  if (done) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-6">
-        <div className="text-center">
+      <div className="min-h-dvh flex items-center justify-center p-6">
+        <main className="text-center">
           <div className="mx-auto h-12 w-12 rounded-full bg-gold/10 text-gold flex items-center justify-center">
-            <Check className="h-6 w-6" />
+            <Check className="h-6 w-6" aria-hidden="true" />
           </div>
           <h1 className="mt-6 text-2xl font-bold">Workspaces created!</h1>
           <p className="mt-3 text-sm text-muted-foreground">
             Your selected UIG division workspaces are now ready.
           </p>
           <div className="mt-6 flex items-center justify-center gap-3">
-            <Button onClick={() => navigate({ to: "/portal/dashboard" })} className="bg-gold text-gold-foreground hover:bg-gold/90">
+            <Button
+              onClick={() => navigate({ to: "/portal/dashboard" })}
+              className="bg-gold text-gold-foreground hover:bg-gold/90"
+            >
               Go to dashboard
             </Button>
           </div>
-        </div>
+        </main>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6">
-      <div className="w-full max-w-2xl">
+    <div className="min-h-dvh flex items-center justify-center p-6">
+      <main className="w-full max-w-2xl">
         <Logo />
         <h1 className="mt-8 text-3xl font-bold">Choose your workspace</h1>
         <p className="mt-2 text-sm text-muted-foreground">
@@ -140,27 +122,26 @@ function ChooseDivisionPage() {
           {DIVISIONS.map((division) => (
             <label
               key={division.slug}
-              className={`group relative flex flex-col items-center rounded-xl border border-border bg-surface p-6 cursor-pointer hover:bg-surface-elevated transition-colors ${
-                selectedDivisions.includes(division.slug)
-                  ? "border-gold bg-gold/5"
-                  : ""
+              className={`group relative flex flex-col items-center rounded-xl border border-border bg-surface p-6 cursor-pointer hover:bg-surface-elevated transition-colors focus-within:ring-2 focus-within:ring-gold ${
+                selectedDivisions.includes(division.slug) ? "border-gold bg-gold/5" : ""
               }`}
             >
               <input
                 type="checkbox"
-                hidden
+                className="sr-only"
                 checked={selectedDivisions.includes(division.slug)}
                 onChange={() => handleDivisionToggle(division.slug)}
               />
               <div className="mt-4 flex h-36 w-48 items-center justify-center overflow-hidden rounded-lg border border-border bg-background">
                 <img
                   src={division.hero}
-                  alt={`${division.name} hero`}
+                  alt={`${division.name}`}
+                  loading="lazy"
                   className="object-cover h-full w-full"
                 />
               </div>
               <div className="mt-4 text-center">
-                <h3 className="font-medium">{division.name}</h3>
+                <h2 className="font-medium">{division.name}</h2>
                 <p className="mt-1 text-sm text-muted-foreground">{division.short}</p>
                 <p className="mt-1 text-xs text-muted-foreground">{division.tagline}</p>
               </div>
@@ -169,15 +150,15 @@ function ChooseDivisionPage() {
         </div>
 
         {selectedDivisions.length > 1 && (
-          <div className="mt-6">
-            <Label>Primary Workspace</Label>
+          <div className="mt-6 space-y-2">
+            <Label htmlFor="primary-workspace">Primary Workspace</Label>
             <Select value={primaryDivision} onValueChange={setPrimaryDivision}>
-              <SelectTrigger>
+              <SelectTrigger id="primary-workspace">
                 <SelectValue placeholder="Select your primary workspace" />
               </SelectTrigger>
               <SelectContent>
-                {selectedDivisions.map(slug => {
-                  const division = DIVISIONS.find(d => d.slug === slug);
+                {selectedDivisions.map((slug) => {
+                  const division = DIVISIONS.find((d) => d.slug === slug);
                   return (
                     <SelectItem key={slug} value={slug}>
                       {division?.name}
@@ -209,10 +190,7 @@ function ChooseDivisionPage() {
         <p className="mt-6 text-center text-xs text-muted-foreground">
           <Link to="/" className="hover:text-foreground">← Back to UIG</Link>
         </p>
-      </div>
+      </main>
     </div>
   );
 }
-
-// Import Check icon (lucide-react)
-import { Check } from "lucide-react";
