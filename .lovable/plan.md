@@ -51,7 +51,7 @@ Each phase = migration (tables + RLS + GRANTs) → server functions → routes u
 
 **6. UIG Intelligence** ✅ DONE — `datasets`, `models`, `predictions` (RLS by division access + staff/admin, seeded with cross-division sample data). Workspace at `/portal/divisions/intelligence`: KPIs (models, avg accuracy, datasets/rows, deployed), AI assistant (one-shot Q&A via Lovable AI `google/gemini-3-flash-preview`), Model Lifecycle board (Draft → Training → Evaluated → Deployed → Monitoring with create-model + advance actions; auto-accuracy on evaluate), live predictions (pick model + prompt → real Lovable AI result persisted with confidence), dataset library with add form, and recent-predictions feed. Roles: admin, staff(data scientist/analyst). Next: Phase 7 — Innovation Lab.
 
-**7. UIG Innovation Lab** — `ideas`, `prototypes`, `partners`, `experiments`. Modules: idea submission, prototype tracker, partner collaboration, experiment log. Cross-links into Intelligence's Model Trainer for AI experiments. Roles: admin, staff(founder), partner, investor.
+**7. UIG Innovation Lab** ✅ DONE — `ideas`, `prototypes`, `partners`, `experiments` (RLS by innovation-lab division access + staff/admin + owner/submitter). Workspace at `/portal/divisions/innovation-lab`: KPIs (ideas, prototypes, partners, experiments), idea submission + 4-stage pipeline (Concept → Validated → Prototype → Launched with stage moves + tags), prototype tracker (build → pilot → launched with repo/demo links), partner collaboration (add/list by type), and an "Experiment with AI" log that pipes a hypothesis into UIG Intelligence (Lovable AI) and persists the result with a confidence score. Verified end-to-end with a division-scoped test user.
 
 ---
 

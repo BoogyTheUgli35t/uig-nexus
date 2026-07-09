@@ -33,6 +33,7 @@ import { Route as DivisionsAgritechRouteImport } from './routes/divisions.agrite
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as PortalSignupChooseDivisionRouteImport } from './routes/portal.signup.choose-division'
+import { Route as ApiPublicStripeWebhookRouteImport } from './routes/api/public/stripe-webhook'
 import { Route as ApexPortalSettingsRouteImport } from './routes/_apex.portal.settings'
 import { Route as ApexPortalDashboardRouteImport } from './routes/_apex.portal.dashboard'
 import { Route as ApexPortalAuditRouteImport } from './routes/_apex.portal.audit'
@@ -169,6 +170,11 @@ const PortalSignupChooseDivisionRoute =
     path: '/choose-division',
     getParentRoute: () => PortalSignupRoute,
   } as any)
+const ApiPublicStripeWebhookRoute = ApiPublicStripeWebhookRouteImport.update({
+  id: '/api/public/stripe-webhook',
+  path: '/api/public/stripe-webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApexPortalSettingsRoute = ApexPortalSettingsRouteImport.update({
   id: '/portal/settings',
   path: '/portal/settings',
@@ -269,6 +275,7 @@ export interface FileRoutesByFullPath {
   '/portal/audit': typeof ApexPortalAuditRoute
   '/portal/dashboard': typeof ApexPortalDashboardRoute
   '/portal/settings': typeof ApexPortalSettingsRoute
+  '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/portal/signup/choose-division': typeof PortalSignupChooseDivisionRoute
   '/portal/divisions/$slug': typeof ApexPortalDivisionsSlugRoute
   '/portal/divisions/agritech': typeof ApexPortalDivisionsAgritechRoute
@@ -306,6 +313,7 @@ export interface FileRoutesByTo {
   '/portal/audit': typeof ApexPortalAuditRoute
   '/portal/dashboard': typeof ApexPortalDashboardRoute
   '/portal/settings': typeof ApexPortalSettingsRoute
+  '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/portal/signup/choose-division': typeof PortalSignupChooseDivisionRoute
   '/portal/divisions/$slug': typeof ApexPortalDivisionsSlugRoute
   '/portal/divisions/agritech': typeof ApexPortalDivisionsAgritechRoute
@@ -346,6 +354,7 @@ export interface FileRoutesById {
   '/_apex/portal/audit': typeof ApexPortalAuditRoute
   '/_apex/portal/dashboard': typeof ApexPortalDashboardRoute
   '/_apex/portal/settings': typeof ApexPortalSettingsRoute
+  '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/portal/signup/choose-division': typeof PortalSignupChooseDivisionRoute
   '/_apex/portal/divisions/$slug': typeof ApexPortalDivisionsSlugRoute
   '/_apex/portal/divisions/agritech': typeof ApexPortalDivisionsAgritechRoute
@@ -386,6 +395,7 @@ export interface FileRouteTypes {
     | '/portal/audit'
     | '/portal/dashboard'
     | '/portal/settings'
+    | '/api/public/stripe-webhook'
     | '/portal/signup/choose-division'
     | '/portal/divisions/$slug'
     | '/portal/divisions/agritech'
@@ -423,6 +433,7 @@ export interface FileRouteTypes {
     | '/portal/audit'
     | '/portal/dashboard'
     | '/portal/settings'
+    | '/api/public/stripe-webhook'
     | '/portal/signup/choose-division'
     | '/portal/divisions/$slug'
     | '/portal/divisions/agritech'
@@ -462,6 +473,7 @@ export interface FileRouteTypes {
     | '/_apex/portal/audit'
     | '/_apex/portal/dashboard'
     | '/_apex/portal/settings'
+    | '/api/public/stripe-webhook'
     | '/portal/signup/choose-division'
     | '/_apex/portal/divisions/$slug'
     | '/_apex/portal/divisions/agritech'
@@ -495,6 +507,7 @@ export interface RootRouteChildren {
   DivisionsTechnologyRoute: typeof DivisionsTechnologyRoute
   DivisionsIndexRoute: typeof DivisionsIndexRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
+  ApiPublicStripeWebhookRoute: typeof ApiPublicStripeWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -666,6 +679,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/portal/signup/choose-division'
       preLoaderRoute: typeof PortalSignupChooseDivisionRouteImport
       parentRoute: typeof PortalSignupRoute
+    }
+    '/api/public/stripe-webhook': {
+      id: '/api/public/stripe-webhook'
+      path: '/api/public/stripe-webhook'
+      fullPath: '/api/public/stripe-webhook'
+      preLoaderRoute: typeof ApiPublicStripeWebhookRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_apex/portal/settings': {
       id: '/_apex/portal/settings'
@@ -854,6 +874,7 @@ const rootRouteChildren: RootRouteChildren = {
   DivisionsTechnologyRoute: DivisionsTechnologyRoute,
   DivisionsIndexRoute: DivisionsIndexRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
+  ApiPublicStripeWebhookRoute: ApiPublicStripeWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
