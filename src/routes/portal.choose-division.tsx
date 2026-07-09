@@ -17,7 +17,7 @@ import {
 import { Logo } from "@/components/site/Logo";
 import { toast } from "sonner";
 
-export const Route = createFileRoute("/portal/signup/choose-division")({
+export const Route = createFileRoute("/portal/choose-division")({
   head: () => ({
     meta: [
       { title: "Choose your workspace — UIG" },

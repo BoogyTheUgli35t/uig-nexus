@@ -23,6 +23,7 @@ import { Route as PortalIndexRouteImport } from './routes/portal.index'
 import { Route as DivisionsIndexRouteImport } from './routes/divisions.index'
 import { Route as PortalSignupRouteImport } from './routes/portal.signup'
 import { Route as PortalLoginRouteImport } from './routes/portal.login'
+import { Route as PortalChooseDivisionRouteImport } from './routes/portal.choose-division'
 import { Route as InsightsSlugRouteImport } from './routes/insights.$slug'
 import { Route as DivisionsTechnologyRouteImport } from './routes/divisions.technology'
 import { Route as DivisionsRealEstateRouteImport } from './routes/divisions.real-estate'
@@ -32,7 +33,6 @@ import { Route as DivisionsInnovationLabRouteImport } from './routes/divisions.i
 import { Route as DivisionsAgritechRouteImport } from './routes/divisions.agritech'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
-import { Route as PortalSignupChooseDivisionRouteImport } from './routes/portal.signup.choose-division'
 import { Route as ApiPublicStripeWebhookRouteImport } from './routes/api/public/stripe-webhook'
 import { Route as ApexPortalSettingsRouteImport } from './routes/_apex.portal.settings'
 import { Route as ApexPortalDashboardRouteImport } from './routes/_apex.portal.dashboard'
@@ -117,6 +117,11 @@ const PortalLoginRoute = PortalLoginRouteImport.update({
   path: '/login',
   getParentRoute: () => PortalRoute,
 } as any)
+const PortalChooseDivisionRoute = PortalChooseDivisionRouteImport.update({
+  id: '/choose-division',
+  path: '/choose-division',
+  getParentRoute: () => PortalRoute,
+} as any)
 const InsightsSlugRoute = InsightsSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -163,12 +168,6 @@ const Char91DotmcpChar93ListToolsRoute =
     id: '/.mcp/list-tools',
     path: '/.mcp/list-tools',
     getParentRoute: () => rootRouteImport,
-  } as any)
-const PortalSignupChooseDivisionRoute =
-  PortalSignupChooseDivisionRouteImport.update({
-    id: '/choose-division',
-    path: '/choose-division',
-    getParentRoute: () => PortalSignupRoute,
   } as any)
 const ApiPublicStripeWebhookRoute = ApiPublicStripeWebhookRouteImport.update({
   id: '/api/public/stripe-webhook',
@@ -267,8 +266,9 @@ export interface FileRoutesByFullPath {
   '/divisions/real-estate': typeof DivisionsRealEstateRoute
   '/divisions/technology': typeof DivisionsTechnologyRoute
   '/insights/$slug': typeof InsightsSlugRoute
+  '/portal/choose-division': typeof PortalChooseDivisionRoute
   '/portal/login': typeof PortalLoginRoute
-  '/portal/signup': typeof PortalSignupRouteWithChildren
+  '/portal/signup': typeof PortalSignupRoute
   '/divisions/': typeof DivisionsIndexRoute
   '/portal/': typeof PortalIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -276,7 +276,6 @@ export interface FileRoutesByFullPath {
   '/portal/dashboard': typeof ApexPortalDashboardRoute
   '/portal/settings': typeof ApexPortalSettingsRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
-  '/portal/signup/choose-division': typeof PortalSignupChooseDivisionRoute
   '/portal/divisions/$slug': typeof ApexPortalDivisionsSlugRoute
   '/portal/divisions/agritech': typeof ApexPortalDivisionsAgritechRoute
   '/portal/divisions/innovation-lab': typeof ApexPortalDivisionsInnovationLabRoute
@@ -305,8 +304,9 @@ export interface FileRoutesByTo {
   '/divisions/real-estate': typeof DivisionsRealEstateRoute
   '/divisions/technology': typeof DivisionsTechnologyRoute
   '/insights/$slug': typeof InsightsSlugRoute
+  '/portal/choose-division': typeof PortalChooseDivisionRoute
   '/portal/login': typeof PortalLoginRoute
-  '/portal/signup': typeof PortalSignupRouteWithChildren
+  '/portal/signup': typeof PortalSignupRoute
   '/divisions': typeof DivisionsIndexRoute
   '/portal': typeof PortalIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -314,7 +314,6 @@ export interface FileRoutesByTo {
   '/portal/dashboard': typeof ApexPortalDashboardRoute
   '/portal/settings': typeof ApexPortalSettingsRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
-  '/portal/signup/choose-division': typeof PortalSignupChooseDivisionRoute
   '/portal/divisions/$slug': typeof ApexPortalDivisionsSlugRoute
   '/portal/divisions/agritech': typeof ApexPortalDivisionsAgritechRoute
   '/portal/divisions/innovation-lab': typeof ApexPortalDivisionsInnovationLabRoute
@@ -346,8 +345,9 @@ export interface FileRoutesById {
   '/divisions/real-estate': typeof DivisionsRealEstateRoute
   '/divisions/technology': typeof DivisionsTechnologyRoute
   '/insights/$slug': typeof InsightsSlugRoute
+  '/portal/choose-division': typeof PortalChooseDivisionRoute
   '/portal/login': typeof PortalLoginRoute
-  '/portal/signup': typeof PortalSignupRouteWithChildren
+  '/portal/signup': typeof PortalSignupRoute
   '/divisions/': typeof DivisionsIndexRoute
   '/portal/': typeof PortalIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -355,7 +355,6 @@ export interface FileRoutesById {
   '/_apex/portal/dashboard': typeof ApexPortalDashboardRoute
   '/_apex/portal/settings': typeof ApexPortalSettingsRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
-  '/portal/signup/choose-division': typeof PortalSignupChooseDivisionRoute
   '/_apex/portal/divisions/$slug': typeof ApexPortalDivisionsSlugRoute
   '/_apex/portal/divisions/agritech': typeof ApexPortalDivisionsAgritechRoute
   '/_apex/portal/divisions/innovation-lab': typeof ApexPortalDivisionsInnovationLabRoute
@@ -387,6 +386,7 @@ export interface FileRouteTypes {
     | '/divisions/real-estate'
     | '/divisions/technology'
     | '/insights/$slug'
+    | '/portal/choose-division'
     | '/portal/login'
     | '/portal/signup'
     | '/divisions/'
@@ -396,7 +396,6 @@ export interface FileRouteTypes {
     | '/portal/dashboard'
     | '/portal/settings'
     | '/api/public/stripe-webhook'
-    | '/portal/signup/choose-division'
     | '/portal/divisions/$slug'
     | '/portal/divisions/agritech'
     | '/portal/divisions/innovation-lab'
@@ -425,6 +424,7 @@ export interface FileRouteTypes {
     | '/divisions/real-estate'
     | '/divisions/technology'
     | '/insights/$slug'
+    | '/portal/choose-division'
     | '/portal/login'
     | '/portal/signup'
     | '/divisions'
@@ -434,7 +434,6 @@ export interface FileRouteTypes {
     | '/portal/dashboard'
     | '/portal/settings'
     | '/api/public/stripe-webhook'
-    | '/portal/signup/choose-division'
     | '/portal/divisions/$slug'
     | '/portal/divisions/agritech'
     | '/portal/divisions/innovation-lab'
@@ -465,6 +464,7 @@ export interface FileRouteTypes {
     | '/divisions/real-estate'
     | '/divisions/technology'
     | '/insights/$slug'
+    | '/portal/choose-division'
     | '/portal/login'
     | '/portal/signup'
     | '/divisions/'
@@ -474,7 +474,6 @@ export interface FileRouteTypes {
     | '/_apex/portal/dashboard'
     | '/_apex/portal/settings'
     | '/api/public/stripe-webhook'
-    | '/portal/signup/choose-division'
     | '/_apex/portal/divisions/$slug'
     | '/_apex/portal/divisions/agritech'
     | '/_apex/portal/divisions/innovation-lab'
@@ -610,6 +609,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PortalLoginRouteImport
       parentRoute: typeof PortalRoute
     }
+    '/portal/choose-division': {
+      id: '/portal/choose-division'
+      path: '/choose-division'
+      fullPath: '/portal/choose-division'
+      preLoaderRoute: typeof PortalChooseDivisionRouteImport
+      parentRoute: typeof PortalRoute
+    }
     '/insights/$slug': {
       id: '/insights/$slug'
       path: '/$slug'
@@ -672,13 +678,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/.mcp/list-tools'
       preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/portal/signup/choose-division': {
-      id: '/portal/signup/choose-division'
-      path: '/choose-division'
-      fullPath: '/portal/signup/choose-division'
-      preLoaderRoute: typeof PortalSignupChooseDivisionRouteImport
-      parentRoute: typeof PortalSignupRoute
     }
     '/api/public/stripe-webhook': {
       id: '/api/public/stripe-webhook'
@@ -825,27 +824,17 @@ const InsightsRouteWithChildren = InsightsRoute._addFileChildren(
   InsightsRouteChildren,
 )
 
-interface PortalSignupRouteChildren {
-  PortalSignupChooseDivisionRoute: typeof PortalSignupChooseDivisionRoute
-}
-
-const PortalSignupRouteChildren: PortalSignupRouteChildren = {
-  PortalSignupChooseDivisionRoute: PortalSignupChooseDivisionRoute,
-}
-
-const PortalSignupRouteWithChildren = PortalSignupRoute._addFileChildren(
-  PortalSignupRouteChildren,
-)
-
 interface PortalRouteChildren {
+  PortalChooseDivisionRoute: typeof PortalChooseDivisionRoute
   PortalLoginRoute: typeof PortalLoginRoute
-  PortalSignupRoute: typeof PortalSignupRouteWithChildren
+  PortalSignupRoute: typeof PortalSignupRoute
   PortalIndexRoute: typeof PortalIndexRoute
 }
 
 const PortalRouteChildren: PortalRouteChildren = {
+  PortalChooseDivisionRoute: PortalChooseDivisionRoute,
   PortalLoginRoute: PortalLoginRoute,
-  PortalSignupRoute: PortalSignupRouteWithChildren,
+  PortalSignupRoute: PortalSignupRoute,
   PortalIndexRoute: PortalIndexRoute,
 }
 
