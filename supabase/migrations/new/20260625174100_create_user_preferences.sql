@@ -1,40 +1,11 @@
--- Create user_preferences table
-CREATE TABLE IF NOT EXISTS public.user_preferences (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
-  division_selection_completed BOOLEAN DEFAULT FALSE,
-  primary_division TEXT,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- Enable RLS
-ALTER TABLE public.user_preferences ENABLE ROW LEVEL SECURITY;
-
--- Create policies
-CREATE POLICY "Users can view their own preferences" ON public.user_preferences
-  FOR SELECT USING (auth.uid() = user_id);
-
-CREATE POLICY "Users can update their own preferences" ON public.user_preferences
-  FOR UPDATE USING (auth.uid() = user_id);
-
-CREATE POLICY "Users can insert their own preferences" ON public.user_preferences
-  FOR INSERT WITH CHECK (auth.uid() = user_id);
-
--- Grant permissions
-GRANT SELECT, INSERT, UPDATE ON public.user_preferences TO authenticated;
-GRANT ALL ON public.user_preferences TO service_role;
-
--- Create updated_at trigger
-CREATE OR REPLACE FUNCTION public.set_updated_at()
-RETURNS TRIGGER AS $$
-BEGIN
-  NEW.updated_at = NOW();
-  RETURN NEW;
-END;
-$$ LANGUAGE plpgsql;
-
-CREATE TRIGGER set_user_preferences_updated_at
-  BEFORE UPDATE ON public.user_preferences
-  FOR EACH ROW
-  EXECUTE FUNCTION public.set_updated_at();
+-- SUPERSEDED — do not apply.
+--
+-- This file lived in a non-standard `migrations/new/` subfolder, which the Supabase CLI
+-- never picks up, so it was never actually applied anywhere. It has been corrected
+-- (missing `notifications_enabled` column, missing UNIQUE(user_id) constraint needed by
+-- the app's upsert) and moved into the real migration sequence at:
+--   supabase/migrations/20260625174100_create_user_preferences.sql
+--
+-- This file is kept only so the history isn't silently deleted. It is safe to remove
+-- this `migrations/new/` folder entirely once you've confirmed the migration above has
+-- been applied to your live database.

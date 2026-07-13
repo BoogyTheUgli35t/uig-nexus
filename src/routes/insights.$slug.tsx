@@ -47,7 +47,9 @@ export const Route = createFileRoute("/insights/$slug")({
     <SiteLayout>
       <Section>
         <h1 className="text-3xl font-bold">Article not found</h1>
-        <Link to="/insights" className="mt-4 inline-flex items-center text-gold">← Back to insights</Link>
+        <Link to="/insights" className="mt-4 inline-flex items-center text-gold">
+          ← Back to insights
+        </Link>
       </Section>
     </SiteLayout>
   ),
@@ -64,11 +66,18 @@ function InsightArticle() {
           <div className="absolute inset-0 grid-bg opacity-30" />
           <div className="absolute -top-40 left-1/2 -translate-x-1/2 h-96 w-[800px] rounded-full bg-gold/10 blur-[120px]" />
           <div className="relative mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 pt-16 pb-16">
-            <Link to="/insights" className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-gold"><ArrowLeft className="h-3 w-3" /> All insights</Link>
+            <Link
+              to="/insights"
+              className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-gold"
+            >
+              <ArrowLeft className="h-3 w-3" /> All insights
+            </Link>
             <Eyebrow>{post.category}</Eyebrow>
             <h1 className="mt-5 text-4xl sm:text-5xl font-bold leading-tight">{post.title}</h1>
             <div className="mt-6 flex items-center gap-4 text-xs text-muted-foreground">
-              <span className="inline-flex items-center gap-1.5"><Calendar className="h-3 w-3" /> {post.date}</span>
+              <span className="inline-flex items-center gap-1.5">
+                <Calendar className="h-3 w-3" /> {post.date}
+              </span>
               <span>UIG Editorial Team</span>
             </div>
           </div>
@@ -85,7 +94,12 @@ function InsightArticle() {
           <h2 className="text-2xl font-bold">Related</h2>
           <div className="mt-6 grid gap-5 sm:grid-cols-2">
             {related.map((r) => (
-              <Link key={r.slug} to="/insights/$slug" params={{ slug: r.slug }} className="rounded-xl border border-border bg-surface/60 p-5 hover:border-gold/40 transition">
+              <Link
+                key={r.slug}
+                to="/insights/$slug"
+                params={{ slug: r.slug }}
+                className="rounded-xl border border-border bg-surface/60 p-5 hover:border-gold/40 transition"
+              >
                 <div className="text-xs text-gold uppercase tracking-wider">{r.category}</div>
                 <h3 className="mt-2 font-semibold">{r.title}</h3>
                 <p className="mt-2 text-sm text-muted-foreground line-clamp-2">{r.excerpt}</p>

@@ -8,7 +8,9 @@ import { HeroBanner, ModuleCard, EmptyState } from "@/components/portal/blocks";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/_apex/portal/divisions/$slug")({
-  head: () => ({ meta: [{ title: "Division — UIG Apex" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({
+    meta: [{ title: "Division — UIG Apex" }, { name: "robots", content: "noindex" }],
+  }),
   component: DivisionWorkspace,
 });
 
@@ -55,7 +57,10 @@ function DivisionWorkspace() {
 
   return (
     <div className={`space-y-8 ${division.accentClass}`}>
-      <Link to="/portal/dashboard" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground">
+      <Link
+        to="/portal/dashboard"
+        className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
+      >
         <ArrowLeft className="h-4 w-4" /> Dashboard
       </Link>
 

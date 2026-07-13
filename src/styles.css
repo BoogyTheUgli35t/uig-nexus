@@ -125,7 +125,11 @@
     min-height: 100vh;
   }
 
-  h1, h2, h3, h4, h5 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
     font-family: var(--font-display);
     letter-spacing: -0.02em;
   }
@@ -167,9 +171,11 @@
     border-radius: inherit;
     padding: 1px;
     background: linear-gradient(135deg, oklch(0.82 0.13 85 / 0.5), transparent 60%);
-    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
     -webkit-mask-composite: xor;
-            mask-composite: exclude;
+    mask-composite: exclude;
     pointer-events: none;
   }
   .marquee-track {
@@ -177,25 +183,59 @@
   }
 
   /* Division accent system — set an accent var on a wrapper, then use acc-* */
-  .acc-gold { --acc: oklch(0.82 0.13 85); }
-  .acc-tech { --acc: oklch(0.68 0.16 240); }
-  .acc-agritech { --acc: oklch(0.72 0.17 150); }
-  .acc-realestate { --acc: oklch(0.85 0.02 260); }
-  .acc-logistics { --acc: oklch(0.7 0.19 45); }
-  .acc-intelligence { --acc: oklch(0.62 0.2 300); }
-  .acc-innovation { --acc: oklch(0.72 0.13 195); }
+  .acc-gold {
+    --acc: oklch(0.82 0.13 85);
+  }
+  .acc-tech {
+    --acc: oklch(0.68 0.16 240);
+  }
+  .acc-agritech {
+    --acc: oklch(0.72 0.17 150);
+  }
+  .acc-realestate {
+    --acc: oklch(0.85 0.02 260);
+  }
+  .acc-logistics {
+    --acc: oklch(0.7 0.19 45);
+  }
+  .acc-intelligence {
+    --acc: oklch(0.62 0.2 300);
+  }
+  .acc-innovation {
+    --acc: oklch(0.72 0.13 195);
+  }
 
-  .acc-text { color: var(--acc, var(--gold)); }
-  .acc-bg { background-color: var(--acc, var(--gold)); }
-  .acc-border { border-color: var(--acc, var(--gold)); }
-  .acc-bg-soft { background-color: color-mix(in oklab, var(--acc, var(--gold)) 12%, transparent); }
-  .acc-border-soft { border-color: color-mix(in oklab, var(--acc, var(--gold)) 35%, transparent); }
-  .acc-glow { box-shadow: 0 10px 40px -12px color-mix(in oklab, var(--acc, var(--gold)) 40%, transparent); }
+  .acc-text {
+    color: var(--acc, var(--gold));
+  }
+  .acc-bg {
+    background-color: var(--acc, var(--gold));
+  }
+  .acc-border {
+    border-color: var(--acc, var(--gold));
+  }
+  .acc-bg-soft {
+    background-color: color-mix(in oklab, var(--acc, var(--gold)) 12%, transparent);
+  }
+  .acc-border-soft {
+    border-color: color-mix(in oklab, var(--acc, var(--gold)) 35%, transparent);
+  }
+  .acc-glow {
+    box-shadow: 0 10px 40px -12px color-mix(in oklab, var(--acc, var(--gold)) 40%, transparent);
+  }
   .acc-gradient {
-    background-image: linear-gradient(135deg, color-mix(in oklab, var(--acc, var(--gold)) 90%, transparent), color-mix(in oklab, var(--acc, var(--gold)) 55%, black));
+    background-image: linear-gradient(
+      135deg,
+      color-mix(in oklab, var(--acc, var(--gold)) 90%, transparent),
+      color-mix(in oklab, var(--acc, var(--gold)) 55%, black)
+    );
   }
   .acc-text-gradient {
-    background-image: linear-gradient(135deg, var(--acc, var(--gold)), color-mix(in oklab, var(--acc, var(--gold)) 60%, white));
+    background-image: linear-gradient(
+      135deg,
+      var(--acc, var(--gold)),
+      color-mix(in oklab, var(--acc, var(--gold)) 60%, white)
+    );
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
@@ -203,8 +243,12 @@
 }
 
 @keyframes marquee {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-33.3333%); }
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-33.3333%);
+  }
 }
 
 @font-face {
@@ -212,7 +256,8 @@
   font-style: normal;
   font-weight: 100 900;
   font-display: swap;
-  src: url("https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2") format("woff2");
+  src: url("https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7.woff2")
+    format("woff2");
 }
 
 @font-face {
@@ -220,5 +265,6 @@
   font-style: normal;
   font-weight: 300 700;
   font-display: swap;
-  src: url("https://fonts.gstatic.com/s/spacegrotesk/v16/V8mDoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUxjLg.woff2") format("woff2");
+  src: url("https://fonts.gstatic.com/s/spacegrotesk/v16/V8mDoQDjQSkFtoMM3T6r8E7mF71Q-gOoraIAEj7oUUxjLg.woff2")
+    format("woff2");
 }

@@ -1,7 +1,17 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/sonner";
 
 import appCss from "../styles.css?url";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 60_000,
+      retry: 1,
+    },
+  },
+});
 
 function NotFoundComponent() {
   return (
@@ -31,16 +41,36 @@ export const Route = createRootRoute({
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Unified Innovations Group — Two Steps Ahead." },
-      { name: "description", content: "UIG is Nigeria's leading multi-sector innovation conglomerate — building the infrastructure for Africa's future through technology, agriculture, intelligence and beyond." },
+      {
+        name: "description",
+        content:
+          "UIG is Nigeria's leading multi-sector innovation conglomerate — building the infrastructure for Africa's future through technology, agriculture, intelligence and beyond.",
+      },
       { name: "author", content: "Unified Innovations Group" },
       { property: "og:title", content: "Unified Innovations Group — Two Steps Ahead." },
-      { property: "og:description", content: "UIG is Nigeria's leading multi-sector innovation conglomerate — building the infrastructure for Africa's future through technology, agriculture, intelligence and beyond." },
+      {
+        property: "og:description",
+        content:
+          "UIG is Nigeria's leading multi-sector innovation conglomerate — building the infrastructure for Africa's future through technology, agriculture, intelligence and beyond.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Unified Innovations Group — Two Steps Ahead." },
-      { name: "twitter:description", content: "UIG is Nigeria's leading multi-sector innovation conglomerate — building the infrastructure for Africa's future through technology, agriculture, intelligence and beyond." },
-      { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/e6b25550-beb6-4918-8631-81e4e441b36b" },
-      { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/e6b25550-beb6-4918-8631-81e4e441b36b" },
+      {
+        name: "twitter:description",
+        content:
+          "UIG is Nigeria's leading multi-sector innovation conglomerate — building the infrastructure for Africa's future through technology, agriculture, intelligence and beyond.",
+      },
+      {
+        property: "og:image",
+        content:
+          "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/e6b25550-beb6-4918-8631-81e4e441b36b",
+      },
+      {
+        name: "twitter:image",
+        content:
+          "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/e6b25550-beb6-4918-8631-81e4e441b36b",
+      },
     ],
     links: [{ rel: "stylesheet", href: appCss }],
   }),
@@ -56,8 +86,10 @@ function RootShell({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        {children}
-        <Toaster />
+        <QueryClientProvider client={queryClient}>
+          {children}
+          <Toaster />
+        </QueryClientProvider>
         <Scripts />
       </body>
     </html>

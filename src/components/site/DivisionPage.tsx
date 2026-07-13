@@ -11,7 +11,11 @@ export type DivisionPageProps = {
   title: ReactNode;
   subtitle: string;
   problem?: { title: string; points: string[] };
-  solutions: { title: string; description: string; icon?: LucideIcon | ComponentType<{ className?: string }> }[];
+  solutions: {
+    title: string;
+    description: string;
+    icon?: LucideIcon | ComponentType<{ className?: string }>;
+  }[];
   process?: { title: string; steps: { name: string; description: string }[] };
   why?: { title: string; points: string[] };
   outcome?: string;
@@ -27,8 +31,12 @@ export function DivisionPage(props: DivisionPageProps) {
   const division = props.slug ? getDivision(props.slug) : undefined;
   return (
     <SiteLayout>
-      <PageHero eyebrow={props.eyebrow} title={props.title} subtitle={props.subtitle} image={division?.hero} />
-
+      <PageHero
+        eyebrow={props.eyebrow}
+        title={props.title}
+        subtitle={props.subtitle}
+        image={division?.hero}
+      />
 
       {props.problem && (
         <Section>
@@ -75,7 +83,10 @@ export function DivisionPage(props: DivisionPageProps) {
           <h2 className="mt-5 text-3xl sm:text-4xl font-bold">{props.process.title}</h2>
           <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
             {props.process.steps.map((s, i) => (
-              <div key={s.name} className="relative rounded-xl border border-border bg-surface/60 p-5">
+              <div
+                key={s.name}
+                className="relative rounded-xl border border-border bg-surface/60 p-5"
+              >
                 <div className="text-xs font-semibold text-gold">0{i + 1}</div>
                 <h3 className="mt-2 font-semibold">{s.name}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{s.description}</p>
@@ -120,7 +131,10 @@ export function DivisionPage(props: DivisionPageProps) {
           <h2 className="mt-5 text-3xl sm:text-4xl font-bold">Live, always on.</h2>
           <ul className="mt-8 grid gap-3 sm:grid-cols-2 max-w-4xl">
             {props.realtime.map((r) => (
-              <li key={r} className="flex gap-3 items-start rounded-lg border border-border bg-surface/40 p-4 text-sm">
+              <li
+                key={r}
+                className="flex gap-3 items-start rounded-lg border border-border bg-surface/40 p-4 text-sm"
+              >
                 <span className="mt-1.5 h-1.5 w-1.5 rounded-full bg-gold shrink-0" />
                 <span className="text-muted-foreground">{r}</span>
               </li>
@@ -135,7 +149,10 @@ export function DivisionPage(props: DivisionPageProps) {
           <h2 className="mt-5 text-3xl sm:text-4xl font-bold">Built for serious operators.</h2>
           <div className="mt-8 flex flex-wrap gap-2 max-w-4xl">
             {props.targetClients.map((c) => (
-              <span key={c} className="inline-flex items-center rounded-full border border-border bg-surface/60 px-3 py-1.5 text-xs text-muted-foreground">
+              <span
+                key={c}
+                className="inline-flex items-center rounded-full border border-border bg-surface/60 px-3 py-1.5 text-xs text-muted-foreground"
+              >
                 {c}
               </span>
             ))}
@@ -150,7 +167,9 @@ export function DivisionPage(props: DivisionPageProps) {
             {props.metrics.map((m) => (
               <div key={m.label} className="rounded-xl border border-gold/20 bg-gold/5 p-6">
                 <div className="text-3xl font-bold text-gradient-gold">{m.value}</div>
-                <div className="mt-2 text-xs text-muted-foreground uppercase tracking-wider">{m.label}</div>
+                <div className="mt-2 text-xs text-muted-foreground uppercase tracking-wider">
+                  {m.label}
+                </div>
               </div>
             ))}
           </div>

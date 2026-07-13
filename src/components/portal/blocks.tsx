@@ -141,7 +141,6 @@ const STATUS_STYLES: Record<string, string> = {
   disconnected: "bg-muted text-muted-foreground border-border",
 };
 
-
 export function StatusBadge({ status }: { status: string }) {
   const key = status.toLowerCase();
   return (

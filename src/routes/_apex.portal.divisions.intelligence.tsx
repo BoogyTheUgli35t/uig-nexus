@@ -1,6 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { z } from "zod";
 import {
   ArrowLeft,
   Lock,
@@ -14,6 +15,8 @@ import {
   Layers,
   Cpu,
   Zap,
+  Trash2,
+  BarChart3,
 } from "lucide-react";
 import { toast } from "sonner";
 import { getDivision } from "@/lib/divisions";
@@ -24,11 +27,19 @@ import {
   createModel,
   advanceModel,
   runPrediction,
-  askAssistant,
+  listMyChatMessages,
+  sendChatMessage,
+  clearMyChat,
   MODEL_LIFECYCLE,
 } from "@/lib/intelligence.functions";
 import { authHeaders } from "@/lib/auth-headers";
-import { HeroBanner, KpiStat, DataPanel, EmptyState, StatusBadge } from "@/components/portal/blocks";
+import {
+  HeroBanner,
+  KpiStat,
+  DataPanel,
+  EmptyState,
+  StatusBadge,
+} from "@/components/portal/blocks";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -37,8 +48,25 @@ export const Route = createFileRoute("/_apex/portal/divisions/intelligence")({
   head: () => ({
     meta: [{ title: "UIG Intelligence — Workspace" }, { name: "robots", content: "noindex" }],
   }),
+  validateSearch: (search) => z.object({ ask: z.string().optional() }).parse(search),
   component: IntelligenceWorkspace,
 });
+
+/** Deterministic, clearly-illustrative "feature importance" bars for a trained
+ * model — no real training happens in this build, so these are seeded from the
+ * model id (stable across renders) rather than a genuine explainability engine. */
+function seededImportances(seed: string) {
+  let h = 0;
+  for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) >>> 0;
+  const rand = () => {
+    h = (h * 1103515245 + 12345) >>> 0;
+    return (h % 1000) / 1000;
+  };
+  const labels = ["Seasonality", "Historical trend", "External signals", "Data recency"];
+  return labels
+    .map((label) => ({ label, value: Math.round((0.25 + rand() * 0.75) * 100) }))
+    .sort((a, b) => b.value - a.value);
+}
 
 const LIFECYCLE_COLUMNS: { key: (typeof MODEL_LIFECYCLE)[number]; label: string }[] = [
   { key: "draft", label: "Draft" },
@@ -59,6 +87,7 @@ function IntelligenceWorkspace() {
   const division = getDivision("intelligence")!;
   const navigate = useNavigate();
   const qc = useQueryClient();
+  const { ask } = Route.useSearch();
   const [hasAccess, setHasAccess] = useState<boolean | null>(null);
 
   const [datasetName, setDatasetName] = useState("");
@@ -67,8 +96,10 @@ function IntelligenceWorkspace() {
   const [predModelId, setPredModelId] = useState("");
   const [predPrompt, setPredPrompt] = useState("");
   const [predResult, setPredResult] = useState<{ result: string; confidence: number } | null>(null);
-  const [question, setQuestion] = useState("");
-  const [answer, setAnswer] = useState("");
+  const [chatInput, setChatInput] = useState("");
+  const [expandedModel, setExpandedModel] = useState<string | null>(null);
+  const chatEndRef = useRef<HTMLDivElement>(null);
+  const sentAskRef = useRef(false);
 
   useEffect(() => {
     (async () => {
@@ -135,11 +166,36 @@ function IntelligenceWorkspace() {
     onError: (e: Error) => toast.error(e.message),
   });
 
-  const assistantMut = useMutation({
-    mutationFn: async () => askAssistant({ data: { question }, headers: await authHeaders() }),
-    onSuccess: (r) => setAnswer(r.answer),
+  const { data: chatMessages } = useQuery({
+    queryKey: ["intelligence-chat"],
+    enabled: hasAccess === true,
+    queryFn: async () => listMyChatMessages({ headers: await authHeaders() }),
+  });
+
+  const chatMut = useMutation({
+    mutationFn: async (message: string) =>
+      sendChatMessage({ data: { message }, headers: await authHeaders() }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["intelligence-chat"] }),
     onError: (e: Error) => toast.error(e.message),
   });
+
+  const clearChatMut = useMutation({
+    mutationFn: async () => clearMyChat({ headers: await authHeaders() }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["intelligence-chat"] }),
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [chatMessages]);
+
+  useEffect(() => {
+    if (ask && hasAccess === true && !sentAskRef.current) {
+      sentAskRef.current = true;
+      chatMut.mutate(ask);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ask, hasAccess]);
 
   const datasetName_ = useMemo(() => {
     const m = new Map<string, string>();
@@ -202,36 +258,94 @@ function IntelligenceWorkspace() {
 
       {/* KPIs */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <KpiStat icon={Cpu} label="Models" value={stats?.models ?? "—"} hint={`${stats?.deployed ?? 0} in production`} />
-        <KpiStat icon={Gauge} label="Avg accuracy" value={stats ? `${stats.avgAccuracy}%` : "—"} hint="across trained models" />
-        <KpiStat icon={Database} label="Datasets" value={stats?.datasets ?? "—"} hint={`${(stats?.totalRows ?? 0).toLocaleString()} rows`} />
-        <KpiStat icon={Rocket} label="Deployed" value={stats?.deployed ?? "—"} hint="live & monitored" />
+        <KpiStat
+          icon={Cpu}
+          label="Models"
+          value={stats?.models ?? "—"}
+          hint={`${stats?.deployed ?? 0} in production`}
+        />
+        <KpiStat
+          icon={Gauge}
+          label="Avg accuracy"
+          value={stats ? `${stats.avgAccuracy}%` : "—"}
+          hint="across trained models"
+        />
+        <KpiStat
+          icon={Database}
+          label="Datasets"
+          value={stats?.datasets ?? "—"}
+          hint={`${(stats?.totalRows ?? 0).toLocaleString()} rows`}
+        />
+        <KpiStat
+          icon={Rocket}
+          label="Deployed"
+          value={stats?.deployed ?? "—"}
+          hint="live & monitored"
+        />
       </div>
 
-      {/* AI assistant */}
-      <DataPanel title="AI assistant">
+      {/* AI assistant — persistent multi-turn chat, not a one-shot Q&A */}
+      <DataPanel
+        title="AI assistant"
+        action={
+          (chatMessages?.length ?? 0) > 0 ? (
+            <button
+              onClick={() => clearChatMut.mutate()}
+              disabled={clearChatMut.isPending}
+              className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
+            >
+              <Trash2 className="h-3 w-3" /> Clear
+            </button>
+          ) : undefined
+        }
+      >
+        <div className="max-h-80 space-y-3 overflow-y-auto rounded-lg border border-border bg-background p-3">
+          {(chatMessages?.length ?? 0) === 0 && !chatMut.isPending ? (
+            <p className="py-6 text-center text-sm text-muted-foreground">
+              Ask anything — e.g. "Which division should we invest in next quarter?"
+            </p>
+          ) : (
+            (chatMessages ?? []).map((m) => (
+              <div key={m.id} className={m.role === "user" ? "text-right" : "text-left"}>
+                <div
+                  className={`inline-block max-w-[85%] rounded-lg px-3 py-2 text-sm leading-relaxed whitespace-pre-wrap ${
+                    m.role === "user" ? "acc-bg-soft acc-text" : "border border-border bg-surface"
+                  }`}
+                >
+                  {m.content}
+                </div>
+              </div>
+            ))
+          )}
+          {chatMut.isPending && (
+            <div className="text-left">
+              <div className="inline-block rounded-lg border border-border bg-surface px-3 py-2 text-sm text-muted-foreground">
+                Thinking…
+              </div>
+            </div>
+          )}
+          <div ref={chatEndRef} />
+        </div>
         <form
-          className="flex flex-col gap-3 sm:flex-row"
+          className="mt-3 flex gap-2"
           onSubmit={(e) => {
             e.preventDefault();
-            if (question.trim()) assistantMut.mutate();
+            if (chatInput.trim()) {
+              chatMut.mutate(chatInput.trim());
+              setChatInput("");
+            }
           }}
         >
           <Input
-            placeholder="Ask anything — e.g. Which division should we invest in next quarter?"
-            value={question}
-            onChange={(e) => setQuestion(e.target.value)}
+            placeholder="Message the assistant…"
+            value={chatInput}
+            onChange={(e) => setChatInput(e.target.value)}
             maxLength={2000}
           />
-          <Button type="submit" disabled={!question.trim() || assistantMut.isPending} className="shrink-0">
-            <Sparkles className="mr-2 h-4 w-4" /> {assistantMut.isPending ? "Thinking…" : "Ask"}
+          <Button type="submit" disabled={!chatInput.trim() || chatMut.isPending} className="shrink-0">
+            <Sparkles className="mr-2 h-4 w-4" /> Send
           </Button>
         </form>
-        {answer && (
-          <div className="mt-4 rounded-lg border border-border bg-background p-4 text-sm leading-relaxed whitespace-pre-wrap">
-            {answer}
-          </div>
-        )}
       </DataPanel>
 
       {/* Model lifecycle dashboard */}
@@ -239,7 +353,9 @@ function IntelligenceWorkspace() {
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
             <h2 className="text-lg font-semibold">Model lifecycle</h2>
-            <p className="text-sm text-muted-foreground">Upload → Train → Evaluate → Deploy → Monitor.</p>
+            <p className="text-sm text-muted-foreground">
+              Upload → Train → Evaluate → Deploy → Monitor.
+            </p>
           </div>
           <form
             className="flex gap-2"
@@ -255,7 +371,11 @@ function IntelligenceWorkspace() {
               maxLength={180}
               className="w-56"
             />
-            <Button type="submit" disabled={!modelName.trim() || modelMut.isPending} variant="outline">
+            <Button
+              type="submit"
+              disabled={!modelName.trim() || modelMut.isPending}
+              variant="outline"
+            >
               <Plus className="mr-2 h-4 w-4" /> Create
             </Button>
           </form>
@@ -280,10 +400,15 @@ function IntelligenceWorkspace() {
                       </div>
                     ) : (
                       items.map((mo) => (
-                        <div key={mo.id} className="rounded-lg border border-border bg-background p-3">
+                        <div
+                          key={mo.id}
+                          className="rounded-lg border border-border bg-background p-3"
+                        >
                           <div className="flex items-center justify-between gap-2">
                             <span className="text-sm font-medium leading-snug">{mo.name}</span>
-                            <span className="font-mono text-[10px] text-muted-foreground">{mo.version}</span>
+                            <span className="font-mono text-[10px] text-muted-foreground">
+                              {mo.version}
+                            </span>
                           </div>
                           <div className="mt-1 flex flex-wrap gap-1 text-[11px] text-muted-foreground">
                             <span className="capitalize">{mo.model_type}</span>
@@ -297,6 +422,36 @@ function IntelligenceWorkspace() {
                           {mo.dataset_id && (
                             <div className="mt-1 truncate text-[10px] text-muted-foreground">
                               {datasetName_.get(mo.dataset_id) ?? "—"}
+                            </div>
+                          )}
+                          {mo.status !== "draft" && mo.status !== "training" && (
+                            <button
+                              type="button"
+                              onClick={() => setExpandedModel(expandedModel === mo.id ? null : mo.id)}
+                              className="mt-2 inline-flex items-center gap-1 text-[10px] text-muted-foreground hover:text-foreground"
+                            >
+                              <BarChart3 className="h-3 w-3" /> Explainability
+                            </button>
+                          )}
+                          {expandedModel === mo.id && (
+                            <div className="mt-1.5 space-y-1">
+                              <p className="text-[9px] italic text-muted-foreground">
+                                Illustrative — no real training ran in this build.
+                              </p>
+                              {seededImportances(mo.id).map((f) => (
+                                <div key={f.label} className="text-[9px]">
+                                  <div className="flex justify-between text-muted-foreground">
+                                    <span>{f.label}</span>
+                                    <span>{f.value}%</span>
+                                  </div>
+                                  <div className="mt-0.5 h-1 rounded-full bg-muted">
+                                    <div
+                                      className="h-1 rounded-full acc-bg"
+                                      style={{ width: `${f.value}%` }}
+                                    />
+                                  </div>
+                                </div>
+                              ))}
                             </div>
                           )}
                           {NEXT_LABEL[mo.status] && (
@@ -336,7 +491,10 @@ function IntelligenceWorkspace() {
           >
             <option value="">General model</option>
             {(data?.models ?? [])
-              .filter((m) => m.status === "deployed" || m.status === "monitoring" || m.status === "trained")
+              .filter(
+                (m) =>
+                  m.status === "deployed" || m.status === "monitoring" || m.status === "trained",
+              )
               .map((m) => (
                 <option key={m.id} value={m.id}>
                   {m.name} ({m.target_division})
@@ -374,9 +532,25 @@ function IntelligenceWorkspace() {
               if (datasetName.trim()) datasetMut.mutate();
             }}
           >
-            <Input placeholder="Dataset name" value={datasetName} onChange={(e) => setDatasetName(e.target.value)} maxLength={180} />
-            <Input placeholder="Rows" value={datasetRows} onChange={(e) => setDatasetRows(e.target.value)} type="number" min={0} className="w-24" />
-            <Button type="submit" disabled={!datasetName.trim() || datasetMut.isPending} variant="outline">
+            <Input
+              placeholder="Dataset name"
+              value={datasetName}
+              onChange={(e) => setDatasetName(e.target.value)}
+              maxLength={180}
+            />
+            <Input
+              placeholder="Rows"
+              value={datasetRows}
+              onChange={(e) => setDatasetRows(e.target.value)}
+              type="number"
+              min={0}
+              className="w-24"
+            />
+            <Button
+              type="submit"
+              disabled={!datasetName.trim() || datasetMut.isPending}
+              variant="outline"
+            >
               <Plus className="h-4 w-4" />
             </Button>
           </form>
@@ -390,7 +564,8 @@ function IntelligenceWorkspace() {
                     <div className="min-w-0">
                       <div className="truncate text-sm font-medium">{d.name}</div>
                       <div className="text-xs text-muted-foreground">
-                        {d.source_division} · {d.rows_count.toLocaleString()} rows · {Number(d.size_mb)} MB
+                        {d.source_division} · {d.rows_count.toLocaleString()} rows ·{" "}
+                        {Number(d.size_mb)} MB
                       </div>
                     </div>
                     <StatusBadge status={d.status} />
@@ -403,7 +578,11 @@ function IntelligenceWorkspace() {
 
         <DataPanel title="Recent predictions">
           {(data?.predictions.length ?? 0) === 0 ? (
-            <EmptyState icon={Layers} title="No predictions yet" description="Run a live prediction to see results here." />
+            <EmptyState
+              icon={Layers}
+              title="No predictions yet"
+              description="Run a live prediction to see results here."
+            />
           ) : (
             <div className="space-y-3">
               {(data?.predictions ?? []).map((p) => (
@@ -411,12 +590,14 @@ function IntelligenceWorkspace() {
                   <div className="flex items-center justify-between gap-2">
                     <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground">
                       <BrainCircuit className="h-3 w-3" />
-                      {p.model_id ? modelName_.get(p.model_id) ?? "Model" : "General model"}
+                      {p.model_id ? (modelName_.get(p.model_id) ?? "Model") : "General model"}
                     </span>
                     <span className="text-[11px] acc-text">{Number(p.confidence).toFixed(0)}%</span>
                   </div>
                   <div className="mt-1 text-xs font-medium leading-snug">{p.prompt}</div>
-                  {p.result && <p className="mt-1 text-xs text-muted-foreground leading-relaxed">{p.result}</p>}
+                  {p.result && (
+                    <p className="mt-1 text-xs text-muted-foreground leading-relaxed">{p.result}</p>
+                  )}
                 </div>
               ))}
             </div>

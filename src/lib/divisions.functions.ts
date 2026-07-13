@@ -20,13 +20,14 @@ export const getMyWorkspace = createServerFn({ method: "GET" })
     const [{ data: roles }, { data: userDivisions }, { data: unread }] = await Promise.all([
       supabase.from("user_roles").select("role").eq("user_id", userId),
       supabase.from("user_divisions").select("division_slug").eq("user_id", userId),
-      supabase.from("notifications").select("id", { count: "exact", head: true }).is("read_at", null),
+      supabase
+        .from("notifications")
+        .select("id", { count: "exact", head: true })
+        .is("read_at", null),
     ]);
     const roleList = (roles ?? []).map((r) => r.role as string);
     const isAdmin = roleList.includes("admin");
-    const slugs = isAdmin
-      ? [...DIVISION_SLUGS]
-      : (userDivisions ?? []).map((d) => d.division_slug);
+    const slugs = isAdmin ? [...DIVISION_SLUGS] : (userDivisions ?? []).map((d) => d.division_slug);
     return {
       userId,
       roles: roleList,

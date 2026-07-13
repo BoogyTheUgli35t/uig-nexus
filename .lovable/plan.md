@@ -65,9 +65,8 @@ Each phase = migration (tables + RLS + GRANTs) → server functions → routes u
 
 ### Out of scope (stubbed as MVP placeholders)
 
-Real IoT sensor ingestion, live GPS/Maps SDK tracking, real ML model training/GPUs, payment processing, native driver mobile app. These render as realistic dashboards with seeded/simulated data.  
-  
-  
+Real IoT sensor ingestion, live GPS/Maps SDK tracking, real ML model training/GPUs, payment processing, native driver mobile app. These render as realistic dashboards with seeded/simulated data.
+
 🎨 Creative Enhancements (Add Below the Plan)
 
 **AI Model Trainer Upgrade**
@@ -134,4 +133,4 @@ Real IoT sensor ingestion, live GPS/Maps SDK tracking, real ML model training/GP
 - Cross‑linked into AgriTech, Real Estate, Logistics.
 - Innovation Lab acts as experimentation hub.
 
-🔥 This way, you keep Lovable’s **solid technical plan** intact, but directly beneath it you add the **creative upgrade layer**. Together, it reads like: *“Here’s the architecture Lovable will build, and here’s how we’ll make it visually rich, personality‑driven, and AI‑powered.”*
+🔥 This way, you keep Lovable’s **solid technical plan** intact, but directly beneath it you add the **creative upgrade layer**. Together, it reads like: _“Here’s the architecture Lovable will build, and here’s how we’ll make it visually rich, personality‑driven, and AI‑powered.”_

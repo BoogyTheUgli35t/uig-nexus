@@ -2,13 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
-export const MODEL_LIFECYCLE = [
-  "draft",
-  "training",
-  "trained",
-  "deployed",
-  "monitoring",
-] as const;
+export const MODEL_LIFECYCLE = ["draft", "training", "trained", "deployed", "monitoring"] as const;
 
 export const MODEL_TYPES = [
   "regression",
@@ -245,23 +239,73 @@ export const runPrediction = createServerFn({ method: "POST" })
     return { result, confidence };
   });
 
-const AssistantSchema = z.object({
-  question: z.string().trim().min(1).max(2000),
+const ASSISTANT_SYSTEM_PROMPT =
+  "You are the UIG Intelligence Assistant — the AI advisor for United Innovations Group, a Nigerian multi-division group spanning Technology, AgriTech, Real Estate, Logistics, Intelligence and an Innovation Lab. " +
+  "Give clear, practical insight in markdown. Be concise (under 200 words) unless asked for depth. Use Nigerian context where relevant.";
+
+/** Loads the signed-in user's persisted chat history (most recent 40 messages). */
+export const listMyChatMessages = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data, error } = await context.supabase
+      .from("ai_chat_messages")
+      .select("id, role, content, created_at")
+      .eq("user_id", context.userId)
+      .order("created_at", { ascending: true })
+      .limit(40);
+    if (error) throw new Error(error.message);
+    return data ?? [];
+  });
+
+const SendChatMessageSchema = z.object({
+  message: z.string().trim().min(1).max(2000),
 });
 
-/** One-shot AI assistant answer for the Intelligence workspace. */
-export const askAssistant = createServerFn({ method: "POST" })
+/** Multi-turn assistant chat: persists the user's message, replies with the last
+ * ~12 turns of real conversation history as context, and persists the reply too —
+ * a genuine conversation thread rather than a one-shot Q&A. */
+export const sendChatMessage = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => AssistantSchema.parse(i))
-  .handler(async ({ data }) => {
-    const answer = await callLovableAI([
-      {
-        role: "system",
-        content:
-          "You are the UIG Intelligence Assistant — the AI advisor for United Innovations Group, a Nigerian multi-division group spanning Technology, AgriTech, Real Estate, Logistics, Intelligence and an Innovation Lab. " +
-          "Give clear, practical insight in markdown. Be concise (under 200 words) unless asked for depth. Use Nigerian context where relevant.",
-      },
-      { role: "user", content: data.question },
-    ]);
+  .inputValidator((i: unknown) => SendChatMessageSchema.parse(i))
+  .handler(async ({ context, data }) => {
+    const { data: history } = await context.supabase
+      .from("ai_chat_messages")
+      .select("role, content")
+      .eq("user_id", context.userId)
+      .order("created_at", { ascending: false })
+      .limit(12);
+
+    const { error: insertErr } = await context.supabase.from("ai_chat_messages").insert({
+      user_id: context.userId,
+      role: "user",
+      content: data.message,
+    });
+    if (insertErr) throw new Error(insertErr.message);
+
+    const messages = [
+      { role: "system", content: ASSISTANT_SYSTEM_PROMPT },
+      ...(history ?? []).reverse(),
+      { role: "user", content: data.message },
+    ];
+    const answer = await callLovableAI(messages);
+
+    const { error: replyErr } = await context.supabase.from("ai_chat_messages").insert({
+      user_id: context.userId,
+      role: "assistant",
+      content: answer,
+    });
+    if (replyErr) throw new Error(replyErr.message);
+
     return { answer };
+  });
+
+export const clearMyChat = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { error } = await context.supabase
+      .from("ai_chat_messages")
+      .delete()
+      .eq("user_id", context.userId);
+    if (error) throw new Error(error.message);
+    return { ok: true };
   });

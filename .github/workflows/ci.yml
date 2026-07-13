@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npm run test
+
+      - name: Build
+        run: npm run build
+        env:
+          # Dummy values so the build's env-var validation passes in CI — no real
+          # Supabase project is contacted at build time, only at request time.
+          VITE_SUPABASE_URL: "https://ci-placeholder.supabase.co"
+          VITE_SUPABASE_PUBLISHABLE_KEY: "ci-placeholder"
+          SUPABASE_URL: "https://ci-placeholder.supabase.co"
+          SUPABASE_PUBLISHABLE_KEY: "ci-placeholder"
+          SUPABASE_SERVICE_ROLE_KEY: "ci-placeholder"

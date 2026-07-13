@@ -1,5 +1,17 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Cpu, Sprout, Building2, Truck, Brain, Beaker, Sparkles, Globe2, Target, Layers } from "lucide-react";
+import {
+  ArrowRight,
+  Cpu,
+  Sprout,
+  Building2,
+  Truck,
+  Brain,
+  Beaker,
+  Sparkles,
+  Globe2,
+  Target,
+  Layers,
+} from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { Section, Eyebrow, FeatureCard, CTABand } from "@/components/site/sections";
 import { Button } from "@/components/ui/button";
@@ -8,26 +20,72 @@ export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Unified Innovations Group — Two Steps Ahead." },
-      { name: "description", content: "UIG is Nigeria's leading multi-sector innovation conglomerate — building the infrastructure for Africa's future through technology, agriculture, intelligence and beyond." },
+      {
+        name: "description",
+        content:
+          "UIG is Nigeria's leading multi-sector innovation conglomerate — building the infrastructure for Africa's future through technology, agriculture, intelligence and beyond.",
+      },
       { property: "og:title", content: "Unified Innovations Group — Two Steps Ahead." },
-      { property: "og:description", content: "Six divisions. One unified vision. Technology, AgriTech, Real Estate, Logistics, Intelligence and Innovation Lab." },
+      {
+        property: "og:description",
+        content:
+          "Six divisions. One unified vision. Technology, AgriTech, Real Estate, Logistics, Intelligence and Innovation Lab.",
+      },
     ],
   }),
   component: HomePage,
 });
 
 const divisions = [
-  { to: "/divisions/technology", label: "UIG Technology", desc: "AI-native software, SaaS and cloud for African enterprises.", icon: Cpu },
-  { to: "/divisions/agritech", label: "UIG AgriTech", desc: "Drones, sensors and farm-to-market intelligence.", icon: Sprout },
-  { to: "/divisions/real-estate", label: "UIG Real Estate", desc: "Property sourcing, smart developments and investment advisory.", icon: Building2 },
-  { to: "/divisions/logistics", label: "UIG Logistics", desc: "Last-mile, fleet, warehousing and cold-chain across Nigeria.", icon: Truck },
-  { to: "/divisions/intelligence", label: "UIG Intelligence", desc: "Native African-language LLMs, business AI and analytics.", icon: Brain },
-  { to: "/divisions/innovation-lab", label: "UIG Innovation Lab", desc: "Incubation, R&D, talent and venture investment.", icon: Beaker },
+  {
+    to: "/divisions/technology",
+    label: "UIG Technology",
+    desc: "AI-native software, SaaS and cloud for African enterprises.",
+    icon: Cpu,
+  },
+  {
+    to: "/divisions/agritech",
+    label: "UIG AgriTech",
+    desc: "Drones, sensors and farm-to-market intelligence.",
+    icon: Sprout,
+  },
+  {
+    to: "/divisions/real-estate",
+    label: "UIG Real Estate",
+    desc: "Property sourcing, smart developments and investment advisory.",
+    icon: Building2,
+  },
+  {
+    to: "/divisions/logistics",
+    label: "UIG Logistics",
+    desc: "Last-mile, fleet, warehousing and cold-chain across Nigeria.",
+    icon: Truck,
+  },
+  {
+    to: "/divisions/intelligence",
+    label: "UIG Intelligence",
+    desc: "Native African-language LLMs, business AI and analytics.",
+    icon: Brain,
+  },
+  {
+    to: "/divisions/innovation-lab",
+    label: "UIG Innovation Lab",
+    desc: "Incubation, R&D, talent and venture investment.",
+    icon: Beaker,
+  },
 ] as const;
 
 const tickerItems = [
-  "Technology", "AgriTech", "Real Estate", "Logistics", "AI & Machine Learning",
-  "Native AI Models", "Innovation Lab", "Smart Agriculture", "Supply Chain Intelligence", "PropTech",
+  "Technology",
+  "AgriTech",
+  "Real Estate",
+  "Logistics",
+  "AI & Machine Learning",
+  "Native AI Models",
+  "Innovation Lab",
+  "Smart Agriculture",
+  "Supply Chain Intelligence",
+  "PropTech",
 ];
 
 function HomePage() {
@@ -44,11 +102,19 @@ function HomePage() {
             Two Steps <span className="text-gradient-gold">Ahead.</span>
           </h1>
           <p className="mt-8 text-lg sm:text-xl text-muted-foreground max-w-2xl leading-relaxed">
-            Unified Innovations Group is Nigeria's leading multi-sector innovation conglomerate — building the infrastructure for Africa's future through technology, agriculture, intelligence and beyond.
+            Unified Innovations Group is Nigeria's leading multi-sector innovation conglomerate —
+            building the infrastructure for Africa's future through technology, agriculture,
+            intelligence and beyond.
           </p>
           <div className="mt-10 flex flex-wrap gap-3">
-            <Button asChild size="lg" className="bg-gold text-gold-foreground hover:bg-gold/90 shadow-gold">
-              <Link to="/divisions">Explore Our Divisions <ArrowRight className="ml-2 h-4 w-4" /></Link>
+            <Button
+              asChild
+              size="lg"
+              className="bg-gold text-gold-foreground hover:bg-gold/90 shadow-gold"
+            >
+              <Link to="/divisions">
+                Explore Our Divisions <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
             </Button>
             <Button asChild size="lg" variant="outline">
               <Link to="/contact">Partner With UIG</Link>
@@ -62,7 +128,8 @@ function HomePage() {
         <div className="flex gap-12 py-5 marquee-track whitespace-nowrap text-sm uppercase tracking-[0.2em] text-gold/80">
           {[...tickerItems, ...tickerItems, ...tickerItems].map((t, i) => (
             <span key={i} className="inline-flex items-center gap-12">
-              {t}<span className="h-1 w-1 rounded-full bg-gold/50" />
+              {t}
+              <span className="h-1 w-1 rounded-full bg-gold/50" />
             </span>
           ))}
         </div>
@@ -93,9 +160,20 @@ function HomePage() {
             </h2>
           </div>
           <div className="text-muted-foreground leading-relaxed space-y-4">
-            <p>UIG is a Nigerian-founded, AI-native multi-sector group operating across six divisions — technology, agriculture, real estate, logistics, intelligence and venture innovation.</p>
-            <p>We design and operate intelligent systems that move whole industries forward — rooted in African market reality, executed to global standards.</p>
-            <Button asChild variant="link" className="text-gold p-0 h-auto"><Link to="/about">Read our story <ArrowRight className="ml-1 h-4 w-4" /></Link></Button>
+            <p>
+              UIG is a Nigerian-founded, AI-native multi-sector group operating across six divisions
+              — technology, agriculture, real estate, logistics, intelligence and venture
+              innovation.
+            </p>
+            <p>
+              We design and operate intelligent systems that move whole industries forward — rooted
+              in African market reality, executed to global standards.
+            </p>
+            <Button asChild variant="link" className="text-gold p-0 h-auto">
+              <Link to="/about">
+                Read our story <ArrowRight className="ml-1 h-4 w-4" />
+              </Link>
+            </Button>
           </div>
         </div>
       </Section>
@@ -106,14 +184,19 @@ function HomePage() {
         <h2 className="mt-5 text-4xl sm:text-5xl font-bold tracking-tight">One unified vision.</h2>
         <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {divisions.map((d) => (
-            <Link key={d.to} to={d.to} className="group relative rounded-2xl border border-border bg-surface/60 p-7 transition hover:border-gold/50 hover:bg-surface hover:shadow-gold">
+            <Link
+              key={d.to}
+              to={d.to}
+              className="group relative rounded-2xl border border-border bg-surface/60 p-7 transition hover:border-gold/50 hover:bg-surface hover:shadow-gold"
+            >
               <div className="inline-flex h-11 w-11 items-center justify-center rounded-lg bg-gold/10 text-gold">
                 <d.icon className="h-5 w-5" />
               </div>
               <h3 className="mt-5 text-xl font-semibold">{d.label}</h3>
               <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{d.desc}</p>
               <div className="mt-5 inline-flex items-center text-sm text-gold">
-                Explore Division <ArrowRight className="ml-1 h-3.5 w-3.5 transition group-hover:translate-x-0.5" />
+                Explore Division{" "}
+                <ArrowRight className="ml-1 h-3.5 w-3.5 transition group-hover:translate-x-0.5" />
               </div>
             </Link>
           ))}
@@ -123,12 +206,30 @@ function HomePage() {
       {/* Why UIG */}
       <Section>
         <Eyebrow>Why UIG</Eyebrow>
-        <h2 className="mt-5 text-4xl sm:text-5xl font-bold tracking-tight max-w-3xl">A different kind of group.</h2>
+        <h2 className="mt-5 text-4xl sm:text-5xl font-bold tracking-tight max-w-3xl">
+          A different kind of group.
+        </h2>
         <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          <FeatureCard icon={<Sparkles className="h-5 w-5" />} title="AI-Native by Design" description="Every operation is intelligent. AI is built in, never bolted on later." />
-          <FeatureCard icon={<Globe2 className="h-5 w-5" />} title="Rooted in Nigeria, Built for Africa" description="Local context, global standards. Playbooks that reflect African market reality." />
-          <FeatureCard icon={<Layers className="h-5 w-5" />} title="Multi-Sector Resilience" description="Six industries, one unified strategy — patterns from one division compound across all." />
-          <FeatureCard icon={<Target className="h-5 w-5" />} title="Builder Mindset" description="We don't consult. We build and we operate. Real systems, real users, real outcomes." />
+          <FeatureCard
+            icon={<Sparkles className="h-5 w-5" />}
+            title="AI-Native by Design"
+            description="Every operation is intelligent. AI is built in, never bolted on later."
+          />
+          <FeatureCard
+            icon={<Globe2 className="h-5 w-5" />}
+            title="Rooted in Nigeria, Built for Africa"
+            description="Local context, global standards. Playbooks that reflect African market reality."
+          />
+          <FeatureCard
+            icon={<Layers className="h-5 w-5" />}
+            title="Multi-Sector Resilience"
+            description="Six industries, one unified strategy — patterns from one division compound across all."
+          />
+          <FeatureCard
+            icon={<Target className="h-5 w-5" />}
+            title="Builder Mindset"
+            description="We don't consult. We build and we operate. Real systems, real users, real outcomes."
+          />
         </div>
       </Section>
 
@@ -138,17 +239,24 @@ function HomePage() {
         <div className="absolute -top-32 left-1/2 -translate-x-1/2 h-96 w-[800px] rounded-full bg-gold/10 blur-[120px]" />
         <div className="relative mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-24 sm:py-32 text-center">
           <p className="text-3xl sm:text-4xl lg:text-5xl font-display italic leading-snug">
-            "We don't build companies.<br />
+            "We don't build companies.
+            <br />
             We build the future that <span className="text-gradient-gold">Nigeria deserves</span>."
           </p>
           <div className="mt-12 grid gap-8 sm:grid-cols-2 max-w-3xl mx-auto text-left">
             <div>
               <div className="text-xs uppercase tracking-wider text-gold">Mission</div>
-              <p className="mt-2 text-muted-foreground">To transform Africa's most critical industries through intelligent technology, local innovation and relentless execution.</p>
+              <p className="mt-2 text-muted-foreground">
+                To transform Africa's most critical industries through intelligent technology, local
+                innovation and relentless execution.
+              </p>
             </div>
             <div>
               <div className="text-xs uppercase tracking-wider text-gold">Vision</div>
-              <p className="mt-2 text-muted-foreground">A continent where no farmer, no builder, no entrepreneur is held back by outdated infrastructure.</p>
+              <p className="mt-2 text-muted-foreground">
+                A continent where no farmer, no builder, no entrepreneur is held back by outdated
+                infrastructure.
+              </p>
             </div>
           </div>
         </div>
@@ -156,15 +264,28 @@ function HomePage() {
 
       {/* Trusted by strip */}
       <Section>
-        <p className="text-center text-xs uppercase tracking-[0.3em] text-muted-foreground">Trusted by forward-thinking organisations across Nigeria and Africa</p>
+        <p className="text-center text-xs uppercase tracking-[0.3em] text-muted-foreground">
+          Trusted by forward-thinking organisations across Nigeria and Africa
+        </p>
         <div className="mt-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-          {["Agribusiness", "Real Estate", "Logistics", "Tech", "Government", "Healthcare"].map((label) => (
-            <div key={label} className="flex h-16 items-center justify-center rounded-lg border border-border bg-surface/40 text-sm text-muted-foreground">{label}</div>
-          ))}
+          {["Agribusiness", "Real Estate", "Logistics", "Tech", "Government", "Healthcare"].map(
+            (label) => (
+              <div
+                key={label}
+                className="flex h-16 items-center justify-center rounded-lg border border-border bg-surface/40 text-sm text-muted-foreground"
+              >
+                {label}
+              </div>
+            ),
+          )}
         </div>
       </Section>
 
-      <CTABand title="Ready to build something extraordinary?" subtitle="Let's build infrastructure that moves Africa forward — together." buttonText="Start a Conversation" />
+      <CTABand
+        title="Ready to build something extraordinary?"
+        subtitle="Let's build infrastructure that moves Africa forward — together."
+        buttonText="Start a Conversation"
+      />
     </SiteLayout>
   );
 }

@@ -11,7 +11,7 @@ export default defineConfig({
   vite: {
     plugins: [
       // Only enable MCP plugin in production build, not local dev (path issue on Windows)
-      process.env.NODE_ENV === "production" ? mcpPlugin() : []
+      process.env.NODE_ENV === "production" ? mcpPlugin() : [],
     ],
   },
 });

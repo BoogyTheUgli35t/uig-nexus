@@ -21,8 +21,8 @@ const paths = [
 
 const insightSlugs: string[] = [
   "nigeria-agriculture-tech-opportunity",
-  "what-ai-native-actually-means",
-  "lagos-real-estate-data-shift",
+  "case-for-native-african-ai",
+  "lagos-real-estate-2025",
 ];
 
 export const Route = createFileRoute("/sitemap.xml")({

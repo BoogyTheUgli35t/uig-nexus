@@ -20,6 +20,13 @@ dist-ssr
 .wrangler/
 .dev.vars
 
+# Env files (this project's .env currently holds the Supabase anon key + project ref —
+# harmless if leaked since RLS gates data access, but SUPABASE_SERVICE_ROLE_KEY must
+# never end up in a file like this; keep it in Cloudflare/Lovable Cloud secrets only)
+.env
+.env.*
+!.env.example
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

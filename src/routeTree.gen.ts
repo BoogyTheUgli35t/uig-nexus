@@ -9,11 +9,15 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TrackRouteImport } from './routes/track'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ServicesRouteImport } from './routes/services'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PortalRouteImport } from './routes/portal'
 import { Route as McpRouteImport } from './routes/mcp'
 import { Route as InsightsRouteImport } from './routes/insights'
+import { Route as CookiesRouteImport } from './routes/cookies'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CareersRouteImport } from './routes/careers'
 import { Route as AboutRouteImport } from './routes/about'
@@ -22,7 +26,9 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as PortalIndexRouteImport } from './routes/portal.index'
 import { Route as DivisionsIndexRouteImport } from './routes/divisions.index'
 import { Route as PortalSignupRouteImport } from './routes/portal.signup'
+import { Route as PortalResetPasswordRouteImport } from './routes/portal.reset-password'
 import { Route as PortalLoginRouteImport } from './routes/portal.login'
+import { Route as PortalForgotPasswordRouteImport } from './routes/portal.forgot-password'
 import { Route as InsightsSlugRouteImport } from './routes/insights.$slug'
 import { Route as DivisionsTechnologyRouteImport } from './routes/divisions.technology'
 import { Route as DivisionsRealEstateRouteImport } from './routes/divisions.real-estate'
@@ -32,20 +38,68 @@ import { Route as DivisionsInnovationLabRouteImport } from './routes/divisions.i
 import { Route as DivisionsAgritechRouteImport } from './routes/divisions.agritech'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
+import { Route as PortalSignupIndexRouteImport } from './routes/portal.signup.index'
 import { Route as PortalSignupChooseDivisionRouteImport } from './routes/portal.signup.choose-division'
+import { Route as ApiStripeWebhookRouteImport } from './routes/api.stripe.webhook'
 import { Route as ApexPortalSettingsRouteImport } from './routes/_apex.portal.settings'
+import { Route as ApexPortalMessagesRouteImport } from './routes/_apex.portal.messages'
+import { Route as ApexPortalDriverTasksRouteImport } from './routes/_apex.portal.driver-tasks'
+import { Route as ApexPortalDocumentsRouteImport } from './routes/_apex.portal.documents'
 import { Route as ApexPortalDashboardRouteImport } from './routes/_apex.portal.dashboard'
+import { Route as ApexPortalBillingRouteImport } from './routes/_apex.portal.billing'
 import { Route as ApexPortalAuditRouteImport } from './routes/_apex.portal.audit'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as ApexPortalProjectsIndexRouteImport } from './routes/_apex.portal.projects.index'
+import { Route as ApexPortalAdminIndexRouteImport } from './routes/_apex.portal.admin.index'
 import { Route as ApexPortalProjectsIdRouteImport } from './routes/_apex.portal.projects.$id'
 import { Route as ApexPortalDivisionsTechnologyRouteImport } from './routes/_apex.portal.divisions.technology'
 import { Route as ApexPortalDivisionsRealEstateRouteImport } from './routes/_apex.portal.divisions.real-estate'
 import { Route as ApexPortalDivisionsLogisticsRouteImport } from './routes/_apex.portal.divisions.logistics'
 import { Route as ApexPortalDivisionsIntelligenceRouteImport } from './routes/_apex.portal.divisions.intelligence'
+import { Route as ApexPortalDivisionsInnovationLabRouteImport } from './routes/_apex.portal.divisions.innovation-lab'
 import { Route as ApexPortalDivisionsAgritechRouteImport } from './routes/_apex.portal.divisions.agritech'
 import { Route as ApexPortalDivisionsSlugRouteImport } from './routes/_apex.portal.divisions.$slug'
+import { Route as ApexPortalAdminUsersRouteImport } from './routes/_apex.portal.admin.users'
+import { Route as ApexPortalAdminAccessRequestsRouteImport } from './routes/_apex.portal.admin.access-requests'
+import { Route as ApexPortalDivisionsTechnologyIndexRouteImport } from './routes/_apex.portal.divisions.technology.index'
+import { Route as ApexPortalDivisionsRealEstateIndexRouteImport } from './routes/_apex.portal.divisions.real-estate.index'
+import { Route as ApexPortalDivisionsLogisticsIndexRouteImport } from './routes/_apex.portal.divisions.logistics.index'
+import { Route as ApexPortalDivisionsAgritechIndexRouteImport } from './routes/_apex.portal.divisions.agritech.index'
+import { Route as ApexPortalDivisionsTechnologyIntegrationsRouteImport } from './routes/_apex.portal.divisions.technology.integrations'
+import { Route as ApexPortalDivisionsTechnologyAutomationRouteImport } from './routes/_apex.portal.divisions.technology.automation'
+import { Route as ApexPortalDivisionsRealEstateTenantsRouteImport } from './routes/_apex.portal.divisions.real-estate.tenants'
+import { Route as ApexPortalDivisionsRealEstateReportsRouteImport } from './routes/_apex.portal.divisions.real-estate.reports'
+import { Route as ApexPortalDivisionsRealEstateLeadsRouteImport } from './routes/_apex.portal.divisions.real-estate.leads'
+import { Route as ApexPortalDivisionsRealEstateInvestorsRouteImport } from './routes/_apex.portal.divisions.real-estate.investors'
+import { Route as ApexPortalDivisionsLogisticsRoutesRouteImport } from './routes/_apex.portal.divisions.logistics.routes'
+import { Route as ApexPortalDivisionsLogisticsFleetRouteImport } from './routes/_apex.portal.divisions.logistics.fleet'
+import { Route as ApexPortalDivisionsLogisticsDriversRouteImport } from './routes/_apex.portal.divisions.logistics.drivers'
+import { Route as ApexPortalDivisionsAgritechFarmersRouteImport } from './routes/_apex.portal.divisions.agritech.farmers'
+import { Route as ApexPortalDivisionsAgritechCooperativesRouteImport } from './routes/_apex.portal.divisions.agritech.cooperatives'
+import { Route as ApexPortalDivisionsAgritechAlertsRouteImport } from './routes/_apex.portal.divisions.agritech.alerts'
+import { Route as ApexPortalDivisionsTechnologyProjectsIndexRouteImport } from './routes/_apex.portal.divisions.technology.projects.index'
+import { Route as ApexPortalDivisionsRealEstatePropertiesIndexRouteImport } from './routes/_apex.portal.divisions.real-estate.properties.index'
+import { Route as ApexPortalDivisionsLogisticsShipmentsIndexRouteImport } from './routes/_apex.portal.divisions.logistics.shipments.index'
+import { Route as ApexPortalDivisionsAgritechFieldsIndexRouteImport } from './routes/_apex.portal.divisions.agritech.fields.index'
+import { Route as ApexPortalDivisionsTechnologyProjectsNewRouteImport } from './routes/_apex.portal.divisions.technology.projects.new'
+import { Route as ApexPortalDivisionsTechnologyProjectsIdRouteImport } from './routes/_apex.portal.divisions.technology.projects.$id'
+import { Route as ApexPortalDivisionsTechnologyClientsNameRouteImport } from './routes/_apex.portal.divisions.technology.clients.$name'
+import { Route as ApexPortalDivisionsRealEstateUnitsIdRouteImport } from './routes/_apex.portal.divisions.real-estate.units.$id'
+import { Route as ApexPortalDivisionsRealEstatePropertiesNewRouteImport } from './routes/_apex.portal.divisions.real-estate.properties.new'
+import { Route as ApexPortalDivisionsRealEstatePropertiesIdRouteImport } from './routes/_apex.portal.divisions.real-estate.properties.$id'
+import { Route as ApexPortalDivisionsLogisticsShipmentsIdRouteImport } from './routes/_apex.portal.divisions.logistics.shipments.$id'
+import { Route as ApexPortalDivisionsAgritechFieldsIdRouteImport } from './routes/_apex.portal.divisions.agritech.fields.$id'
 
+const TrackRoute = TrackRouteImport.update({
+  id: '/track',
+  path: '/track',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
@@ -54,6 +108,11 @@ const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
   path: '/services',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PortalRoute = PortalRouteImport.update({
@@ -69,6 +128,11 @@ const McpRoute = McpRouteImport.update({
 const InsightsRoute = InsightsRouteImport.update({
   id: '/insights',
   path: '/insights',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CookiesRoute = CookiesRouteImport.update({
+  id: '/cookies',
+  path: '/cookies',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContactRoute = ContactRouteImport.update({
@@ -110,9 +174,19 @@ const PortalSignupRoute = PortalSignupRouteImport.update({
   path: '/signup',
   getParentRoute: () => PortalRoute,
 } as any)
+const PortalResetPasswordRoute = PortalResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => PortalRoute,
+} as any)
 const PortalLoginRoute = PortalLoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => PortalRoute,
+} as any)
+const PortalForgotPasswordRoute = PortalForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
   getParentRoute: () => PortalRoute,
 } as any)
 const InsightsSlugRoute = InsightsSlugRouteImport.update({
@@ -162,20 +236,50 @@ const Char91DotmcpChar93ListToolsRoute =
     path: '/.mcp/list-tools',
     getParentRoute: () => rootRouteImport,
   } as any)
+const PortalSignupIndexRoute = PortalSignupIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PortalSignupRoute,
+} as any)
 const PortalSignupChooseDivisionRoute =
   PortalSignupChooseDivisionRouteImport.update({
     id: '/choose-division',
     path: '/choose-division',
     getParentRoute: () => PortalSignupRoute,
   } as any)
+const ApiStripeWebhookRoute = ApiStripeWebhookRouteImport.update({
+  id: '/api/stripe/webhook',
+  path: '/api/stripe/webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApexPortalSettingsRoute = ApexPortalSettingsRouteImport.update({
   id: '/portal/settings',
   path: '/portal/settings',
   getParentRoute: () => ApexRoute,
 } as any)
+const ApexPortalMessagesRoute = ApexPortalMessagesRouteImport.update({
+  id: '/portal/messages',
+  path: '/portal/messages',
+  getParentRoute: () => ApexRoute,
+} as any)
+const ApexPortalDriverTasksRoute = ApexPortalDriverTasksRouteImport.update({
+  id: '/portal/driver-tasks',
+  path: '/portal/driver-tasks',
+  getParentRoute: () => ApexRoute,
+} as any)
+const ApexPortalDocumentsRoute = ApexPortalDocumentsRouteImport.update({
+  id: '/portal/documents',
+  path: '/portal/documents',
+  getParentRoute: () => ApexRoute,
+} as any)
 const ApexPortalDashboardRoute = ApexPortalDashboardRouteImport.update({
   id: '/portal/dashboard',
   path: '/portal/dashboard',
+  getParentRoute: () => ApexRoute,
+} as any)
+const ApexPortalBillingRoute = ApexPortalBillingRouteImport.update({
+  id: '/portal/billing',
+  path: '/portal/billing',
   getParentRoute: () => ApexRoute,
 } as any)
 const ApexPortalAuditRoute = ApexPortalAuditRouteImport.update({
@@ -192,6 +296,11 @@ const Char91DotmcpChar93InvokeToolToolRoute =
 const ApexPortalProjectsIndexRoute = ApexPortalProjectsIndexRouteImport.update({
   id: '/portal/projects/',
   path: '/portal/projects/',
+  getParentRoute: () => ApexRoute,
+} as any)
+const ApexPortalAdminIndexRoute = ApexPortalAdminIndexRouteImport.update({
+  id: '/portal/admin/',
+  path: '/portal/admin/',
   getParentRoute: () => ApexRoute,
 } as any)
 const ApexPortalProjectsIdRoute = ApexPortalProjectsIdRouteImport.update({
@@ -223,6 +332,12 @@ const ApexPortalDivisionsIntelligenceRoute =
     path: '/portal/divisions/intelligence',
     getParentRoute: () => ApexRoute,
   } as any)
+const ApexPortalDivisionsInnovationLabRoute =
+  ApexPortalDivisionsInnovationLabRouteImport.update({
+    id: '/portal/divisions/innovation-lab',
+    path: '/portal/divisions/innovation-lab',
+    getParentRoute: () => ApexRoute,
+  } as any)
 const ApexPortalDivisionsAgritechRoute =
   ApexPortalDivisionsAgritechRouteImport.update({
     id: '/portal/divisions/agritech',
@@ -234,17 +349,200 @@ const ApexPortalDivisionsSlugRoute = ApexPortalDivisionsSlugRouteImport.update({
   path: '/portal/divisions/$slug',
   getParentRoute: () => ApexRoute,
 } as any)
+const ApexPortalAdminUsersRoute = ApexPortalAdminUsersRouteImport.update({
+  id: '/portal/admin/users',
+  path: '/portal/admin/users',
+  getParentRoute: () => ApexRoute,
+} as any)
+const ApexPortalAdminAccessRequestsRoute =
+  ApexPortalAdminAccessRequestsRouteImport.update({
+    id: '/portal/admin/access-requests',
+    path: '/portal/admin/access-requests',
+    getParentRoute: () => ApexRoute,
+  } as any)
+const ApexPortalDivisionsTechnologyIndexRoute =
+  ApexPortalDivisionsTechnologyIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => ApexPortalDivisionsTechnologyRoute,
+  } as any)
+const ApexPortalDivisionsRealEstateIndexRoute =
+  ApexPortalDivisionsRealEstateIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => ApexPortalDivisionsRealEstateRoute,
+  } as any)
+const ApexPortalDivisionsLogisticsIndexRoute =
+  ApexPortalDivisionsLogisticsIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => ApexPortalDivisionsLogisticsRoute,
+  } as any)
+const ApexPortalDivisionsAgritechIndexRoute =
+  ApexPortalDivisionsAgritechIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => ApexPortalDivisionsAgritechRoute,
+  } as any)
+const ApexPortalDivisionsTechnologyIntegrationsRoute =
+  ApexPortalDivisionsTechnologyIntegrationsRouteImport.update({
+    id: '/integrations',
+    path: '/integrations',
+    getParentRoute: () => ApexPortalDivisionsTechnologyRoute,
+  } as any)
+const ApexPortalDivisionsTechnologyAutomationRoute =
+  ApexPortalDivisionsTechnologyAutomationRouteImport.update({
+    id: '/automation',
+    path: '/automation',
+    getParentRoute: () => ApexPortalDivisionsTechnologyRoute,
+  } as any)
+const ApexPortalDivisionsRealEstateTenantsRoute =
+  ApexPortalDivisionsRealEstateTenantsRouteImport.update({
+    id: '/tenants',
+    path: '/tenants',
+    getParentRoute: () => ApexPortalDivisionsRealEstateRoute,
+  } as any)
+const ApexPortalDivisionsRealEstateReportsRoute =
+  ApexPortalDivisionsRealEstateReportsRouteImport.update({
+    id: '/reports',
+    path: '/reports',
+    getParentRoute: () => ApexPortalDivisionsRealEstateRoute,
+  } as any)
+const ApexPortalDivisionsRealEstateLeadsRoute =
+  ApexPortalDivisionsRealEstateLeadsRouteImport.update({
+    id: '/leads',
+    path: '/leads',
+    getParentRoute: () => ApexPortalDivisionsRealEstateRoute,
+  } as any)
+const ApexPortalDivisionsRealEstateInvestorsRoute =
+  ApexPortalDivisionsRealEstateInvestorsRouteImport.update({
+    id: '/investors',
+    path: '/investors',
+    getParentRoute: () => ApexPortalDivisionsRealEstateRoute,
+  } as any)
+const ApexPortalDivisionsLogisticsRoutesRoute =
+  ApexPortalDivisionsLogisticsRoutesRouteImport.update({
+    id: '/routes',
+    path: '/routes',
+    getParentRoute: () => ApexPortalDivisionsLogisticsRoute,
+  } as any)
+const ApexPortalDivisionsLogisticsFleetRoute =
+  ApexPortalDivisionsLogisticsFleetRouteImport.update({
+    id: '/fleet',
+    path: '/fleet',
+    getParentRoute: () => ApexPortalDivisionsLogisticsRoute,
+  } as any)
+const ApexPortalDivisionsLogisticsDriversRoute =
+  ApexPortalDivisionsLogisticsDriversRouteImport.update({
+    id: '/drivers',
+    path: '/drivers',
+    getParentRoute: () => ApexPortalDivisionsLogisticsRoute,
+  } as any)
+const ApexPortalDivisionsAgritechFarmersRoute =
+  ApexPortalDivisionsAgritechFarmersRouteImport.update({
+    id: '/farmers',
+    path: '/farmers',
+    getParentRoute: () => ApexPortalDivisionsAgritechRoute,
+  } as any)
+const ApexPortalDivisionsAgritechCooperativesRoute =
+  ApexPortalDivisionsAgritechCooperativesRouteImport.update({
+    id: '/cooperatives',
+    path: '/cooperatives',
+    getParentRoute: () => ApexPortalDivisionsAgritechRoute,
+  } as any)
+const ApexPortalDivisionsAgritechAlertsRoute =
+  ApexPortalDivisionsAgritechAlertsRouteImport.update({
+    id: '/alerts',
+    path: '/alerts',
+    getParentRoute: () => ApexPortalDivisionsAgritechRoute,
+  } as any)
+const ApexPortalDivisionsTechnologyProjectsIndexRoute =
+  ApexPortalDivisionsTechnologyProjectsIndexRouteImport.update({
+    id: '/projects/',
+    path: '/projects/',
+    getParentRoute: () => ApexPortalDivisionsTechnologyRoute,
+  } as any)
+const ApexPortalDivisionsRealEstatePropertiesIndexRoute =
+  ApexPortalDivisionsRealEstatePropertiesIndexRouteImport.update({
+    id: '/properties/',
+    path: '/properties/',
+    getParentRoute: () => ApexPortalDivisionsRealEstateRoute,
+  } as any)
+const ApexPortalDivisionsLogisticsShipmentsIndexRoute =
+  ApexPortalDivisionsLogisticsShipmentsIndexRouteImport.update({
+    id: '/shipments/',
+    path: '/shipments/',
+    getParentRoute: () => ApexPortalDivisionsLogisticsRoute,
+  } as any)
+const ApexPortalDivisionsAgritechFieldsIndexRoute =
+  ApexPortalDivisionsAgritechFieldsIndexRouteImport.update({
+    id: '/fields/',
+    path: '/fields/',
+    getParentRoute: () => ApexPortalDivisionsAgritechRoute,
+  } as any)
+const ApexPortalDivisionsTechnologyProjectsNewRoute =
+  ApexPortalDivisionsTechnologyProjectsNewRouteImport.update({
+    id: '/projects/new',
+    path: '/projects/new',
+    getParentRoute: () => ApexPortalDivisionsTechnologyRoute,
+  } as any)
+const ApexPortalDivisionsTechnologyProjectsIdRoute =
+  ApexPortalDivisionsTechnologyProjectsIdRouteImport.update({
+    id: '/projects/$id',
+    path: '/projects/$id',
+    getParentRoute: () => ApexPortalDivisionsTechnologyRoute,
+  } as any)
+const ApexPortalDivisionsTechnologyClientsNameRoute =
+  ApexPortalDivisionsTechnologyClientsNameRouteImport.update({
+    id: '/clients/$name',
+    path: '/clients/$name',
+    getParentRoute: () => ApexPortalDivisionsTechnologyRoute,
+  } as any)
+const ApexPortalDivisionsRealEstateUnitsIdRoute =
+  ApexPortalDivisionsRealEstateUnitsIdRouteImport.update({
+    id: '/units/$id',
+    path: '/units/$id',
+    getParentRoute: () => ApexPortalDivisionsRealEstateRoute,
+  } as any)
+const ApexPortalDivisionsRealEstatePropertiesNewRoute =
+  ApexPortalDivisionsRealEstatePropertiesNewRouteImport.update({
+    id: '/properties/new',
+    path: '/properties/new',
+    getParentRoute: () => ApexPortalDivisionsRealEstateRoute,
+  } as any)
+const ApexPortalDivisionsRealEstatePropertiesIdRoute =
+  ApexPortalDivisionsRealEstatePropertiesIdRouteImport.update({
+    id: '/properties/$id',
+    path: '/properties/$id',
+    getParentRoute: () => ApexPortalDivisionsRealEstateRoute,
+  } as any)
+const ApexPortalDivisionsLogisticsShipmentsIdRoute =
+  ApexPortalDivisionsLogisticsShipmentsIdRouteImport.update({
+    id: '/shipments/$id',
+    path: '/shipments/$id',
+    getParentRoute: () => ApexPortalDivisionsLogisticsRoute,
+  } as any)
+const ApexPortalDivisionsAgritechFieldsIdRoute =
+  ApexPortalDivisionsAgritechFieldsIdRouteImport.update({
+    id: '/fields/$id',
+    path: '/fields/$id',
+    getParentRoute: () => ApexPortalDivisionsAgritechRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
+  '/cookies': typeof CookiesRoute
   '/insights': typeof InsightsRouteWithChildren
   '/mcp': typeof McpRoute
   '/portal': typeof PortalRouteWithChildren
+  '/privacy': typeof PrivacyRoute
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/terms': typeof TermsRoute
+  '/track': typeof TrackRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/divisions/agritech': typeof DivisionsAgritechRoute
@@ -254,33 +552,77 @@ export interface FileRoutesByFullPath {
   '/divisions/real-estate': typeof DivisionsRealEstateRoute
   '/divisions/technology': typeof DivisionsTechnologyRoute
   '/insights/$slug': typeof InsightsSlugRoute
+  '/portal/forgot-password': typeof PortalForgotPasswordRoute
   '/portal/login': typeof PortalLoginRoute
+  '/portal/reset-password': typeof PortalResetPasswordRoute
   '/portal/signup': typeof PortalSignupRouteWithChildren
   '/divisions/': typeof DivisionsIndexRoute
   '/portal/': typeof PortalIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/portal/audit': typeof ApexPortalAuditRoute
+  '/portal/billing': typeof ApexPortalBillingRoute
   '/portal/dashboard': typeof ApexPortalDashboardRoute
+  '/portal/documents': typeof ApexPortalDocumentsRoute
+  '/portal/driver-tasks': typeof ApexPortalDriverTasksRoute
+  '/portal/messages': typeof ApexPortalMessagesRoute
   '/portal/settings': typeof ApexPortalSettingsRoute
+  '/api/stripe/webhook': typeof ApiStripeWebhookRoute
   '/portal/signup/choose-division': typeof PortalSignupChooseDivisionRoute
+  '/portal/signup/': typeof PortalSignupIndexRoute
+  '/portal/admin/access-requests': typeof ApexPortalAdminAccessRequestsRoute
+  '/portal/admin/users': typeof ApexPortalAdminUsersRoute
   '/portal/divisions/$slug': typeof ApexPortalDivisionsSlugRoute
-  '/portal/divisions/agritech': typeof ApexPortalDivisionsAgritechRoute
+  '/portal/divisions/agritech': typeof ApexPortalDivisionsAgritechRouteWithChildren
+  '/portal/divisions/innovation-lab': typeof ApexPortalDivisionsInnovationLabRoute
   '/portal/divisions/intelligence': typeof ApexPortalDivisionsIntelligenceRoute
-  '/portal/divisions/logistics': typeof ApexPortalDivisionsLogisticsRoute
-  '/portal/divisions/real-estate': typeof ApexPortalDivisionsRealEstateRoute
-  '/portal/divisions/technology': typeof ApexPortalDivisionsTechnologyRoute
+  '/portal/divisions/logistics': typeof ApexPortalDivisionsLogisticsRouteWithChildren
+  '/portal/divisions/real-estate': typeof ApexPortalDivisionsRealEstateRouteWithChildren
+  '/portal/divisions/technology': typeof ApexPortalDivisionsTechnologyRouteWithChildren
   '/portal/projects/$id': typeof ApexPortalProjectsIdRoute
+  '/portal/admin/': typeof ApexPortalAdminIndexRoute
   '/portal/projects/': typeof ApexPortalProjectsIndexRoute
+  '/portal/divisions/agritech/alerts': typeof ApexPortalDivisionsAgritechAlertsRoute
+  '/portal/divisions/agritech/cooperatives': typeof ApexPortalDivisionsAgritechCooperativesRoute
+  '/portal/divisions/agritech/farmers': typeof ApexPortalDivisionsAgritechFarmersRoute
+  '/portal/divisions/logistics/drivers': typeof ApexPortalDivisionsLogisticsDriversRoute
+  '/portal/divisions/logistics/fleet': typeof ApexPortalDivisionsLogisticsFleetRoute
+  '/portal/divisions/logistics/routes': typeof ApexPortalDivisionsLogisticsRoutesRoute
+  '/portal/divisions/real-estate/investors': typeof ApexPortalDivisionsRealEstateInvestorsRoute
+  '/portal/divisions/real-estate/leads': typeof ApexPortalDivisionsRealEstateLeadsRoute
+  '/portal/divisions/real-estate/reports': typeof ApexPortalDivisionsRealEstateReportsRoute
+  '/portal/divisions/real-estate/tenants': typeof ApexPortalDivisionsRealEstateTenantsRoute
+  '/portal/divisions/technology/automation': typeof ApexPortalDivisionsTechnologyAutomationRoute
+  '/portal/divisions/technology/integrations': typeof ApexPortalDivisionsTechnologyIntegrationsRoute
+  '/portal/divisions/agritech/': typeof ApexPortalDivisionsAgritechIndexRoute
+  '/portal/divisions/logistics/': typeof ApexPortalDivisionsLogisticsIndexRoute
+  '/portal/divisions/real-estate/': typeof ApexPortalDivisionsRealEstateIndexRoute
+  '/portal/divisions/technology/': typeof ApexPortalDivisionsTechnologyIndexRoute
+  '/portal/divisions/agritech/fields/$id': typeof ApexPortalDivisionsAgritechFieldsIdRoute
+  '/portal/divisions/logistics/shipments/$id': typeof ApexPortalDivisionsLogisticsShipmentsIdRoute
+  '/portal/divisions/real-estate/properties/$id': typeof ApexPortalDivisionsRealEstatePropertiesIdRoute
+  '/portal/divisions/real-estate/properties/new': typeof ApexPortalDivisionsRealEstatePropertiesNewRoute
+  '/portal/divisions/real-estate/units/$id': typeof ApexPortalDivisionsRealEstateUnitsIdRoute
+  '/portal/divisions/technology/clients/$name': typeof ApexPortalDivisionsTechnologyClientsNameRoute
+  '/portal/divisions/technology/projects/$id': typeof ApexPortalDivisionsTechnologyProjectsIdRoute
+  '/portal/divisions/technology/projects/new': typeof ApexPortalDivisionsTechnologyProjectsNewRoute
+  '/portal/divisions/agritech/fields/': typeof ApexPortalDivisionsAgritechFieldsIndexRoute
+  '/portal/divisions/logistics/shipments/': typeof ApexPortalDivisionsLogisticsShipmentsIndexRoute
+  '/portal/divisions/real-estate/properties/': typeof ApexPortalDivisionsRealEstatePropertiesIndexRoute
+  '/portal/divisions/technology/projects/': typeof ApexPortalDivisionsTechnologyProjectsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
+  '/cookies': typeof CookiesRoute
   '/insights': typeof InsightsRouteWithChildren
   '/mcp': typeof McpRoute
+  '/privacy': typeof PrivacyRoute
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/terms': typeof TermsRoute
+  '/track': typeof TrackRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/divisions/agritech': typeof DivisionsAgritechRoute
@@ -290,23 +632,58 @@ export interface FileRoutesByTo {
   '/divisions/real-estate': typeof DivisionsRealEstateRoute
   '/divisions/technology': typeof DivisionsTechnologyRoute
   '/insights/$slug': typeof InsightsSlugRoute
+  '/portal/forgot-password': typeof PortalForgotPasswordRoute
   '/portal/login': typeof PortalLoginRoute
-  '/portal/signup': typeof PortalSignupRouteWithChildren
+  '/portal/reset-password': typeof PortalResetPasswordRoute
   '/divisions': typeof DivisionsIndexRoute
   '/portal': typeof PortalIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/portal/audit': typeof ApexPortalAuditRoute
+  '/portal/billing': typeof ApexPortalBillingRoute
   '/portal/dashboard': typeof ApexPortalDashboardRoute
+  '/portal/documents': typeof ApexPortalDocumentsRoute
+  '/portal/driver-tasks': typeof ApexPortalDriverTasksRoute
+  '/portal/messages': typeof ApexPortalMessagesRoute
   '/portal/settings': typeof ApexPortalSettingsRoute
+  '/api/stripe/webhook': typeof ApiStripeWebhookRoute
   '/portal/signup/choose-division': typeof PortalSignupChooseDivisionRoute
+  '/portal/signup': typeof PortalSignupIndexRoute
+  '/portal/admin/access-requests': typeof ApexPortalAdminAccessRequestsRoute
+  '/portal/admin/users': typeof ApexPortalAdminUsersRoute
   '/portal/divisions/$slug': typeof ApexPortalDivisionsSlugRoute
-  '/portal/divisions/agritech': typeof ApexPortalDivisionsAgritechRoute
+  '/portal/divisions/innovation-lab': typeof ApexPortalDivisionsInnovationLabRoute
   '/portal/divisions/intelligence': typeof ApexPortalDivisionsIntelligenceRoute
-  '/portal/divisions/logistics': typeof ApexPortalDivisionsLogisticsRoute
-  '/portal/divisions/real-estate': typeof ApexPortalDivisionsRealEstateRoute
-  '/portal/divisions/technology': typeof ApexPortalDivisionsTechnologyRoute
   '/portal/projects/$id': typeof ApexPortalProjectsIdRoute
+  '/portal/admin': typeof ApexPortalAdminIndexRoute
   '/portal/projects': typeof ApexPortalProjectsIndexRoute
+  '/portal/divisions/agritech/alerts': typeof ApexPortalDivisionsAgritechAlertsRoute
+  '/portal/divisions/agritech/cooperatives': typeof ApexPortalDivisionsAgritechCooperativesRoute
+  '/portal/divisions/agritech/farmers': typeof ApexPortalDivisionsAgritechFarmersRoute
+  '/portal/divisions/logistics/drivers': typeof ApexPortalDivisionsLogisticsDriversRoute
+  '/portal/divisions/logistics/fleet': typeof ApexPortalDivisionsLogisticsFleetRoute
+  '/portal/divisions/logistics/routes': typeof ApexPortalDivisionsLogisticsRoutesRoute
+  '/portal/divisions/real-estate/investors': typeof ApexPortalDivisionsRealEstateInvestorsRoute
+  '/portal/divisions/real-estate/leads': typeof ApexPortalDivisionsRealEstateLeadsRoute
+  '/portal/divisions/real-estate/reports': typeof ApexPortalDivisionsRealEstateReportsRoute
+  '/portal/divisions/real-estate/tenants': typeof ApexPortalDivisionsRealEstateTenantsRoute
+  '/portal/divisions/technology/automation': typeof ApexPortalDivisionsTechnologyAutomationRoute
+  '/portal/divisions/technology/integrations': typeof ApexPortalDivisionsTechnologyIntegrationsRoute
+  '/portal/divisions/agritech': typeof ApexPortalDivisionsAgritechIndexRoute
+  '/portal/divisions/logistics': typeof ApexPortalDivisionsLogisticsIndexRoute
+  '/portal/divisions/real-estate': typeof ApexPortalDivisionsRealEstateIndexRoute
+  '/portal/divisions/technology': typeof ApexPortalDivisionsTechnologyIndexRoute
+  '/portal/divisions/agritech/fields/$id': typeof ApexPortalDivisionsAgritechFieldsIdRoute
+  '/portal/divisions/logistics/shipments/$id': typeof ApexPortalDivisionsLogisticsShipmentsIdRoute
+  '/portal/divisions/real-estate/properties/$id': typeof ApexPortalDivisionsRealEstatePropertiesIdRoute
+  '/portal/divisions/real-estate/properties/new': typeof ApexPortalDivisionsRealEstatePropertiesNewRoute
+  '/portal/divisions/real-estate/units/$id': typeof ApexPortalDivisionsRealEstateUnitsIdRoute
+  '/portal/divisions/technology/clients/$name': typeof ApexPortalDivisionsTechnologyClientsNameRoute
+  '/portal/divisions/technology/projects/$id': typeof ApexPortalDivisionsTechnologyProjectsIdRoute
+  '/portal/divisions/technology/projects/new': typeof ApexPortalDivisionsTechnologyProjectsNewRoute
+  '/portal/divisions/agritech/fields': typeof ApexPortalDivisionsAgritechFieldsIndexRoute
+  '/portal/divisions/logistics/shipments': typeof ApexPortalDivisionsLogisticsShipmentsIndexRoute
+  '/portal/divisions/real-estate/properties': typeof ApexPortalDivisionsRealEstatePropertiesIndexRoute
+  '/portal/divisions/technology/projects': typeof ApexPortalDivisionsTechnologyProjectsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -315,11 +692,15 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
+  '/cookies': typeof CookiesRoute
   '/insights': typeof InsightsRouteWithChildren
   '/mcp': typeof McpRoute
   '/portal': typeof PortalRouteWithChildren
+  '/privacy': typeof PrivacyRoute
   '/services': typeof ServicesRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/terms': typeof TermsRoute
+  '/track': typeof TrackRoute
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/divisions/agritech': typeof DivisionsAgritechRoute
@@ -329,23 +710,63 @@ export interface FileRoutesById {
   '/divisions/real-estate': typeof DivisionsRealEstateRoute
   '/divisions/technology': typeof DivisionsTechnologyRoute
   '/insights/$slug': typeof InsightsSlugRoute
+  '/portal/forgot-password': typeof PortalForgotPasswordRoute
   '/portal/login': typeof PortalLoginRoute
+  '/portal/reset-password': typeof PortalResetPasswordRoute
   '/portal/signup': typeof PortalSignupRouteWithChildren
   '/divisions/': typeof DivisionsIndexRoute
   '/portal/': typeof PortalIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/_apex/portal/audit': typeof ApexPortalAuditRoute
+  '/_apex/portal/billing': typeof ApexPortalBillingRoute
   '/_apex/portal/dashboard': typeof ApexPortalDashboardRoute
+  '/_apex/portal/documents': typeof ApexPortalDocumentsRoute
+  '/_apex/portal/driver-tasks': typeof ApexPortalDriverTasksRoute
+  '/_apex/portal/messages': typeof ApexPortalMessagesRoute
   '/_apex/portal/settings': typeof ApexPortalSettingsRoute
+  '/api/stripe/webhook': typeof ApiStripeWebhookRoute
   '/portal/signup/choose-division': typeof PortalSignupChooseDivisionRoute
+  '/portal/signup/': typeof PortalSignupIndexRoute
+  '/_apex/portal/admin/access-requests': typeof ApexPortalAdminAccessRequestsRoute
+  '/_apex/portal/admin/users': typeof ApexPortalAdminUsersRoute
   '/_apex/portal/divisions/$slug': typeof ApexPortalDivisionsSlugRoute
-  '/_apex/portal/divisions/agritech': typeof ApexPortalDivisionsAgritechRoute
+  '/_apex/portal/divisions/agritech': typeof ApexPortalDivisionsAgritechRouteWithChildren
+  '/_apex/portal/divisions/innovation-lab': typeof ApexPortalDivisionsInnovationLabRoute
   '/_apex/portal/divisions/intelligence': typeof ApexPortalDivisionsIntelligenceRoute
-  '/_apex/portal/divisions/logistics': typeof ApexPortalDivisionsLogisticsRoute
-  '/_apex/portal/divisions/real-estate': typeof ApexPortalDivisionsRealEstateRoute
-  '/_apex/portal/divisions/technology': typeof ApexPortalDivisionsTechnologyRoute
+  '/_apex/portal/divisions/logistics': typeof ApexPortalDivisionsLogisticsRouteWithChildren
+  '/_apex/portal/divisions/real-estate': typeof ApexPortalDivisionsRealEstateRouteWithChildren
+  '/_apex/portal/divisions/technology': typeof ApexPortalDivisionsTechnologyRouteWithChildren
   '/_apex/portal/projects/$id': typeof ApexPortalProjectsIdRoute
+  '/_apex/portal/admin/': typeof ApexPortalAdminIndexRoute
   '/_apex/portal/projects/': typeof ApexPortalProjectsIndexRoute
+  '/_apex/portal/divisions/agritech/alerts': typeof ApexPortalDivisionsAgritechAlertsRoute
+  '/_apex/portal/divisions/agritech/cooperatives': typeof ApexPortalDivisionsAgritechCooperativesRoute
+  '/_apex/portal/divisions/agritech/farmers': typeof ApexPortalDivisionsAgritechFarmersRoute
+  '/_apex/portal/divisions/logistics/drivers': typeof ApexPortalDivisionsLogisticsDriversRoute
+  '/_apex/portal/divisions/logistics/fleet': typeof ApexPortalDivisionsLogisticsFleetRoute
+  '/_apex/portal/divisions/logistics/routes': typeof ApexPortalDivisionsLogisticsRoutesRoute
+  '/_apex/portal/divisions/real-estate/investors': typeof ApexPortalDivisionsRealEstateInvestorsRoute
+  '/_apex/portal/divisions/real-estate/leads': typeof ApexPortalDivisionsRealEstateLeadsRoute
+  '/_apex/portal/divisions/real-estate/reports': typeof ApexPortalDivisionsRealEstateReportsRoute
+  '/_apex/portal/divisions/real-estate/tenants': typeof ApexPortalDivisionsRealEstateTenantsRoute
+  '/_apex/portal/divisions/technology/automation': typeof ApexPortalDivisionsTechnologyAutomationRoute
+  '/_apex/portal/divisions/technology/integrations': typeof ApexPortalDivisionsTechnologyIntegrationsRoute
+  '/_apex/portal/divisions/agritech/': typeof ApexPortalDivisionsAgritechIndexRoute
+  '/_apex/portal/divisions/logistics/': typeof ApexPortalDivisionsLogisticsIndexRoute
+  '/_apex/portal/divisions/real-estate/': typeof ApexPortalDivisionsRealEstateIndexRoute
+  '/_apex/portal/divisions/technology/': typeof ApexPortalDivisionsTechnologyIndexRoute
+  '/_apex/portal/divisions/agritech/fields/$id': typeof ApexPortalDivisionsAgritechFieldsIdRoute
+  '/_apex/portal/divisions/logistics/shipments/$id': typeof ApexPortalDivisionsLogisticsShipmentsIdRoute
+  '/_apex/portal/divisions/real-estate/properties/$id': typeof ApexPortalDivisionsRealEstatePropertiesIdRoute
+  '/_apex/portal/divisions/real-estate/properties/new': typeof ApexPortalDivisionsRealEstatePropertiesNewRoute
+  '/_apex/portal/divisions/real-estate/units/$id': typeof ApexPortalDivisionsRealEstateUnitsIdRoute
+  '/_apex/portal/divisions/technology/clients/$name': typeof ApexPortalDivisionsTechnologyClientsNameRoute
+  '/_apex/portal/divisions/technology/projects/$id': typeof ApexPortalDivisionsTechnologyProjectsIdRoute
+  '/_apex/portal/divisions/technology/projects/new': typeof ApexPortalDivisionsTechnologyProjectsNewRoute
+  '/_apex/portal/divisions/agritech/fields/': typeof ApexPortalDivisionsAgritechFieldsIndexRoute
+  '/_apex/portal/divisions/logistics/shipments/': typeof ApexPortalDivisionsLogisticsShipmentsIndexRoute
+  '/_apex/portal/divisions/real-estate/properties/': typeof ApexPortalDivisionsRealEstatePropertiesIndexRoute
+  '/_apex/portal/divisions/technology/projects/': typeof ApexPortalDivisionsTechnologyProjectsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -354,11 +775,15 @@ export interface FileRouteTypes {
     | '/about'
     | '/careers'
     | '/contact'
+    | '/cookies'
     | '/insights'
     | '/mcp'
     | '/portal'
+    | '/privacy'
     | '/services'
     | '/sitemap.xml'
+    | '/terms'
+    | '/track'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/divisions/agritech'
@@ -368,33 +793,77 @@ export interface FileRouteTypes {
     | '/divisions/real-estate'
     | '/divisions/technology'
     | '/insights/$slug'
+    | '/portal/forgot-password'
     | '/portal/login'
+    | '/portal/reset-password'
     | '/portal/signup'
     | '/divisions/'
     | '/portal/'
     | '/.mcp/invoke-tool/$tool'
     | '/portal/audit'
+    | '/portal/billing'
     | '/portal/dashboard'
+    | '/portal/documents'
+    | '/portal/driver-tasks'
+    | '/portal/messages'
     | '/portal/settings'
+    | '/api/stripe/webhook'
     | '/portal/signup/choose-division'
+    | '/portal/signup/'
+    | '/portal/admin/access-requests'
+    | '/portal/admin/users'
     | '/portal/divisions/$slug'
     | '/portal/divisions/agritech'
+    | '/portal/divisions/innovation-lab'
     | '/portal/divisions/intelligence'
     | '/portal/divisions/logistics'
     | '/portal/divisions/real-estate'
     | '/portal/divisions/technology'
     | '/portal/projects/$id'
+    | '/portal/admin/'
     | '/portal/projects/'
+    | '/portal/divisions/agritech/alerts'
+    | '/portal/divisions/agritech/cooperatives'
+    | '/portal/divisions/agritech/farmers'
+    | '/portal/divisions/logistics/drivers'
+    | '/portal/divisions/logistics/fleet'
+    | '/portal/divisions/logistics/routes'
+    | '/portal/divisions/real-estate/investors'
+    | '/portal/divisions/real-estate/leads'
+    | '/portal/divisions/real-estate/reports'
+    | '/portal/divisions/real-estate/tenants'
+    | '/portal/divisions/technology/automation'
+    | '/portal/divisions/technology/integrations'
+    | '/portal/divisions/agritech/'
+    | '/portal/divisions/logistics/'
+    | '/portal/divisions/real-estate/'
+    | '/portal/divisions/technology/'
+    | '/portal/divisions/agritech/fields/$id'
+    | '/portal/divisions/logistics/shipments/$id'
+    | '/portal/divisions/real-estate/properties/$id'
+    | '/portal/divisions/real-estate/properties/new'
+    | '/portal/divisions/real-estate/units/$id'
+    | '/portal/divisions/technology/clients/$name'
+    | '/portal/divisions/technology/projects/$id'
+    | '/portal/divisions/technology/projects/new'
+    | '/portal/divisions/agritech/fields/'
+    | '/portal/divisions/logistics/shipments/'
+    | '/portal/divisions/real-estate/properties/'
+    | '/portal/divisions/technology/projects/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
     | '/careers'
     | '/contact'
+    | '/cookies'
     | '/insights'
     | '/mcp'
+    | '/privacy'
     | '/services'
     | '/sitemap.xml'
+    | '/terms'
+    | '/track'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/divisions/agritech'
@@ -404,23 +873,58 @@ export interface FileRouteTypes {
     | '/divisions/real-estate'
     | '/divisions/technology'
     | '/insights/$slug'
+    | '/portal/forgot-password'
     | '/portal/login'
-    | '/portal/signup'
+    | '/portal/reset-password'
     | '/divisions'
     | '/portal'
     | '/.mcp/invoke-tool/$tool'
     | '/portal/audit'
+    | '/portal/billing'
     | '/portal/dashboard'
+    | '/portal/documents'
+    | '/portal/driver-tasks'
+    | '/portal/messages'
     | '/portal/settings'
+    | '/api/stripe/webhook'
     | '/portal/signup/choose-division'
+    | '/portal/signup'
+    | '/portal/admin/access-requests'
+    | '/portal/admin/users'
     | '/portal/divisions/$slug'
-    | '/portal/divisions/agritech'
+    | '/portal/divisions/innovation-lab'
     | '/portal/divisions/intelligence'
+    | '/portal/projects/$id'
+    | '/portal/admin'
+    | '/portal/projects'
+    | '/portal/divisions/agritech/alerts'
+    | '/portal/divisions/agritech/cooperatives'
+    | '/portal/divisions/agritech/farmers'
+    | '/portal/divisions/logistics/drivers'
+    | '/portal/divisions/logistics/fleet'
+    | '/portal/divisions/logistics/routes'
+    | '/portal/divisions/real-estate/investors'
+    | '/portal/divisions/real-estate/leads'
+    | '/portal/divisions/real-estate/reports'
+    | '/portal/divisions/real-estate/tenants'
+    | '/portal/divisions/technology/automation'
+    | '/portal/divisions/technology/integrations'
+    | '/portal/divisions/agritech'
     | '/portal/divisions/logistics'
     | '/portal/divisions/real-estate'
     | '/portal/divisions/technology'
-    | '/portal/projects/$id'
-    | '/portal/projects'
+    | '/portal/divisions/agritech/fields/$id'
+    | '/portal/divisions/logistics/shipments/$id'
+    | '/portal/divisions/real-estate/properties/$id'
+    | '/portal/divisions/real-estate/properties/new'
+    | '/portal/divisions/real-estate/units/$id'
+    | '/portal/divisions/technology/clients/$name'
+    | '/portal/divisions/technology/projects/$id'
+    | '/portal/divisions/technology/projects/new'
+    | '/portal/divisions/agritech/fields'
+    | '/portal/divisions/logistics/shipments'
+    | '/portal/divisions/real-estate/properties'
+    | '/portal/divisions/technology/projects'
   id:
     | '__root__'
     | '/'
@@ -428,11 +932,15 @@ export interface FileRouteTypes {
     | '/about'
     | '/careers'
     | '/contact'
+    | '/cookies'
     | '/insights'
     | '/mcp'
     | '/portal'
+    | '/privacy'
     | '/services'
     | '/sitemap.xml'
+    | '/terms'
+    | '/track'
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/divisions/agritech'
@@ -442,23 +950,63 @@ export interface FileRouteTypes {
     | '/divisions/real-estate'
     | '/divisions/technology'
     | '/insights/$slug'
+    | '/portal/forgot-password'
     | '/portal/login'
+    | '/portal/reset-password'
     | '/portal/signup'
     | '/divisions/'
     | '/portal/'
     | '/.mcp/invoke-tool/$tool'
     | '/_apex/portal/audit'
+    | '/_apex/portal/billing'
     | '/_apex/portal/dashboard'
+    | '/_apex/portal/documents'
+    | '/_apex/portal/driver-tasks'
+    | '/_apex/portal/messages'
     | '/_apex/portal/settings'
+    | '/api/stripe/webhook'
     | '/portal/signup/choose-division'
+    | '/portal/signup/'
+    | '/_apex/portal/admin/access-requests'
+    | '/_apex/portal/admin/users'
     | '/_apex/portal/divisions/$slug'
     | '/_apex/portal/divisions/agritech'
+    | '/_apex/portal/divisions/innovation-lab'
     | '/_apex/portal/divisions/intelligence'
     | '/_apex/portal/divisions/logistics'
     | '/_apex/portal/divisions/real-estate'
     | '/_apex/portal/divisions/technology'
     | '/_apex/portal/projects/$id'
+    | '/_apex/portal/admin/'
     | '/_apex/portal/projects/'
+    | '/_apex/portal/divisions/agritech/alerts'
+    | '/_apex/portal/divisions/agritech/cooperatives'
+    | '/_apex/portal/divisions/agritech/farmers'
+    | '/_apex/portal/divisions/logistics/drivers'
+    | '/_apex/portal/divisions/logistics/fleet'
+    | '/_apex/portal/divisions/logistics/routes'
+    | '/_apex/portal/divisions/real-estate/investors'
+    | '/_apex/portal/divisions/real-estate/leads'
+    | '/_apex/portal/divisions/real-estate/reports'
+    | '/_apex/portal/divisions/real-estate/tenants'
+    | '/_apex/portal/divisions/technology/automation'
+    | '/_apex/portal/divisions/technology/integrations'
+    | '/_apex/portal/divisions/agritech/'
+    | '/_apex/portal/divisions/logistics/'
+    | '/_apex/portal/divisions/real-estate/'
+    | '/_apex/portal/divisions/technology/'
+    | '/_apex/portal/divisions/agritech/fields/$id'
+    | '/_apex/portal/divisions/logistics/shipments/$id'
+    | '/_apex/portal/divisions/real-estate/properties/$id'
+    | '/_apex/portal/divisions/real-estate/properties/new'
+    | '/_apex/portal/divisions/real-estate/units/$id'
+    | '/_apex/portal/divisions/technology/clients/$name'
+    | '/_apex/portal/divisions/technology/projects/$id'
+    | '/_apex/portal/divisions/technology/projects/new'
+    | '/_apex/portal/divisions/agritech/fields/'
+    | '/_apex/portal/divisions/logistics/shipments/'
+    | '/_apex/portal/divisions/real-estate/properties/'
+    | '/_apex/portal/divisions/technology/projects/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -467,11 +1015,15 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   CareersRoute: typeof CareersRoute
   ContactRoute: typeof ContactRoute
+  CookiesRoute: typeof CookiesRoute
   InsightsRoute: typeof InsightsRouteWithChildren
   McpRoute: typeof McpRoute
   PortalRoute: typeof PortalRouteWithChildren
+  PrivacyRoute: typeof PrivacyRoute
   ServicesRoute: typeof ServicesRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  TermsRoute: typeof TermsRoute
+  TrackRoute: typeof TrackRoute
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   DivisionsAgritechRoute: typeof DivisionsAgritechRoute
@@ -482,10 +1034,25 @@ export interface RootRouteChildren {
   DivisionsTechnologyRoute: typeof DivisionsTechnologyRoute
   DivisionsIndexRoute: typeof DivisionsIndexRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
+  ApiStripeWebhookRoute: typeof ApiStripeWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/track': {
+      id: '/track'
+      path: '/track'
+      fullPath: '/track'
+      preLoaderRoute: typeof TrackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
@@ -498,6 +1065,13 @@ declare module '@tanstack/react-router' {
       path: '/services'
       fullPath: '/services'
       preLoaderRoute: typeof ServicesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/portal': {
@@ -519,6 +1093,13 @@ declare module '@tanstack/react-router' {
       path: '/insights'
       fullPath: '/insights'
       preLoaderRoute: typeof InsightsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cookies': {
+      id: '/cookies'
+      path: '/cookies'
+      fullPath: '/cookies'
+      preLoaderRoute: typeof CookiesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contact': {
@@ -577,11 +1158,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PortalSignupRouteImport
       parentRoute: typeof PortalRoute
     }
+    '/portal/reset-password': {
+      id: '/portal/reset-password'
+      path: '/reset-password'
+      fullPath: '/portal/reset-password'
+      preLoaderRoute: typeof PortalResetPasswordRouteImport
+      parentRoute: typeof PortalRoute
+    }
     '/portal/login': {
       id: '/portal/login'
       path: '/login'
       fullPath: '/portal/login'
       preLoaderRoute: typeof PortalLoginRouteImport
+      parentRoute: typeof PortalRoute
+    }
+    '/portal/forgot-password': {
+      id: '/portal/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/portal/forgot-password'
+      preLoaderRoute: typeof PortalForgotPasswordRouteImport
       parentRoute: typeof PortalRoute
     }
     '/insights/$slug': {
@@ -647,12 +1242,26 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/portal/signup/': {
+      id: '/portal/signup/'
+      path: '/'
+      fullPath: '/portal/signup/'
+      preLoaderRoute: typeof PortalSignupIndexRouteImport
+      parentRoute: typeof PortalSignupRoute
+    }
     '/portal/signup/choose-division': {
       id: '/portal/signup/choose-division'
       path: '/choose-division'
       fullPath: '/portal/signup/choose-division'
       preLoaderRoute: typeof PortalSignupChooseDivisionRouteImport
       parentRoute: typeof PortalSignupRoute
+    }
+    '/api/stripe/webhook': {
+      id: '/api/stripe/webhook'
+      path: '/api/stripe/webhook'
+      fullPath: '/api/stripe/webhook'
+      preLoaderRoute: typeof ApiStripeWebhookRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/_apex/portal/settings': {
       id: '/_apex/portal/settings'
@@ -661,11 +1270,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApexPortalSettingsRouteImport
       parentRoute: typeof ApexRoute
     }
+    '/_apex/portal/messages': {
+      id: '/_apex/portal/messages'
+      path: '/portal/messages'
+      fullPath: '/portal/messages'
+      preLoaderRoute: typeof ApexPortalMessagesRouteImport
+      parentRoute: typeof ApexRoute
+    }
+    '/_apex/portal/driver-tasks': {
+      id: '/_apex/portal/driver-tasks'
+      path: '/portal/driver-tasks'
+      fullPath: '/portal/driver-tasks'
+      preLoaderRoute: typeof ApexPortalDriverTasksRouteImport
+      parentRoute: typeof ApexRoute
+    }
+    '/_apex/portal/documents': {
+      id: '/_apex/portal/documents'
+      path: '/portal/documents'
+      fullPath: '/portal/documents'
+      preLoaderRoute: typeof ApexPortalDocumentsRouteImport
+      parentRoute: typeof ApexRoute
+    }
     '/_apex/portal/dashboard': {
       id: '/_apex/portal/dashboard'
       path: '/portal/dashboard'
       fullPath: '/portal/dashboard'
       preLoaderRoute: typeof ApexPortalDashboardRouteImport
+      parentRoute: typeof ApexRoute
+    }
+    '/_apex/portal/billing': {
+      id: '/_apex/portal/billing'
+      path: '/portal/billing'
+      fullPath: '/portal/billing'
+      preLoaderRoute: typeof ApexPortalBillingRouteImport
       parentRoute: typeof ApexRoute
     }
     '/_apex/portal/audit': {
@@ -687,6 +1324,13 @@ declare module '@tanstack/react-router' {
       path: '/portal/projects'
       fullPath: '/portal/projects/'
       preLoaderRoute: typeof ApexPortalProjectsIndexRouteImport
+      parentRoute: typeof ApexRoute
+    }
+    '/_apex/portal/admin/': {
+      id: '/_apex/portal/admin/'
+      path: '/portal/admin'
+      fullPath: '/portal/admin/'
+      preLoaderRoute: typeof ApexPortalAdminIndexRouteImport
       parentRoute: typeof ApexRoute
     }
     '/_apex/portal/projects/$id': {
@@ -724,6 +1368,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApexPortalDivisionsIntelligenceRouteImport
       parentRoute: typeof ApexRoute
     }
+    '/_apex/portal/divisions/innovation-lab': {
+      id: '/_apex/portal/divisions/innovation-lab'
+      path: '/portal/divisions/innovation-lab'
+      fullPath: '/portal/divisions/innovation-lab'
+      preLoaderRoute: typeof ApexPortalDivisionsInnovationLabRouteImport
+      parentRoute: typeof ApexRoute
+    }
     '/_apex/portal/divisions/agritech': {
       id: '/_apex/portal/divisions/agritech'
       path: '/portal/divisions/agritech'
@@ -738,34 +1389,396 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApexPortalDivisionsSlugRouteImport
       parentRoute: typeof ApexRoute
     }
+    '/_apex/portal/admin/users': {
+      id: '/_apex/portal/admin/users'
+      path: '/portal/admin/users'
+      fullPath: '/portal/admin/users'
+      preLoaderRoute: typeof ApexPortalAdminUsersRouteImport
+      parentRoute: typeof ApexRoute
+    }
+    '/_apex/portal/admin/access-requests': {
+      id: '/_apex/portal/admin/access-requests'
+      path: '/portal/admin/access-requests'
+      fullPath: '/portal/admin/access-requests'
+      preLoaderRoute: typeof ApexPortalAdminAccessRequestsRouteImport
+      parentRoute: typeof ApexRoute
+    }
+    '/_apex/portal/divisions/technology/': {
+      id: '/_apex/portal/divisions/technology/'
+      path: '/'
+      fullPath: '/portal/divisions/technology/'
+      preLoaderRoute: typeof ApexPortalDivisionsTechnologyIndexRouteImport
+      parentRoute: typeof ApexPortalDivisionsTechnologyRoute
+    }
+    '/_apex/portal/divisions/real-estate/': {
+      id: '/_apex/portal/divisions/real-estate/'
+      path: '/'
+      fullPath: '/portal/divisions/real-estate/'
+      preLoaderRoute: typeof ApexPortalDivisionsRealEstateIndexRouteImport
+      parentRoute: typeof ApexPortalDivisionsRealEstateRoute
+    }
+    '/_apex/portal/divisions/logistics/': {
+      id: '/_apex/portal/divisions/logistics/'
+      path: '/'
+      fullPath: '/portal/divisions/logistics/'
+      preLoaderRoute: typeof ApexPortalDivisionsLogisticsIndexRouteImport
+      parentRoute: typeof ApexPortalDivisionsLogisticsRoute
+    }
+    '/_apex/portal/divisions/agritech/': {
+      id: '/_apex/portal/divisions/agritech/'
+      path: '/'
+      fullPath: '/portal/divisions/agritech/'
+      preLoaderRoute: typeof ApexPortalDivisionsAgritechIndexRouteImport
+      parentRoute: typeof ApexPortalDivisionsAgritechRoute
+    }
+    '/_apex/portal/divisions/technology/integrations': {
+      id: '/_apex/portal/divisions/technology/integrations'
+      path: '/integrations'
+      fullPath: '/portal/divisions/technology/integrations'
+      preLoaderRoute: typeof ApexPortalDivisionsTechnologyIntegrationsRouteImport
+      parentRoute: typeof ApexPortalDivisionsTechnologyRoute
+    }
+    '/_apex/portal/divisions/technology/automation': {
+      id: '/_apex/portal/divisions/technology/automation'
+      path: '/automation'
+      fullPath: '/portal/divisions/technology/automation'
+      preLoaderRoute: typeof ApexPortalDivisionsTechnologyAutomationRouteImport
+      parentRoute: typeof ApexPortalDivisionsTechnologyRoute
+    }
+    '/_apex/portal/divisions/real-estate/tenants': {
+      id: '/_apex/portal/divisions/real-estate/tenants'
+      path: '/tenants'
+      fullPath: '/portal/divisions/real-estate/tenants'
+      preLoaderRoute: typeof ApexPortalDivisionsRealEstateTenantsRouteImport
+      parentRoute: typeof ApexPortalDivisionsRealEstateRoute
+    }
+    '/_apex/portal/divisions/real-estate/reports': {
+      id: '/_apex/portal/divisions/real-estate/reports'
+      path: '/reports'
+      fullPath: '/portal/divisions/real-estate/reports'
+      preLoaderRoute: typeof ApexPortalDivisionsRealEstateReportsRouteImport
+      parentRoute: typeof ApexPortalDivisionsRealEstateRoute
+    }
+    '/_apex/portal/divisions/real-estate/leads': {
+      id: '/_apex/portal/divisions/real-estate/leads'
+      path: '/leads'
+      fullPath: '/portal/divisions/real-estate/leads'
+      preLoaderRoute: typeof ApexPortalDivisionsRealEstateLeadsRouteImport
+      parentRoute: typeof ApexPortalDivisionsRealEstateRoute
+    }
+    '/_apex/portal/divisions/real-estate/investors': {
+      id: '/_apex/portal/divisions/real-estate/investors'
+      path: '/investors'
+      fullPath: '/portal/divisions/real-estate/investors'
+      preLoaderRoute: typeof ApexPortalDivisionsRealEstateInvestorsRouteImport
+      parentRoute: typeof ApexPortalDivisionsRealEstateRoute
+    }
+    '/_apex/portal/divisions/logistics/routes': {
+      id: '/_apex/portal/divisions/logistics/routes'
+      path: '/routes'
+      fullPath: '/portal/divisions/logistics/routes'
+      preLoaderRoute: typeof ApexPortalDivisionsLogisticsRoutesRouteImport
+      parentRoute: typeof ApexPortalDivisionsLogisticsRoute
+    }
+    '/_apex/portal/divisions/logistics/fleet': {
+      id: '/_apex/portal/divisions/logistics/fleet'
+      path: '/fleet'
+      fullPath: '/portal/divisions/logistics/fleet'
+      preLoaderRoute: typeof ApexPortalDivisionsLogisticsFleetRouteImport
+      parentRoute: typeof ApexPortalDivisionsLogisticsRoute
+    }
+    '/_apex/portal/divisions/logistics/drivers': {
+      id: '/_apex/portal/divisions/logistics/drivers'
+      path: '/drivers'
+      fullPath: '/portal/divisions/logistics/drivers'
+      preLoaderRoute: typeof ApexPortalDivisionsLogisticsDriversRouteImport
+      parentRoute: typeof ApexPortalDivisionsLogisticsRoute
+    }
+    '/_apex/portal/divisions/agritech/farmers': {
+      id: '/_apex/portal/divisions/agritech/farmers'
+      path: '/farmers'
+      fullPath: '/portal/divisions/agritech/farmers'
+      preLoaderRoute: typeof ApexPortalDivisionsAgritechFarmersRouteImport
+      parentRoute: typeof ApexPortalDivisionsAgritechRoute
+    }
+    '/_apex/portal/divisions/agritech/cooperatives': {
+      id: '/_apex/portal/divisions/agritech/cooperatives'
+      path: '/cooperatives'
+      fullPath: '/portal/divisions/agritech/cooperatives'
+      preLoaderRoute: typeof ApexPortalDivisionsAgritechCooperativesRouteImport
+      parentRoute: typeof ApexPortalDivisionsAgritechRoute
+    }
+    '/_apex/portal/divisions/agritech/alerts': {
+      id: '/_apex/portal/divisions/agritech/alerts'
+      path: '/alerts'
+      fullPath: '/portal/divisions/agritech/alerts'
+      preLoaderRoute: typeof ApexPortalDivisionsAgritechAlertsRouteImport
+      parentRoute: typeof ApexPortalDivisionsAgritechRoute
+    }
+    '/_apex/portal/divisions/technology/projects/': {
+      id: '/_apex/portal/divisions/technology/projects/'
+      path: '/projects'
+      fullPath: '/portal/divisions/technology/projects/'
+      preLoaderRoute: typeof ApexPortalDivisionsTechnologyProjectsIndexRouteImport
+      parentRoute: typeof ApexPortalDivisionsTechnologyRoute
+    }
+    '/_apex/portal/divisions/real-estate/properties/': {
+      id: '/_apex/portal/divisions/real-estate/properties/'
+      path: '/properties'
+      fullPath: '/portal/divisions/real-estate/properties/'
+      preLoaderRoute: typeof ApexPortalDivisionsRealEstatePropertiesIndexRouteImport
+      parentRoute: typeof ApexPortalDivisionsRealEstateRoute
+    }
+    '/_apex/portal/divisions/logistics/shipments/': {
+      id: '/_apex/portal/divisions/logistics/shipments/'
+      path: '/shipments'
+      fullPath: '/portal/divisions/logistics/shipments/'
+      preLoaderRoute: typeof ApexPortalDivisionsLogisticsShipmentsIndexRouteImport
+      parentRoute: typeof ApexPortalDivisionsLogisticsRoute
+    }
+    '/_apex/portal/divisions/agritech/fields/': {
+      id: '/_apex/portal/divisions/agritech/fields/'
+      path: '/fields'
+      fullPath: '/portal/divisions/agritech/fields/'
+      preLoaderRoute: typeof ApexPortalDivisionsAgritechFieldsIndexRouteImport
+      parentRoute: typeof ApexPortalDivisionsAgritechRoute
+    }
+    '/_apex/portal/divisions/technology/projects/new': {
+      id: '/_apex/portal/divisions/technology/projects/new'
+      path: '/projects/new'
+      fullPath: '/portal/divisions/technology/projects/new'
+      preLoaderRoute: typeof ApexPortalDivisionsTechnologyProjectsNewRouteImport
+      parentRoute: typeof ApexPortalDivisionsTechnologyRoute
+    }
+    '/_apex/portal/divisions/technology/projects/$id': {
+      id: '/_apex/portal/divisions/technology/projects/$id'
+      path: '/projects/$id'
+      fullPath: '/portal/divisions/technology/projects/$id'
+      preLoaderRoute: typeof ApexPortalDivisionsTechnologyProjectsIdRouteImport
+      parentRoute: typeof ApexPortalDivisionsTechnologyRoute
+    }
+    '/_apex/portal/divisions/technology/clients/$name': {
+      id: '/_apex/portal/divisions/technology/clients/$name'
+      path: '/clients/$name'
+      fullPath: '/portal/divisions/technology/clients/$name'
+      preLoaderRoute: typeof ApexPortalDivisionsTechnologyClientsNameRouteImport
+      parentRoute: typeof ApexPortalDivisionsTechnologyRoute
+    }
+    '/_apex/portal/divisions/real-estate/units/$id': {
+      id: '/_apex/portal/divisions/real-estate/units/$id'
+      path: '/units/$id'
+      fullPath: '/portal/divisions/real-estate/units/$id'
+      preLoaderRoute: typeof ApexPortalDivisionsRealEstateUnitsIdRouteImport
+      parentRoute: typeof ApexPortalDivisionsRealEstateRoute
+    }
+    '/_apex/portal/divisions/real-estate/properties/new': {
+      id: '/_apex/portal/divisions/real-estate/properties/new'
+      path: '/properties/new'
+      fullPath: '/portal/divisions/real-estate/properties/new'
+      preLoaderRoute: typeof ApexPortalDivisionsRealEstatePropertiesNewRouteImport
+      parentRoute: typeof ApexPortalDivisionsRealEstateRoute
+    }
+    '/_apex/portal/divisions/real-estate/properties/$id': {
+      id: '/_apex/portal/divisions/real-estate/properties/$id'
+      path: '/properties/$id'
+      fullPath: '/portal/divisions/real-estate/properties/$id'
+      preLoaderRoute: typeof ApexPortalDivisionsRealEstatePropertiesIdRouteImport
+      parentRoute: typeof ApexPortalDivisionsRealEstateRoute
+    }
+    '/_apex/portal/divisions/logistics/shipments/$id': {
+      id: '/_apex/portal/divisions/logistics/shipments/$id'
+      path: '/shipments/$id'
+      fullPath: '/portal/divisions/logistics/shipments/$id'
+      preLoaderRoute: typeof ApexPortalDivisionsLogisticsShipmentsIdRouteImport
+      parentRoute: typeof ApexPortalDivisionsLogisticsRoute
+    }
+    '/_apex/portal/divisions/agritech/fields/$id': {
+      id: '/_apex/portal/divisions/agritech/fields/$id'
+      path: '/fields/$id'
+      fullPath: '/portal/divisions/agritech/fields/$id'
+      preLoaderRoute: typeof ApexPortalDivisionsAgritechFieldsIdRouteImport
+      parentRoute: typeof ApexPortalDivisionsAgritechRoute
+    }
   }
 }
 
+interface ApexPortalDivisionsAgritechRouteChildren {
+  ApexPortalDivisionsAgritechAlertsRoute: typeof ApexPortalDivisionsAgritechAlertsRoute
+  ApexPortalDivisionsAgritechCooperativesRoute: typeof ApexPortalDivisionsAgritechCooperativesRoute
+  ApexPortalDivisionsAgritechFarmersRoute: typeof ApexPortalDivisionsAgritechFarmersRoute
+  ApexPortalDivisionsAgritechIndexRoute: typeof ApexPortalDivisionsAgritechIndexRoute
+  ApexPortalDivisionsAgritechFieldsIdRoute: typeof ApexPortalDivisionsAgritechFieldsIdRoute
+  ApexPortalDivisionsAgritechFieldsIndexRoute: typeof ApexPortalDivisionsAgritechFieldsIndexRoute
+}
+
+const ApexPortalDivisionsAgritechRouteChildren: ApexPortalDivisionsAgritechRouteChildren =
+  {
+    ApexPortalDivisionsAgritechAlertsRoute:
+      ApexPortalDivisionsAgritechAlertsRoute,
+    ApexPortalDivisionsAgritechCooperativesRoute:
+      ApexPortalDivisionsAgritechCooperativesRoute,
+    ApexPortalDivisionsAgritechFarmersRoute:
+      ApexPortalDivisionsAgritechFarmersRoute,
+    ApexPortalDivisionsAgritechIndexRoute:
+      ApexPortalDivisionsAgritechIndexRoute,
+    ApexPortalDivisionsAgritechFieldsIdRoute:
+      ApexPortalDivisionsAgritechFieldsIdRoute,
+    ApexPortalDivisionsAgritechFieldsIndexRoute:
+      ApexPortalDivisionsAgritechFieldsIndexRoute,
+  }
+
+const ApexPortalDivisionsAgritechRouteWithChildren =
+  ApexPortalDivisionsAgritechRoute._addFileChildren(
+    ApexPortalDivisionsAgritechRouteChildren,
+  )
+
+interface ApexPortalDivisionsLogisticsRouteChildren {
+  ApexPortalDivisionsLogisticsDriversRoute: typeof ApexPortalDivisionsLogisticsDriversRoute
+  ApexPortalDivisionsLogisticsFleetRoute: typeof ApexPortalDivisionsLogisticsFleetRoute
+  ApexPortalDivisionsLogisticsRoutesRoute: typeof ApexPortalDivisionsLogisticsRoutesRoute
+  ApexPortalDivisionsLogisticsIndexRoute: typeof ApexPortalDivisionsLogisticsIndexRoute
+  ApexPortalDivisionsLogisticsShipmentsIdRoute: typeof ApexPortalDivisionsLogisticsShipmentsIdRoute
+  ApexPortalDivisionsLogisticsShipmentsIndexRoute: typeof ApexPortalDivisionsLogisticsShipmentsIndexRoute
+}
+
+const ApexPortalDivisionsLogisticsRouteChildren: ApexPortalDivisionsLogisticsRouteChildren =
+  {
+    ApexPortalDivisionsLogisticsDriversRoute:
+      ApexPortalDivisionsLogisticsDriversRoute,
+    ApexPortalDivisionsLogisticsFleetRoute:
+      ApexPortalDivisionsLogisticsFleetRoute,
+    ApexPortalDivisionsLogisticsRoutesRoute:
+      ApexPortalDivisionsLogisticsRoutesRoute,
+    ApexPortalDivisionsLogisticsIndexRoute:
+      ApexPortalDivisionsLogisticsIndexRoute,
+    ApexPortalDivisionsLogisticsShipmentsIdRoute:
+      ApexPortalDivisionsLogisticsShipmentsIdRoute,
+    ApexPortalDivisionsLogisticsShipmentsIndexRoute:
+      ApexPortalDivisionsLogisticsShipmentsIndexRoute,
+  }
+
+const ApexPortalDivisionsLogisticsRouteWithChildren =
+  ApexPortalDivisionsLogisticsRoute._addFileChildren(
+    ApexPortalDivisionsLogisticsRouteChildren,
+  )
+
+interface ApexPortalDivisionsRealEstateRouteChildren {
+  ApexPortalDivisionsRealEstateInvestorsRoute: typeof ApexPortalDivisionsRealEstateInvestorsRoute
+  ApexPortalDivisionsRealEstateLeadsRoute: typeof ApexPortalDivisionsRealEstateLeadsRoute
+  ApexPortalDivisionsRealEstateReportsRoute: typeof ApexPortalDivisionsRealEstateReportsRoute
+  ApexPortalDivisionsRealEstateTenantsRoute: typeof ApexPortalDivisionsRealEstateTenantsRoute
+  ApexPortalDivisionsRealEstateIndexRoute: typeof ApexPortalDivisionsRealEstateIndexRoute
+  ApexPortalDivisionsRealEstatePropertiesIdRoute: typeof ApexPortalDivisionsRealEstatePropertiesIdRoute
+  ApexPortalDivisionsRealEstatePropertiesNewRoute: typeof ApexPortalDivisionsRealEstatePropertiesNewRoute
+  ApexPortalDivisionsRealEstateUnitsIdRoute: typeof ApexPortalDivisionsRealEstateUnitsIdRoute
+  ApexPortalDivisionsRealEstatePropertiesIndexRoute: typeof ApexPortalDivisionsRealEstatePropertiesIndexRoute
+}
+
+const ApexPortalDivisionsRealEstateRouteChildren: ApexPortalDivisionsRealEstateRouteChildren =
+  {
+    ApexPortalDivisionsRealEstateInvestorsRoute:
+      ApexPortalDivisionsRealEstateInvestorsRoute,
+    ApexPortalDivisionsRealEstateLeadsRoute:
+      ApexPortalDivisionsRealEstateLeadsRoute,
+    ApexPortalDivisionsRealEstateReportsRoute:
+      ApexPortalDivisionsRealEstateReportsRoute,
+    ApexPortalDivisionsRealEstateTenantsRoute:
+      ApexPortalDivisionsRealEstateTenantsRoute,
+    ApexPortalDivisionsRealEstateIndexRoute:
+      ApexPortalDivisionsRealEstateIndexRoute,
+    ApexPortalDivisionsRealEstatePropertiesIdRoute:
+      ApexPortalDivisionsRealEstatePropertiesIdRoute,
+    ApexPortalDivisionsRealEstatePropertiesNewRoute:
+      ApexPortalDivisionsRealEstatePropertiesNewRoute,
+    ApexPortalDivisionsRealEstateUnitsIdRoute:
+      ApexPortalDivisionsRealEstateUnitsIdRoute,
+    ApexPortalDivisionsRealEstatePropertiesIndexRoute:
+      ApexPortalDivisionsRealEstatePropertiesIndexRoute,
+  }
+
+const ApexPortalDivisionsRealEstateRouteWithChildren =
+  ApexPortalDivisionsRealEstateRoute._addFileChildren(
+    ApexPortalDivisionsRealEstateRouteChildren,
+  )
+
+interface ApexPortalDivisionsTechnologyRouteChildren {
+  ApexPortalDivisionsTechnologyAutomationRoute: typeof ApexPortalDivisionsTechnologyAutomationRoute
+  ApexPortalDivisionsTechnologyIntegrationsRoute: typeof ApexPortalDivisionsTechnologyIntegrationsRoute
+  ApexPortalDivisionsTechnologyIndexRoute: typeof ApexPortalDivisionsTechnologyIndexRoute
+  ApexPortalDivisionsTechnologyClientsNameRoute: typeof ApexPortalDivisionsTechnologyClientsNameRoute
+  ApexPortalDivisionsTechnologyProjectsIdRoute: typeof ApexPortalDivisionsTechnologyProjectsIdRoute
+  ApexPortalDivisionsTechnologyProjectsNewRoute: typeof ApexPortalDivisionsTechnologyProjectsNewRoute
+  ApexPortalDivisionsTechnologyProjectsIndexRoute: typeof ApexPortalDivisionsTechnologyProjectsIndexRoute
+}
+
+const ApexPortalDivisionsTechnologyRouteChildren: ApexPortalDivisionsTechnologyRouteChildren =
+  {
+    ApexPortalDivisionsTechnologyAutomationRoute:
+      ApexPortalDivisionsTechnologyAutomationRoute,
+    ApexPortalDivisionsTechnologyIntegrationsRoute:
+      ApexPortalDivisionsTechnologyIntegrationsRoute,
+    ApexPortalDivisionsTechnologyIndexRoute:
+      ApexPortalDivisionsTechnologyIndexRoute,
+    ApexPortalDivisionsTechnologyClientsNameRoute:
+      ApexPortalDivisionsTechnologyClientsNameRoute,
+    ApexPortalDivisionsTechnologyProjectsIdRoute:
+      ApexPortalDivisionsTechnologyProjectsIdRoute,
+    ApexPortalDivisionsTechnologyProjectsNewRoute:
+      ApexPortalDivisionsTechnologyProjectsNewRoute,
+    ApexPortalDivisionsTechnologyProjectsIndexRoute:
+      ApexPortalDivisionsTechnologyProjectsIndexRoute,
+  }
+
+const ApexPortalDivisionsTechnologyRouteWithChildren =
+  ApexPortalDivisionsTechnologyRoute._addFileChildren(
+    ApexPortalDivisionsTechnologyRouteChildren,
+  )
+
 interface ApexRouteChildren {
   ApexPortalAuditRoute: typeof ApexPortalAuditRoute
+  ApexPortalBillingRoute: typeof ApexPortalBillingRoute
   ApexPortalDashboardRoute: typeof ApexPortalDashboardRoute
+  ApexPortalDocumentsRoute: typeof ApexPortalDocumentsRoute
+  ApexPortalDriverTasksRoute: typeof ApexPortalDriverTasksRoute
+  ApexPortalMessagesRoute: typeof ApexPortalMessagesRoute
   ApexPortalSettingsRoute: typeof ApexPortalSettingsRoute
+  ApexPortalAdminAccessRequestsRoute: typeof ApexPortalAdminAccessRequestsRoute
+  ApexPortalAdminUsersRoute: typeof ApexPortalAdminUsersRoute
   ApexPortalDivisionsSlugRoute: typeof ApexPortalDivisionsSlugRoute
-  ApexPortalDivisionsAgritechRoute: typeof ApexPortalDivisionsAgritechRoute
+  ApexPortalDivisionsAgritechRoute: typeof ApexPortalDivisionsAgritechRouteWithChildren
+  ApexPortalDivisionsInnovationLabRoute: typeof ApexPortalDivisionsInnovationLabRoute
   ApexPortalDivisionsIntelligenceRoute: typeof ApexPortalDivisionsIntelligenceRoute
-  ApexPortalDivisionsLogisticsRoute: typeof ApexPortalDivisionsLogisticsRoute
-  ApexPortalDivisionsRealEstateRoute: typeof ApexPortalDivisionsRealEstateRoute
-  ApexPortalDivisionsTechnologyRoute: typeof ApexPortalDivisionsTechnologyRoute
+  ApexPortalDivisionsLogisticsRoute: typeof ApexPortalDivisionsLogisticsRouteWithChildren
+  ApexPortalDivisionsRealEstateRoute: typeof ApexPortalDivisionsRealEstateRouteWithChildren
+  ApexPortalDivisionsTechnologyRoute: typeof ApexPortalDivisionsTechnologyRouteWithChildren
   ApexPortalProjectsIdRoute: typeof ApexPortalProjectsIdRoute
+  ApexPortalAdminIndexRoute: typeof ApexPortalAdminIndexRoute
   ApexPortalProjectsIndexRoute: typeof ApexPortalProjectsIndexRoute
 }
 
 const ApexRouteChildren: ApexRouteChildren = {
   ApexPortalAuditRoute: ApexPortalAuditRoute,
+  ApexPortalBillingRoute: ApexPortalBillingRoute,
   ApexPortalDashboardRoute: ApexPortalDashboardRoute,
+  ApexPortalDocumentsRoute: ApexPortalDocumentsRoute,
+  ApexPortalDriverTasksRoute: ApexPortalDriverTasksRoute,
+  ApexPortalMessagesRoute: ApexPortalMessagesRoute,
   ApexPortalSettingsRoute: ApexPortalSettingsRoute,
+  ApexPortalAdminAccessRequestsRoute: ApexPortalAdminAccessRequestsRoute,
+  ApexPortalAdminUsersRoute: ApexPortalAdminUsersRoute,
   ApexPortalDivisionsSlugRoute: ApexPortalDivisionsSlugRoute,
-  ApexPortalDivisionsAgritechRoute: ApexPortalDivisionsAgritechRoute,
+  ApexPortalDivisionsAgritechRoute:
+    ApexPortalDivisionsAgritechRouteWithChildren,
+  ApexPortalDivisionsInnovationLabRoute: ApexPortalDivisionsInnovationLabRoute,
   ApexPortalDivisionsIntelligenceRoute: ApexPortalDivisionsIntelligenceRoute,
-  ApexPortalDivisionsLogisticsRoute: ApexPortalDivisionsLogisticsRoute,
-  ApexPortalDivisionsRealEstateRoute: ApexPortalDivisionsRealEstateRoute,
-  ApexPortalDivisionsTechnologyRoute: ApexPortalDivisionsTechnologyRoute,
+  ApexPortalDivisionsLogisticsRoute:
+    ApexPortalDivisionsLogisticsRouteWithChildren,
+  ApexPortalDivisionsRealEstateRoute:
+    ApexPortalDivisionsRealEstateRouteWithChildren,
+  ApexPortalDivisionsTechnologyRoute:
+    ApexPortalDivisionsTechnologyRouteWithChildren,
   ApexPortalProjectsIdRoute: ApexPortalProjectsIdRoute,
+  ApexPortalAdminIndexRoute: ApexPortalAdminIndexRoute,
   ApexPortalProjectsIndexRoute: ApexPortalProjectsIndexRoute,
 }
 
@@ -785,10 +1798,12 @@ const InsightsRouteWithChildren = InsightsRoute._addFileChildren(
 
 interface PortalSignupRouteChildren {
   PortalSignupChooseDivisionRoute: typeof PortalSignupChooseDivisionRoute
+  PortalSignupIndexRoute: typeof PortalSignupIndexRoute
 }
 
 const PortalSignupRouteChildren: PortalSignupRouteChildren = {
   PortalSignupChooseDivisionRoute: PortalSignupChooseDivisionRoute,
+  PortalSignupIndexRoute: PortalSignupIndexRoute,
 }
 
 const PortalSignupRouteWithChildren = PortalSignupRoute._addFileChildren(
@@ -796,13 +1811,17 @@ const PortalSignupRouteWithChildren = PortalSignupRoute._addFileChildren(
 )
 
 interface PortalRouteChildren {
+  PortalForgotPasswordRoute: typeof PortalForgotPasswordRoute
   PortalLoginRoute: typeof PortalLoginRoute
+  PortalResetPasswordRoute: typeof PortalResetPasswordRoute
   PortalSignupRoute: typeof PortalSignupRouteWithChildren
   PortalIndexRoute: typeof PortalIndexRoute
 }
 
 const PortalRouteChildren: PortalRouteChildren = {
+  PortalForgotPasswordRoute: PortalForgotPasswordRoute,
   PortalLoginRoute: PortalLoginRoute,
+  PortalResetPasswordRoute: PortalResetPasswordRoute,
   PortalSignupRoute: PortalSignupRouteWithChildren,
   PortalIndexRoute: PortalIndexRoute,
 }
@@ -816,11 +1835,15 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   CareersRoute: CareersRoute,
   ContactRoute: ContactRoute,
+  CookiesRoute: CookiesRoute,
   InsightsRoute: InsightsRouteWithChildren,
   McpRoute: McpRoute,
   PortalRoute: PortalRouteWithChildren,
+  PrivacyRoute: PrivacyRoute,
   ServicesRoute: ServicesRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  TermsRoute: TermsRoute,
+  TrackRoute: TrackRoute,
   Char91DotmcpChar93ListToolsRoute: Char91DotmcpChar93ListToolsRoute,
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
@@ -832,6 +1855,7 @@ const rootRouteChildren: RootRouteChildren = {
   DivisionsTechnologyRoute: DivisionsTechnologyRoute,
   DivisionsIndexRoute: DivisionsIndexRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
+  ApiStripeWebhookRoute: ApiStripeWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

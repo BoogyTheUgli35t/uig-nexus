@@ -13,7 +13,10 @@ export function Section({
   id?: string;
 }) {
   return (
-    <section id={id} className={`mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 sm:py-24 ${className}`}>
+    <section
+      id={id}
+      className={`mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-20 sm:py-24 ${className}`}
+    >
       {children}
     </section>
   );
@@ -62,9 +65,7 @@ export function PageHero({
           {title}
         </h1>
         {subtitle && (
-          <p className="mt-6 text-lg text-muted-foreground max-w-2xl leading-relaxed">
-            {subtitle}
-          </p>
+          <p className="mt-6 text-lg text-muted-foreground max-w-2xl leading-relaxed">{subtitle}</p>
         )}
         {children && <div className="mt-8">{children}</div>}
       </div>
@@ -92,7 +93,11 @@ export function CTABand({
             <h2 className="text-3xl sm:text-4xl font-bold tracking-tight max-w-2xl">{title}</h2>
             {subtitle && <p className="mt-3 text-muted-foreground max-w-xl">{subtitle}</p>}
           </div>
-          <Button asChild size="lg" className="bg-gold text-gold-foreground hover:bg-gold/90 shadow-gold">
+          <Button
+            asChild
+            size="lg"
+            className="bg-gold text-gold-foreground hover:bg-gold/90 shadow-gold"
+          >
             <Link to={buttonTo}>
               {buttonText} <ArrowRight className="ml-2 h-4 w-4" />
             </Link>

@@ -6,36 +6,34 @@ export const seedAgriTechData = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     const { supabase, userId } = context;
-    
+
     // Farmers
     const farmers = [
       {
-        full_name: 'Aliyu Bello',
-        phone: '+234 803 111 2233',
-        location: 'Kano State',
-        cooperative: 'Kano Rice Growers',
-        primary_crop: 'Rice',
+        full_name: "Aliyu Bello",
+        phone: "+234 803 111 2233",
+        location: "Kano State",
+        cooperative: "Kano Rice Growers",
+        primary_crop: "Rice",
         hectares: 12.5,
-        status: 'active',
-        owner_id: userId
+        status: "active",
       },
       {
-        full_name: 'Ngozi Okeke',
-        phone: '+234 802 445 6677',
-        location: 'Benue State',
-        cooperative: 'Benue Yam Cooperative',
-        primary_crop: 'Yam',
+        full_name: "Ngozi Okeke",
+        phone: "+234 802 445 6677",
+        location: "Benue State",
+        cooperative: "Benue Yam Cooperative",
+        primary_crop: "Yam",
         hectares: 8.0,
-        status: 'active',
-        owner_id: userId
-      }
+        status: "active",
+      },
     ];
 
     const { data: farmerData, error: farmerError } = await supabase
-      .from('farmers')
+      .from("farmers")
       .insert(farmers)
-      .select('id');
-    
+      .select("id");
+
     if (farmerError) throw new Error(farmerError.message);
 
     // Fields for farmers
@@ -43,26 +41,24 @@ export const seedAgriTechData = createServerFn({ method: "POST" })
       const fields = [
         {
           farmer_id: farmerData[0].id,
-          name: 'Rice Field A',
-          crop: 'Rice',
+          name: "Rice Field A",
+          crop: "Rice",
           hectares: 6.2,
           health: 85,
-          status: 'healthy'
+          status: "healthy",
         },
         {
           farmer_id: farmerData[1].id,
-          name: 'Yam Field A',
-          crop: 'Yam',
+          name: "Yam Field A",
+          crop: "Yam",
           hectares: 4.0,
           health: 78,
-          status: 'healthy'
-        }
+          status: "healthy",
+        },
       ];
 
-      const { error: fieldError } = await supabase
-        .from('fields')
-        .insert(fields);
-      
+      const { error: fieldError } = await supabase.from("fields").insert(fields);
+
       if (fieldError) throw new Error(fieldError.message);
 
       // Sensor data for fields
@@ -74,53 +70,29 @@ export const seedAgriTechData = createServerFn({ method: "POST" })
             soil_moisture: 35 + Math.random() * 10,
             temperature: 25 + Math.random() * 5,
             humidity: 60 + Math.random() * 20,
-            recorded_at: new Date(Date.now() - i * 3600000).toISOString()
+            recorded_at: new Date(Date.now() - i * 3600000).toISOString(),
           });
         }
       }
 
-      const { error: sensorError } = await supabase
-        .from('sensor_data')
-        .insert(sensorData);
-      
+      const { error: sensorError } = await supabase.from("sensor_data").insert(sensorData);
+
       if (sensorError) throw new Error(sensorError.message);
 
       // Yield predictions
-      const yieldPredictions = fields.map(field => ({
+      const yieldPredictions = fields.map((field) => ({
         field_id: field.farmer_id,
-        season: '2025 Wet',
+        season: "2025 Wet",
         predicted_yield_tons: 3 + Math.random() * 5,
-        confidence: 75 + Math.floor(Math.random() * 20)
+        confidence: 75 + Math.floor(Math.random() * 20),
       }));
 
       const { error: yieldError } = await supabase
-        .from('yield_predictions')
+        .from("yield_predictions")
         .insert(yieldPredictions);
-      
+
       if (yieldError) throw new Error(yieldError.message);
     }
-
-    // Cooperatives
-    const cooperatives = [
-      {
-        name: 'Kano Rice Growers',
-        members: JSON.stringify(['Aliyu Bello', 'Other Members']),
-        contact: '+234 803 111 2233',
-        owner_id: userId
-      },
-      {
-        name: 'Benue Yam Cooperative',
-        members: JSON.stringify(['Ngozi Okeke', 'Other Members']),
-        contact: '+234 802 445 6677',
-        owner_id: userId
-      }
-    ];
-
-    const { error: cooperativeError } = await supabase
-      .from('cooperatives')
-      .insert(cooperatives);
-    
-    if (cooperativeError) throw new Error(cooperativeError.message);
 
     return { success: true };
   });
