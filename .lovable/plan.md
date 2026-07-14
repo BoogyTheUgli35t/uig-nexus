@@ -1,94 +1,61 @@
-make sure to follow this exact build plan: Here’s a regenerated **full build plan** that merges the already‑built Lovable plan (from your UIG Nexus project) with the creative enhancements we designed. This way you have a single, unified spec that reflects what’s live, what’s complete, and what’s still missing — with every division page, route, and feature included.
+# UIG Nexus — Recovery + Build Plan
 
-# UIG Nexus — Full Build Plan (Regenerated Master Spec)
+## Context / findings
 
-## Foundation
+The live database is out of sync with the repo. Confirmed missing from the live schema: **every migration from `20260709130000` onward was never applied** — roughly 16 files. This is why `document_library`, `billing_transactions`, and the investor/farmer self-service columns don't appear in `src/integrations/supabase/types.ts`.
 
-- **Roles:** Compact set (admin, staff, client, plus investor, farmer, driver).
-- **Access control:** `user_divisions` table controls which division dashboards a user sees.
-- **Shared infra:** Notifications, messaging, documents center, admin panel.
-- **UI shell:** Global topbar (notifications, search, user menu), sidebar grouped by division, premium dark UI with gold accents.
-- **Imagery:** HeroBanner + ImageGallery per division, seeded with premium branded assets.
-- **Payments:** Stripe sandbox integrated, checkout flow working, webhook route ready.
-- **Security:** RLS scoped per division, dangerous “any user can read/edit everything” policies removed.
-- **Auth:** Supabase sign‑up/sign‑in verified, Google sign‑in enabled, leaked‑password protection active.
+Missing tables include: `property_units`, `property_images`, `crm_activities`, `deployments`, `automation_rules`, `project_invoices`, `tech_project_documents`, `shipment_events`, `route_stops`, `vehicle_maintenance_logs`, `field_images`, `agri_alerts`, `ai_chat_messages`, `mvp_checklist_items`, `demo_days`, `demo_day_slots`, `newsletter_subscribers`, `document_library`, `billing_transactions` — plus lease e-sign columns on `tenants` and `user_id` columns on `investors`/`farmers`.
 
-## Division Workspaces
+Load-bearing files you flagged (`_apex.tsx` roles/nav, `portal.choose-division.tsx` role-intent selector, `package.json` stripe/playwright deps, all `supabase/migrations/`) are present and will be preserved, not reverted.
 
-### 1. UIG Technology (Accent: Electric Blue)
+Two items I cannot do as literally described (explained in chat): I can't `git pull` from your GitHub repo (Lovable manages git internally), and on Lovable Cloud the service-role key / DB password / a separate Supabase dashboard login are not accessible — local dev uses the anon key + URL already in `.env`.
 
-- **Tables:** `tech_projects`, `tech_tasks`, `integrations`, `deployments`.
-- **Routes:** `/portal/divisions/technology`, `/projects`, `/automation`, `/integrations`, `/client-portal/:id`.
-- **Modules:** Project board (Kanban + timeline), client portal, automation rules builder, integration hub.
-- **Imagery:** Futuristic servers, dashboards, coding visuals.
-- **Extra features:** SLA tracker, release notes, milestone billing.
+---
 
-### 2. UIG AgriTech (Accent: Green)
+## Phase 1 — Apply pending migrations + regenerate types  (do first, then PAUSE)
 
-- **Tables:** `farmers`, `fields`, `sensor_data`, `yield_predictions`, `cooperatives`.
-- **Routes:** `/portal/divisions/agritech`, `/farmers`, `/fields/:id`, `/sensors`, `/predictions`.
-- **Modules:** Farmer onboarding, field dashboard (map + sensor overlays), yield prediction chart.
-- **Imagery:** Drone over farmland, smart tractors, irrigation systems.
-- **Extra features:** Field health index, alerting (low moisture/pest risk), farmer training content.
+Re-run the SQL of each unapplied migration through the migration tool, **in dependency order** (each requires your approval). Most use `IF NOT EXISTS` / `ADD COLUMN IF NOT EXISTS`, so already-present objects are skipped safely.
 
-### 3. UIG Real Estate (Accent: Silver/White)
+Order:
+1. `newsletter_subscribers`
+2. Division expansions: `real_estate` → `technology` → `logistics` → `agritech` → `intelligence` → `innovation_lab` (+ RLS tighten, notifications insert fix)
+3. `documents_center` (`document_library` + storage policies)
+4. `messaging`
+5. `lease_esign_stub` (depends on `tenants`)
+6. `billing_stripe` (`billing_transactions`)
+7. `investor_farmer_self_service` (depends on `agritech` tables: `field_images`, `agri_alerts`)
 
-- **Tables:** `properties`, `property_units`, `tenants`, `investors`, `leads`, `crm_activities`, `property_analytics`.
-- **Routes:** `/portal/divisions/real-estate`, `/properties`, `/properties/:id`, `/tenants`, `/investors`, `/leads`, `/reports`.
-- **Modules:** Property listings grid with images, tenant portal, investor ROI dashboard, CRM pipeline.
-- **Imagery:** Modern Nigerian smart buildings, luxury apartments, smart housing renders.
-- **Extra features:** Smart alerts, automated lead follow‑ups, property comparison tool, eSign stub.
+After all migrations run, the types file regenerates automatically from the live schema. I'll then verify each new table/column exists via read queries and run the DB linter for new RLS gaps.
 
-### 4. UIG Logistics (Accent: Orange/Red)
+**Stop here and report verification results before feature work.**
 
-- **Tables:** `shipments`, `drivers`, `vehicles`, `routes`, `delivery_proofs`.
-- **Routes:** `/portal/divisions/logistics`, `/shipments`, `/shipments/:id`, `/drivers`, `/fleet`, `/routes`.
-- **Modules:** Shipment tracking (map + live board), driver task view (mobile‑friendly), fleet panel, route optimization grid.
-- **Imagery:** Trucks, GPS maps, logistics hubs, fleet vehicles.
-- **Extra features:** ETA prediction, driver performance dashboards, customer tracking portal.
+---
 
-### 5. UIG Intelligence (Accent: Neon Purple)
+## Phase 2 — Real Estate core CRUD + division-scoped RLS
 
-- **Tables:** `datasets`, `models`, `predictions`, `model_runs`.
-- **Routes:** `/portal/divisions/intelligence`, `/datasets`, `/models`, `/models/:id`, `/assistant`, `/integrations`.
-- **Modules:** AI assistant panel, predictive analytics dashboard, dataset upload, Model Trainer.
-- **Creative upgrade:** Full Model Lifecycle dashboard (Upload → Train → Evaluate → Deploy → Monitor).
-- **Imagery:** AI brain graphics, neural networks, predictive charts.
-- **Extra features:** Model explainability, drift alerts, experiment tracking.
+Working create/edit/delete for **properties, units, tenants, leads, documents**, all scoped to `real-estate` division access:
+- Server functions in `src/lib/realestate.functions.ts` (CRUD + list/detail), guarded by `requireSupabaseAuth` + division-access check.
+- Wire existing routes: `properties.index/$id/new`, `real-estate.units.$id`, `tenants`, `leads`, plus a documents surface backed by `document_library`.
+- Verify RLS: only users with `real-estate` in `user_divisions` can read/write; confirm inserts set owner/division correctly.
 
-### 6. UIG Innovation Lab (Accent: Teal)
+## Phase 3 — Technology portal + access-request approval flow
 
-- **Tables:** `ideas`, `prototypes`, `experiments`, `partners`.
-- **Routes:** `/portal/divisions/innovation-lab`, `/ideas`, `/prototypes`, `/experiments`.
-- **Modules:** Idea submission, prototype tracker, partner collaboration, experiment log.
-- **Creative upgrade:** “Experiment with AI” button pipes datasets into Intelligence; Prototype Showcase gallery.
-- **Imagery:** Startup teams, hackathons, lab experiments.
-- **Extra features:** Partner portal, MVP checklist, demo day scheduler.
+- Technology KPIs + searchable project/document library + project/workflow management tied to the selected division (builds on existing `tech.functions.ts`).
+- "Request access to another division" UI → writes to `access_requests`.
+- Admin approval flow (admin route) that, on approval, updates `user_divisions` and lets the user route into the new workspace. Reuses the `getMyAccessRequestStatus` pattern already in `_apex.tsx`.
 
-## Signup & Onboarding Flow
+## Phase 4 — Creative upgrades (largest; sequenced after core is stable)
 
-- **Route:** `/signup` → `/signup/choose-division`.
-- **Flow:** User registers → verifies email → chooses division(s) → `user_divisions` seeded → lands on chosen dashboard.
-- **UX:** Division cards with hero thumbnails and taglines; multi‑select allowed; primary workspace set.
-- **Result:** Each user lands directly in the division they bought into, with seeded demo data and galleries.
+Real Estate: virtual tours, mortgage/ROI calculator, neighborhood scoring · AgriTech: weather-linked yield forecasts, produce marketplace · Logistics: live GPS map, route suggestions · Intelligence: anomaly-detection alerts · Innovation Lab: idea submission + upvoting board · Cross-cutting: NGN/USD dual-currency display, PWA install, WhatsApp notifications. (Paystack/Flutterwave deferred — Stripe sandbox stays for now.)
 
-## Website Status
+## Phase 5 — Playwright regression tests
 
-- **Built:** Public site (Home, About, Divisions, Services, Careers, Insights, Contact), division pages with hero sections, portal infrastructure, SEO basics, admin setup, error handling.
-- **Missing:** Division functional modules (now specified above), Playwright E2E suite, cookie banner, WhatsApp FAB, About page expansion, Services page polish, image galleries wired into workflows, payment gating, subscription management.
+Cover sign up → choose division → dashboard, and sign in → dashboard → sign out → sign in, asserting redirects/routing never regress. Uses existing `@playwright/test` dep + `test:e2e` script.
 
-## Strategies & Next Steps
+---
 
-- **Phase delivery:** Foundation → Tech + Real Estate → AgriTech + Logistics → Intelligence + Innovation Lab.
-- **Seeded demo data:** Nigerian properties, farms, fleets, datasets.
-- **Image storytelling:** Galleries integrated into dashboards and reports.
-- **Pilots:** Secure 2–3 pilot customers per division.
-- **Payments:** Stripe live setup with webhook secret; subscription management.
-- **Testing:** Playwright E2E for signup, division onboarding, core flows.
-- **Compliance:** Cookie banner, NDPR/GDPR consent, RLS audits.
-- **AI roadmap:** Placeholder training now, external ML service integration later.
-- **Innovation:** Use Lab to incubate spinouts and showcase prototypes.
-
-## Closing
-
-This regenerated plan now matches your **already built Lovable phases** (Logistics, Intelligence, Innovation Lab complete, Stripe sandbox integrated, Supabase auth fixed) and incorporates the **creative upgrades** (accent colors, galleries, Model Lifecycle, division storytelling). It’s the **full build pipeline**: every division page, route, module, and feature accounted for, with signup routing users to their chosen division dashboards.
+## Technical notes
+- Migrations applied via the migration tool (not raw psql) so approval + type regen happen correctly; run strictly in the order above to satisfy FK/column dependencies.
+- All new server logic uses `createServerFn` + `requireSupabaseAuth` (no edge functions for app logic); admin-only actions verify role via `has_role`.
+- New public tables (if any arise) get GRANTs in the same migration.
+- I'll also quietly fix the current realtime notifications runtime error (a `postgres_changes` callback added after `subscribe()`).
