@@ -22,9 +22,9 @@ const CROPS = [
 export function YieldCalculator() {
   const [cropIndex, setCropIndex] = useState(0);
   const [hectares, setHectares] = useState(5);
-  const [yieldPerHa, setYieldPerHa] = useState(CROPS[0].yieldTonsPerHa);
-  const [pricePerTon, setPricePerTon] = useState(CROPS[0].pricePerTon);
-  const [costPerHa, setCostPerHa] = useState(CROPS[0].costPerHa);
+  const [yieldPerHa, setYieldPerHa] = useState<number>(CROPS[0].yieldTonsPerHa);
+  const [pricePerTon, setPricePerTon] = useState<number>(CROPS[0].pricePerTon);
+  const [costPerHa, setCostPerHa] = useState<number>(CROPS[0].costPerHa);
 
   function selectCrop(i: number) {
     setCropIndex(i);

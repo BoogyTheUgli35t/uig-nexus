@@ -142,7 +142,7 @@ export const getListingDetail = createServerFn({ method: "GET" })
     const { data: similar } = await supabase
       .from("properties")
       .select("id, title, state, price, listing_type, property_type, bedrooms")
-      .eq("state", property.state)
+      .eq("state", property.state ?? "")
       .neq("id", data.id)
       .neq("status", "off_market")
       .limit(3);

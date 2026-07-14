@@ -16,7 +16,8 @@ export function getStripe(): Stripe {
     );
   }
   if (!_stripe) {
-    _stripe = new Stripe(key, { apiVersion: "2025-08-27.basil" });
+    // Pinned ahead of the installed SDK's typed default; Stripe accepts any released version string.
+    _stripe = new Stripe(key, { apiVersion: "2025-08-27.basil" as Stripe.StripeConfig["apiVersion"] });
   }
   return _stripe;
 }

@@ -589,43 +589,37 @@ export type Database = {
       }
       experiments: {
         Row: {
-          confidence: number
           created_at: string
-          hypothesis: string | null
+          created_by: string | null
+          hypothesis: string
           id: string
           idea_id: string | null
-          owner_id: string | null
+          model_id: string | null
+          prototype_id: string | null
           result: string | null
-          source_division: string
           status: string
-          title: string
-          updated_at: string
         }
         Insert: {
-          confidence?: number
           created_at?: string
-          hypothesis?: string | null
+          created_by?: string | null
+          hypothesis: string
           id?: string
           idea_id?: string | null
-          owner_id?: string | null
+          model_id?: string | null
+          prototype_id?: string | null
           result?: string | null
-          source_division?: string
           status?: string
-          title: string
-          updated_at?: string
         }
         Update: {
-          confidence?: number
           created_at?: string
-          hypothesis?: string | null
+          created_by?: string | null
+          hypothesis?: string
           id?: string
           idea_id?: string | null
-          owner_id?: string | null
+          model_id?: string | null
+          prototype_id?: string | null
           result?: string | null
-          source_division?: string
           status?: string
-          title?: string
-          updated_at?: string
         }
         Relationships: [
           {
@@ -633,6 +627,20 @@ export type Database = {
             columns: ["idea_id"]
             isOneToOne: false
             referencedRelation: "ideas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "experiments_prototype_id_fkey"
+            columns: ["prototype_id"]
+            isOneToOne: false
+            referencedRelation: "prototypes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "experiments_model_id_fkey"
+            columns: ["model_id"]
+            isOneToOne: false
+            referencedRelation: "models"
             referencedColumns: ["id"]
           },
         ]
@@ -808,6 +816,48 @@ export type Database = {
           submitted_by?: string | null
           tags?: Json | null
           title?: string
+        }
+        Relationships: []
+      }
+      innovation_submissions: {
+        Row: {
+          category: string | null
+          created_at: string
+          email: string
+          full_name: string
+          id: string
+          idea_description: string
+          idea_title: string
+          phone: string | null
+          reviewed_at: string | null
+          reviewer_notes: string | null
+          status: string
+        }
+        Insert: {
+          category?: string | null
+          created_at?: string
+          email: string
+          full_name: string
+          id?: string
+          idea_description: string
+          idea_title: string
+          phone?: string | null
+          reviewed_at?: string | null
+          reviewer_notes?: string | null
+          status?: string
+        }
+        Update: {
+          category?: string | null
+          created_at?: string
+          email?: string
+          full_name?: string
+          id?: string
+          idea_description?: string
+          idea_title?: string
+          phone?: string | null
+          reviewed_at?: string | null
+          reviewer_notes?: string | null
+          status?: string
         }
         Relationships: []
       }
@@ -1352,10 +1402,13 @@ export type Database = {
           description: string | null
           featured: boolean
           id: string
+          land_title_type: string | null
+          listing_type: string
           org_id: string | null
           owner_id: string | null
           price: number
           property_type: string
+          state: string | null
           status: string
           title: string
           updated_at: string
@@ -1372,10 +1425,13 @@ export type Database = {
           description?: string | null
           featured?: boolean
           id?: string
+          land_title_type?: string | null
+          listing_type?: string
           org_id?: string | null
           owner_id?: string | null
           price?: number
           property_type?: string
+          state?: string | null
           status?: string
           title: string
           updated_at?: string
@@ -1392,10 +1448,13 @@ export type Database = {
           description?: string | null
           featured?: boolean
           id?: string
+          land_title_type?: string | null
+          listing_type?: string
           org_id?: string | null
           owner_id?: string | null
           price?: number
           property_type?: string
+          state?: string | null
           status?: string
           title?: string
           updated_at?: string
@@ -1416,6 +1475,7 @@ export type Database = {
           caption: string | null
           created_at: string
           id: string
+          is_render: boolean
           position: number
           property_id: string
           storage_path: string
@@ -1425,6 +1485,7 @@ export type Database = {
           caption?: string | null
           created_at?: string
           id?: string
+          is_render?: boolean
           position?: number
           property_id: string
           storage_path: string
@@ -1434,6 +1495,7 @@ export type Database = {
           caption?: string | null
           created_at?: string
           id?: string
+          is_render?: boolean
           position?: number
           property_id?: string
           storage_path?: string
@@ -1816,6 +1878,74 @@ export type Database = {
             columns: ["route_id"]
             isOneToOne: false
             referencedRelation: "routes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      status_components: {
+        Row: {
+          description: string | null
+          id: string
+          name: string
+          position: number
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          description?: string | null
+          id?: string
+          name: string
+          position?: number
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          description?: string | null
+          id?: string
+          name?: string
+          position?: number
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      status_incidents: {
+        Row: {
+          body: string | null
+          component_id: string | null
+          created_at: string
+          id: string
+          resolved_at: string | null
+          severity: string
+          status: string
+          title: string
+        }
+        Insert: {
+          body?: string | null
+          component_id?: string | null
+          created_at?: string
+          id?: string
+          resolved_at?: string | null
+          severity?: string
+          status?: string
+          title: string
+        }
+        Update: {
+          body?: string | null
+          component_id?: string | null
+          created_at?: string
+          id?: string
+          resolved_at?: string | null
+          severity?: string
+          status?: string
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "status_incidents_component_id_fkey"
+            columns: ["component_id"]
+            isOneToOne: false
+            referencedRelation: "status_components"
             referencedColumns: ["id"]
           },
         ]

@@ -3,6 +3,7 @@ import { getRequestHeader, getRequestIP } from "@tanstack/react-start/server";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import type { Database } from "@/integrations/supabase/types";
 
 export const getDashboard = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
@@ -54,7 +55,12 @@ export const getDashboard = createServerFn({ method: "GET" })
 
 const PULSE_QUERIES: Record<
   string,
-  { table: string; label: string; select: string; filter?: (q: any) => any }
+  {
+    table: keyof Database["public"]["Tables"];
+    label: string;
+    select: string;
+    filter?: (q: any) => any;
+  }
 > = {
   technology: {
     table: "tech_tasks",
@@ -503,16 +509,17 @@ export const approveAccessRequest = createServerFn({ method: "POST" })
     if (reqErr) throw new Error(reqErr.message);
 
     if (reqRow.user_id) {
+      const approvedUserId = reqRow.user_id;
       const { error: roleErr } = await supabaseAdmin
         .from("user_roles")
-        .upsert({ user_id: reqRow.user_id, role: data.role }, { onConflict: "user_id" });
+        .upsert({ user_id: approvedUserId, role: data.role }, { onConflict: "user_id" });
       if (roleErr) throw new Error(roleErr.message);
 
       if (data.division_slugs.length > 0) {
-        await supabaseAdmin.from("user_divisions").delete().eq("user_id", reqRow.user_id);
+        await supabaseAdmin.from("user_divisions").delete().eq("user_id", approvedUserId);
         const { error: divErr } = await supabaseAdmin
           .from("user_divisions")
-          .insert(data.division_slugs.map((slug) => ({ user_id: reqRow.user_id, division_slug: slug })));
+          .insert(data.division_slugs.map((slug) => ({ user_id: approvedUserId, division_slug: slug })));
         if (divErr) throw new Error(divErr.message);
       }
 
