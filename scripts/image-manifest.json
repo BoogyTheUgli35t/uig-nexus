@@ -1,0 +1,111 @@
+{
+  "defaults": {
+    "model": "nano-banana",
+    "heroModel": "flux",
+    "style": "editorial photography, natural light, warm golden-hour tones, Nigeria, photorealistic, no text, no watermarks, no logos"
+  },
+  "brand": [
+    {
+      "publicId": "uig/brand/story-01",
+      "aspectRatio": "4:3",
+      "prompt": "Modern African software engineering team collaborating around monitors in a bright Lagos office, city skyline through windows"
+    },
+    {
+      "publicId": "uig/brand/story-02",
+      "aspectRatio": "4:3",
+      "prompt": "Contemporary residential estate development in Lekki Lagos at dusk, clean architectural lines, palm trees, warm lights"
+    },
+    {
+      "publicId": "uig/brand/story-03",
+      "aspectRatio": "4:3",
+      "prompt": "Aerial drone view of irrigated green farmland grid in Nigeria, golden hour, agricultural machinery working a field"
+    },
+    {
+      "publicId": "uig/brand/story-04",
+      "aspectRatio": "4:3",
+      "prompt": "Modern logistics trucks on a Nigerian expressway at sunrise, motion blur, shipping containers in background"
+    },
+    {
+      "publicId": "uig/brand/story-05",
+      "aspectRatio": "4:3",
+      "prompt": "Data visualization glowing on large screens in a dark modern operations control room, African analysts at work"
+    },
+    {
+      "publicId": "uig/brand/story-06",
+      "aspectRatio": "4:3",
+      "prompt": "Bright innovation lab workshop with prototypes, whiteboards full of sketches, young African engineers testing hardware"
+    }
+  ],
+  "divisions": [
+    {
+      "slug": "technology",
+      "hero": "Sleek dark-toned software development office in Lagos at night, glowing code on ultrawide monitors, skyline bokeh, cinematic",
+      "gallery": [
+        "Close-up of hands typing on a laptop with clean dashboard UI on screen, shallow depth of field",
+        "Modern server room with subtle blue lighting, clean cable management",
+        "African product team in a design review around a large wall display",
+        "Minimalist workspace with code editor and coffee, morning light"
+      ]
+    },
+    {
+      "slug": "agritech",
+      "hero": "Aerial view of lush irrigated farmland in Nigeria with a drone flying overhead, golden hour, dramatic clouds",
+      "gallery": [
+        "Farmer using a tablet in a green maize field, sensor tower in background",
+        "Agricultural drone spraying crops over neat field rows at sunrise",
+        "Close-up of soil moisture sensor in rich dark earth with young seedlings",
+        "Cooperative of Nigerian farmers reviewing harvest data on a shared screen"
+      ]
+    },
+    {
+      "slug": "real-estate",
+      "hero": "Striking modern residential tower in Ikoyi Lagos at blue hour, glass facade reflecting sunset, luxury architectural photography",
+      "gallery": [
+        "Bright contemporary living room with floor-to-ceiling windows overlooking Lagos lagoon",
+        "Gated estate streetscape in Lekki with palm trees and modern terrace houses",
+        "Architect and client reviewing building plans on site, hard hats",
+        "Rooftop terrace of a luxury apartment at dusk with city lights"
+      ]
+    },
+    {
+      "slug": "logistics",
+      "hero": "Fleet of modern delivery trucks lined up at a Nigerian distribution hub at dawn, dramatic sky, cinematic wide shot",
+      "gallery": [
+        "GPS route map glowing on a dashboard tablet inside a truck cab",
+        "Warehouse workers scanning packages on a busy sorting line",
+        "Container port cranes at Apapa Lagos at sunset, silhouettes",
+        "Delivery rider on a motorbike crossing a Lagos bridge, motion"
+      ]
+    },
+    {
+      "slug": "intelligence",
+      "hero": "Futuristic AI operations center with holographic data projections, dark room, gold and blue accent lighting, cinematic",
+      "gallery": [
+        "Neural network visualization on a large curved display, abstract",
+        "Data scientist annotating charts on a glass wall, focused",
+        "Abstract flowing particle field suggesting machine learning, gold on dark",
+        "Team reviewing predictive analytics dashboards in a modern boardroom"
+      ]
+    },
+    {
+      "slug": "innovation-lab",
+      "hero": "Vibrant startup workshop space with 3D printers, prototypes and sticky-note walls, natural light, energetic, Lagos",
+      "gallery": [
+        "Close-up of hands assembling an electronics prototype on a workbench",
+        "Founders pitching at a whiteboard covered in product sketches",
+        "3D printer mid-print with a small product prototype emerging",
+        "Demo day audience watching a product presentation in a loft space"
+      ]
+    }
+  ],
+  "listings": {
+    "promptTemplate": "Professional real-estate photograph of {subject}, {city} Nigeria, {angle}, bright natural light, wide-angle interior-exterior architecture photography, photorealistic, no people, no text",
+    "angles": ["exterior front elevation", "living space interior", "aerial neighborhood context"],
+    "subjects": {
+      "residential": "a modern upscale home",
+      "commercial": "a contemporary commercial building",
+      "land": "a cleared serviced plot of land with survey markers",
+      "mixed_use": "a modern mixed-use development"
+    }
+  }
+}

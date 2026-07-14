@@ -131,7 +131,7 @@ export const getListingDetail = createServerFn({ method: "GET" })
         .maybeSingle(),
       supabase
         .from("property_images")
-        .select("id, storage_path, position, caption")
+        .select("id, storage_path, position, caption, is_render")
         .eq("property_id", data.id)
         .order("position", { ascending: true }),
     ]);

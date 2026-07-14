@@ -80,8 +80,12 @@ function ListingDetailPage() {
 
   const { property, images, similar } = data;
   const isLand = property.property_type === "land";
-  const gallery = images.length > 0 ? images : [{ id: "placeholder", storage_path: "", position: 0, caption: null }];
+  const gallery =
+    images.length > 0
+      ? images
+      : [{ id: "placeholder", storage_path: "", position: 0, caption: null, is_render: false }];
   const active = gallery[activeImage] ?? gallery[0];
+  const hasRenders = images.some((img) => img.is_render);
 
   const waMessage = `Hi UIG — I'm interested in "${property.title}" (${property.city || state}, ${naira(Number(property.price))}${property.listing_type === "rent" ? "/yr" : ""}). Could you share more details?`;
   const waHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(waMessage)}`;
@@ -146,6 +150,11 @@ function ListingDetailPage() {
                 <div className="flex h-full w-full items-center justify-center text-muted-foreground">
                   <Building2 className="h-10 w-10" />
                 </div>
+              )}
+              {hasRenders && (
+                <span className="absolute top-3 left-3 rounded-full border border-border bg-background/80 px-3 py-1 text-[11px] text-muted-foreground backdrop-blur">
+                  Illustrative imagery — actual photos to follow
+                </span>
               )}
               {gallery.length > 1 && (
                 <>
