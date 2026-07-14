@@ -165,6 +165,54 @@ export type Database = {
           },
         ]
       }
+      billing_transactions: {
+        Row: {
+          amount_kobo: number
+          created_at: string
+          created_by: string
+          currency: string
+          description: string
+          division: string | null
+          id: string
+          paid_at: string | null
+          related_id: string | null
+          related_table: string | null
+          status: string
+          stripe_payment_intent: string | null
+          stripe_session_id: string | null
+        }
+        Insert: {
+          amount_kobo: number
+          created_at?: string
+          created_by: string
+          currency?: string
+          description: string
+          division?: string | null
+          id?: string
+          paid_at?: string | null
+          related_id?: string | null
+          related_table?: string | null
+          status?: string
+          stripe_payment_intent?: string | null
+          stripe_session_id?: string | null
+        }
+        Update: {
+          amount_kobo?: number
+          created_at?: string
+          created_by?: string
+          currency?: string
+          description?: string
+          division?: string | null
+          id?: string
+          paid_at?: string | null
+          related_id?: string | null
+          related_table?: string | null
+          status?: string
+          stripe_payment_intent?: string | null
+          stripe_session_id?: string | null
+        }
+        Relationships: []
+      }
       contact_submissions: {
         Row: {
           company: string | null
@@ -400,6 +448,42 @@ export type Database = {
         }
         Relationships: []
       }
+      document_library: {
+        Row: {
+          created_at: string
+          description: string | null
+          division: string | null
+          file_path: string
+          file_type: string | null
+          id: string
+          owner_id: string
+          size_bytes: number | null
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          division?: string | null
+          file_path: string
+          file_type?: string | null
+          id?: string
+          owner_id: string
+          size_bytes?: number | null
+          title: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          division?: string | null
+          file_path?: string
+          file_type?: string | null
+          id?: string
+          owner_id?: string
+          size_bytes?: number | null
+          title?: string
+        }
+        Relationships: []
+      }
       documents: {
         Row: {
           created_at: string
@@ -567,6 +651,7 @@ export type Database = {
           primary_crop: string | null
           status: string
           updated_at: string
+          user_id: string | null
         }
         Insert: {
           cooperative?: string | null
@@ -581,6 +666,7 @@ export type Database = {
           primary_crop?: string | null
           status?: string
           updated_at?: string
+          user_id?: string | null
         }
         Update: {
           cooperative?: string | null
@@ -595,6 +681,7 @@ export type Database = {
           primary_crop?: string | null
           status?: string
           updated_at?: string
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -773,6 +860,7 @@ export type Database = {
           phone: string | null
           portfolio_value: number
           updated_at: string
+          user_id: string | null
         }
         Insert: {
           amount_invested?: number
@@ -784,6 +872,7 @@ export type Database = {
           phone?: string | null
           portfolio_value?: number
           updated_at?: string
+          user_id?: string | null
         }
         Update: {
           amount_invested?: number
@@ -795,6 +884,7 @@ export type Database = {
           phone?: string | null
           portfolio_value?: number
           updated_at?: string
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -1927,7 +2017,12 @@ export type Database = {
           email: string | null
           full_name: string
           id: string
+          lease_document_path: string | null
           lease_end: string | null
+          lease_sent_at: string | null
+          lease_signature_status: string
+          lease_signed_at: string | null
+          lease_signed_name: string | null
           lease_start: string | null
           payment_status: string
           phone: string | null
@@ -1941,7 +2036,12 @@ export type Database = {
           email?: string | null
           full_name: string
           id?: string
+          lease_document_path?: string | null
           lease_end?: string | null
+          lease_sent_at?: string | null
+          lease_signature_status?: string
+          lease_signed_at?: string | null
+          lease_signed_name?: string | null
           lease_start?: string | null
           payment_status?: string
           phone?: string | null
@@ -1955,7 +2055,12 @@ export type Database = {
           email?: string | null
           full_name?: string
           id?: string
+          lease_document_path?: string | null
           lease_end?: string | null
+          lease_sent_at?: string | null
+          lease_signature_status?: string
+          lease_signed_at?: string | null
+          lease_signed_name?: string | null
           lease_start?: string | null
           payment_status?: string
           phone?: string | null
