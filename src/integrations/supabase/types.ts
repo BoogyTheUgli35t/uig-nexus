@@ -50,6 +50,59 @@ export type Database = {
         }
         Relationships: []
       }
+      automation_rules: {
+        Row: {
+          action_type: string
+          config: Json
+          created_at: string
+          created_by: string | null
+          enabled: boolean
+          id: string
+          last_run_at: string | null
+          name: string
+          run_count: number
+          tech_project_id: string | null
+          trigger_type: string
+          updated_at: string
+        }
+        Insert: {
+          action_type?: string
+          config?: Json
+          created_at?: string
+          created_by?: string | null
+          enabled?: boolean
+          id?: string
+          last_run_at?: string | null
+          name: string
+          run_count?: number
+          tech_project_id?: string | null
+          trigger_type?: string
+          updated_at?: string
+        }
+        Update: {
+          action_type?: string
+          config?: Json
+          created_at?: string
+          created_by?: string | null
+          enabled?: boolean
+          id?: string
+          last_run_at?: string | null
+          name?: string
+          run_count?: number
+          tech_project_id?: string | null
+          trigger_type?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "automation_rules_tech_project_id_fkey"
+            columns: ["tech_project_id"]
+            isOneToOne: false
+            referencedRelation: "tech_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       contact_submissions: {
         Row: {
           company: string | null
@@ -79,6 +132,41 @@ export type Database = {
           name?: string
         }
         Relationships: []
+      }
+      crm_activities: {
+        Row: {
+          activity_type: string
+          created_at: string
+          created_by: string | null
+          id: string
+          lead_id: string
+          notes: string | null
+        }
+        Insert: {
+          activity_type?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          lead_id: string
+          notes?: string | null
+        }
+        Update: {
+          activity_type?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          lead_id?: string
+          notes?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_activities_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       datasets: {
         Row: {
@@ -118,6 +206,47 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      deployments: {
+        Row: {
+          created_at: string
+          deployed_by: string | null
+          environment: string
+          id: string
+          notes: string | null
+          status: string
+          tech_project_id: string
+          version: string
+        }
+        Insert: {
+          created_at?: string
+          deployed_by?: string | null
+          environment?: string
+          id?: string
+          notes?: string | null
+          status?: string
+          tech_project_id: string
+          version: string
+        }
+        Update: {
+          created_at?: string
+          deployed_by?: string | null
+          environment?: string
+          id?: string
+          notes?: string | null
+          status?: string
+          tech_project_id?: string
+          version?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deployments_tech_project_id_fkey"
+            columns: ["tech_project_id"]
+            isOneToOne: false
+            referencedRelation: "tech_projects"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       divisions: {
         Row: {
@@ -490,10 +619,12 @@ export type Database = {
       }
       leads: {
         Row: {
+          budget_max: number | null
           created_at: string
           email: string | null
           full_name: string
           id: string
+          next_follow_up_date: string | null
           notes: string | null
           owner_id: string | null
           phone: string | null
@@ -502,10 +633,12 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          budget_max?: number | null
           created_at?: string
           email?: string | null
           full_name: string
           id?: string
+          next_follow_up_date?: string | null
           notes?: string | null
           owner_id?: string | null
           phone?: string | null
@@ -514,10 +647,12 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          budget_max?: number | null
           created_at?: string
           email?: string | null
           full_name?: string
           id?: string
+          next_follow_up_date?: string | null
           notes?: string | null
           owner_id?: string | null
           phone?: string | null
@@ -611,6 +746,24 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      newsletter_subscribers: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+        }
+        Relationships: []
       }
       notifications: {
         Row: {
@@ -793,6 +946,50 @@ export type Database = {
           },
         ]
       }
+      project_invoices: {
+        Row: {
+          amount: number
+          created_at: string
+          due_date: string | null
+          id: string
+          issued_at: string
+          milestone: string
+          paid_at: string | null
+          status: string
+          tech_project_id: string
+        }
+        Insert: {
+          amount?: number
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          issued_at?: string
+          milestone: string
+          paid_at?: string | null
+          status?: string
+          tech_project_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          issued_at?: string
+          milestone?: string
+          paid_at?: string | null
+          status?: string
+          tech_project_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_invoices_tech_project_id_fkey"
+            columns: ["tech_project_id"]
+            isOneToOne: false
+            referencedRelation: "tech_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       projects: {
         Row: {
           created_at: string
@@ -843,12 +1040,14 @@ export type Database = {
       properties: {
         Row: {
           address: string | null
+          amenities: Json
           area_sqm: number
           bathrooms: number
           bedrooms: number
           city: string | null
           created_at: string
           description: string | null
+          featured: boolean
           id: string
           org_id: string | null
           owner_id: string | null
@@ -857,15 +1056,18 @@ export type Database = {
           status: string
           title: string
           updated_at: string
+          year_built: number | null
         }
         Insert: {
           address?: string | null
+          amenities?: Json
           area_sqm?: number
           bathrooms?: number
           bedrooms?: number
           city?: string | null
           created_at?: string
           description?: string | null
+          featured?: boolean
           id?: string
           org_id?: string | null
           owner_id?: string | null
@@ -874,15 +1076,18 @@ export type Database = {
           status?: string
           title: string
           updated_at?: string
+          year_built?: number | null
         }
         Update: {
           address?: string | null
+          amenities?: Json
           area_sqm?: number
           bathrooms?: number
           bedrooms?: number
           city?: string | null
           created_at?: string
           description?: string | null
+          featured?: boolean
           id?: string
           org_id?: string | null
           owner_id?: string | null
@@ -891,6 +1096,7 @@ export type Database = {
           status?: string
           title?: string
           updated_at?: string
+          year_built?: number | null
         }
         Relationships: [
           {
@@ -898,6 +1104,104 @@ export type Database = {
             columns: ["org_id"]
             isOneToOne: false
             referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      property_images: {
+        Row: {
+          caption: string | null
+          created_at: string
+          id: string
+          position: number
+          property_id: string
+          storage_path: string
+          uploaded_by: string | null
+        }
+        Insert: {
+          caption?: string | null
+          created_at?: string
+          id?: string
+          position?: number
+          property_id: string
+          storage_path: string
+          uploaded_by?: string | null
+        }
+        Update: {
+          caption?: string | null
+          created_at?: string
+          id?: string
+          position?: number
+          property_id?: string
+          storage_path?: string
+          uploaded_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_images_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      property_units: {
+        Row: {
+          area_sqm: number
+          bathrooms: number
+          bedrooms: number
+          created_at: string
+          floor: number | null
+          id: string
+          property_id: string
+          rent_amount: number
+          status: string
+          tenant_id: string | null
+          unit_number: string
+          updated_at: string
+        }
+        Insert: {
+          area_sqm?: number
+          bathrooms?: number
+          bedrooms?: number
+          created_at?: string
+          floor?: number | null
+          id?: string
+          property_id: string
+          rent_amount?: number
+          status?: string
+          tenant_id?: string | null
+          unit_number: string
+          updated_at?: string
+        }
+        Update: {
+          area_sqm?: number
+          bathrooms?: number
+          bedrooms?: number
+          created_at?: string
+          floor?: number | null
+          id?: string
+          property_id?: string
+          rent_amount?: number
+          status?: string
+          tenant_id?: string | null
+          unit_number?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_units_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_units_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
             referencedColumns: ["id"]
           },
         ]
@@ -1130,39 +1434,95 @@ export type Database = {
           },
         ]
       }
+      tech_project_documents: {
+        Row: {
+          created_at: string
+          file_path: string
+          id: string
+          mime_type: string | null
+          name: string
+          size_bytes: number | null
+          tech_project_id: string
+          uploaded_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          file_path: string
+          id?: string
+          mime_type?: string | null
+          name: string
+          size_bytes?: number | null
+          tech_project_id: string
+          uploaded_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          file_path?: string
+          id?: string
+          mime_type?: string | null
+          name?: string
+          size_bytes?: number | null
+          tech_project_id?: string
+          uploaded_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tech_project_documents_tech_project_id_fkey"
+            columns: ["tech_project_id"]
+            isOneToOne: false
+            referencedRelation: "tech_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tech_projects: {
         Row: {
+          budget: number | null
+          client_email: string | null
           client_name: string | null
           created_at: string
+          due_date: string | null
           id: string
           metadata: Json
           org_id: string | null
           owner_id: string | null
           progress: number
+          sla_hours: number | null
+          start_date: string | null
           status: string
           title: string
           updated_at: string
         }
         Insert: {
+          budget?: number | null
+          client_email?: string | null
           client_name?: string | null
           created_at?: string
+          due_date?: string | null
           id?: string
           metadata?: Json
           org_id?: string | null
           owner_id?: string | null
           progress?: number
+          sla_hours?: number | null
+          start_date?: string | null
           status?: string
           title: string
           updated_at?: string
         }
         Update: {
+          budget?: number | null
+          client_email?: string | null
           client_name?: string | null
           created_at?: string
+          due_date?: string | null
           id?: string
           metadata?: Json
           org_id?: string | null
           owner_id?: string | null
           progress?: number
+          sla_hours?: number | null
+          start_date?: string | null
           status?: string
           title?: string
           updated_at?: string
@@ -1179,21 +1539,30 @@ export type Database = {
       }
       tech_tasks: {
         Row: {
+          assignee_email: string | null
           created_at: string
+          description: string | null
+          due_date: string | null
           id: string
           status: string
           tech_project_id: string
           title: string
         }
         Insert: {
+          assignee_email?: string | null
           created_at?: string
+          description?: string | null
+          due_date?: string | null
           id?: string
           status?: string
           tech_project_id: string
           title: string
         }
         Update: {
+          assignee_email?: string | null
           created_at?: string
+          description?: string | null
+          due_date?: string | null
           id?: string
           status?: string
           tech_project_id?: string
@@ -1221,6 +1590,7 @@ export type Database = {
           phone: string | null
           property_id: string | null
           rent_amount: number
+          unit_id: string | null
           updated_at: string
         }
         Insert: {
@@ -1234,6 +1604,7 @@ export type Database = {
           phone?: string | null
           property_id?: string | null
           rent_amount?: number
+          unit_id?: string | null
           updated_at?: string
         }
         Update: {
@@ -1247,6 +1618,7 @@ export type Database = {
           phone?: string | null
           property_id?: string | null
           rent_amount?: number
+          unit_id?: string | null
           updated_at?: string
         }
         Relationships: [
@@ -1255,6 +1627,13 @@ export type Database = {
             columns: ["property_id"]
             isOneToOne: false
             referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tenants_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "property_units"
             referencedColumns: ["id"]
           },
         ]
