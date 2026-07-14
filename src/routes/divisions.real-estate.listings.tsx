@@ -34,9 +34,10 @@ function coverUrl(path: string | null) {
 }
 
 function ListingsHubPage() {
-  const { data: locations, isLoading } = useQuery({
+  const { data: locations, isLoading, isError } = useQuery({
     queryKey: ["public-listing-locations"],
     queryFn: () => getListingLocations(),
+    retry: 1,
   });
 
   return (
@@ -65,7 +66,13 @@ function ListingsHubPage() {
           </div>
         )}
 
-        {!isLoading && (!locations || locations.length === 0) && (
+        {!isLoading && isError && (
+          <div className="mt-10 rounded-xl border border-border bg-surface/40 p-10 text-center text-muted-foreground">
+            Listings are temporarily unavailable — please try again shortly.
+          </div>
+        )}
+
+        {!isLoading && !isError && (!locations || locations.length === 0) && (
           <div className="mt-10 rounded-xl border border-border bg-surface/40 p-10 text-center text-muted-foreground">
             No listings are live yet — check back soon.
           </div>

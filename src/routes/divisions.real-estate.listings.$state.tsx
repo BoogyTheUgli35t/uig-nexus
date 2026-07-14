@@ -43,8 +43,9 @@ function LocationListingsPage() {
     "all",
   );
 
-  const { data: listings, isLoading } = useQuery({
+  const { data: listings, isLoading, isError } = useQuery({
     queryKey: ["public-listings", state, listingType, propertyType],
+    retry: 1,
     queryFn: () =>
       getListingsByLocation({
         data: {
@@ -118,7 +119,13 @@ function LocationListingsPage() {
           </div>
         )}
 
-        {!isLoading && (!listings || listings.length === 0) && (
+        {!isLoading && isError && (
+          <div className="mt-8 rounded-xl border border-border bg-surface/40 p-10 text-center text-muted-foreground">
+            Listings are temporarily unavailable — please try again shortly.
+          </div>
+        )}
+
+        {!isLoading && !isError && (!listings || listings.length === 0) && (
           <div className="mt-8 rounded-xl border border-border bg-surface/40 p-10 text-center text-muted-foreground">
             No listings match those filters right now.
           </div>

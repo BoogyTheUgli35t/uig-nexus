@@ -4,7 +4,17 @@ import { Check, ArrowRight } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { PageHero, Section, Eyebrow, CTABand, FeatureCard } from "@/components/site/sections";
-import { getDivision, type DivisionSlug } from "@/lib/divisions";
+import { getDivision, DIVISIONS, type DivisionSlug } from "@/lib/divisions";
+
+/** Public marketing routes for each division, typed as literals so Link stays type-safe. */
+const DIVISION_ROUTES = [
+  { slug: "technology", to: "/divisions/technology" },
+  { slug: "agritech", to: "/divisions/agritech" },
+  { slug: "real-estate", to: "/divisions/real-estate" },
+  { slug: "logistics", to: "/divisions/logistics" },
+  { slug: "intelligence", to: "/divisions/intelligence" },
+  { slug: "innovation-lab", to: "/divisions/innovation-lab" },
+] as const;
 
 export type DivisionPageProps = {
   slug?: DivisionSlug;
@@ -273,6 +283,37 @@ export function DivisionPage(props: DivisionPageProps) {
                 </div>
               </div>
             ))}
+          </div>
+        </Section>
+      )}
+
+      {props.slug && (
+        <Section className="!pt-0">
+          <Eyebrow>One group, six divisions</Eyebrow>
+          <h2 className="mt-5 text-3xl sm:text-4xl font-bold">Explore the rest of UIG.</h2>
+          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {DIVISION_ROUTES.filter((r) => r.slug !== props.slug).map((r) => {
+              const d = DIVISIONS.find((x) => x.slug === r.slug);
+              if (!d) return null;
+              return (
+                <Link
+                  key={d.slug}
+                  to={r.to}
+                  className={`${d.accentClass} group relative overflow-hidden rounded-xl border border-border bg-surface/60 p-5 transition hover:acc-border-soft hover:bg-surface`}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg acc-bg-soft acc-text">
+                      <d.icon className="h-5 w-5" />
+                    </div>
+                    <div className="min-w-0">
+                      <div className="font-semibold">{d.short}</div>
+                      <div className="truncate text-xs text-muted-foreground">{d.tagline}</div>
+                    </div>
+                    <ArrowRight className="ml-auto h-4 w-4 shrink-0 text-muted-foreground transition group-hover:acc-text" />
+                  </div>
+                </Link>
+              );
+            })}
           </div>
         </Section>
       )}

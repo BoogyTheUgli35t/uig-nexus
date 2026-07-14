@@ -16,33 +16,22 @@ import { SiteLayout } from "@/components/site/SiteLayout";
 import { Section, Eyebrow, FeatureCard, CTABand } from "@/components/site/sections";
 import { Button } from "@/components/ui/button";
 
-// Real, licensed photography (Unsplash — free for commercial use) shot by Nigerian
-// photographers, used for the homepage photo story below.
+// Original UIG division photography (bundled assets — no external CDN dependency),
+// used for the homepage photo story below.
+import heroTechnology from "@/assets/divisions/hero-technology.jpg";
+import heroAgritech from "@/assets/divisions/hero-agritech.jpg";
+import heroRealEstate from "@/assets/divisions/hero-real-estate.jpg";
+import heroLogistics from "@/assets/divisions/hero-logistics.jpg";
+import heroIntelligence from "@/assets/divisions/hero-intelligence.jpg";
+import heroInnovationLab from "@/assets/divisions/hero-innovation-lab.jpg";
+
 const STORY_IMAGES = [
-  {
-    src: "https://images.unsplash.com/photo-1618828665347-d870c38c95c7?auto=format&fit=crop&w=1000&q=80",
-    caption: "Lagos skyline",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1580239808575-21a119018fb4?auto=format&fit=crop&w=1000&q=80",
-    caption: "UIG Real Estate — Lekki development",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1739302750702-e26a61113758?auto=format&fit=crop&w=1000&q=80",
-    caption: "UIG Technology — Lagos engineering team",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1647463047632-f06655631086?auto=format&fit=crop&w=1000&q=80",
-    caption: "UIG AgriTech — field operations",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1611746351408-c0a1346be8e8?auto=format&fit=crop&w=1000&q=80",
-    caption: "UIG Logistics — fleet on the road",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1704230093731-8dad84d386a9?auto=format&fit=crop&w=1000&q=80",
-    caption: "Abuja, from above",
-  },
+  { src: heroTechnology, caption: "UIG Technology — AI-native software & platforms" },
+  { src: heroRealEstate, caption: "UIG Real Estate — property systems & listings" },
+  { src: heroAgritech, caption: "UIG AgriTech — smart agriculture & yield intelligence" },
+  { src: heroLogistics, caption: "UIG Logistics — fleet intelligence & routing" },
+  { src: heroIntelligence, caption: "UIG Intelligence — models, analytics & automation" },
+  { src: heroInnovationLab, caption: "UIG Innovation Lab — where new ventures are born" },
 ] as const;
 
 export const Route = createFileRoute("/")({
@@ -122,12 +111,6 @@ function HomePage() {
     <SiteLayout>
       {/* Hero */}
       <section className="relative overflow-hidden">
-        <img
-          src="https://images.unsplash.com/photo-1618828665347-d870c38c95c7?auto=format&fit=crop&w=2000&q=80"
-          alt=""
-          aria-hidden="true"
-          className="absolute inset-0 h-full w-full object-cover opacity-[0.14]"
-        />
         <div className="absolute inset-0 grid-bg opacity-50" />
         <div className="absolute inset-x-0 top-0 h-[600px] bg-gradient-to-b from-gold/5 via-transparent to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/70 to-background" />
