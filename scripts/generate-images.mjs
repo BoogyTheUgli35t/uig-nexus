@@ -55,6 +55,19 @@ const MODELS = {
 };
 
 class QuotaExceeded extends Error {}
+let failedSlots = 0;
+
+/** Generate one slot; content-policy or other per-slot failures log and continue. Quota exhaustion aborts. */
+async function tryGenerateTo(publicId, prompt, opts) {
+  try {
+    return await generateTo(publicId, prompt, opts);
+  } catch (err) {
+    if (err instanceof QuotaExceeded) throw err;
+    failedSlots++;
+    console.error(`FAILED ${publicId}: ${err.message.slice(0, 200)}`);
+    return null;
+  }
+}
 
 async function generateTo(publicId, prompt, { model, aspectRatio, resolution = "1K" }) {
   if (urlMap[publicId] && !FORCE) { console.log(`skip (done): ${publicId}`); return urlMap[publicId]; }
@@ -112,7 +125,7 @@ const slugify = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|
 // ---------- scopes ----------
 async function runBrand() {
   for (const slot of manifest.brand) {
-    await generateTo(slot.publicId, `${slot.prompt}, ${manifest.defaults.style}`, {
+    await tryGenerateTo(slot.publicId, `${slot.prompt}, ${manifest.defaults.style}`, {
       model: MODELS.standard, aspectRatio: slot.aspectRatio || "4:3",
     });
   }
@@ -120,11 +133,11 @@ async function runBrand() {
 
 async function runDivisions() {
   for (const d of manifest.divisions) {
-    await generateTo(`uig/divisions/${d.slug}/hero`, `${d.hero}, ${manifest.defaults.style}`, {
+    await tryGenerateTo(`uig/divisions/${d.slug}/hero`, `${d.hero}, ${manifest.defaults.style}`, {
       model: MODELS.hero, aspectRatio: "16:9", resolution: "2K",
     });
     for (let i = 0; i < d.gallery.length; i++) {
-      await generateTo(
+      await tryGenerateTo(
         `uig/divisions/${d.slug}/gallery-${String(i + 1).padStart(2, "0")}`,
         `${d.gallery[i]}, ${manifest.defaults.style}`,
         { model: MODELS.standard, aspectRatio: "4:3" },
@@ -161,7 +174,7 @@ async function runListings() {
         const prompt = t.promptTemplate
           .replace("{subject}", subject).replace("{city}", p.city || "Lagos").replace("{angle}", angle);
         const publicId = `uig/listings/${stateFolder}/${p.id}/${row.position}`;
-        const url = await generateTo(publicId, prompt, { model: MODELS.standard, aspectRatio: "16:9" });
+        const url = await tryGenerateTo(publicId, prompt, { model: MODELS.standard, aspectRatio: "16:9" });
         if (url) {
           sql.push(
             `UPDATE public.property_images SET storage_path = '${url}', is_render = true, ` +
@@ -185,7 +198,7 @@ try {
   if (inScope("brand")) await runBrand();
   if (inScope("divisions")) await runDivisions();
   if (inScope("listings")) await runListings();
-  console.log("done.");
+  console.log(failedSlots ? `done with ${failedSlots} failed slot(s) — rerun to retry.` : "done.");
 } catch (err) {
   console.error(err.message);
   process.exit(err instanceof QuotaExceeded ? 2 : 1);
