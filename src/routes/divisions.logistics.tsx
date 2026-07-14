@@ -10,6 +10,7 @@ import {
   Plug,
 } from "lucide-react";
 import { DivisionPage } from "@/components/site/DivisionPage";
+import { RateEstimator } from "@/components/site/RateEstimator";
 
 export const Route = createFileRoute("/divisions/logistics")({
   head: () => ({
@@ -116,6 +117,13 @@ export const Route = createFileRoute("/divisions/logistics")({
         { value: "98.2%", label: "On-time rate" },
         { value: "300+", label: "Active business clients" },
       ]}
+      tool={{
+        eyebrow: "Try it yourself",
+        title: "Estimate a shipment rate.",
+        description:
+          "Pick your origin and destination cities, package weight and speed to get a ballpark price and delivery window.",
+        component: <RateEstimator />,
+      }}
       ctaTitle="Get a logistics quote."
       ctaButton="Integrate Our Delivery API"
     />

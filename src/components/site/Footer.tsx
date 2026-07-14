@@ -103,6 +103,11 @@ export function Footer() {
                 Track a shipment
               </Link>
             </li>
+            <li>
+              <Link to="/status" className="hover:text-gold transition">
+                System status
+              </Link>
+            </li>
           </ul>
         </div>
         <div>

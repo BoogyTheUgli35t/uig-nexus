@@ -1,6 +1,7 @@
 import type { ComponentType, ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
-import { Check } from "lucide-react";
+import { Check, ArrowRight } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { PageHero, Section, Eyebrow, CTABand, FeatureCard } from "@/components/site/sections";
 import { getDivision, type DivisionSlug } from "@/lib/divisions";
@@ -25,6 +26,22 @@ export type DivisionPageProps = {
   metrics?: { value: string; label: string }[];
   ctaTitle: string;
   ctaButton: string;
+  ctaTo?: string;
+  browseCta?: { title: string; description: string; buttonText: string; to: string };
+  tool?: { eyebrow: string; title: string; description?: string; component: ReactNode };
+  caseStudies?: {
+    eyebrow: string;
+    title: string;
+    note?: string;
+    items: {
+      client: string;
+      industry: string;
+      challenge: string;
+      solution: string;
+      result: string;
+      metric: string;
+    }[];
+  };
 };
 
 export function DivisionPage(props: DivisionPageProps) {
@@ -37,6 +54,41 @@ export function DivisionPage(props: DivisionPageProps) {
         subtitle={props.subtitle}
         image={division?.hero}
       />
+
+      {division && division.gallery.length > 0 && (
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-1 border-b border-border">
+          {division.gallery.map((src) => (
+            <div key={src} className="group aspect-[4/3] overflow-hidden bg-surface">
+              <img
+                src={src}
+                alt=""
+                loading="lazy"
+                className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+              />
+            </div>
+          ))}
+        </div>
+      )}
+
+      {props.browseCta && (
+        <Section className="!py-14">
+          <div className="relative overflow-hidden rounded-2xl border border-gold/20 bg-surface p-8 sm:p-10 glow-border">
+            <div className="absolute -top-16 -left-16 h-56 w-56 rounded-full bg-gold/10 blur-3xl" />
+            <div className="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
+              <div>
+                <h3 className="text-2xl font-bold">{props.browseCta.title}</h3>
+                <p className="mt-2 text-muted-foreground max-w-xl">{props.browseCta.description}</p>
+              </div>
+              <Link
+                to={props.browseCta.to}
+                className="inline-flex shrink-0 items-center gap-2 rounded-lg bg-gold px-6 py-3 font-semibold text-gold-foreground shadow-gold transition hover:bg-gold/90"
+              >
+                {props.browseCta.buttonText} <ArrowRight className="h-4 w-4" />
+              </Link>
+            </div>
+          </div>
+        </Section>
+      )}
 
       {props.problem && (
         <Section>
@@ -76,6 +128,55 @@ export function DivisionPage(props: DivisionPageProps) {
           </div>
         )}
       </Section>
+
+      {props.tool && (
+        <Section className="!pt-0">
+          <Eyebrow>{props.tool.eyebrow}</Eyebrow>
+          <h2 className="mt-5 text-3xl sm:text-4xl font-bold max-w-2xl">{props.tool.title}</h2>
+          {props.tool.description && (
+            <p className="mt-3 text-muted-foreground max-w-2xl">{props.tool.description}</p>
+          )}
+          <div className="mt-8 max-w-2xl">{props.tool.component}</div>
+        </Section>
+      )}
+
+      {props.caseStudies && (
+        <Section className="!pt-0">
+          <Eyebrow>{props.caseStudies.eyebrow}</Eyebrow>
+          <h2 className="mt-5 text-3xl sm:text-4xl font-bold max-w-2xl">{props.caseStudies.title}</h2>
+          {props.caseStudies.note && (
+            <p className="mt-3 text-xs text-muted-foreground max-w-2xl">{props.caseStudies.note}</p>
+          )}
+          <div className="mt-8 grid gap-5 lg:grid-cols-3">
+            {props.caseStudies.items.map((cs) => (
+              <div
+                key={cs.client}
+                className="flex flex-col rounded-xl border border-border bg-surface/60 p-6"
+              >
+                <div className="text-xs uppercase tracking-wider text-gold">{cs.industry}</div>
+                <h3 className="mt-1.5 font-display text-lg font-semibold">{cs.client}</h3>
+                <dl className="mt-4 space-y-3 text-sm">
+                  <div>
+                    <dt className="text-xs font-medium text-muted-foreground">Challenge</dt>
+                    <dd className="mt-1 text-muted-foreground">{cs.challenge}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-xs font-medium text-muted-foreground">What we built</dt>
+                    <dd className="mt-1 text-muted-foreground">{cs.solution}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-xs font-medium text-muted-foreground">Result</dt>
+                    <dd className="mt-1 text-muted-foreground">{cs.result}</dd>
+                  </div>
+                </dl>
+                <div className="mt-5 rounded-lg border border-gold/30 bg-gold/5 px-4 py-3 text-center">
+                  <span className="text-lg font-bold text-gradient-gold">{cs.metric}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Section>
+      )}
 
       {props.process && (
         <Section>
@@ -176,7 +277,11 @@ export function DivisionPage(props: DivisionPageProps) {
         </Section>
       )}
 
-      <CTABand title={props.ctaTitle} buttonText={props.ctaButton} />
+      <CTABand
+        title={props.ctaTitle}
+        buttonText={props.ctaButton}
+        {...(props.ctaTo ? { buttonTo: props.ctaTo } : {})}
+      />
     </SiteLayout>
   );
 }

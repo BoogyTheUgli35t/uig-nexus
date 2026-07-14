@@ -427,3 +427,101 @@ export const getClientProjects = createServerFn({ method: "GET" })
       : { data: [] };
     return { projects: projects ?? [], deployments: deployments ?? [] };
   });
+
+// =============== Public status page management ===============
+// Manages status_components/status_incidents — the data behind the public
+// /status page. See public-status.functions.ts for the unauthenticated
+// read side. Kept separate from the confidential per-project SLA tracker
+// above (that one has client_name/client_email/budget; this one is public
+// by design).
+
+export const STATUS_COMPONENT_STATUSES = [
+  "operational",
+  "degraded",
+  "partial_outage",
+  "major_outage",
+] as const;
+export const STATUS_INCIDENT_STATUSES = ["investigating", "identified", "monitoring", "resolved"] as const;
+export const STATUS_INCIDENT_SEVERITIES = ["minor", "major", "critical"] as const;
+
+export const listStatusComponents = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data, error } = await context.supabase
+      .from("status_components")
+      .select("*")
+      .order("position", { ascending: true });
+    if (error) throw new Error(error.message);
+    return data ?? [];
+  });
+
+const UpdateComponentStatusSchema = z.object({
+  id: z.string().uuid(),
+  status: z.enum(STATUS_COMPONENT_STATUSES),
+});
+
+export const updateComponentStatus = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((i: unknown) => UpdateComponentStatusSchema.parse(i))
+  .handler(async ({ context, data }) => {
+    const { error } = await context.supabase
+      .from("status_components")
+      .update({ status: data.status, updated_at: new Date().toISOString() })
+      .eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const listStatusIncidents = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data, error } = await context.supabase
+      .from("status_incidents")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(50);
+    if (error) throw new Error(error.message);
+    return data ?? [];
+  });
+
+const CreateIncidentSchema = z.object({
+  title: z.string().trim().min(1).max(180),
+  body: z.string().trim().max(2000).optional().or(z.literal("")),
+  severity: z.enum(STATUS_INCIDENT_SEVERITIES).default("minor"),
+  component_id: z.string().uuid().optional().or(z.literal("")),
+});
+
+export const createIncident = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((i: unknown) => CreateIncidentSchema.parse(i))
+  .handler(async ({ context, data }) => {
+    const { error } = await context.supabase.from("status_incidents").insert({
+      title: data.title,
+      body: data.body || null,
+      severity: data.severity,
+      component_id: data.component_id || null,
+      status: "investigating",
+    });
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+const UpdateIncidentSchema = z.object({
+  id: z.string().uuid(),
+  status: z.enum(STATUS_INCIDENT_STATUSES),
+});
+
+export const updateIncidentStatus = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((i: unknown) => UpdateIncidentSchema.parse(i))
+  .handler(async ({ context, data }) => {
+    const { error } = await context.supabase
+      .from("status_incidents")
+      .update({
+        status: data.status,
+        ...(data.status === "resolved" ? { resolved_at: new Date().toISOString() } : {}),
+      })
+      .eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });

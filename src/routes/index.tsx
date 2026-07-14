@@ -16,6 +16,35 @@ import { SiteLayout } from "@/components/site/SiteLayout";
 import { Section, Eyebrow, FeatureCard, CTABand } from "@/components/site/sections";
 import { Button } from "@/components/ui/button";
 
+// Real, licensed photography (Unsplash — free for commercial use) shot by Nigerian
+// photographers, used for the homepage photo story below.
+const STORY_IMAGES = [
+  {
+    src: "https://images.unsplash.com/photo-1618828665347-d870c38c95c7?auto=format&fit=crop&w=1000&q=80",
+    caption: "Lagos skyline",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1580239808575-21a119018fb4?auto=format&fit=crop&w=1000&q=80",
+    caption: "UIG Real Estate — Lekki development",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1739302750702-e26a61113758?auto=format&fit=crop&w=1000&q=80",
+    caption: "UIG Technology — Lagos engineering team",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1647463047632-f06655631086?auto=format&fit=crop&w=1000&q=80",
+    caption: "UIG AgriTech — field operations",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1611746351408-c0a1346be8e8?auto=format&fit=crop&w=1000&q=80",
+    caption: "UIG Logistics — fleet on the road",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1704230093731-8dad84d386a9?auto=format&fit=crop&w=1000&q=80",
+    caption: "Abuja, from above",
+  },
+] as const;
+
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
@@ -93,8 +122,15 @@ function HomePage() {
     <SiteLayout>
       {/* Hero */}
       <section className="relative overflow-hidden">
+        <img
+          src="https://images.unsplash.com/photo-1618828665347-d870c38c95c7?auto=format&fit=crop&w=2000&q=80"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 h-full w-full object-cover opacity-[0.14]"
+        />
         <div className="absolute inset-0 grid-bg opacity-50" />
         <div className="absolute inset-x-0 top-0 h-[600px] bg-gradient-to-b from-gold/5 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/70 to-background" />
         <div className="absolute -top-40 left-1/2 -translate-x-1/2 h-[500px] w-[800px] rounded-full bg-gold/10 blur-[120px]" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-20 pb-24 sm:pt-32 sm:pb-32">
           <Eyebrow>Lagos · Pan-African · Global</Eyebrow>
@@ -199,6 +235,33 @@ function HomePage() {
                 <ArrowRight className="ml-1 h-3.5 w-3.5 transition group-hover:translate-x-0.5" />
               </div>
             </Link>
+          ))}
+        </div>
+      </Section>
+
+      {/* Photo story */}
+      <Section>
+        <Eyebrow>On the ground</Eyebrow>
+        <h2 className="mt-5 text-4xl sm:text-5xl font-bold tracking-tight max-w-3xl">
+          Real work, across real Nigeria.
+        </h2>
+        <div className="mt-10 grid grid-cols-2 sm:grid-cols-3 gap-3">
+          {STORY_IMAGES.map((img) => (
+            <div
+              key={img.src}
+              className="group relative aspect-[4/3] overflow-hidden rounded-xl border border-border"
+            >
+              <img
+                src={img.src}
+                alt={img.caption}
+                loading="lazy"
+                className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/0 to-transparent" />
+              <div className="absolute bottom-0 left-0 right-0 p-3 text-xs text-foreground/90">
+                {img.caption}
+              </div>
+            </div>
           ))}
         </div>
       </Section>

@@ -10,6 +10,7 @@ import {
   Briefcase,
 } from "lucide-react";
 import { DivisionPage } from "@/components/site/DivisionPage";
+import { YieldCalculator } from "@/components/site/YieldCalculator";
 
 export const Route = createFileRoute("/divisions/agritech")({
   head: () => ({
@@ -117,6 +118,13 @@ export const Route = createFileRoute("/divisions/agritech")({
         { value: "35%", label: "Avg. yield uplift" },
         { value: "₦180M+", label: "F2M transactions" },
       ]}
+      tool={{
+        eyebrow: "Try it yourself",
+        title: "Estimate your yield and ROI.",
+        description:
+          "A quick, editable model for prospective farmers and agribusiness investors — pick a crop, set your farm size, and adjust the numbers to your local market.",
+        component: <YieldCalculator />,
+      }}
       ctaTitle="Join the AgriTech network."
       ctaButton="Request a Farm Assessment"
     />

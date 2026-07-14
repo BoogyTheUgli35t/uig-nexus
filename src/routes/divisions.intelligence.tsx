@@ -10,6 +10,7 @@ import {
   FlaskConical,
 } from "lucide-react";
 import { DivisionPage } from "@/components/site/DivisionPage";
+import { SampleChatDemo } from "@/components/site/SampleChatDemo";
 
 export const Route = createFileRoute("/divisions/intelligence")({
   head: () => ({
@@ -108,6 +109,50 @@ export const Route = createFileRoute("/divisions/intelligence")({
         { value: "94%", label: "Yoruba intent recognition" },
         { value: "500K+", label: "Hausa training tokens" },
       ]}
+      tool={{
+        eyebrow: "See it in action",
+        title: "What native-language AI sounds like.",
+        description:
+          "We can't expose a live client model publicly — but here's a sample of the kind of conversation it handles.",
+        component: <SampleChatDemo />,
+      }}
+      caseStudies={{
+        eyebrow: "Proof, not promises",
+        title: "Recent engagements.",
+        note: "Representative engagements — client names withheld under NDA.",
+        items: [
+          {
+            client: "A national telecom's customer support desk",
+            industry: "Telecom",
+            challenge:
+              "Support agents fielded thousands of Pidgin and Yoruba-language queries daily, with no automation available in those languages.",
+            solution:
+              "A WhatsApp-native support bot trained on the client's product catalogue and common support intents in Pidgin and Yoruba.",
+            result: "First-response time fell from hours to seconds for routine queries.",
+            metric: "60% of tickets deflected",
+          },
+          {
+            client: "A microfinance bank's credit team",
+            industry: "Fintech / Banking",
+            challenge:
+              "Manual fraud review couldn't keep pace with transaction volume, and false positives were blocking legitimate customers.",
+            solution:
+              "A custom fraud-scoring model trained on the bank's historical transaction data, integrated directly into their approval flow.",
+            result: "Flagged transactions for manual review dropped while catching more true fraud.",
+            metric: "45% fewer false positives",
+          },
+          {
+            client: "A regional produce distributor",
+            industry: "Agribusiness",
+            challenge:
+              "Demand forecasting was based on gut feel, leading to overstocking on some routes and stockouts on others.",
+            solution:
+              "A predictive analytics dashboard forecasting weekly demand per depot from historical sales and seasonal patterns.",
+            result: "Depots re-ordered against forecasts instead of guesswork within one season.",
+            metric: "18% less spoilage waste",
+          },
+        ],
+      }}
       ctaTitle="Explore AI solutions for your business."
       ctaButton="Request an AI Audit"
     />

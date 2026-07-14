@@ -108,9 +108,16 @@ export const Route = createFileRoute("/divisions/real-estate")({
         { value: "₦2B+", label: "Transactions facilitated" },
         { value: "500+", label: "Properties verified" },
         { value: "12", label: "Projects in pipeline" },
-        { value: "4 cities", label: "Active markets" },
+        { value: "5 cities", label: "Active markets" },
       ]}
-      ctaTitle="Browse available properties."
+      browseCta={{
+        title: "Browse live listings by location.",
+        description:
+          "Houses, apartments, commercial space and land for sale or rent across Lagos, Abuja, Port Harcourt, Enugu and Kano — with full photo galleries for every listing.",
+        buttonText: "Browse listings",
+        to: "/divisions/real-estate/listings",
+      }}
+      ctaTitle="Looking for something specific?"
       ctaButton="Speak to an Investment Advisor"
     />
   ),

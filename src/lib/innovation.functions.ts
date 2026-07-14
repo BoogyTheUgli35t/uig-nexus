@@ -389,3 +389,45 @@ export const updateExperiment = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
+// =============== Public submission review queue ===============
+// Reviews the intake from the public "submit an idea" form
+// (src/routes/divisions.innovation-lab.submit.tsx, written via the
+// unauthenticated submitPublicIdea in public-innovation.functions.ts). Staff
+// triage here and manually promote worthwhile ones into `ideas` via
+// submitIdea above — deliberately not automatic.
+
+export const SUBMISSION_STATUSES = ["new", "reviewing", "accepted", "declined"] as const;
+
+export const listInnovationSubmissions = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data, error } = await context.supabase
+      .from("innovation_submissions")
+      .select("*")
+      .order("created_at", { ascending: false });
+    if (error) throw new Error(error.message);
+    return data ?? [];
+  });
+
+const ReviewSubmissionSchema = z.object({
+  id: z.string().uuid(),
+  status: z.enum(SUBMISSION_STATUSES),
+  reviewer_notes: z.string().trim().max(2000).optional().or(z.literal("")),
+});
+
+export const reviewSubmission = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((i: unknown) => ReviewSubmissionSchema.parse(i))
+  .handler(async ({ context, data }) => {
+    const { error } = await context.supabase
+      .from("innovation_submissions")
+      .update({
+        status: data.status,
+        ...(data.reviewer_notes !== undefined ? { reviewer_notes: data.reviewer_notes || null } : {}),
+        reviewed_at: new Date().toISOString(),
+      })
+      .eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });

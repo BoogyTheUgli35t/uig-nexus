@@ -14,9 +14,12 @@ const paths = [
   "/divisions/logistics",
   "/divisions/intelligence",
   "/divisions/innovation-lab",
+  "/divisions/real-estate/listings",
+  "/divisions/innovation-lab/submit",
   "/careers",
   "/insights",
   "/contact",
+  "/status",
 ];
 
 const insightSlugs: string[] = [

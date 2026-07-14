@@ -19,6 +19,7 @@ import {
   Calendar,
   FlaskConical,
   BrainCircuit,
+  Inbox,
 } from "lucide-react";
 import { toast } from "sonner";
 import { getDivision } from "@/lib/divisions";
@@ -43,8 +44,11 @@ import {
   listLinkableModels,
   createExperiment,
   updateExperiment,
+  listInnovationSubmissions,
+  reviewSubmission,
   IDEA_STATUSES,
   PROTOTYPE_STATUSES,
+  SUBMISSION_STATUSES,
 } from "@/lib/innovation.functions";
 import { authHeaders } from "@/lib/auth-headers";
 import { supabase } from "@/integrations/supabase/client";
@@ -149,6 +153,17 @@ function InnovationLabWorkspace() {
     mutationFn: async (v: { id: string; status: (typeof IDEA_STATUSES)[number] }) =>
       updateIdeaStatus({ data: v, headers: await authHeaders() }),
     onSuccess: invalidate,
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const { data: submissions, isLoading: submissionsLoading } = useQuery({
+    queryKey: ["innovation-submissions"],
+    queryFn: async () => listInnovationSubmissions({ headers: await authHeaders() }),
+  });
+  const reviewMut = useMutation({
+    mutationFn: async (v: { id: string; status: (typeof SUBMISSION_STATUSES)[number] }) =>
+      reviewSubmission({ data: v, headers: await authHeaders() }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["innovation-submissions"] }),
     onError: (e: Error) => toast.error(e.message),
   });
 
@@ -520,6 +535,48 @@ function InnovationLabWorkspace() {
                     </div>
                   );
                 })}
+              </div>
+            )}
+          </DataPanel>
+
+          {/* Public idea submissions — intake from the public "submit an idea"
+              form at /divisions/innovation-lab/submit. Kept separate from the
+              venture pipeline above; promoting a submission means manually
+              re-entering it via "Pitch a new venture/idea" once it's vetted. */}
+          <DataPanel title="Public idea submissions">
+            {submissionsLoading ? (
+              <p className="text-sm text-muted-foreground">Loading submissions...</p>
+            ) : (submissions?.length ?? 0) === 0 ? (
+              <EmptyState icon={Inbox} title="No public submissions yet" />
+            ) : (
+              <div className="divide-y divide-border">
+                {submissions?.map((s) => (
+                  <div key={s.id} className="py-4 first:pt-0 last:pb-0 space-y-2">
+                    <div className="flex items-start justify-between gap-4">
+                      <div>
+                        <h4 className="font-semibold text-base">{s.idea_title}</h4>
+                        <p className="text-sm text-muted-foreground mt-1">{s.idea_description}</p>
+                        <p className="mt-2 text-xs text-muted-foreground">
+                          {s.full_name} · {s.email}
+                          {s.phone ? ` · ${s.phone}` : ""}
+                          {s.category ? ` · ${s.category}` : ""}
+                        </p>
+                      </div>
+                      <StatusBadge status={s.status} />
+                    </div>
+                    <div className="flex flex-wrap gap-1">
+                      {SUBMISSION_STATUSES.filter((st) => st !== s.status).map((st) => (
+                        <button
+                          key={st}
+                          onClick={() => reviewMut.mutate({ id: s.id, status: st })}
+                          className="rounded border border-border px-2 py-0.5 text-[10px] capitalize text-muted-foreground transition hover:border-gold hover:text-foreground"
+                        >
+                          Mark {st}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                ))}
               </div>
             )}
           </DataPanel>

@@ -108,6 +108,13 @@ export const Route = createFileRoute("/divisions/innovation-lab")({
         { value: "₦50M", label: "Seed fund committed" },
         { value: "200", label: "Innovation Hub seats" },
       ]}
+      browseCta={{
+        title: "Got an idea? We want to hear it.",
+        description:
+          "Submit your startup idea directly — every submission is reviewed by the Innovation Lab team, and strong ideas get a follow-up call.",
+        buttonText: "Submit your idea",
+        to: "/divisions/innovation-lab/submit",
+      }}
       ctaTitle="Apply to the incubation programme."
       ctaButton="Visit the Innovation Hub"
     />

@@ -96,6 +96,50 @@ export const Route = createFileRoute("/divisions/technology")({
         { value: "98%", label: "Client retention" },
         { value: "6 wks", label: "Avg. deployment" },
       ]}
+      browseCta={{
+        title: "Uptime guarantees, verifiable.",
+        description:
+          "Live status for the web platform, portal, listings, payments and logistics API — updated by the team that runs them.",
+        buttonText: "View system status",
+        to: "/status",
+      }}
+      caseStudies={{
+        eyebrow: "Proof, not promises",
+        title: "Recent engagements.",
+        note: "Representative engagements — client names withheld under NDA.",
+        items: [
+          {
+            client: "A Lagos-based payments fintech",
+            industry: "Fintech",
+            challenge:
+              "Finance ops spent ~20 hours a week manually reconciling transactions across three payment processors.",
+            solution:
+              "A unified reconciliation dashboard integrating Paystack, Flutterwave and Stripe via their settlement APIs, with automated mismatch flagging.",
+            result: "Manual reconciliation work dropped from 20 hours/week to under 2.",
+            metric: "90% less reconciliation time",
+          },
+          {
+            client: "A 12-store regional retail chain",
+            industry: "Retail",
+            challenge:
+              "No real-time inventory visibility across locations — frequent stockouts on fast-moving items.",
+            solution:
+              "A cloud inventory platform integrated with existing POS terminals, with predictive restock alerts per store.",
+            result: "Stockouts on top-selling SKUs dropped sharply within the first quarter.",
+            metric: "32% fewer stockouts",
+          },
+          {
+            client: "A multi-clinic healthcare network",
+            industry: "Healthcare",
+            challenge:
+              "Patient records fragmented across paper files and two incompatible legacy systems.",
+            solution:
+              "A unified, role-based patient records platform with a phased migration plan to avoid clinic downtime.",
+            result: "40,000+ patient records migrated with zero data loss.",
+            metric: "6-week full migration",
+          },
+        ],
+      }}
       ctaTitle="Start your digital transformation."
       ctaButton="Talk to UIG Technology"
     />

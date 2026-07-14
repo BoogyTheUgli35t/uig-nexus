@@ -31,7 +31,7 @@ import { DataPanel, EmptyState, StatusBadge, KpiStat } from "@/components/portal
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { cn } from "@/lib/utils";
+import { cn, resolveImageUrl } from "@/lib/utils";
 
 export const Route = createFileRoute("/_apex/portal/divisions/real-estate/properties/$id")({
   component: PropertyDetailPage,
@@ -45,7 +45,7 @@ const naira = (n: number) => {
 };
 
 function imgUrl(path: string) {
-  return supabase.storage.from("property-images").getPublicUrl(path).data.publicUrl;
+  return resolveImageUrl("property-images", path);
 }
 
 function PropertyDetailPage() {

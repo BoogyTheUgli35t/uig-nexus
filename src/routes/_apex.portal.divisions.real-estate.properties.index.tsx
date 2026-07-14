@@ -11,7 +11,7 @@ import { authHeaders } from "@/lib/auth-headers";
 import { EmptyState, StatusBadge } from "@/components/portal/blocks";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { supabase } from "@/integrations/supabase/client";
+import { resolveImageUrl } from "@/lib/utils";
 
 export const Route = createFileRoute("/_apex/portal/divisions/real-estate/properties/")({
   component: PropertiesPage,
@@ -26,7 +26,7 @@ const naira = (n: number) => {
 
 function coverUrl(path: string | null) {
   if (!path) return null;
-  return supabase.storage.from("property-images").getPublicUrl(path).data.publicUrl;
+  return resolveImageUrl("property-images", path);
 }
 
 function PropertiesPage() {
