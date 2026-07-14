@@ -50,6 +50,169 @@ export type Database = {
         }
         Relationships: []
       }
+      agri_alerts: {
+        Row: {
+          acknowledged: boolean
+          acknowledged_at: string | null
+          created_at: string
+          field_id: string
+          id: string
+          message: string
+          severity: string
+        }
+        Insert: {
+          acknowledged?: boolean
+          acknowledged_at?: string | null
+          created_at?: string
+          field_id: string
+          id?: string
+          message: string
+          severity?: string
+        }
+        Update: {
+          acknowledged?: boolean
+          acknowledged_at?: string | null
+          created_at?: string
+          field_id?: string
+          id?: string
+          message?: string
+          severity?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agri_alerts_field_id_fkey"
+            columns: ["field_id"]
+            isOneToOne: false
+            referencedRelation: "fields"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ai_chat_messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          role: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      automation_rules: {
+        Row: {
+          action_type: string
+          config: Json
+          created_at: string
+          created_by: string | null
+          enabled: boolean
+          id: string
+          last_run_at: string | null
+          name: string
+          run_count: number
+          tech_project_id: string | null
+          trigger_type: string
+          updated_at: string
+        }
+        Insert: {
+          action_type?: string
+          config?: Json
+          created_at?: string
+          created_by?: string | null
+          enabled?: boolean
+          id?: string
+          last_run_at?: string | null
+          name: string
+          run_count?: number
+          tech_project_id?: string | null
+          trigger_type?: string
+          updated_at?: string
+        }
+        Update: {
+          action_type?: string
+          config?: Json
+          created_at?: string
+          created_by?: string | null
+          enabled?: boolean
+          id?: string
+          last_run_at?: string | null
+          name?: string
+          run_count?: number
+          tech_project_id?: string | null
+          trigger_type?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "automation_rules_tech_project_id_fkey"
+            columns: ["tech_project_id"]
+            isOneToOne: false
+            referencedRelation: "tech_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      billing_transactions: {
+        Row: {
+          amount_kobo: number
+          created_at: string
+          created_by: string
+          currency: string
+          description: string
+          division: string | null
+          id: string
+          paid_at: string | null
+          related_id: string | null
+          related_table: string | null
+          status: string
+          stripe_payment_intent: string | null
+          stripe_session_id: string | null
+        }
+        Insert: {
+          amount_kobo: number
+          created_at?: string
+          created_by: string
+          currency?: string
+          description: string
+          division?: string | null
+          id?: string
+          paid_at?: string | null
+          related_id?: string | null
+          related_table?: string | null
+          status?: string
+          stripe_payment_intent?: string | null
+          stripe_session_id?: string | null
+        }
+        Update: {
+          amount_kobo?: number
+          created_at?: string
+          created_by?: string
+          currency?: string
+          description?: string
+          division?: string | null
+          id?: string
+          paid_at?: string | null
+          related_id?: string | null
+          related_table?: string | null
+          status?: string
+          stripe_payment_intent?: string | null
+          stripe_session_id?: string | null
+        }
+        Relationships: []
+      }
       contact_submissions: {
         Row: {
           company: string | null
@@ -79,6 +242,41 @@ export type Database = {
           name?: string
         }
         Relationships: []
+      }
+      crm_activities: {
+        Row: {
+          activity_type: string
+          created_at: string
+          created_by: string | null
+          id: string
+          lead_id: string
+          notes: string | null
+        }
+        Insert: {
+          activity_type?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          lead_id: string
+          notes?: string | null
+        }
+        Update: {
+          activity_type?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          lead_id?: string
+          notes?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crm_activities_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "leads"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       datasets: {
         Row: {
@@ -119,6 +317,110 @@ export type Database = {
         }
         Relationships: []
       }
+      demo_day_slots: {
+        Row: {
+          created_at: string
+          demo_day_id: string
+          id: string
+          prototype_id: string
+          slot_time: string | null
+        }
+        Insert: {
+          created_at?: string
+          demo_day_id: string
+          id?: string
+          prototype_id: string
+          slot_time?: string | null
+        }
+        Update: {
+          created_at?: string
+          demo_day_id?: string
+          id?: string
+          prototype_id?: string
+          slot_time?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "demo_day_slots_demo_day_id_fkey"
+            columns: ["demo_day_id"]
+            isOneToOne: false
+            referencedRelation: "demo_days"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "demo_day_slots_prototype_id_fkey"
+            columns: ["prototype_id"]
+            isOneToOne: false
+            referencedRelation: "prototypes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      demo_days: {
+        Row: {
+          created_at: string
+          event_date: string
+          id: string
+          status: string
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          event_date: string
+          id?: string
+          status?: string
+          title: string
+        }
+        Update: {
+          created_at?: string
+          event_date?: string
+          id?: string
+          status?: string
+          title?: string
+        }
+        Relationships: []
+      }
+      deployments: {
+        Row: {
+          created_at: string
+          deployed_by: string | null
+          environment: string
+          id: string
+          notes: string | null
+          status: string
+          tech_project_id: string
+          version: string
+        }
+        Insert: {
+          created_at?: string
+          deployed_by?: string | null
+          environment?: string
+          id?: string
+          notes?: string | null
+          status?: string
+          tech_project_id: string
+          version: string
+        }
+        Update: {
+          created_at?: string
+          deployed_by?: string | null
+          environment?: string
+          id?: string
+          notes?: string | null
+          status?: string
+          tech_project_id?: string
+          version?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deployments_tech_project_id_fkey"
+            columns: ["tech_project_id"]
+            isOneToOne: false
+            referencedRelation: "tech_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       divisions: {
         Row: {
           accent: string
@@ -143,6 +445,42 @@ export type Database = {
           slug?: string
           sort_order?: number
           tagline?: string | null
+        }
+        Relationships: []
+      }
+      document_library: {
+        Row: {
+          created_at: string
+          description: string | null
+          division: string | null
+          file_path: string
+          file_type: string | null
+          id: string
+          owner_id: string
+          size_bytes: number | null
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          division?: string | null
+          file_path: string
+          file_type?: string | null
+          id?: string
+          owner_id: string
+          size_bytes?: number | null
+          title: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          division?: string | null
+          file_path?: string
+          file_type?: string | null
+          id?: string
+          owner_id?: string
+          size_bytes?: number | null
+          title?: string
         }
         Relationships: []
       }
@@ -193,38 +531,50 @@ export type Database = {
       drivers: {
         Row: {
           created_at: string
+          current_lat: number | null
+          current_lng: number | null
           deliveries_completed: number
           full_name: string
           id: string
+          license_expiry: string | null
           license_no: string | null
           phone: string | null
           rating: number
           status: string
           updated_at: string
+          user_id: string | null
           vehicle_id: string | null
         }
         Insert: {
           created_at?: string
+          current_lat?: number | null
+          current_lng?: number | null
           deliveries_completed?: number
           full_name: string
           id?: string
+          license_expiry?: string | null
           license_no?: string | null
           phone?: string | null
           rating?: number
           status?: string
           updated_at?: string
+          user_id?: string | null
           vehicle_id?: string | null
         }
         Update: {
           created_at?: string
+          current_lat?: number | null
+          current_lng?: number | null
           deliveries_completed?: number
           full_name?: string
           id?: string
+          license_expiry?: string | null
           license_no?: string | null
           phone?: string | null
           rating?: number
           status?: string
           updated_at?: string
+          user_id?: string | null
           vehicle_id?: string | null
         }
         Relationships: [
@@ -301,6 +651,7 @@ export type Database = {
           primary_crop: string | null
           status: string
           updated_at: string
+          user_id: string | null
         }
         Insert: {
           cooperative?: string | null
@@ -315,6 +666,7 @@ export type Database = {
           primary_crop?: string | null
           status?: string
           updated_at?: string
+          user_id?: string | null
         }
         Update: {
           cooperative?: string | null
@@ -329,6 +681,7 @@ export type Database = {
           primary_crop?: string | null
           status?: string
           updated_at?: string
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -336,6 +689,44 @@ export type Database = {
             columns: ["org_id"]
             isOneToOne: false
             referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      field_images: {
+        Row: {
+          caption: string | null
+          created_at: string
+          field_id: string
+          id: string
+          source: string
+          storage_path: string
+          uploaded_by: string | null
+        }
+        Insert: {
+          caption?: string | null
+          created_at?: string
+          field_id: string
+          id?: string
+          source?: string
+          storage_path: string
+          uploaded_by?: string | null
+        }
+        Update: {
+          caption?: string | null
+          created_at?: string
+          field_id?: string
+          id?: string
+          source?: string
+          storage_path?: string
+          uploaded_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "field_images_field_id_fkey"
+            columns: ["field_id"]
+            isOneToOne: false
+            referencedRelation: "fields"
             referencedColumns: ["id"]
           },
         ]
@@ -348,6 +739,8 @@ export type Database = {
           health: number
           hectares: number
           id: string
+          lat: number | null
+          lng: number | null
           name: string
           status: string
           updated_at: string
@@ -359,6 +752,8 @@ export type Database = {
           health?: number
           hectares?: number
           id?: string
+          lat?: number | null
+          lng?: number | null
           name: string
           status?: string
           updated_at?: string
@@ -370,6 +765,8 @@ export type Database = {
           health?: number
           hectares?: number
           id?: string
+          lat?: number | null
+          lng?: number | null
           name?: string
           status?: string
           updated_at?: string
@@ -463,6 +860,7 @@ export type Database = {
           phone: string | null
           portfolio_value: number
           updated_at: string
+          user_id: string | null
         }
         Insert: {
           amount_invested?: number
@@ -474,6 +872,7 @@ export type Database = {
           phone?: string | null
           portfolio_value?: number
           updated_at?: string
+          user_id?: string | null
         }
         Update: {
           amount_invested?: number
@@ -485,15 +884,18 @@ export type Database = {
           phone?: string | null
           portfolio_value?: number
           updated_at?: string
+          user_id?: string | null
         }
         Relationships: []
       }
       leads: {
         Row: {
+          budget_max: number | null
           created_at: string
           email: string | null
           full_name: string
           id: string
+          next_follow_up_date: string | null
           notes: string | null
           owner_id: string | null
           phone: string | null
@@ -502,10 +904,12 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          budget_max?: number | null
           created_at?: string
           email?: string | null
           full_name: string
           id?: string
+          next_follow_up_date?: string | null
           notes?: string | null
           owner_id?: string | null
           phone?: string | null
@@ -514,10 +918,12 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          budget_max?: number | null
           created_at?: string
           email?: string | null
           full_name?: string
           id?: string
+          next_follow_up_date?: string | null
           notes?: string | null
           owner_id?: string | null
           phone?: string | null
@@ -611,6 +1017,56 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      mvp_checklist_items: {
+        Row: {
+          created_at: string
+          done: boolean
+          id: string
+          idea_id: string
+          task: string
+        }
+        Insert: {
+          created_at?: string
+          done?: boolean
+          id?: string
+          idea_id: string
+          task: string
+        }
+        Update: {
+          created_at?: string
+          done?: boolean
+          id?: string
+          idea_id?: string
+          task?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mvp_checklist_items_idea_id_fkey"
+            columns: ["idea_id"]
+            isOneToOne: false
+            referencedRelation: "ideas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      newsletter_subscribers: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+        }
+        Relationships: []
       }
       notifications: {
         Row: {
@@ -793,6 +1249,50 @@ export type Database = {
           },
         ]
       }
+      project_invoices: {
+        Row: {
+          amount: number
+          created_at: string
+          due_date: string | null
+          id: string
+          issued_at: string
+          milestone: string
+          paid_at: string | null
+          status: string
+          tech_project_id: string
+        }
+        Insert: {
+          amount?: number
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          issued_at?: string
+          milestone: string
+          paid_at?: string | null
+          status?: string
+          tech_project_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          issued_at?: string
+          milestone?: string
+          paid_at?: string | null
+          status?: string
+          tech_project_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_invoices_tech_project_id_fkey"
+            columns: ["tech_project_id"]
+            isOneToOne: false
+            referencedRelation: "tech_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       projects: {
         Row: {
           created_at: string
@@ -843,12 +1343,14 @@ export type Database = {
       properties: {
         Row: {
           address: string | null
+          amenities: Json
           area_sqm: number
           bathrooms: number
           bedrooms: number
           city: string | null
           created_at: string
           description: string | null
+          featured: boolean
           id: string
           org_id: string | null
           owner_id: string | null
@@ -857,15 +1359,18 @@ export type Database = {
           status: string
           title: string
           updated_at: string
+          year_built: number | null
         }
         Insert: {
           address?: string | null
+          amenities?: Json
           area_sqm?: number
           bathrooms?: number
           bedrooms?: number
           city?: string | null
           created_at?: string
           description?: string | null
+          featured?: boolean
           id?: string
           org_id?: string | null
           owner_id?: string | null
@@ -874,15 +1379,18 @@ export type Database = {
           status?: string
           title: string
           updated_at?: string
+          year_built?: number | null
         }
         Update: {
           address?: string | null
+          amenities?: Json
           area_sqm?: number
           bathrooms?: number
           bedrooms?: number
           city?: string | null
           created_at?: string
           description?: string | null
+          featured?: boolean
           id?: string
           org_id?: string | null
           owner_id?: string | null
@@ -891,6 +1399,7 @@ export type Database = {
           status?: string
           title?: string
           updated_at?: string
+          year_built?: number | null
         }
         Relationships: [
           {
@@ -898,6 +1407,104 @@ export type Database = {
             columns: ["org_id"]
             isOneToOne: false
             referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      property_images: {
+        Row: {
+          caption: string | null
+          created_at: string
+          id: string
+          position: number
+          property_id: string
+          storage_path: string
+          uploaded_by: string | null
+        }
+        Insert: {
+          caption?: string | null
+          created_at?: string
+          id?: string
+          position?: number
+          property_id: string
+          storage_path: string
+          uploaded_by?: string | null
+        }
+        Update: {
+          caption?: string | null
+          created_at?: string
+          id?: string
+          position?: number
+          property_id?: string
+          storage_path?: string
+          uploaded_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_images_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      property_units: {
+        Row: {
+          area_sqm: number
+          bathrooms: number
+          bedrooms: number
+          created_at: string
+          floor: number | null
+          id: string
+          property_id: string
+          rent_amount: number
+          status: string
+          tenant_id: string | null
+          unit_number: string
+          updated_at: string
+        }
+        Insert: {
+          area_sqm?: number
+          bathrooms?: number
+          bedrooms?: number
+          created_at?: string
+          floor?: number | null
+          id?: string
+          property_id: string
+          rent_amount?: number
+          status?: string
+          tenant_id?: string | null
+          unit_number: string
+          updated_at?: string
+        }
+        Update: {
+          area_sqm?: number
+          bathrooms?: number
+          bedrooms?: number
+          created_at?: string
+          floor?: number | null
+          id?: string
+          property_id?: string
+          rent_amount?: number
+          status?: string
+          tenant_id?: string | null
+          unit_number?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "property_units_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "property_units_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
             referencedColumns: ["id"]
           },
         ]
@@ -940,8 +1547,63 @@ export type Database = {
           },
         ]
       }
+      route_stops: {
+        Row: {
+          address: string
+          completed: boolean
+          completed_at: string | null
+          created_at: string
+          id: string
+          lat: number | null
+          lng: number | null
+          route_id: string
+          sequence: number
+          shipment_id: string | null
+        }
+        Insert: {
+          address: string
+          completed?: boolean
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          lat?: number | null
+          lng?: number | null
+          route_id: string
+          sequence?: number
+          shipment_id?: string | null
+        }
+        Update: {
+          address?: string
+          completed?: boolean
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          lat?: number | null
+          lng?: number | null
+          route_id?: string
+          sequence?: number
+          shipment_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "route_stops_route_id_fkey"
+            columns: ["route_id"]
+            isOneToOne: false
+            referencedRelation: "routes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "route_stops_shipment_id_fkey"
+            columns: ["shipment_id"]
+            isOneToOne: false
+            referencedRelation: "shipments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       routes: {
         Row: {
+          assigned_driver_id: string | null
           created_at: string
           destination: string
           distance_km: number
@@ -952,8 +1614,10 @@ export type Database = {
           status: string
           stops: number
           updated_at: string
+          waypoints: Json
         }
         Insert: {
+          assigned_driver_id?: string | null
           created_at?: string
           destination: string
           distance_km?: number
@@ -964,8 +1628,10 @@ export type Database = {
           status?: string
           stops?: number
           updated_at?: string
+          waypoints?: Json
         }
         Update: {
+          assigned_driver_id?: string | null
           created_at?: string
           destination?: string
           distance_km?: number
@@ -976,8 +1642,17 @@ export type Database = {
           status?: string
           stops?: number
           updated_at?: string
+          waypoints?: Json
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "routes_assigned_driver_id_fkey"
+            columns: ["assigned_driver_id"]
+            isOneToOne: false
+            referencedRelation: "drivers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       sensor_data: {
         Row: {
@@ -1014,17 +1689,61 @@ export type Database = {
           },
         ]
       }
+      shipment_events: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          note: string | null
+          shipment_id: string
+          status: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          note?: string | null
+          shipment_id: string
+          status: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          note?: string | null
+          shipment_id?: string
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shipment_events_shipment_id_fkey"
+            columns: ["shipment_id"]
+            isOneToOne: false
+            referencedRelation: "shipments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       shipments: {
         Row: {
           cargo: string | null
           created_at: string
           customer: string
+          delivered_at: string | null
           driver_id: string | null
           dropoff_city: string | null
+          dropoff_lat: number | null
+          dropoff_lng: number | null
           eta: string | null
           id: string
           owner_id: string | null
           pickup_city: string | null
+          pickup_lat: number | null
+          pickup_lng: number | null
+          pod_notes: string | null
+          pod_photo_url: string | null
+          pod_signature_name: string | null
+          priority: string
           reference: string
           route_id: string | null
           status: string
@@ -1036,12 +1755,21 @@ export type Database = {
           cargo?: string | null
           created_at?: string
           customer: string
+          delivered_at?: string | null
           driver_id?: string | null
           dropoff_city?: string | null
+          dropoff_lat?: number | null
+          dropoff_lng?: number | null
           eta?: string | null
           id?: string
           owner_id?: string | null
           pickup_city?: string | null
+          pickup_lat?: number | null
+          pickup_lng?: number | null
+          pod_notes?: string | null
+          pod_photo_url?: string | null
+          pod_signature_name?: string | null
+          priority?: string
           reference: string
           route_id?: string | null
           status?: string
@@ -1053,12 +1781,21 @@ export type Database = {
           cargo?: string | null
           created_at?: string
           customer?: string
+          delivered_at?: string | null
           driver_id?: string | null
           dropoff_city?: string | null
+          dropoff_lat?: number | null
+          dropoff_lng?: number | null
           eta?: string | null
           id?: string
           owner_id?: string | null
           pickup_city?: string | null
+          pickup_lat?: number | null
+          pickup_lng?: number | null
+          pod_notes?: string | null
+          pod_photo_url?: string | null
+          pod_signature_name?: string | null
+          priority?: string
           reference?: string
           route_id?: string | null
           status?: string
@@ -1130,39 +1867,95 @@ export type Database = {
           },
         ]
       }
+      tech_project_documents: {
+        Row: {
+          created_at: string
+          file_path: string
+          id: string
+          mime_type: string | null
+          name: string
+          size_bytes: number | null
+          tech_project_id: string
+          uploaded_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          file_path: string
+          id?: string
+          mime_type?: string | null
+          name: string
+          size_bytes?: number | null
+          tech_project_id: string
+          uploaded_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          file_path?: string
+          id?: string
+          mime_type?: string | null
+          name?: string
+          size_bytes?: number | null
+          tech_project_id?: string
+          uploaded_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "tech_project_documents_tech_project_id_fkey"
+            columns: ["tech_project_id"]
+            isOneToOne: false
+            referencedRelation: "tech_projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tech_projects: {
         Row: {
+          budget: number | null
+          client_email: string | null
           client_name: string | null
           created_at: string
+          due_date: string | null
           id: string
           metadata: Json
           org_id: string | null
           owner_id: string | null
           progress: number
+          sla_hours: number | null
+          start_date: string | null
           status: string
           title: string
           updated_at: string
         }
         Insert: {
+          budget?: number | null
+          client_email?: string | null
           client_name?: string | null
           created_at?: string
+          due_date?: string | null
           id?: string
           metadata?: Json
           org_id?: string | null
           owner_id?: string | null
           progress?: number
+          sla_hours?: number | null
+          start_date?: string | null
           status?: string
           title: string
           updated_at?: string
         }
         Update: {
+          budget?: number | null
+          client_email?: string | null
           client_name?: string | null
           created_at?: string
+          due_date?: string | null
           id?: string
           metadata?: Json
           org_id?: string | null
           owner_id?: string | null
           progress?: number
+          sla_hours?: number | null
+          start_date?: string | null
           status?: string
           title?: string
           updated_at?: string
@@ -1179,21 +1972,30 @@ export type Database = {
       }
       tech_tasks: {
         Row: {
+          assignee_email: string | null
           created_at: string
+          description: string | null
+          due_date: string | null
           id: string
           status: string
           tech_project_id: string
           title: string
         }
         Insert: {
+          assignee_email?: string | null
           created_at?: string
+          description?: string | null
+          due_date?: string | null
           id?: string
           status?: string
           tech_project_id: string
           title: string
         }
         Update: {
+          assignee_email?: string | null
           created_at?: string
+          description?: string | null
+          due_date?: string | null
           id?: string
           status?: string
           tech_project_id?: string
@@ -1215,12 +2017,18 @@ export type Database = {
           email: string | null
           full_name: string
           id: string
+          lease_document_path: string | null
           lease_end: string | null
+          lease_sent_at: string | null
+          lease_signature_status: string
+          lease_signed_at: string | null
+          lease_signed_name: string | null
           lease_start: string | null
           payment_status: string
           phone: string | null
           property_id: string | null
           rent_amount: number
+          unit_id: string | null
           updated_at: string
         }
         Insert: {
@@ -1228,12 +2036,18 @@ export type Database = {
           email?: string | null
           full_name: string
           id?: string
+          lease_document_path?: string | null
           lease_end?: string | null
+          lease_sent_at?: string | null
+          lease_signature_status?: string
+          lease_signed_at?: string | null
+          lease_signed_name?: string | null
           lease_start?: string | null
           payment_status?: string
           phone?: string | null
           property_id?: string | null
           rent_amount?: number
+          unit_id?: string | null
           updated_at?: string
         }
         Update: {
@@ -1241,12 +2055,18 @@ export type Database = {
           email?: string | null
           full_name?: string
           id?: string
+          lease_document_path?: string | null
           lease_end?: string | null
+          lease_sent_at?: string | null
+          lease_signature_status?: string
+          lease_signed_at?: string | null
+          lease_signed_name?: string | null
           lease_start?: string | null
           payment_status?: string
           phone?: string | null
           property_id?: string | null
           rent_amount?: number
+          unit_id?: string | null
           updated_at?: string
         }
         Relationships: [
@@ -1255,6 +2075,13 @@ export type Database = {
             columns: ["property_id"]
             isOneToOne: false
             referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tenants_unit_id_fkey"
+            columns: ["unit_id"]
+            isOneToOne: false
+            referencedRelation: "property_units"
             referencedColumns: ["id"]
           },
         ]
@@ -1333,13 +2160,59 @@ export type Database = {
         }
         Relationships: []
       }
+      vehicle_maintenance_logs: {
+        Row: {
+          cost: number | null
+          created_at: string
+          created_by: string | null
+          id: string
+          next_due: string | null
+          notes: string | null
+          performed_at: string
+          service_type: string
+          vehicle_id: string
+        }
+        Insert: {
+          cost?: number | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          next_due?: string | null
+          notes?: string | null
+          performed_at?: string
+          service_type: string
+          vehicle_id: string
+        }
+        Update: {
+          cost?: number | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          next_due?: string | null
+          notes?: string | null
+          performed_at?: string
+          service_type?: string
+          vehicle_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vehicle_maintenance_logs_vehicle_id_fkey"
+            columns: ["vehicle_id"]
+            isOneToOne: false
+            referencedRelation: "vehicles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       vehicles: {
         Row: {
           capacity_kg: number
           created_at: string
           fuel_level: number
           id: string
+          insurance_expiry: string | null
           last_service: string | null
+          next_service_due: string | null
           odometer_km: number
           plate: string
           status: string
@@ -1351,7 +2224,9 @@ export type Database = {
           created_at?: string
           fuel_level?: number
           id?: string
+          insurance_expiry?: string | null
           last_service?: string | null
+          next_service_due?: string | null
           odometer_km?: number
           plate: string
           status?: string
@@ -1363,7 +2238,9 @@ export type Database = {
           created_at?: string
           fuel_level?: number
           id?: string
+          insurance_expiry?: string | null
           last_service?: string | null
+          next_service_due?: string | null
           odometer_km?: number
           plate?: string
           status?: string
@@ -1418,6 +2295,27 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      track_shipment: {
+        Args: { p_tracking_code: string }
+        Returns: {
+          delivered_at: string
+          dropoff_city: string
+          eta: string
+          pickup_city: string
+          pod_photo_url: string
+          priority: string
+          reference: string
+          status: string
+        }[]
+      }
+      track_shipment_events: {
+        Args: { p_tracking_code: string }
+        Returns: {
+          created_at: string
+          note: string
+          status: string
+        }[]
       }
       user_org: { Args: { _user_id: string }; Returns: string }
     }
