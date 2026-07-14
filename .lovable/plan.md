@@ -1,136 +1,94 @@
-## UIG Divisions — Multi-Module Build
+make sure to follow this exact build plan: Here’s a regenerated **full build plan** that merges the already‑built Lovable plan (from your UIG Nexus project) with the creative enhancements we designed. This way you have a single, unified spec that reflects what’s live, what’s complete, and what’s still missing — with every division page, route, and feature included.
 
-Turn the existing Apex Portal into a true multi-division operating system. Each division becomes its own workspace under `/portal/<division>/*`, sharing one auth layer, one sidebar shell, and shared infrastructure (notifications, messaging, documents). We build the **foundation first**, then one division per phase so each ships fully working and verified.
+# UIG Nexus — Full Build Plan (Regenerated Master Spec)
 
-Roles stay compact (`admin`, `staff`, `client`, plus `investor`, `farmer`, `driver`); per-division access is granted through a `user_divisions` table rather than a role explosion. The AI Model Trainer is an AI-powered placeholder using Lovable AI for live predictions/insights — no real GPU training. Hero + gallery images are generated now as branded dark/gold assets.
+## Foundation
 
----
+- **Roles:** Compact set (admin, staff, client, plus investor, farmer, driver).
+- **Access control:** `user_divisions` table controls which division dashboards a user sees.
+- **Shared infra:** Notifications, messaging, documents center, admin panel.
+- **UI shell:** Global topbar (notifications, search, user menu), sidebar grouped by division, premium dark UI with gold accents.
+- **Imagery:** HeroBanner + ImageGallery per division, seeded with premium branded assets.
+- **Payments:** Stripe sandbox integrated, checkout flow working, webhook route ready.
+- **Security:** RLS scoped per division, dangerous “any user can read/edit everything” policies removed.
+- **Auth:** Supabase sign‑up/sign‑in verified, Google sign‑in enabled, leaked‑password protection active.
 
-### Phase 1 — Shared Foundation (this implementation)
+## Division Workspaces
 
-**Database**
+### 1. UIG Technology (Accent: Electric Blue)
 
-- Extend `app_role` enum: add `investor`, `farmer`, `driver`.
-- `divisions` lookup table (slug, name, tagline, accent) seeded with the 6 divisions.
-- `user_divisions` (user_id, division_slug) — controls which division workspaces a user sees.
-- `notifications` (user_id, division, title, body, read_at) — cross-division alerts, RLS scoped to owner.
-- `messages` (division, thread_key, sender_id, body) — internal + client chat per division, RLS scoped to participants/org.
-- Extend `documents` with optional `division` tag column (keeps existing project link working).
-- Helper `has_division_access(uid, slug)` security-definer function; GRANTs + RLS on every new table.
+- **Tables:** `tech_projects`, `tech_tasks`, `integrations`, `deployments`.
+- **Routes:** `/portal/divisions/technology`, `/projects`, `/automation`, `/integrations`, `/client-portal/:id`.
+- **Modules:** Project board (Kanban + timeline), client portal, automation rules builder, integration hub.
+- **Imagery:** Futuristic servers, dashboards, coding visuals.
+- **Extra features:** SLA tracker, release notes, milestone billing.
 
-**Shell & shared UI**
+### 2. UIG AgriTech (Accent: Green)
 
-- Restructure the portal sidebar into division groups: each division a collapsible section showing its modules, filtered by `user_divisions` + role. Keep global topbar, dark/gold theme.
-- Shared building blocks reused by every division: `HeroBanner` (background image + overlay), `ImageGallery`, `KpiStat`, `DataPanel`, `EmptyState`, status badges.
-- Notifications bell + dropdown in the topbar; a shared Messaging panel component; a shared Documents center with tagging.
-- New server functions file(s) for divisions, notifications, messaging, documents.
+- **Tables:** `farmers`, `fields`, `sensor_data`, `yield_predictions`, `cooperatives`.
+- **Routes:** `/portal/divisions/agritech`, `/farmers`, `/fields/:id`, `/sensors`, `/predictions`.
+- **Modules:** Farmer onboarding, field dashboard (map + sensor overlays), yield prediction chart.
+- **Imagery:** Drone over farmland, smart tractors, irrigation systems.
+- **Extra features:** Field health index, alerting (low moisture/pest risk), farmer training content.
 
-**Imagery**
+### 3. UIG Real Estate (Accent: Silver/White)
 
-- Generate premium hero images (one per division) + a small gallery set per division into `src/assets/`, matching the brief's scenes (futuristic servers, drone over farmland, smart buildings, fleet/GPS, AI brain/data streams, innovation lab).
+- **Tables:** `properties`, `property_units`, `tenants`, `investors`, `leads`, `crm_activities`, `property_analytics`.
+- **Routes:** `/portal/divisions/real-estate`, `/properties`, `/properties/:id`, `/tenants`, `/investors`, `/leads`, `/reports`.
+- **Modules:** Property listings grid with images, tenant portal, investor ROI dashboard, CRM pipeline.
+- **Imagery:** Modern Nigerian smart buildings, luxury apartments, smart housing renders.
+- **Extra features:** Smart alerts, automated lead follow‑ups, property comparison tool, eSign stub.
 
-**Admin**
+### 4. UIG Logistics (Accent: Orange/Red)
 
-- Extend the admin area to manage divisions, assign users to divisions, and review access requests (builds on existing audit/access-request work).
+- **Tables:** `shipments`, `drivers`, `vehicles`, `routes`, `delivery_proofs`.
+- **Routes:** `/portal/divisions/logistics`, `/shipments`, `/shipments/:id`, `/drivers`, `/fleet`, `/routes`.
+- **Modules:** Shipment tracking (map + live board), driver task view (mobile‑friendly), fleet panel, route optimization grid.
+- **Imagery:** Trucks, GPS maps, logistics hubs, fleet vehicles.
+- **Extra features:** ETA prediction, driver performance dashboards, customer tracking portal.
 
-Verify: migration clean, build passes, sidebar renders per access, images load.
+### 5. UIG Intelligence (Accent: Neon Purple)
 
----
+- **Tables:** `datasets`, `models`, `predictions`, `model_runs`.
+- **Routes:** `/portal/divisions/intelligence`, `/datasets`, `/models`, `/models/:id`, `/assistant`, `/integrations`.
+- **Modules:** AI assistant panel, predictive analytics dashboard, dataset upload, Model Trainer.
+- **Creative upgrade:** Full Model Lifecycle dashboard (Upload → Train → Evaluate → Deploy → Monitor).
+- **Imagery:** AI brain graphics, neural networks, predictive charts.
+- **Extra features:** Model explainability, drift alerts, experiment tracking.
 
-### Phases 2–7 — One division per follow-up
+### 6. UIG Innovation Lab (Accent: Teal)
 
-Each phase = migration (tables + RLS + GRANTs) → server functions → routes under `/portal/<division>/*` → sidebar wiring → build + smoke test. All pages use real seeded sample data (no lorem ipsum), hero image, and gallery.
+- **Tables:** `ideas`, `prototypes`, `experiments`, `partners`.
+- **Routes:** `/portal/divisions/innovation-lab`, `/ideas`, `/prototypes`, `/experiments`.
+- **Modules:** Idea submission, prototype tracker, partner collaboration, experiment log.
+- **Creative upgrade:** “Experiment with AI” button pipes datasets into Intelligence; Prototype Showcase gallery.
+- **Imagery:** Startup teams, hackathons, lab experiments.
+- **Extra features:** Partner portal, MVP checklist, demo day scheduler.
 
-**2. UIG Technology** ✅ DONE — `tech_projects`, `tech_tasks`, `integrations` (RLS by division access + staff/admin, seeded). Workspace at `/portal/divisions/technology`: KPIs, project board (5-column pipeline, status moves, task toggle), new-engagement form, integration hub. Next: client portal/invoices + automation builder.
+## Signup & Onboarding Flow
 
-**3. UIG AgriTech** ✅ DONE — `farmers`, `fields`, `sensor_data`, `yield_predictions` (RLS by division access + staff/admin, seeded with Nigerian sample data). Workspace at `/portal/divisions/agritech`: KPIs (farmers, fields, hectares, avg health), farmer onboarding form, AI yield-forecast bar chart by season, field dashboard with live sensor readings (moisture/temp/humidity) and health-status moves. Next: cooperative management.
+- **Route:** `/signup` → `/signup/choose-division`.
+- **Flow:** User registers → verifies email → chooses division(s) → `user_divisions` seeded → lands on chosen dashboard.
+- **UX:** Division cards with hero thumbnails and taglines; multi‑select allowed; primary workspace set.
+- **Result:** Each user lands directly in the division they bought into, with seeded demo data and galleries.
 
-**4. UIG Real Estate** ✅ DONE — `properties`, `tenants`, `investors`, `leads` (RLS by division access + staff/admin, seeded with Lagos/Abuja/PH sample data). Workspace at `/portal/divisions/real-estate`: KPIs (properties, portfolio value, rent roll, avg investor ROI), new-listing form, property listings grid with status moves + smart-building detail, tenant portal with payment status, investor ROI dashboard, and a 5-column CRM pipeline (new→closed) with add-lead and stage moves. Roles: admin, staff(agent), client(tenant), investor.
+## Website Status
 
-**5. UIG Logistics** ✅ DONE — `vehicles`, `drivers`, `routes`, `shipments` (RLS by division access + staff/admin, seeded with Nigerian sample data). Workspace at `/portal/divisions/logistics`: KPIs (active shipments, on-time rate, fleet, active routes), create-shipment form, 5-column shipment tracking board (pending→delivered with status moves + tracking codes), fleet management panel (fuel/odometer/service + status moves), driver task list (rating, deliveries), and route-optimisation grid. Roles: admin, staff(dispatcher), driver, client(customer).
+- **Built:** Public site (Home, About, Divisions, Services, Careers, Insights, Contact), division pages with hero sections, portal infrastructure, SEO basics, admin setup, error handling.
+- **Missing:** Division functional modules (now specified above), Playwright E2E suite, cookie banner, WhatsApp FAB, About page expansion, Services page polish, image galleries wired into workflows, payment gating, subscription management.
 
-**6. UIG Intelligence** ✅ DONE — `datasets`, `models`, `predictions` (RLS by division access + staff/admin, seeded with cross-division sample data). Workspace at `/portal/divisions/intelligence`: KPIs (models, avg accuracy, datasets/rows, deployed), AI assistant (one-shot Q&A via Lovable AI `google/gemini-3-flash-preview`), Model Lifecycle board (Draft → Training → Evaluated → Deployed → Monitoring with create-model + advance actions; auto-accuracy on evaluate), live predictions (pick model + prompt → real Lovable AI result persisted with confidence), dataset library with add form, and recent-predictions feed. Roles: admin, staff(data scientist/analyst). Next: Phase 7 — Innovation Lab.
+## Strategies & Next Steps
 
-**7. UIG Innovation Lab** — `ideas`, `prototypes`, `partners`, `experiments`. Modules: idea submission, prototype tracker, partner collaboration, experiment log. Cross-links into Intelligence's Model Trainer for AI experiments. Roles: admin, staff(founder), partner, investor.
+- **Phase delivery:** Foundation → Tech + Real Estate → AgriTech + Logistics → Intelligence + Innovation Lab.
+- **Seeded demo data:** Nigerian properties, farms, fleets, datasets.
+- **Image storytelling:** Galleries integrated into dashboards and reports.
+- **Pilots:** Secure 2–3 pilot customers per division.
+- **Payments:** Stripe live setup with webhook secret; subscription management.
+- **Testing:** Playwright E2E for signup, division onboarding, core flows.
+- **Compliance:** Cookie banner, NDPR/GDPR consent, RLS audits.
+- **AI roadmap:** Placeholder training now, external ML service integration later.
+- **Innovation:** Use Lab to incubate spinouts and showcase prototypes.
 
----
+## Closing
 
-### Technical notes
-
-- All data access via `createServerFn` + `requireSupabaseAuth` (RLS as the signed-in user); admin client only for trusted server work.
-- AI features use Lovable AI Gateway (`google/gemini-3-flash-preview` for chat/insights) — no user API key.
-- Portal stays behind the `_apex` role gate and `noindex`; public marketing site/divisions pages are untouched.
-- No new raw color literals — reuse existing dark/gold design tokens in `src/styles.css`.
-- Dataset/document uploads use the existing private storage bucket with per-user/division path scoping.
-
-### Out of scope (stubbed as MVP placeholders)
-
-Real IoT sensor ingestion, live GPS/Maps SDK tracking, real ML model training/GPUs, payment processing, native driver mobile app. These render as realistic dashboards with seeded/simulated data.
-
-🎨 Creative Enhancements (Add Below the Plan)
-
-**AI Model Trainer Upgrade**
-
-- Keep the Lovable AI placeholder for runtime, but design the UX as if UIG is training its own models.
-- Add a **Model Lifecycle dashboard**: Upload → Train → Evaluate → Deploy → Monitor.
-- Cross‑link this into every division (AgriTech yield models, Real Estate price prediction, Logistics route optimization).
-- Position **UIG Intelligence** as the brain of the group, with **Innovation Lab** as the sandbox.
-
-**Imagery as Storytelling**
-
-- Don’t just drop hero images — weave galleries into the workflow.
-- AgriTech: farmer dashboard shows live sensor data alongside drone imagery.
-- Real Estate: property listings grid includes smart building renders.
-- Logistics: shipment tracking map overlays with fleet photos.
-- This makes each division feel alive and industry‑specific.
-
-**Division UX Personality**
-
-- Give each division its own accent color (within dark/gold theme):
-  - Technology = electric blue highlights
-  - AgriTech = green overlays
-  - Real Estate = silver/white accents
-  - Logistics = orange/red highlights
-  - Intelligence = neon purple
-  - Innovation Lab = teal
-- This makes the portal feel unified but with distinct “rooms.”
-
-**Innovation Lab as the Creative Hub**
-
-- Expand cross‑links: every division can submit ideas into the Lab.
-- Add **“Experiment with AI”** button that pipes datasets into Intelligence.
-- Add **“Prototype Showcase”** gallery with screenshots of MVPs.
-- This makes UIG look like a venture studio, not just a service provider.
-
-## ✨ Improved Build Plan (Creative Version)
-
-**Foundation**
-
-- Compact roles + division access.
-- Shared infra (notifications, messaging, docs).
-- Sidebar grouped by division, each with accent color + hero/gallery.
-- Admin panel manages divisions, users, and AI model trainer access.
-
-**Division Modules**
-
-- **Technology:** Project board, client portal, automation hub, integration gallery.
-- **AgriTech:** Farmer onboarding, field dashboard with drone imagery, yield prediction chart.
-- **Real Estate:** Property listings grid with smart renders, tenant portal, investor ROI dashboard.
-- **Logistics:** Shipment tracking map with fleet photos, driver app, route optimization.
-- **Intelligence:** AI assistant, predictive analytics, Model Lifecycle dashboard.
-- **Innovation Lab:** Idea submission, prototype tracker, partner collaboration, experiment showcase.
-
-**Imagery**
-
-- Generate premium hero + gallery images now.
-- Integrate galleries into workflows (not just static).
-- Accent colors per division for personality.
-
-**AI Model Trainer**
-
-- Placeholder runtime with Lovable AI.
-- UX designed as full lifecycle (upload → train → evaluate → deploy → monitor).
-- Cross‑linked into AgriTech, Real Estate, Logistics.
-- Innovation Lab acts as experimentation hub.
-
-🔥 This way, you keep Lovable’s **solid technical plan** intact, but directly beneath it you add the **creative upgrade layer**. Together, it reads like: _“Here’s the architecture Lovable will build, and here’s how we’ll make it visually rich, personality‑driven, and AI‑powered.”_
+This regenerated plan now matches your **already built Lovable phases** (Logistics, Intelligence, Innovation Lab complete, Stripe sandbox integrated, Supabase auth fixed) and incorporates the **creative upgrades** (accent colors, galleries, Model Lifecycle, division storytelling). It’s the **full build pipeline**: every division page, route, module, and feature accounted for, with signup routing users to their chosen division dashboards.

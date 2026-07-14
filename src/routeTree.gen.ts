@@ -29,6 +29,7 @@ import { Route as PortalSignupRouteImport } from './routes/portal.signup'
 import { Route as PortalResetPasswordRouteImport } from './routes/portal.reset-password'
 import { Route as PortalLoginRouteImport } from './routes/portal.login'
 import { Route as PortalForgotPasswordRouteImport } from './routes/portal.forgot-password'
+import { Route as PortalChooseDivisionRouteImport } from './routes/portal.choose-division'
 import { Route as InsightsSlugRouteImport } from './routes/insights.$slug'
 import { Route as DivisionsTechnologyRouteImport } from './routes/divisions.technology'
 import { Route as DivisionsRealEstateRouteImport } from './routes/divisions.real-estate'
@@ -39,8 +40,8 @@ import { Route as DivisionsAgritechRouteImport } from './routes/divisions.agrite
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as PortalSignupIndexRouteImport } from './routes/portal.signup.index'
-import { Route as PortalSignupChooseDivisionRouteImport } from './routes/portal.signup.choose-division'
 import { Route as ApiStripeWebhookRouteImport } from './routes/api.stripe.webhook'
+import { Route as ApiPublicStripeWebhookRouteImport } from './routes/api/public/stripe-webhook'
 import { Route as ApexPortalSettingsRouteImport } from './routes/_apex.portal.settings'
 import { Route as ApexPortalMessagesRouteImport } from './routes/_apex.portal.messages'
 import { Route as ApexPortalDriverTasksRouteImport } from './routes/_apex.portal.driver-tasks'
@@ -189,6 +190,11 @@ const PortalForgotPasswordRoute = PortalForgotPasswordRouteImport.update({
   path: '/forgot-password',
   getParentRoute: () => PortalRoute,
 } as any)
+const PortalChooseDivisionRoute = PortalChooseDivisionRouteImport.update({
+  id: '/choose-division',
+  path: '/choose-division',
+  getParentRoute: () => PortalRoute,
+} as any)
 const InsightsSlugRoute = InsightsSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -241,15 +247,14 @@ const PortalSignupIndexRoute = PortalSignupIndexRouteImport.update({
   path: '/',
   getParentRoute: () => PortalSignupRoute,
 } as any)
-const PortalSignupChooseDivisionRoute =
-  PortalSignupChooseDivisionRouteImport.update({
-    id: '/choose-division',
-    path: '/choose-division',
-    getParentRoute: () => PortalSignupRoute,
-  } as any)
 const ApiStripeWebhookRoute = ApiStripeWebhookRouteImport.update({
   id: '/api/stripe/webhook',
   path: '/api/stripe/webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicStripeWebhookRoute = ApiPublicStripeWebhookRouteImport.update({
+  id: '/api/public/stripe-webhook',
+  path: '/api/public/stripe-webhook',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApexPortalSettingsRoute = ApexPortalSettingsRouteImport.update({
@@ -552,6 +557,7 @@ export interface FileRoutesByFullPath {
   '/divisions/real-estate': typeof DivisionsRealEstateRoute
   '/divisions/technology': typeof DivisionsTechnologyRoute
   '/insights/$slug': typeof InsightsSlugRoute
+  '/portal/choose-division': typeof PortalChooseDivisionRoute
   '/portal/forgot-password': typeof PortalForgotPasswordRoute
   '/portal/login': typeof PortalLoginRoute
   '/portal/reset-password': typeof PortalResetPasswordRoute
@@ -566,8 +572,8 @@ export interface FileRoutesByFullPath {
   '/portal/driver-tasks': typeof ApexPortalDriverTasksRoute
   '/portal/messages': typeof ApexPortalMessagesRoute
   '/portal/settings': typeof ApexPortalSettingsRoute
+  '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/api/stripe/webhook': typeof ApiStripeWebhookRoute
-  '/portal/signup/choose-division': typeof PortalSignupChooseDivisionRoute
   '/portal/signup/': typeof PortalSignupIndexRoute
   '/portal/admin/access-requests': typeof ApexPortalAdminAccessRequestsRoute
   '/portal/admin/users': typeof ApexPortalAdminUsersRoute
@@ -632,6 +638,7 @@ export interface FileRoutesByTo {
   '/divisions/real-estate': typeof DivisionsRealEstateRoute
   '/divisions/technology': typeof DivisionsTechnologyRoute
   '/insights/$slug': typeof InsightsSlugRoute
+  '/portal/choose-division': typeof PortalChooseDivisionRoute
   '/portal/forgot-password': typeof PortalForgotPasswordRoute
   '/portal/login': typeof PortalLoginRoute
   '/portal/reset-password': typeof PortalResetPasswordRoute
@@ -645,8 +652,8 @@ export interface FileRoutesByTo {
   '/portal/driver-tasks': typeof ApexPortalDriverTasksRoute
   '/portal/messages': typeof ApexPortalMessagesRoute
   '/portal/settings': typeof ApexPortalSettingsRoute
+  '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/api/stripe/webhook': typeof ApiStripeWebhookRoute
-  '/portal/signup/choose-division': typeof PortalSignupChooseDivisionRoute
   '/portal/signup': typeof PortalSignupIndexRoute
   '/portal/admin/access-requests': typeof ApexPortalAdminAccessRequestsRoute
   '/portal/admin/users': typeof ApexPortalAdminUsersRoute
@@ -710,6 +717,7 @@ export interface FileRoutesById {
   '/divisions/real-estate': typeof DivisionsRealEstateRoute
   '/divisions/technology': typeof DivisionsTechnologyRoute
   '/insights/$slug': typeof InsightsSlugRoute
+  '/portal/choose-division': typeof PortalChooseDivisionRoute
   '/portal/forgot-password': typeof PortalForgotPasswordRoute
   '/portal/login': typeof PortalLoginRoute
   '/portal/reset-password': typeof PortalResetPasswordRoute
@@ -724,8 +732,8 @@ export interface FileRoutesById {
   '/_apex/portal/driver-tasks': typeof ApexPortalDriverTasksRoute
   '/_apex/portal/messages': typeof ApexPortalMessagesRoute
   '/_apex/portal/settings': typeof ApexPortalSettingsRoute
+  '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/api/stripe/webhook': typeof ApiStripeWebhookRoute
-  '/portal/signup/choose-division': typeof PortalSignupChooseDivisionRoute
   '/portal/signup/': typeof PortalSignupIndexRoute
   '/_apex/portal/admin/access-requests': typeof ApexPortalAdminAccessRequestsRoute
   '/_apex/portal/admin/users': typeof ApexPortalAdminUsersRoute
@@ -793,6 +801,7 @@ export interface FileRouteTypes {
     | '/divisions/real-estate'
     | '/divisions/technology'
     | '/insights/$slug'
+    | '/portal/choose-division'
     | '/portal/forgot-password'
     | '/portal/login'
     | '/portal/reset-password'
@@ -807,8 +816,8 @@ export interface FileRouteTypes {
     | '/portal/driver-tasks'
     | '/portal/messages'
     | '/portal/settings'
+    | '/api/public/stripe-webhook'
     | '/api/stripe/webhook'
-    | '/portal/signup/choose-division'
     | '/portal/signup/'
     | '/portal/admin/access-requests'
     | '/portal/admin/users'
@@ -873,6 +882,7 @@ export interface FileRouteTypes {
     | '/divisions/real-estate'
     | '/divisions/technology'
     | '/insights/$slug'
+    | '/portal/choose-division'
     | '/portal/forgot-password'
     | '/portal/login'
     | '/portal/reset-password'
@@ -886,8 +896,8 @@ export interface FileRouteTypes {
     | '/portal/driver-tasks'
     | '/portal/messages'
     | '/portal/settings'
+    | '/api/public/stripe-webhook'
     | '/api/stripe/webhook'
-    | '/portal/signup/choose-division'
     | '/portal/signup'
     | '/portal/admin/access-requests'
     | '/portal/admin/users'
@@ -950,6 +960,7 @@ export interface FileRouteTypes {
     | '/divisions/real-estate'
     | '/divisions/technology'
     | '/insights/$slug'
+    | '/portal/choose-division'
     | '/portal/forgot-password'
     | '/portal/login'
     | '/portal/reset-password'
@@ -964,8 +975,8 @@ export interface FileRouteTypes {
     | '/_apex/portal/driver-tasks'
     | '/_apex/portal/messages'
     | '/_apex/portal/settings'
+    | '/api/public/stripe-webhook'
     | '/api/stripe/webhook'
-    | '/portal/signup/choose-division'
     | '/portal/signup/'
     | '/_apex/portal/admin/access-requests'
     | '/_apex/portal/admin/users'
@@ -1034,6 +1045,7 @@ export interface RootRouteChildren {
   DivisionsTechnologyRoute: typeof DivisionsTechnologyRoute
   DivisionsIndexRoute: typeof DivisionsIndexRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
+  ApiPublicStripeWebhookRoute: typeof ApiPublicStripeWebhookRoute
   ApiStripeWebhookRoute: typeof ApiStripeWebhookRoute
 }
 
@@ -1179,6 +1191,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PortalForgotPasswordRouteImport
       parentRoute: typeof PortalRoute
     }
+    '/portal/choose-division': {
+      id: '/portal/choose-division'
+      path: '/choose-division'
+      fullPath: '/portal/choose-division'
+      preLoaderRoute: typeof PortalChooseDivisionRouteImport
+      parentRoute: typeof PortalRoute
+    }
     '/insights/$slug': {
       id: '/insights/$slug'
       path: '/$slug'
@@ -1249,18 +1268,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PortalSignupIndexRouteImport
       parentRoute: typeof PortalSignupRoute
     }
-    '/portal/signup/choose-division': {
-      id: '/portal/signup/choose-division'
-      path: '/choose-division'
-      fullPath: '/portal/signup/choose-division'
-      preLoaderRoute: typeof PortalSignupChooseDivisionRouteImport
-      parentRoute: typeof PortalSignupRoute
-    }
     '/api/stripe/webhook': {
       id: '/api/stripe/webhook'
       path: '/api/stripe/webhook'
       fullPath: '/api/stripe/webhook'
       preLoaderRoute: typeof ApiStripeWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/stripe-webhook': {
+      id: '/api/public/stripe-webhook'
+      path: '/api/public/stripe-webhook'
+      fullPath: '/api/public/stripe-webhook'
+      preLoaderRoute: typeof ApiPublicStripeWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_apex/portal/settings': {
@@ -1797,12 +1816,10 @@ const InsightsRouteWithChildren = InsightsRoute._addFileChildren(
 )
 
 interface PortalSignupRouteChildren {
-  PortalSignupChooseDivisionRoute: typeof PortalSignupChooseDivisionRoute
   PortalSignupIndexRoute: typeof PortalSignupIndexRoute
 }
 
 const PortalSignupRouteChildren: PortalSignupRouteChildren = {
-  PortalSignupChooseDivisionRoute: PortalSignupChooseDivisionRoute,
   PortalSignupIndexRoute: PortalSignupIndexRoute,
 }
 
@@ -1811,6 +1828,7 @@ const PortalSignupRouteWithChildren = PortalSignupRoute._addFileChildren(
 )
 
 interface PortalRouteChildren {
+  PortalChooseDivisionRoute: typeof PortalChooseDivisionRoute
   PortalForgotPasswordRoute: typeof PortalForgotPasswordRoute
   PortalLoginRoute: typeof PortalLoginRoute
   PortalResetPasswordRoute: typeof PortalResetPasswordRoute
@@ -1819,6 +1837,7 @@ interface PortalRouteChildren {
 }
 
 const PortalRouteChildren: PortalRouteChildren = {
+  PortalChooseDivisionRoute: PortalChooseDivisionRoute,
   PortalForgotPasswordRoute: PortalForgotPasswordRoute,
   PortalLoginRoute: PortalLoginRoute,
   PortalResetPasswordRoute: PortalResetPasswordRoute,
@@ -1855,6 +1874,7 @@ const rootRouteChildren: RootRouteChildren = {
   DivisionsTechnologyRoute: DivisionsTechnologyRoute,
   DivisionsIndexRoute: DivisionsIndexRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
+  ApiPublicStripeWebhookRoute: ApiPublicStripeWebhookRoute,
   ApiStripeWebhookRoute: ApiStripeWebhookRoute,
 }
 export const routeTree = rootRouteImport
