@@ -363,7 +363,7 @@ export const createExperiment = createServerFn({ method: "POST" })
       model_id: data.model_id || null,
       hypothesis: data.hypothesis,
       status: "planned",
-      created_by: context.userId,
+      owner_id: context.userId,
     });
     if (error) throw new Error(error.message);
     return { ok: true };
