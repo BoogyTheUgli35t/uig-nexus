@@ -1,5 +1,5 @@
 import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
-import { ArrowLeft, Lock, LayoutGrid, Users, MapPinned, Layers, AlertTriangle } from "lucide-react";
+import { ArrowLeft, Lock, LayoutGrid, Users, MapPinned, Layers, AlertTriangle, Radio, CloudSun } from "lucide-react";
 import { getDivision } from "@/lib/divisions";
 import { useDivisionAccess } from "@/hooks/use-division-access";
 import { HeroBanner, EmptyState } from "@/components/portal/blocks";
@@ -17,6 +17,8 @@ const TABS = [
   { to: "/portal/divisions/agritech", label: "Overview", icon: LayoutGrid, exact: true },
   { to: "/portal/divisions/agritech/farmers", label: "Farmers", icon: Users },
   { to: "/portal/divisions/agritech/fields", label: "Fields", icon: MapPinned },
+  { to: "/portal/divisions/agritech/sensors", label: "Sensors", icon: Radio },
+  { to: "/portal/divisions/agritech/predictions", label: "Predictions", icon: CloudSun },
   { to: "/portal/divisions/agritech/cooperatives", label: "Cooperatives", icon: Layers },
   { to: "/portal/divisions/agritech/alerts", label: "Alerts", icon: AlertTriangle },
 ] as const;

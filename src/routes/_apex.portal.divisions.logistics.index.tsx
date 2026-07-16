@@ -23,7 +23,7 @@ function LogisticsOverview() {
     <div className="space-y-8">
       <div className="flex justify-end">
         <Link
-          to="/portal/divisions/intelligence"
+          to="/portal/divisions/intelligence/assistant"
           search={{ ask: `We have ${stats?.active ?? 0} active shipments and an on-time rate of ${stats?.onTimeRate ?? 0}%. Any patterns or risks worth flagging?` }}
           className="text-sm text-gold hover:underline"
         >

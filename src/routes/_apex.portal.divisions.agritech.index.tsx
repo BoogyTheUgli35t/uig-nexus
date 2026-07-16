@@ -65,7 +65,7 @@ function AgritechOverview() {
         title="AI yield forecast (tonnes by season)"
         action={
           <Link
-            to="/portal/divisions/intelligence"
+            to="/portal/divisions/intelligence/assistant"
             search={{ ask: "Looking at UIG AgriTech's yield forecast, what should we watch for next season?" }}
             className="text-sm text-gold hover:underline"
           >
