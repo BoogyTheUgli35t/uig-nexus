@@ -307,26 +307,48 @@ const AuditEventSchema = z.object({
     "access_request_submitted",
   ]),
   email: z.string().email().optional().nullable(),
-  user_id: z.string().uuid().optional().nullable(),
   metadata: z.record(z.string(), z.any()).optional(),
 });
 
+/**
+ * Records a portal audit event. To prevent forgery, the caller's identity is
+ * ALWAYS derived server-side from the bearer token (if present) — never trusted
+ * from the client payload. Pre-auth events (sign-in attempts, session expiry,
+ * access-denied) are logged with a null user_id and only the client-supplied
+ * email; authenticated events always overwrite email/user_id with the verified
+ * session claims.
+ */
 export const logPortalEvent = createServerFn({ method: "POST" })
   .inputValidator((i: unknown) => AuditEventSchema.parse(i))
   .handler(async ({ data }) => {
     let ip: string | null = null;
     let ua: string | null = null;
+    let authedUserId: string | null = null;
+    let authedEmail: string | null = null;
     try {
       ip = getRequestIP({ xForwardedFor: true }) ?? null;
       ua = getRequestHeader("user-agent") ?? null;
+      const authHeader = getRequestHeader("authorization");
+      if (authHeader?.startsWith("Bearer ")) {
+        const token = authHeader.slice(7);
+        const { data: verified } = await supabaseAdmin.auth.getUser(token);
+        authedUserId = verified.user?.id ?? null;
+        authedEmail = verified.user?.email ?? null;
+      }
     } catch {
-      // ignore
+      // ignore — fall through with null identity
     }
+    // Cap metadata size to prevent log flooding.
+    const rawMeta = data.metadata ?? {};
+    const metaStr = JSON.stringify(rawMeta);
+    const safeMeta = metaStr.length > 2000 ? { truncated: true } : rawMeta;
+
     const { error } = await supabaseAdmin.from("portal_audit_log").insert({
-      user_id: data.user_id ?? null,
-      email: data.email ?? null,
+      // Verified identity always wins over anything the client sent.
+      user_id: authedUserId,
+      email: authedUserId ? authedEmail : (data.email ?? null),
       event_type: data.event_type,
-      metadata: data.metadata ?? {},
+      metadata: safeMeta,
       ip_address: ip,
       user_agent: ua,
     });
