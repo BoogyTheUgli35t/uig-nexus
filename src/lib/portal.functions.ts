@@ -649,9 +649,14 @@ export const getMyRoles = createServerFn({ method: "GET" })
 const RegisterUserDivisionsSchema = z.object({
   selected_divisions: z.array(z.string()),
   primary_division: z.string().optional().or(z.literal("")),
-  role_preference: z.enum(["admin", "staff", "client"]).default("client"),
 });
 
+/**
+ * Self-service onboarding endpoint. New portal accounts ALWAYS get the
+ * baseline `client` role — never `admin` or `staff`. Elevated roles are
+ * granted only through the admin-only access-request approval flow
+ * (`approveAccessRequest`) or `updateUserAccess`.
+ */
 export const registerUserDivisions = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((i: unknown) => RegisterUserDivisionsSchema.parse(i))
@@ -676,19 +681,24 @@ export const registerUserDivisions = createServerFn({ method: "POST" })
       throw new Error(divisionError.message);
     }
 
-    // 2. Ensure role is assigned (upsert)
-    // We try to insert or update the user's role
-    const { error: roleError } = await supabaseAdmin.from("user_roles").upsert(
-      {
-        user_id: userId,
-        role: data.role_preference,
-      },
-      { onConflict: "user_id" },
-    );
+    // 2. Ensure the user has the baseline `client` role only if they have no
+    //    role yet. Never overwrite an existing (potentially elevated) role
+    //    that an admin has already granted through the approval flow.
+    const { data: existingRole } = await supabaseAdmin
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", userId)
+      .maybeSingle();
 
-    if (roleError) {
-      console.error("Error assigning role:", roleError.message);
-      throw new Error(roleError.message);
+    if (!existingRole) {
+      const { error: roleError } = await supabaseAdmin.from("user_roles").insert({
+        user_id: userId,
+        role: "client",
+      });
+      if (roleError && !/duplicate key/i.test(roleError.message)) {
+        console.error("Error assigning role:", roleError.message);
+        throw new Error(roleError.message);
+      }
     }
 
     // 3. Create/update user preferences
