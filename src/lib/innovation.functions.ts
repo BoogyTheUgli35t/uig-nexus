@@ -361,9 +361,10 @@ export const createExperiment = createServerFn({ method: "POST" })
       idea_id: data.idea_id || null,
       prototype_id: data.prototype_id || null,
       model_id: data.model_id || null,
+      title: data.hypothesis.slice(0, 120),
       hypothesis: data.hypothesis,
       status: "planned",
-      created_by: context.userId,
+      owner_id: context.userId,
     });
     if (error) throw new Error(error.message);
     return { ok: true };
