@@ -589,37 +589,43 @@ export type Database = {
       }
       experiments: {
         Row: {
+          confidence: number
           created_at: string
-          created_by: string | null
-          hypothesis: string
+          hypothesis: string | null
           id: string
           idea_id: string | null
-          model_id: string | null
-          prototype_id: string | null
+          owner_id: string | null
           result: string | null
+          source_division: string
           status: string
+          title: string
+          updated_at: string
         }
         Insert: {
+          confidence?: number
           created_at?: string
-          created_by?: string | null
-          hypothesis: string
+          hypothesis?: string | null
           id?: string
           idea_id?: string | null
-          model_id?: string | null
-          prototype_id?: string | null
+          owner_id?: string | null
           result?: string | null
+          source_division?: string
           status?: string
+          title: string
+          updated_at?: string
         }
         Update: {
+          confidence?: number
           created_at?: string
-          created_by?: string | null
-          hypothesis?: string
+          hypothesis?: string | null
           id?: string
           idea_id?: string | null
-          model_id?: string | null
-          prototype_id?: string | null
+          owner_id?: string | null
           result?: string | null
+          source_division?: string
           status?: string
+          title?: string
+          updated_at?: string
         }
         Relationships: [
           {
@@ -627,20 +633,6 @@ export type Database = {
             columns: ["idea_id"]
             isOneToOne: false
             referencedRelation: "ideas"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "experiments_prototype_id_fkey"
-            columns: ["prototype_id"]
-            isOneToOne: false
-            referencedRelation: "prototypes"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "experiments_model_id_fkey"
-            columns: ["model_id"]
-            isOneToOne: false
-            referencedRelation: "models"
             referencedColumns: ["id"]
           },
         ]
