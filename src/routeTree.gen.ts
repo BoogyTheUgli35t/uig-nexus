@@ -44,6 +44,7 @@ import { Route as PortalSignupIndexRouteImport } from './routes/portal.signup.in
 import { Route as DivisionsRealEstateListingsRouteImport } from './routes/divisions.real-estate.listings'
 import { Route as DivisionsInnovationLabSubmitRouteImport } from './routes/divisions.innovation-lab.submit'
 import { Route as ApiStripeWebhookRouteImport } from './routes/api.stripe.webhook'
+import { Route as ApiPublicTrackRouteImport } from './routes/api/public/track'
 import { Route as ApiPublicStripeWebhookRouteImport } from './routes/api/public/stripe-webhook'
 import { Route as ApexPortalSettingsRouteImport } from './routes/_apex.portal.settings'
 import { Route as ApexPortalMessagesRouteImport } from './routes/_apex.portal.messages'
@@ -285,6 +286,11 @@ const DivisionsInnovationLabSubmitRoute =
 const ApiStripeWebhookRoute = ApiStripeWebhookRouteImport.update({
   id: '/api/stripe/webhook',
   path: '/api/stripe/webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicTrackRoute = ApiPublicTrackRouteImport.update({
+  id: '/api/public/track',
+  path: '/api/public/track',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiPublicStripeWebhookRoute = ApiPublicStripeWebhookRouteImport.update({
@@ -699,6 +705,7 @@ export interface FileRoutesByFullPath {
   '/portal/messages': typeof ApexPortalMessagesRoute
   '/portal/settings': typeof ApexPortalSettingsRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
+  '/api/public/track': typeof ApiPublicTrackRoute
   '/api/stripe/webhook': typeof ApiStripeWebhookRoute
   '/divisions/innovation-lab/submit': typeof DivisionsInnovationLabSubmitRoute
   '/divisions/real-estate/listings': typeof DivisionsRealEstateListingsRouteWithChildren
@@ -797,6 +804,7 @@ export interface FileRoutesByTo {
   '/portal/messages': typeof ApexPortalMessagesRoute
   '/portal/settings': typeof ApexPortalSettingsRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
+  '/api/public/track': typeof ApiPublicTrackRoute
   '/api/stripe/webhook': typeof ApiStripeWebhookRoute
   '/divisions/innovation-lab/submit': typeof DivisionsInnovationLabSubmitRoute
   '/divisions/real-estate/listings': typeof DivisionsRealEstateListingsRouteWithChildren
@@ -893,6 +901,7 @@ export interface FileRoutesById {
   '/_apex/portal/messages': typeof ApexPortalMessagesRoute
   '/_apex/portal/settings': typeof ApexPortalSettingsRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
+  '/api/public/track': typeof ApiPublicTrackRoute
   '/api/stripe/webhook': typeof ApiStripeWebhookRoute
   '/divisions/innovation-lab/submit': typeof DivisionsInnovationLabSubmitRoute
   '/divisions/real-estate/listings': typeof DivisionsRealEstateListingsRouteWithChildren
@@ -995,6 +1004,7 @@ export interface FileRouteTypes {
     | '/portal/messages'
     | '/portal/settings'
     | '/api/public/stripe-webhook'
+    | '/api/public/track'
     | '/api/stripe/webhook'
     | '/divisions/innovation-lab/submit'
     | '/divisions/real-estate/listings'
@@ -1093,6 +1103,7 @@ export interface FileRouteTypes {
     | '/portal/messages'
     | '/portal/settings'
     | '/api/public/stripe-webhook'
+    | '/api/public/track'
     | '/api/stripe/webhook'
     | '/divisions/innovation-lab/submit'
     | '/divisions/real-estate/listings'
@@ -1188,6 +1199,7 @@ export interface FileRouteTypes {
     | '/_apex/portal/messages'
     | '/_apex/portal/settings'
     | '/api/public/stripe-webhook'
+    | '/api/public/track'
     | '/api/stripe/webhook'
     | '/divisions/innovation-lab/submit'
     | '/divisions/real-estate/listings'
@@ -1276,6 +1288,7 @@ export interface RootRouteChildren {
   DivisionsIndexRoute: typeof DivisionsIndexRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicStripeWebhookRoute: typeof ApiPublicStripeWebhookRoute
+  ApiPublicTrackRoute: typeof ApiPublicTrackRoute
   ApiStripeWebhookRoute: typeof ApiStripeWebhookRoute
 }
 
@@ -1524,6 +1537,13 @@ declare module '@tanstack/react-router' {
       path: '/api/stripe/webhook'
       fullPath: '/api/stripe/webhook'
       preLoaderRoute: typeof ApiStripeWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/track': {
+      id: '/api/public/track'
+      path: '/api/public/track'
+      fullPath: '/api/public/track'
+      preLoaderRoute: typeof ApiPublicTrackRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/public/stripe-webhook': {
@@ -2353,6 +2373,7 @@ const rootRouteChildren: RootRouteChildren = {
   DivisionsIndexRoute: DivisionsIndexRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicStripeWebhookRoute: ApiPublicStripeWebhookRoute,
+  ApiPublicTrackRoute: ApiPublicTrackRoute,
   ApiStripeWebhookRoute: ApiStripeWebhookRoute,
 }
 export const routeTree = rootRouteImport
