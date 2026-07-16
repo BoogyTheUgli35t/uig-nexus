@@ -53,13 +53,12 @@ function TrackPage() {
     setLoading(true);
     setSearched(true);
     try {
-      const [{ data: rows, error }, { data: evRows }] = await Promise.all([
-        supabase.rpc("track_shipment", { p_tracking_code: code.trim().toUpperCase() }),
-        supabase.rpc("track_shipment_events", { p_tracking_code: code.trim().toUpperCase() }),
-      ]);
-      if (error) throw error;
-      setResult((rows?.[0] as Tracking) ?? null);
-      setEvents((evRows as TrackEvent[]) ?? []);
+      const trimmed = code.trim().toUpperCase();
+      const res = await fetch(`/api/public/track?code=${encodeURIComponent(trimmed)}`);
+      if (!res.ok) throw new Error("lookup failed");
+      const json = (await res.json()) as { shipment: Tracking | null; events: TrackEvent[] };
+      setResult(json.shipment);
+      setEvents(json.events ?? []);
     } catch {
       setResult(null);
       setEvents([]);
