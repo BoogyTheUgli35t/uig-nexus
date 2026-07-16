@@ -126,14 +126,16 @@ function IdeasPage() {
           <EmptyState icon={Lightbulb} title="No ideas here yet" description="Pitch the first one above." />
         ) : (
           <div className="space-y-3">
-            {ideas.map((idea) => (
+            {ideas.map((idea) => {
+              const tags = Array.isArray(idea.tags) ? (idea.tags as string[]) : [];
+              return (
               <div key={idea.id} className="rounded-lg border border-border bg-background p-4">
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div className="text-sm font-medium">{idea.title}</div>
                   <div className="flex items-center gap-2">
-                    <StatusBadge status={idea.status} />
+                    <StatusBadge status={idea.status ?? "concept"} />
                     <select
-                      value={idea.status}
+                      value={idea.status ?? "concept"}
                       onChange={(e) =>
                         statusMut.mutate({
                           id: idea.id,
@@ -153,9 +155,9 @@ function IdeasPage() {
                 {idea.description && (
                   <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed">{idea.description}</p>
                 )}
-                {(idea.tags ?? []).length > 0 && (
+                {tags.length > 0 && (
                   <div className="mt-2 flex flex-wrap gap-1.5">
-                    {(idea.tags ?? []).map((t: string) => (
+                    {tags.map((t) => (
                       <span key={t} className="rounded-full acc-bg-soft acc-text px-2 py-0.5 text-[10px]">
                         {t}
                       </span>
@@ -163,7 +165,8 @@ function IdeasPage() {
                   </div>
                 )}
               </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </DataPanel>

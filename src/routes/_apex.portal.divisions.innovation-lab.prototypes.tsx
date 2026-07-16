@@ -132,14 +132,16 @@ function PrototypesPage() {
                       Empty
                     </div>
                   ) : (
-                    items.map((p) => (
+                    items.map((p) => {
+                      const shots = Array.isArray(p.screenshots) ? (p.screenshots as string[]) : [];
+                      return (
                       <div key={p.id} className="rounded-lg border border-border bg-background p-3">
                         <div className="text-sm font-medium leading-snug">
                           {p.idea_id ? (ideaTitle.get(p.idea_id) ?? "Prototype") : "Prototype"}
                         </div>
-                        {(p.screenshots ?? []).length > 0 && (
+                        {shots.length > 0 && (
                           <div className="mt-2 grid grid-cols-2 gap-1">
-                            {(p.screenshots ?? []).slice(0, 2).map((s: string) => (
+                            {shots.slice(0, 2).map((s) => (
                               <img
                                 key={s}
                                 src={shotUrl(s)}
@@ -173,7 +175,7 @@ function PrototypesPage() {
                           )}
                         </div>
                         <select
-                          value={p.status}
+                          value={p.status ?? "concept"}
                           onChange={(e) =>
                             statusMut.mutate({
                               id: p.id,
@@ -189,7 +191,8 @@ function PrototypesPage() {
                           ))}
                         </select>
                       </div>
-                    ))
+                      );
+                    })
                   )}
                 </div>
               </div>
