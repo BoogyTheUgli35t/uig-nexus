@@ -361,6 +361,7 @@ export const createExperiment = createServerFn({ method: "POST" })
       idea_id: data.idea_id || null,
       prototype_id: data.prototype_id || null,
       model_id: data.model_id || null,
+      title: data.hypothesis.slice(0, 120),
       hypothesis: data.hypothesis,
       status: "planned",
       owner_id: context.userId,
