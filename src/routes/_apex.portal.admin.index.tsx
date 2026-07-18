@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { UserCheck, Users, ScrollText, CreditCard, ShieldCheck, ArrowRight } from "lucide-react";
+import { UserCheck, Users, ScrollText, CreditCard, ShieldCheck, ArrowRight, Megaphone, Activity } from "lucide-react";
 import { getAdminOverview } from "@/lib/portal.functions";
 import { authHeaders } from "@/lib/auth-headers";
 import { DataPanel, EmptyState, KpiStat } from "@/components/portal/blocks";
@@ -26,10 +26,22 @@ const QUICK_LINKS = [
     icon: Users,
   },
   {
-    to: "/portal/audit" as const,
+    to: "/portal/admin/audit" as const,
     label: "Audit log",
-    description: "Sign-ins, access changes and denied attempts.",
+    description: "Filter events by user, division and time range.",
     icon: ScrollText,
+  },
+  {
+    to: "/portal/admin/system" as const,
+    label: "System oversight",
+    description: "Company-wide activity across every division.",
+    icon: Activity,
+  },
+  {
+    to: "/portal/admin/broadcast" as const,
+    label: "Broadcast",
+    description: "Send an announcement to all users, a division or a role.",
+    icon: Megaphone,
   },
   {
     to: "/portal/billing" as const,
