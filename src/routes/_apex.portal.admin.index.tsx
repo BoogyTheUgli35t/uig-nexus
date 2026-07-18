@@ -130,7 +130,7 @@ function AdminOverviewPage() {
         )}
       </DataPanel>
 
-      <DataPanel title="Recent activity" action={{ to: "/portal/audit", label: "View full log" }}>
+      <DataPanel title="Recent activity" action={{ to: "/portal/admin/audit", label: "View full log" }}>
         {isLoading ? (
           <div className="text-sm text-muted-foreground">Loading…</div>
         ) : !data || data.recentAudit.length === 0 ? (
