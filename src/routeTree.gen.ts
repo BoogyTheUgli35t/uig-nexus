@@ -66,6 +66,7 @@ import { Route as ApexPortalDivisionsInnovationLabRouteImport } from './routes/_
 import { Route as ApexPortalDivisionsAgritechRouteImport } from './routes/_apex.portal.divisions.agritech'
 import { Route as ApexPortalDivisionsSlugRouteImport } from './routes/_apex.portal.divisions.$slug'
 import { Route as ApexPortalAdminUsersRouteImport } from './routes/_apex.portal.admin.users'
+import { Route as ApexPortalAdminBroadcastRouteImport } from './routes/_apex.portal.admin.broadcast'
 import { Route as ApexPortalAdminAuditRouteImport } from './routes/_apex.portal.admin.audit'
 import { Route as ApexPortalAdminAccessRequestsRouteImport } from './routes/_apex.portal.admin.access-requests'
 import { Route as ApexPortalDivisionsTechnologyIndexRouteImport } from './routes/_apex.portal.divisions.technology.index'
@@ -407,6 +408,12 @@ const ApexPortalAdminUsersRoute = ApexPortalAdminUsersRouteImport.update({
   path: '/portal/admin/users',
   getParentRoute: () => ApexRoute,
 } as any)
+const ApexPortalAdminBroadcastRoute =
+  ApexPortalAdminBroadcastRouteImport.update({
+    id: '/portal/admin/broadcast',
+    path: '/portal/admin/broadcast',
+    getParentRoute: () => ApexRoute,
+  } as any)
 const ApexPortalAdminAuditRoute = ApexPortalAdminAuditRouteImport.update({
   id: '/portal/admin/audit',
   path: '/portal/admin/audit',
@@ -718,6 +725,7 @@ export interface FileRoutesByFullPath {
   '/portal/signup/': typeof PortalSignupIndexRoute
   '/portal/admin/access-requests': typeof ApexPortalAdminAccessRequestsRoute
   '/portal/admin/audit': typeof ApexPortalAdminAuditRoute
+  '/portal/admin/broadcast': typeof ApexPortalAdminBroadcastRoute
   '/portal/admin/users': typeof ApexPortalAdminUsersRoute
   '/portal/divisions/$slug': typeof ApexPortalDivisionsSlugRoute
   '/portal/divisions/agritech': typeof ApexPortalDivisionsAgritechRouteWithChildren
@@ -818,6 +826,7 @@ export interface FileRoutesByTo {
   '/portal/signup': typeof PortalSignupIndexRoute
   '/portal/admin/access-requests': typeof ApexPortalAdminAccessRequestsRoute
   '/portal/admin/audit': typeof ApexPortalAdminAuditRoute
+  '/portal/admin/broadcast': typeof ApexPortalAdminBroadcastRoute
   '/portal/admin/users': typeof ApexPortalAdminUsersRoute
   '/portal/divisions/$slug': typeof ApexPortalDivisionsSlugRoute
   '/portal/projects/$id': typeof ApexPortalProjectsIdRoute
@@ -916,6 +925,7 @@ export interface FileRoutesById {
   '/portal/signup/': typeof PortalSignupIndexRoute
   '/_apex/portal/admin/access-requests': typeof ApexPortalAdminAccessRequestsRoute
   '/_apex/portal/admin/audit': typeof ApexPortalAdminAuditRoute
+  '/_apex/portal/admin/broadcast': typeof ApexPortalAdminBroadcastRoute
   '/_apex/portal/admin/users': typeof ApexPortalAdminUsersRoute
   '/_apex/portal/divisions/$slug': typeof ApexPortalDivisionsSlugRoute
   '/_apex/portal/divisions/agritech': typeof ApexPortalDivisionsAgritechRouteWithChildren
@@ -1020,6 +1030,7 @@ export interface FileRouteTypes {
     | '/portal/signup/'
     | '/portal/admin/access-requests'
     | '/portal/admin/audit'
+    | '/portal/admin/broadcast'
     | '/portal/admin/users'
     | '/portal/divisions/$slug'
     | '/portal/divisions/agritech'
@@ -1120,6 +1131,7 @@ export interface FileRouteTypes {
     | '/portal/signup'
     | '/portal/admin/access-requests'
     | '/portal/admin/audit'
+    | '/portal/admin/broadcast'
     | '/portal/admin/users'
     | '/portal/divisions/$slug'
     | '/portal/projects/$id'
@@ -1217,6 +1229,7 @@ export interface FileRouteTypes {
     | '/portal/signup/'
     | '/_apex/portal/admin/access-requests'
     | '/_apex/portal/admin/audit'
+    | '/_apex/portal/admin/broadcast'
     | '/_apex/portal/admin/users'
     | '/_apex/portal/divisions/$slug'
     | '/_apex/portal/divisions/agritech'
@@ -1703,6 +1716,13 @@ declare module '@tanstack/react-router' {
       path: '/portal/admin/users'
       fullPath: '/portal/admin/users'
       preLoaderRoute: typeof ApexPortalAdminUsersRouteImport
+      parentRoute: typeof ApexRoute
+    }
+    '/_apex/portal/admin/broadcast': {
+      id: '/_apex/portal/admin/broadcast'
+      path: '/portal/admin/broadcast'
+      fullPath: '/portal/admin/broadcast'
+      preLoaderRoute: typeof ApexPortalAdminBroadcastRouteImport
       parentRoute: typeof ApexRoute
     }
     '/_apex/portal/admin/audit': {
@@ -2221,6 +2241,7 @@ interface ApexRouteChildren {
   ApexPortalSettingsRoute: typeof ApexPortalSettingsRoute
   ApexPortalAdminAccessRequestsRoute: typeof ApexPortalAdminAccessRequestsRoute
   ApexPortalAdminAuditRoute: typeof ApexPortalAdminAuditRoute
+  ApexPortalAdminBroadcastRoute: typeof ApexPortalAdminBroadcastRoute
   ApexPortalAdminUsersRoute: typeof ApexPortalAdminUsersRoute
   ApexPortalDivisionsSlugRoute: typeof ApexPortalDivisionsSlugRoute
   ApexPortalDivisionsAgritechRoute: typeof ApexPortalDivisionsAgritechRouteWithChildren
@@ -2244,6 +2265,7 @@ const ApexRouteChildren: ApexRouteChildren = {
   ApexPortalSettingsRoute: ApexPortalSettingsRoute,
   ApexPortalAdminAccessRequestsRoute: ApexPortalAdminAccessRequestsRoute,
   ApexPortalAdminAuditRoute: ApexPortalAdminAuditRoute,
+  ApexPortalAdminBroadcastRoute: ApexPortalAdminBroadcastRoute,
   ApexPortalAdminUsersRoute: ApexPortalAdminUsersRoute,
   ApexPortalDivisionsSlugRoute: ApexPortalDivisionsSlugRoute,
   ApexPortalDivisionsAgritechRoute:
