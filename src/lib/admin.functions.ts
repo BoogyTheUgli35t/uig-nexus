@@ -72,8 +72,12 @@ const DIVISION_TABLES: Record<string, string[]> = {
 };
 
 async function tableCount(name: string): Promise<number> {
-  const { count } = await supabaseAdmin.from(name).select("id", { count: "exact", head: true });
-  return count ?? 0;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { count } = await (supabaseAdmin.from as any)(name).select("id", {
+    count: "exact",
+    head: true,
+  });
+  return (count as number) ?? 0;
 }
 
 export const getSystemHealth = createServerFn({ method: "GET" })
