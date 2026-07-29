@@ -44,6 +44,7 @@ import { Route as PortalSignupIndexRouteImport } from './routes/portal.signup.in
 import { Route as DivisionsRealEstateListingsRouteImport } from './routes/divisions.real-estate.listings'
 import { Route as DivisionsInnovationLabSubmitRouteImport } from './routes/divisions.innovation-lab.submit'
 import { Route as ApiStripeWebhookRouteImport } from './routes/api.stripe.webhook'
+import { Route as ApiPublicTrackRouteImport } from './routes/api/public/track'
 import { Route as ApiPublicStripeWebhookRouteImport } from './routes/api/public/stripe-webhook'
 import { Route as ApexPortalSettingsRouteImport } from './routes/_apex.portal.settings'
 import { Route as ApexPortalMessagesRouteImport } from './routes/_apex.portal.messages'
@@ -65,6 +66,9 @@ import { Route as ApexPortalDivisionsInnovationLabRouteImport } from './routes/_
 import { Route as ApexPortalDivisionsAgritechRouteImport } from './routes/_apex.portal.divisions.agritech'
 import { Route as ApexPortalDivisionsSlugRouteImport } from './routes/_apex.portal.divisions.$slug'
 import { Route as ApexPortalAdminUsersRouteImport } from './routes/_apex.portal.admin.users'
+import { Route as ApexPortalAdminSystemRouteImport } from './routes/_apex.portal.admin.system'
+import { Route as ApexPortalAdminBroadcastRouteImport } from './routes/_apex.portal.admin.broadcast'
+import { Route as ApexPortalAdminAuditRouteImport } from './routes/_apex.portal.admin.audit'
 import { Route as ApexPortalAdminAccessRequestsRouteImport } from './routes/_apex.portal.admin.access-requests'
 import { Route as ApexPortalDivisionsTechnologyIndexRouteImport } from './routes/_apex.portal.divisions.technology.index'
 import { Route as ApexPortalDivisionsRealEstateIndexRouteImport } from './routes/_apex.portal.divisions.real-estate.index'
@@ -287,6 +291,11 @@ const ApiStripeWebhookRoute = ApiStripeWebhookRouteImport.update({
   path: '/api/stripe/webhook',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicTrackRoute = ApiPublicTrackRouteImport.update({
+  id: '/api/public/track',
+  path: '/api/public/track',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicStripeWebhookRoute = ApiPublicStripeWebhookRouteImport.update({
   id: '/api/public/stripe-webhook',
   path: '/api/public/stripe-webhook',
@@ -398,6 +407,22 @@ const ApexPortalDivisionsSlugRoute = ApexPortalDivisionsSlugRouteImport.update({
 const ApexPortalAdminUsersRoute = ApexPortalAdminUsersRouteImport.update({
   id: '/portal/admin/users',
   path: '/portal/admin/users',
+  getParentRoute: () => ApexRoute,
+} as any)
+const ApexPortalAdminSystemRoute = ApexPortalAdminSystemRouteImport.update({
+  id: '/portal/admin/system',
+  path: '/portal/admin/system',
+  getParentRoute: () => ApexRoute,
+} as any)
+const ApexPortalAdminBroadcastRoute =
+  ApexPortalAdminBroadcastRouteImport.update({
+    id: '/portal/admin/broadcast',
+    path: '/portal/admin/broadcast',
+    getParentRoute: () => ApexRoute,
+  } as any)
+const ApexPortalAdminAuditRoute = ApexPortalAdminAuditRouteImport.update({
+  id: '/portal/admin/audit',
+  path: '/portal/admin/audit',
   getParentRoute: () => ApexRoute,
 } as any)
 const ApexPortalAdminAccessRequestsRoute =
@@ -699,11 +724,15 @@ export interface FileRoutesByFullPath {
   '/portal/messages': typeof ApexPortalMessagesRoute
   '/portal/settings': typeof ApexPortalSettingsRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
+  '/api/public/track': typeof ApiPublicTrackRoute
   '/api/stripe/webhook': typeof ApiStripeWebhookRoute
   '/divisions/innovation-lab/submit': typeof DivisionsInnovationLabSubmitRoute
   '/divisions/real-estate/listings': typeof DivisionsRealEstateListingsRouteWithChildren
   '/portal/signup/': typeof PortalSignupIndexRoute
   '/portal/admin/access-requests': typeof ApexPortalAdminAccessRequestsRoute
+  '/portal/admin/audit': typeof ApexPortalAdminAuditRoute
+  '/portal/admin/broadcast': typeof ApexPortalAdminBroadcastRoute
+  '/portal/admin/system': typeof ApexPortalAdminSystemRoute
   '/portal/admin/users': typeof ApexPortalAdminUsersRoute
   '/portal/divisions/$slug': typeof ApexPortalDivisionsSlugRoute
   '/portal/divisions/agritech': typeof ApexPortalDivisionsAgritechRouteWithChildren
@@ -797,11 +826,15 @@ export interface FileRoutesByTo {
   '/portal/messages': typeof ApexPortalMessagesRoute
   '/portal/settings': typeof ApexPortalSettingsRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
+  '/api/public/track': typeof ApiPublicTrackRoute
   '/api/stripe/webhook': typeof ApiStripeWebhookRoute
   '/divisions/innovation-lab/submit': typeof DivisionsInnovationLabSubmitRoute
   '/divisions/real-estate/listings': typeof DivisionsRealEstateListingsRouteWithChildren
   '/portal/signup': typeof PortalSignupIndexRoute
   '/portal/admin/access-requests': typeof ApexPortalAdminAccessRequestsRoute
+  '/portal/admin/audit': typeof ApexPortalAdminAuditRoute
+  '/portal/admin/broadcast': typeof ApexPortalAdminBroadcastRoute
+  '/portal/admin/system': typeof ApexPortalAdminSystemRoute
   '/portal/admin/users': typeof ApexPortalAdminUsersRoute
   '/portal/divisions/$slug': typeof ApexPortalDivisionsSlugRoute
   '/portal/projects/$id': typeof ApexPortalProjectsIdRoute
@@ -893,11 +926,15 @@ export interface FileRoutesById {
   '/_apex/portal/messages': typeof ApexPortalMessagesRoute
   '/_apex/portal/settings': typeof ApexPortalSettingsRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
+  '/api/public/track': typeof ApiPublicTrackRoute
   '/api/stripe/webhook': typeof ApiStripeWebhookRoute
   '/divisions/innovation-lab/submit': typeof DivisionsInnovationLabSubmitRoute
   '/divisions/real-estate/listings': typeof DivisionsRealEstateListingsRouteWithChildren
   '/portal/signup/': typeof PortalSignupIndexRoute
   '/_apex/portal/admin/access-requests': typeof ApexPortalAdminAccessRequestsRoute
+  '/_apex/portal/admin/audit': typeof ApexPortalAdminAuditRoute
+  '/_apex/portal/admin/broadcast': typeof ApexPortalAdminBroadcastRoute
+  '/_apex/portal/admin/system': typeof ApexPortalAdminSystemRoute
   '/_apex/portal/admin/users': typeof ApexPortalAdminUsersRoute
   '/_apex/portal/divisions/$slug': typeof ApexPortalDivisionsSlugRoute
   '/_apex/portal/divisions/agritech': typeof ApexPortalDivisionsAgritechRouteWithChildren
@@ -995,11 +1032,15 @@ export interface FileRouteTypes {
     | '/portal/messages'
     | '/portal/settings'
     | '/api/public/stripe-webhook'
+    | '/api/public/track'
     | '/api/stripe/webhook'
     | '/divisions/innovation-lab/submit'
     | '/divisions/real-estate/listings'
     | '/portal/signup/'
     | '/portal/admin/access-requests'
+    | '/portal/admin/audit'
+    | '/portal/admin/broadcast'
+    | '/portal/admin/system'
     | '/portal/admin/users'
     | '/portal/divisions/$slug'
     | '/portal/divisions/agritech'
@@ -1093,11 +1134,15 @@ export interface FileRouteTypes {
     | '/portal/messages'
     | '/portal/settings'
     | '/api/public/stripe-webhook'
+    | '/api/public/track'
     | '/api/stripe/webhook'
     | '/divisions/innovation-lab/submit'
     | '/divisions/real-estate/listings'
     | '/portal/signup'
     | '/portal/admin/access-requests'
+    | '/portal/admin/audit'
+    | '/portal/admin/broadcast'
+    | '/portal/admin/system'
     | '/portal/admin/users'
     | '/portal/divisions/$slug'
     | '/portal/projects/$id'
@@ -1188,11 +1233,15 @@ export interface FileRouteTypes {
     | '/_apex/portal/messages'
     | '/_apex/portal/settings'
     | '/api/public/stripe-webhook'
+    | '/api/public/track'
     | '/api/stripe/webhook'
     | '/divisions/innovation-lab/submit'
     | '/divisions/real-estate/listings'
     | '/portal/signup/'
     | '/_apex/portal/admin/access-requests'
+    | '/_apex/portal/admin/audit'
+    | '/_apex/portal/admin/broadcast'
+    | '/_apex/portal/admin/system'
     | '/_apex/portal/admin/users'
     | '/_apex/portal/divisions/$slug'
     | '/_apex/portal/divisions/agritech'
@@ -1276,6 +1325,7 @@ export interface RootRouteChildren {
   DivisionsIndexRoute: typeof DivisionsIndexRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicStripeWebhookRoute: typeof ApiPublicStripeWebhookRoute
+  ApiPublicTrackRoute: typeof ApiPublicTrackRoute
   ApiStripeWebhookRoute: typeof ApiStripeWebhookRoute
 }
 
@@ -1526,6 +1576,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiStripeWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/track': {
+      id: '/api/public/track'
+      path: '/api/public/track'
+      fullPath: '/api/public/track'
+      preLoaderRoute: typeof ApiPublicTrackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/stripe-webhook': {
       id: '/api/public/stripe-webhook'
       path: '/api/public/stripe-webhook'
@@ -1671,6 +1728,27 @@ declare module '@tanstack/react-router' {
       path: '/portal/admin/users'
       fullPath: '/portal/admin/users'
       preLoaderRoute: typeof ApexPortalAdminUsersRouteImport
+      parentRoute: typeof ApexRoute
+    }
+    '/_apex/portal/admin/system': {
+      id: '/_apex/portal/admin/system'
+      path: '/portal/admin/system'
+      fullPath: '/portal/admin/system'
+      preLoaderRoute: typeof ApexPortalAdminSystemRouteImport
+      parentRoute: typeof ApexRoute
+    }
+    '/_apex/portal/admin/broadcast': {
+      id: '/_apex/portal/admin/broadcast'
+      path: '/portal/admin/broadcast'
+      fullPath: '/portal/admin/broadcast'
+      preLoaderRoute: typeof ApexPortalAdminBroadcastRouteImport
+      parentRoute: typeof ApexRoute
+    }
+    '/_apex/portal/admin/audit': {
+      id: '/_apex/portal/admin/audit'
+      path: '/portal/admin/audit'
+      fullPath: '/portal/admin/audit'
+      preLoaderRoute: typeof ApexPortalAdminAuditRouteImport
       parentRoute: typeof ApexRoute
     }
     '/_apex/portal/admin/access-requests': {
@@ -2181,6 +2259,9 @@ interface ApexRouteChildren {
   ApexPortalMessagesRoute: typeof ApexPortalMessagesRoute
   ApexPortalSettingsRoute: typeof ApexPortalSettingsRoute
   ApexPortalAdminAccessRequestsRoute: typeof ApexPortalAdminAccessRequestsRoute
+  ApexPortalAdminAuditRoute: typeof ApexPortalAdminAuditRoute
+  ApexPortalAdminBroadcastRoute: typeof ApexPortalAdminBroadcastRoute
+  ApexPortalAdminSystemRoute: typeof ApexPortalAdminSystemRoute
   ApexPortalAdminUsersRoute: typeof ApexPortalAdminUsersRoute
   ApexPortalDivisionsSlugRoute: typeof ApexPortalDivisionsSlugRoute
   ApexPortalDivisionsAgritechRoute: typeof ApexPortalDivisionsAgritechRouteWithChildren
@@ -2203,6 +2284,9 @@ const ApexRouteChildren: ApexRouteChildren = {
   ApexPortalMessagesRoute: ApexPortalMessagesRoute,
   ApexPortalSettingsRoute: ApexPortalSettingsRoute,
   ApexPortalAdminAccessRequestsRoute: ApexPortalAdminAccessRequestsRoute,
+  ApexPortalAdminAuditRoute: ApexPortalAdminAuditRoute,
+  ApexPortalAdminBroadcastRoute: ApexPortalAdminBroadcastRoute,
+  ApexPortalAdminSystemRoute: ApexPortalAdminSystemRoute,
   ApexPortalAdminUsersRoute: ApexPortalAdminUsersRoute,
   ApexPortalDivisionsSlugRoute: ApexPortalDivisionsSlugRoute,
   ApexPortalDivisionsAgritechRoute:
@@ -2353,8 +2437,19 @@ const rootRouteChildren: RootRouteChildren = {
   DivisionsIndexRoute: DivisionsIndexRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicStripeWebhookRoute: ApiPublicStripeWebhookRoute,
+  ApiPublicTrackRoute: ApiPublicTrackRoute,
   ApiStripeWebhookRoute: ApiStripeWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}

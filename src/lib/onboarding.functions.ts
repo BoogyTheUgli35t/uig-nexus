@@ -25,19 +25,23 @@ export const chooseDivisions = createServerFn({ method: "POST" })
   .inputValidator((i: unknown) => ChooseDivisionsSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { supabase, userId } = context;
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
     // De-duplicate and resolve the primary workspace.
     const unique = Array.from(new Set(data.divisions));
     const primary = data.primary && unique.includes(data.primary) ? data.primary : unique[0];
 
     // Replace the user's division access with the current selection.
-    const { error: delError } = await supabase
+    // Uses admin client because RLS on user_divisions is admin-manage-only
+    // (self-service manage was removed to close a privilege-escalation hole).
+    // Server-side, this is safe: we scope every write to the authenticated userId.
+    const { error: delError } = await supabaseAdmin
       .from("user_divisions")
       .delete()
       .eq("user_id", userId);
     if (delError) throw new Error(delError.message);
 
-    const { error: insError } = await supabase
+    const { error: insError } = await supabaseAdmin
       .from("user_divisions")
       .insert(unique.map((division_slug) => ({ user_id: userId, division_slug })));
     if (insError) throw new Error(insError.message);
