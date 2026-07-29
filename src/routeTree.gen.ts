@@ -40,7 +40,6 @@ import { Route as DivisionsInnovationLabRouteImport } from './routes/divisions.i
 import { Route as DivisionsAgritechRouteImport } from './routes/divisions.agritech'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
-import { Route as PortalSignupIndexRouteImport } from './routes/portal.signup.index'
 import { Route as DivisionsRealEstateListingsRouteImport } from './routes/divisions.real-estate_.listings'
 import { Route as DivisionsInnovationLabSubmitRouteImport } from './routes/divisions.innovation-lab_.submit'
 import { Route as ApiStripeWebhookRouteImport } from './routes/api.stripe.webhook'
@@ -270,11 +269,6 @@ const Char91DotmcpChar93ListToolsRoute =
     path: '/.mcp/list-tools',
     getParentRoute: () => rootRouteImport,
   } as any)
-const PortalSignupIndexRoute = PortalSignupIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => PortalSignupRoute,
-} as any)
 const DivisionsRealEstateListingsRoute =
   DivisionsRealEstateListingsRouteImport.update({
     id: '/divisions/real-estate_/listings',
@@ -718,7 +712,7 @@ export interface FileRoutesByFullPath {
   '/portal/forgot-password': typeof PortalForgotPasswordRoute
   '/portal/login': typeof PortalLoginRoute
   '/portal/reset-password': typeof PortalResetPasswordRoute
-  '/portal/signup': typeof PortalSignupRouteWithChildren
+  '/portal/signup': typeof PortalSignupRoute
   '/divisions/': typeof DivisionsIndexRoute
   '/portal/': typeof PortalIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -734,7 +728,6 @@ export interface FileRoutesByFullPath {
   '/api/stripe/webhook': typeof ApiStripeWebhookRoute
   '/divisions/innovation-lab/submit': typeof DivisionsInnovationLabSubmitRoute
   '/divisions/real-estate/listings': typeof DivisionsRealEstateListingsRouteWithChildren
-  '/portal/signup/': typeof PortalSignupIndexRoute
   '/portal/admin/access-requests': typeof ApexPortalAdminAccessRequestsRoute
   '/portal/admin/audit': typeof ApexPortalAdminAuditRoute
   '/portal/admin/broadcast': typeof ApexPortalAdminBroadcastRoute
@@ -822,6 +815,7 @@ export interface FileRoutesByTo {
   '/portal/forgot-password': typeof PortalForgotPasswordRoute
   '/portal/login': typeof PortalLoginRoute
   '/portal/reset-password': typeof PortalResetPasswordRoute
+  '/portal/signup': typeof PortalSignupRoute
   '/divisions': typeof DivisionsIndexRoute
   '/portal': typeof PortalIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -837,7 +831,6 @@ export interface FileRoutesByTo {
   '/api/stripe/webhook': typeof ApiStripeWebhookRoute
   '/divisions/innovation-lab/submit': typeof DivisionsInnovationLabSubmitRoute
   '/divisions/real-estate/listings': typeof DivisionsRealEstateListingsRouteWithChildren
-  '/portal/signup': typeof PortalSignupIndexRoute
   '/portal/admin/access-requests': typeof ApexPortalAdminAccessRequestsRoute
   '/portal/admin/audit': typeof ApexPortalAdminAuditRoute
   '/portal/admin/broadcast': typeof ApexPortalAdminBroadcastRoute
@@ -922,7 +915,7 @@ export interface FileRoutesById {
   '/portal/forgot-password': typeof PortalForgotPasswordRoute
   '/portal/login': typeof PortalLoginRoute
   '/portal/reset-password': typeof PortalResetPasswordRoute
-  '/portal/signup': typeof PortalSignupRouteWithChildren
+  '/portal/signup': typeof PortalSignupRoute
   '/divisions/': typeof DivisionsIndexRoute
   '/portal/': typeof PortalIndexRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -938,7 +931,6 @@ export interface FileRoutesById {
   '/api/stripe/webhook': typeof ApiStripeWebhookRoute
   '/divisions/innovation-lab_/submit': typeof DivisionsInnovationLabSubmitRoute
   '/divisions/real-estate_/listings': typeof DivisionsRealEstateListingsRouteWithChildren
-  '/portal/signup/': typeof PortalSignupIndexRoute
   '/_apex/portal/admin/access-requests': typeof ApexPortalAdminAccessRequestsRoute
   '/_apex/portal/admin/audit': typeof ApexPortalAdminAuditRoute
   '/_apex/portal/admin/broadcast': typeof ApexPortalAdminBroadcastRoute
@@ -1045,7 +1037,6 @@ export interface FileRouteTypes {
     | '/api/stripe/webhook'
     | '/divisions/innovation-lab/submit'
     | '/divisions/real-estate/listings'
-    | '/portal/signup/'
     | '/portal/admin/access-requests'
     | '/portal/admin/audit'
     | '/portal/admin/broadcast'
@@ -1133,6 +1124,7 @@ export interface FileRouteTypes {
     | '/portal/forgot-password'
     | '/portal/login'
     | '/portal/reset-password'
+    | '/portal/signup'
     | '/divisions'
     | '/portal'
     | '/.mcp/invoke-tool/$tool'
@@ -1148,7 +1140,6 @@ export interface FileRouteTypes {
     | '/api/stripe/webhook'
     | '/divisions/innovation-lab/submit'
     | '/divisions/real-estate/listings'
-    | '/portal/signup'
     | '/portal/admin/access-requests'
     | '/portal/admin/audit'
     | '/portal/admin/broadcast'
@@ -1248,7 +1239,6 @@ export interface FileRouteTypes {
     | '/api/stripe/webhook'
     | '/divisions/innovation-lab_/submit'
     | '/divisions/real-estate_/listings'
-    | '/portal/signup/'
     | '/_apex/portal/admin/access-requests'
     | '/_apex/portal/admin/audit'
     | '/_apex/portal/admin/broadcast'
@@ -1561,13 +1551,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/.mcp/list-tools'
       preLoaderRoute: typeof Char91DotmcpChar93ListToolsRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/portal/signup/': {
-      id: '/portal/signup/'
-      path: '/'
-      fullPath: '/portal/signup/'
-      preLoaderRoute: typeof PortalSignupIndexRouteImport
-      parentRoute: typeof PortalSignupRoute
     }
     '/divisions/real-estate_/listings': {
       id: '/divisions/real-estate_/listings'
@@ -2343,24 +2326,12 @@ const InsightsRouteWithChildren = InsightsRoute._addFileChildren(
   InsightsRouteChildren,
 )
 
-interface PortalSignupRouteChildren {
-  PortalSignupIndexRoute: typeof PortalSignupIndexRoute
-}
-
-const PortalSignupRouteChildren: PortalSignupRouteChildren = {
-  PortalSignupIndexRoute: PortalSignupIndexRoute,
-}
-
-const PortalSignupRouteWithChildren = PortalSignupRoute._addFileChildren(
-  PortalSignupRouteChildren,
-)
-
 interface PortalRouteChildren {
   PortalChooseDivisionRoute: typeof PortalChooseDivisionRoute
   PortalForgotPasswordRoute: typeof PortalForgotPasswordRoute
   PortalLoginRoute: typeof PortalLoginRoute
   PortalResetPasswordRoute: typeof PortalResetPasswordRoute
-  PortalSignupRoute: typeof PortalSignupRouteWithChildren
+  PortalSignupRoute: typeof PortalSignupRoute
   PortalIndexRoute: typeof PortalIndexRoute
 }
 
@@ -2369,7 +2340,7 @@ const PortalRouteChildren: PortalRouteChildren = {
   PortalForgotPasswordRoute: PortalForgotPasswordRoute,
   PortalLoginRoute: PortalLoginRoute,
   PortalResetPasswordRoute: PortalResetPasswordRoute,
-  PortalSignupRoute: PortalSignupRouteWithChildren,
+  PortalSignupRoute: PortalSignupRoute,
   PortalIndexRoute: PortalIndexRoute,
 }
 

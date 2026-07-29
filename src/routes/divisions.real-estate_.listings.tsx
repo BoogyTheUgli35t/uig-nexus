@@ -6,6 +6,7 @@ import { SiteLayout } from "@/components/site/SiteLayout";
 import { PageHero, Section, Eyebrow } from "@/components/site/sections";
 import { NigeriaListingsMap } from "@/components/site/NigeriaListingsMap";
 import { resolveImageUrl } from "@/lib/utils";
+import { sizedImage } from "@/lib/media";
 
 export const Route = createFileRoute("/divisions/real-estate_/listings")({
   head: () => ({
@@ -28,9 +29,11 @@ const naira = (n: number) => {
   return `₦${n}`;
 };
 
+/** Location cards render at ~400px wide — serving the stored 1600px original
+ * wasted several MB per page load. */
 function coverUrl(path: string | null) {
   if (!path) return null;
-  return resolveImageUrl("property-images", path);
+  return sizedImage(resolveImageUrl("property-images", path), 800);
 }
 
 function ListingsHubPage() {

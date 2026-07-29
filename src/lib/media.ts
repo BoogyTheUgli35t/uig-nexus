@@ -32,6 +32,26 @@ export function media(slot: string, fallback: string, transform?: MediaTransform
   return transform ? withTransform(generated, transform) : generated;
 }
 
+/**
+ * Right-size an arbitrary remote image for the slot it renders in.
+ *
+ * Property photos are stored at 1600px but rendered into ~400–800px cards, so
+ * without this every listing grid downloads several megabytes it cannot use.
+ * Handles both of the CDNs actually present in the data (Cloudinary for
+ * generated imagery, Unsplash for seeded photos) and passes anything else —
+ * including Supabase Storage objects — through untouched.
+ */
+export function sizedImage(url: string | null | undefined, width: number): string | null {
+  if (!url) return null;
+  if (url.includes("res.cloudinary.com") && url.includes("/image/upload/")) {
+    return url.replace("/image/upload/", `/image/upload/f_auto,q_auto,w_${width}/`);
+  }
+  if (url.includes("images.unsplash.com")) {
+    return url.replace(/([?&])w=\d+/, `$1w=${width}`);
+  }
+  return url;
+}
+
 /** Division hero: `uig/divisions/<slug>/hero`. */
 export function divisionHero(slug: string, fallback: string): string {
   return media(`uig/divisions/${slug}/hero`, fallback, "hero");

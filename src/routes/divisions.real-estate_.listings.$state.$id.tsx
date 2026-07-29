@@ -22,6 +22,7 @@ import { MortgageCalculator } from "@/components/site/MortgageCalculator";
 import { JsonLd } from "@/components/site/JsonLd";
 import { SITE_URL } from "@/lib/seo";
 import { resolveImageUrl, cn } from "@/lib/utils";
+import { sizedImage } from "@/lib/media";
 
 export const Route = createFileRoute("/divisions/real-estate_/listings/$state/$id")({
   head: ({ params }) => ({
@@ -192,7 +193,12 @@ function ListingDetailPage() {
                     )}
                   >
                     {img.storage_path && (
-                      <img src={imgUrl(img.storage_path)} alt="" className="h-full w-full object-cover" />
+                      <img
+                        src={sizedImage(imgUrl(img.storage_path), 200) ?? undefined}
+                        alt=""
+                        loading="lazy"
+                        className="h-full w-full object-cover"
+                      />
                     )}
                   </button>
                 ))}
@@ -304,7 +310,7 @@ function ListingDetailPage() {
           </div>
           <div className="mt-4 grid gap-5 sm:grid-cols-3">
             {similar.map((s) => {
-              const cover = s.coverImagePath ? imgUrl(s.coverImagePath) : null;
+              const cover = s.coverImagePath ? sizedImage(imgUrl(s.coverImagePath), 600) : null;
               return (
                 <Link
                   key={s.id}

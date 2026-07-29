@@ -10,6 +10,7 @@ import {
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { PageHero, Section } from "@/components/site/sections";
 import { resolveImageUrl, cn } from "@/lib/utils";
+import { sizedImage } from "@/lib/media";
 
 export const Route = createFileRoute("/divisions/real-estate_/listings/$state")({
   head: ({ params }) => ({
@@ -31,9 +32,10 @@ const naira = (n: number) => {
   return `₦${n}`;
 };
 
+/** Listing cards render at ~800px wide; the stored originals are 1600px. */
 function coverUrl(path: string | null) {
   if (!path) return null;
-  return resolveImageUrl("property-images", path);
+  return sizedImage(resolveImageUrl("property-images", path), 800);
 }
 
 function LocationListingsPage() {
