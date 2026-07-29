@@ -8,14 +8,23 @@ import {
   FlaskConical,
 } from "lucide-react";
 
-// Original UIG division photography (bundled assets — local, always available,
-// no external CDN dependency).
-import heroTechnology from "@/assets/divisions/hero-technology.jpg";
-import heroAgritech from "@/assets/divisions/hero-agritech.jpg";
-import heroRealEstate from "@/assets/divisions/hero-real-estate.jpg";
-import heroLogistics from "@/assets/divisions/hero-logistics.jpg";
-import heroIntelligence from "@/assets/divisions/hero-intelligence.jpg";
-import heroInnovationLab from "@/assets/divisions/hero-innovation-lab.jpg";
+// Bundled division photography — always available, no CDN dependency. Each hero
+// is upgraded to its Cloudinary-generated counterpart via divisionHero() once
+// that slot has been generated; until then the local asset is served.
+import heroTechnologyLocal from "@/assets/divisions/hero-technology.jpg";
+import heroAgritechLocal from "@/assets/divisions/hero-agritech.jpg";
+import heroRealEstateLocal from "@/assets/divisions/hero-real-estate.jpg";
+import heroLogisticsLocal from "@/assets/divisions/hero-logistics.jpg";
+import heroIntelligenceLocal from "@/assets/divisions/hero-intelligence.jpg";
+import heroInnovationLabLocal from "@/assets/divisions/hero-innovation-lab.jpg";
+import { divisionHero, divisionGallery } from "@/lib/media";
+
+const heroTechnology = divisionHero("technology", heroTechnologyLocal);
+const heroAgritech = divisionHero("agritech", heroAgritechLocal);
+const heroRealEstate = divisionHero("real-estate", heroRealEstateLocal);
+const heroLogistics = divisionHero("logistics", heroLogisticsLocal);
+const heroIntelligence = divisionHero("intelligence", heroIntelligenceLocal);
+const heroInnovationLab = divisionHero("innovation-lab", heroInnovationLabLocal);
 
 export type DivisionSlug =
   | "technology"
@@ -69,7 +78,7 @@ export const DIVISIONS: Division[] = [
     accentClass: "acc-tech",
     icon: Cpu,
     hero: heroTechnology,
-    gallery: [],
+    gallery: divisionGallery("technology"),
     modules: [
       { label: "Project board", description: "Kanban + timeline across every client engagement.", status: "live" },
       { label: "Client portal", description: "Live project status, invoices and documents.", status: "live" },
@@ -88,7 +97,7 @@ export const DIVISIONS: Division[] = [
     accentClass: "acc-agritech",
     icon: Sprout,
     hero: heroAgritech,
-    gallery: [],
+    gallery: divisionGallery("agritech"),
     modules: [
       { label: "Farmer onboarding", description: "Register farmers and cooperatives in minutes.", status: "live" },
       { label: "Field dashboard", description: "Map view with live sensor and drone data.", status: "live" },
@@ -107,7 +116,7 @@ export const DIVISIONS: Division[] = [
     accentClass: "acc-realestate",
     icon: Building2,
     hero: heroRealEstate,
-    gallery: [],
+    gallery: divisionGallery("real-estate"),
     modules: [
       { label: "Property listings", description: "Manage the full portfolio with rich detail.", status: "live" },
       { label: "Tenant portal", description: "Payments, documents and maintenance requests.", status: "live" },
@@ -126,7 +135,7 @@ export const DIVISIONS: Division[] = [
     accentClass: "acc-logistics",
     icon: Truck,
     hero: heroLogistics,
-    gallery: [],
+    gallery: divisionGallery("logistics"),
     modules: [
       { label: "Shipment tracking", description: "Live status board and map view.", status: "live" },
       { label: "Driver tasks", description: "Mobile-friendly assignments and proof of delivery.", status: "live" },
@@ -145,7 +154,7 @@ export const DIVISIONS: Division[] = [
     accentClass: "acc-intelligence",
     icon: BrainCircuit,
     hero: heroIntelligence,
-    gallery: [],
+    gallery: divisionGallery("intelligence"),
     modules: [
       { label: "AI assistant", description: "Chat with UIG's models for insight on demand.", status: "live" },
       { label: "Predictive analytics", description: "Forecasts and trends across the group.", status: "live" },
@@ -164,7 +173,7 @@ export const DIVISIONS: Division[] = [
     accentClass: "acc-innovation",
     icon: FlaskConical,
     hero: heroInnovationLab,
-    gallery: [],
+    gallery: divisionGallery("innovation-lab"),
     modules: [
       { label: "Idea submission", description: "Capture ideas from every division.", status: "live" },
       { label: "Prototype tracker", description: "Status board from concept to demo.", status: "live" },

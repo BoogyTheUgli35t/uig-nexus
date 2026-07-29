@@ -16,22 +16,41 @@ import { SiteLayout } from "@/components/site/SiteLayout";
 import { Section, Eyebrow, FeatureCard, CTABand } from "@/components/site/sections";
 import { Button } from "@/components/ui/button";
 
-// Original UIG division photography (bundled assets — no external CDN dependency),
-// used for the homepage photo story below.
+// Homepage photo story. Each slot serves its Cloudinary-generated image once
+// available, falling back to bundled division photography so nothing ever breaks.
 import heroTechnology from "@/assets/divisions/hero-technology.jpg";
 import heroAgritech from "@/assets/divisions/hero-agritech.jpg";
 import heroRealEstate from "@/assets/divisions/hero-real-estate.jpg";
 import heroLogistics from "@/assets/divisions/hero-logistics.jpg";
 import heroIntelligence from "@/assets/divisions/hero-intelligence.jpg";
 import heroInnovationLab from "@/assets/divisions/hero-innovation-lab.jpg";
+import { media } from "@/lib/media";
 
 const STORY_IMAGES = [
-  { src: heroTechnology, caption: "UIG Technology — AI-native software & platforms" },
-  { src: heroRealEstate, caption: "UIG Real Estate — property systems & listings" },
-  { src: heroAgritech, caption: "UIG AgriTech — smart agriculture & yield intelligence" },
-  { src: heroLogistics, caption: "UIG Logistics — fleet intelligence & routing" },
-  { src: heroIntelligence, caption: "UIG Intelligence — models, analytics & automation" },
-  { src: heroInnovationLab, caption: "UIG Innovation Lab — where new ventures are born" },
+  {
+    src: media("uig/brand/story-01", heroTechnology, "card"),
+    caption: "UIG Technology — AI-native software & platforms",
+  },
+  {
+    src: media("uig/brand/story-02", heroRealEstate, "card"),
+    caption: "UIG Real Estate — property systems & listings",
+  },
+  {
+    src: media("uig/brand/story-03", heroAgritech, "card"),
+    caption: "UIG AgriTech — smart agriculture & yield intelligence",
+  },
+  {
+    src: media("uig/brand/story-04", heroLogistics, "card"),
+    caption: "UIG Logistics — fleet intelligence & routing",
+  },
+  {
+    src: media("uig/brand/story-05", heroIntelligence, "card"),
+    caption: "UIG Intelligence — models, analytics & automation",
+  },
+  {
+    src: media("uig/brand/story-06", heroInnovationLab, "card"),
+    caption: "UIG Innovation Lab — where new ventures are born",
+  },
 ] as const;
 
 export const Route = createFileRoute("/")({
