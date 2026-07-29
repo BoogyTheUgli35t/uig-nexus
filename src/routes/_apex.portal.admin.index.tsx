@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { UserCheck, Users, ScrollText, CreditCard, ShieldCheck, ArrowRight, Megaphone, Activity } from "lucide-react";
+import { UserCheck, Users, ScrollText, CreditCard, ShieldCheck, ArrowRight, Megaphone, Activity, Database } from "lucide-react";
 import { getAdminOverview } from "@/lib/portal.functions";
 import { authHeaders } from "@/lib/auth-headers";
 import { DataPanel, EmptyState, KpiStat } from "@/components/portal/blocks";
@@ -42,6 +42,12 @@ const QUICK_LINKS = [
     label: "Broadcast",
     description: "Send an announcement to all users, a division or a role.",
     icon: Megaphone,
+  },
+  {
+    to: "/portal/admin/data" as const,
+    label: "Division data",
+    description: "Record counts per division and one-click sample data seeding.",
+    icon: Database,
   },
   {
     to: "/portal/billing" as const,
