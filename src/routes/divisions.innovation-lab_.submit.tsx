@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
-export const Route = createFileRoute("/divisions/innovation-lab/submit")({
+export const Route = createFileRoute("/divisions/innovation-lab_/submit")({
   head: () => ({
     meta: [
       { title: "Submit Your Idea — UIG Innovation Lab" },

@@ -7,7 +7,7 @@ import { PageHero, Section, Eyebrow } from "@/components/site/sections";
 import { NigeriaListingsMap } from "@/components/site/NigeriaListingsMap";
 import { resolveImageUrl } from "@/lib/utils";
 
-export const Route = createFileRoute("/divisions/real-estate/listings")({
+export const Route = createFileRoute("/divisions/real-estate_/listings")({
   head: () => ({
     meta: [
       { title: "Browse Listings by Location — UIG Real Estate" },

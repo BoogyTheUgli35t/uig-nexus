@@ -1,4 +1,5 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
+import { useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -97,5 +98,13 @@ function RootShell({ children }: { children: React.ReactNode }) {
 }
 
 function RootComponent() {
+  // Hydration probe: set once the client bundle actually mounts. E2E uses this
+  // to distinguish "the app is broken" from "this environment served SSR HTML
+  // but never hydrated", which is otherwise indistinguishable from the outside
+  // and produced a run of phantom test failures.
+  useEffect(() => {
+    (window as unknown as { __UIG_HYDRATED__?: boolean }).__UIG_HYDRATED__ = true;
+  }, []);
+
   return <Outlet />;
 }

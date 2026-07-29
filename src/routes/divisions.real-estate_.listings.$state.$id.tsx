@@ -23,7 +23,7 @@ import { JsonLd } from "@/components/site/JsonLd";
 import { SITE_URL } from "@/lib/seo";
 import { resolveImageUrl, cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/divisions/real-estate/listings/$state/$id")({
+export const Route = createFileRoute("/divisions/real-estate_/listings/$state/$id")({
   head: ({ params }) => ({
     meta: [{ title: `Property in ${params.state} — UIG Real Estate` }],
   }),

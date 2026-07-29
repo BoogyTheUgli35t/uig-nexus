@@ -41,8 +41,8 @@ import { Route as DivisionsAgritechRouteImport } from './routes/divisions.agrite
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
 import { Route as PortalSignupIndexRouteImport } from './routes/portal.signup.index'
-import { Route as DivisionsRealEstateListingsRouteImport } from './routes/divisions.real-estate.listings'
-import { Route as DivisionsInnovationLabSubmitRouteImport } from './routes/divisions.innovation-lab.submit'
+import { Route as DivisionsRealEstateListingsRouteImport } from './routes/divisions.real-estate_.listings'
+import { Route as DivisionsInnovationLabSubmitRouteImport } from './routes/divisions.innovation-lab_.submit'
 import { Route as ApiStripeWebhookRouteImport } from './routes/api.stripe.webhook'
 import { Route as ApiPublicTrackRouteImport } from './routes/api/public/track'
 import { Route as ApiPublicStripeWebhookRouteImport } from './routes/api/public/stripe-webhook'
@@ -56,7 +56,7 @@ import { Route as ApexPortalAuditRouteImport } from './routes/_apex.portal.audit
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as ApexPortalProjectsIndexRouteImport } from './routes/_apex.portal.projects.index'
 import { Route as ApexPortalAdminIndexRouteImport } from './routes/_apex.portal.admin.index'
-import { Route as DivisionsRealEstateListingsStateRouteImport } from './routes/divisions.real-estate.listings.$state'
+import { Route as DivisionsRealEstateListingsStateRouteImport } from './routes/divisions.real-estate_.listings.$state'
 import { Route as ApexPortalProjectsIdRouteImport } from './routes/_apex.portal.projects.$id'
 import { Route as ApexPortalDivisionsTechnologyRouteImport } from './routes/_apex.portal.divisions.technology'
 import { Route as ApexPortalDivisionsRealEstateRouteImport } from './routes/_apex.portal.divisions.real-estate'
@@ -77,7 +77,7 @@ import { Route as ApexPortalDivisionsLogisticsIndexRouteImport } from './routes/
 import { Route as ApexPortalDivisionsIntelligenceIndexRouteImport } from './routes/_apex.portal.divisions.intelligence.index'
 import { Route as ApexPortalDivisionsInnovationLabIndexRouteImport } from './routes/_apex.portal.divisions.innovation-lab.index'
 import { Route as ApexPortalDivisionsAgritechIndexRouteImport } from './routes/_apex.portal.divisions.agritech.index'
-import { Route as DivisionsRealEstateListingsStateIdRouteImport } from './routes/divisions.real-estate.listings.$state.$id'
+import { Route as DivisionsRealEstateListingsStateIdRouteImport } from './routes/divisions.real-estate_.listings.$state.$id'
 import { Route as ApexPortalDivisionsTechnologyIntegrationsRouteImport } from './routes/_apex.portal.divisions.technology.integrations'
 import { Route as ApexPortalDivisionsTechnologyAutomationRouteImport } from './routes/_apex.portal.divisions.technology.automation'
 import { Route as ApexPortalDivisionsRealEstateTenantsRouteImport } from './routes/_apex.portal.divisions.real-estate.tenants'
@@ -277,15 +277,15 @@ const PortalSignupIndexRoute = PortalSignupIndexRouteImport.update({
 } as any)
 const DivisionsRealEstateListingsRoute =
   DivisionsRealEstateListingsRouteImport.update({
-    id: '/listings',
-    path: '/listings',
-    getParentRoute: () => DivisionsRealEstateRoute,
+    id: '/divisions/real-estate_/listings',
+    path: '/divisions/real-estate/listings',
+    getParentRoute: () => rootRouteImport,
   } as any)
 const DivisionsInnovationLabSubmitRoute =
   DivisionsInnovationLabSubmitRouteImport.update({
-    id: '/submit',
-    path: '/submit',
-    getParentRoute: () => DivisionsInnovationLabRoute,
+    id: '/divisions/innovation-lab_/submit',
+    path: '/divisions/innovation-lab/submit',
+    getParentRoute: () => rootRouteImport,
   } as any)
 const ApiStripeWebhookRoute = ApiStripeWebhookRouteImport.update({
   id: '/api/stripe/webhook',
@@ -708,10 +708,10 @@ export interface FileRoutesByFullPath {
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/divisions/agritech': typeof DivisionsAgritechRoute
-  '/divisions/innovation-lab': typeof DivisionsInnovationLabRouteWithChildren
+  '/divisions/innovation-lab': typeof DivisionsInnovationLabRoute
   '/divisions/intelligence': typeof DivisionsIntelligenceRoute
   '/divisions/logistics': typeof DivisionsLogisticsRoute
-  '/divisions/real-estate': typeof DivisionsRealEstateRouteWithChildren
+  '/divisions/real-estate': typeof DivisionsRealEstateRoute
   '/divisions/technology': typeof DivisionsTechnologyRoute
   '/insights/$slug': typeof InsightsSlugRoute
   '/portal/choose-division': typeof PortalChooseDivisionRoute
@@ -812,10 +812,10 @@ export interface FileRoutesByTo {
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/divisions/agritech': typeof DivisionsAgritechRoute
-  '/divisions/innovation-lab': typeof DivisionsInnovationLabRouteWithChildren
+  '/divisions/innovation-lab': typeof DivisionsInnovationLabRoute
   '/divisions/intelligence': typeof DivisionsIntelligenceRoute
   '/divisions/logistics': typeof DivisionsLogisticsRoute
-  '/divisions/real-estate': typeof DivisionsRealEstateRouteWithChildren
+  '/divisions/real-estate': typeof DivisionsRealEstateRoute
   '/divisions/technology': typeof DivisionsTechnologyRoute
   '/insights/$slug': typeof InsightsSlugRoute
   '/portal/choose-division': typeof PortalChooseDivisionRoute
@@ -912,10 +912,10 @@ export interface FileRoutesById {
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/divisions/agritech': typeof DivisionsAgritechRoute
-  '/divisions/innovation-lab': typeof DivisionsInnovationLabRouteWithChildren
+  '/divisions/innovation-lab': typeof DivisionsInnovationLabRoute
   '/divisions/intelligence': typeof DivisionsIntelligenceRoute
   '/divisions/logistics': typeof DivisionsLogisticsRoute
-  '/divisions/real-estate': typeof DivisionsRealEstateRouteWithChildren
+  '/divisions/real-estate': typeof DivisionsRealEstateRoute
   '/divisions/technology': typeof DivisionsTechnologyRoute
   '/insights/$slug': typeof InsightsSlugRoute
   '/portal/choose-division': typeof PortalChooseDivisionRoute
@@ -936,8 +936,8 @@ export interface FileRoutesById {
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/api/public/track': typeof ApiPublicTrackRoute
   '/api/stripe/webhook': typeof ApiStripeWebhookRoute
-  '/divisions/innovation-lab/submit': typeof DivisionsInnovationLabSubmitRoute
-  '/divisions/real-estate/listings': typeof DivisionsRealEstateListingsRouteWithChildren
+  '/divisions/innovation-lab_/submit': typeof DivisionsInnovationLabSubmitRoute
+  '/divisions/real-estate_/listings': typeof DivisionsRealEstateListingsRouteWithChildren
   '/portal/signup/': typeof PortalSignupIndexRoute
   '/_apex/portal/admin/access-requests': typeof ApexPortalAdminAccessRequestsRoute
   '/_apex/portal/admin/audit': typeof ApexPortalAdminAuditRoute
@@ -953,7 +953,7 @@ export interface FileRoutesById {
   '/_apex/portal/divisions/real-estate': typeof ApexPortalDivisionsRealEstateRouteWithChildren
   '/_apex/portal/divisions/technology': typeof ApexPortalDivisionsTechnologyRouteWithChildren
   '/_apex/portal/projects/$id': typeof ApexPortalProjectsIdRoute
-  '/divisions/real-estate/listings/$state': typeof DivisionsRealEstateListingsStateRouteWithChildren
+  '/divisions/real-estate_/listings/$state': typeof DivisionsRealEstateListingsStateRouteWithChildren
   '/_apex/portal/admin/': typeof ApexPortalAdminIndexRoute
   '/_apex/portal/projects/': typeof ApexPortalProjectsIndexRoute
   '/_apex/portal/divisions/agritech/alerts': typeof ApexPortalDivisionsAgritechAlertsRoute
@@ -977,7 +977,7 @@ export interface FileRoutesById {
   '/_apex/portal/divisions/real-estate/tenants': typeof ApexPortalDivisionsRealEstateTenantsRoute
   '/_apex/portal/divisions/technology/automation': typeof ApexPortalDivisionsTechnologyAutomationRoute
   '/_apex/portal/divisions/technology/integrations': typeof ApexPortalDivisionsTechnologyIntegrationsRoute
-  '/divisions/real-estate/listings/$state/$id': typeof DivisionsRealEstateListingsStateIdRoute
+  '/divisions/real-estate_/listings/$state/$id': typeof DivisionsRealEstateListingsStateIdRoute
   '/_apex/portal/divisions/agritech/': typeof ApexPortalDivisionsAgritechIndexRoute
   '/_apex/portal/divisions/innovation-lab/': typeof ApexPortalDivisionsInnovationLabIndexRoute
   '/_apex/portal/divisions/intelligence/': typeof ApexPortalDivisionsIntelligenceIndexRoute
@@ -1246,8 +1246,8 @@ export interface FileRouteTypes {
     | '/api/public/stripe-webhook'
     | '/api/public/track'
     | '/api/stripe/webhook'
-    | '/divisions/innovation-lab/submit'
-    | '/divisions/real-estate/listings'
+    | '/divisions/innovation-lab_/submit'
+    | '/divisions/real-estate_/listings'
     | '/portal/signup/'
     | '/_apex/portal/admin/access-requests'
     | '/_apex/portal/admin/audit'
@@ -1263,7 +1263,7 @@ export interface FileRouteTypes {
     | '/_apex/portal/divisions/real-estate'
     | '/_apex/portal/divisions/technology'
     | '/_apex/portal/projects/$id'
-    | '/divisions/real-estate/listings/$state'
+    | '/divisions/real-estate_/listings/$state'
     | '/_apex/portal/admin/'
     | '/_apex/portal/projects/'
     | '/_apex/portal/divisions/agritech/alerts'
@@ -1287,7 +1287,7 @@ export interface FileRouteTypes {
     | '/_apex/portal/divisions/real-estate/tenants'
     | '/_apex/portal/divisions/technology/automation'
     | '/_apex/portal/divisions/technology/integrations'
-    | '/divisions/real-estate/listings/$state/$id'
+    | '/divisions/real-estate_/listings/$state/$id'
     | '/_apex/portal/divisions/agritech/'
     | '/_apex/portal/divisions/innovation-lab/'
     | '/_apex/portal/divisions/intelligence/'
@@ -1329,16 +1329,18 @@ export interface RootRouteChildren {
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   DivisionsAgritechRoute: typeof DivisionsAgritechRoute
-  DivisionsInnovationLabRoute: typeof DivisionsInnovationLabRouteWithChildren
+  DivisionsInnovationLabRoute: typeof DivisionsInnovationLabRoute
   DivisionsIntelligenceRoute: typeof DivisionsIntelligenceRoute
   DivisionsLogisticsRoute: typeof DivisionsLogisticsRoute
-  DivisionsRealEstateRoute: typeof DivisionsRealEstateRouteWithChildren
+  DivisionsRealEstateRoute: typeof DivisionsRealEstateRoute
   DivisionsTechnologyRoute: typeof DivisionsTechnologyRoute
   DivisionsIndexRoute: typeof DivisionsIndexRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicStripeWebhookRoute: typeof ApiPublicStripeWebhookRoute
   ApiPublicTrackRoute: typeof ApiPublicTrackRoute
   ApiStripeWebhookRoute: typeof ApiStripeWebhookRoute
+  DivisionsInnovationLabSubmitRoute: typeof DivisionsInnovationLabSubmitRoute
+  DivisionsRealEstateListingsRoute: typeof DivisionsRealEstateListingsRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -1567,19 +1569,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PortalSignupIndexRouteImport
       parentRoute: typeof PortalSignupRoute
     }
-    '/divisions/real-estate/listings': {
-      id: '/divisions/real-estate/listings'
-      path: '/listings'
+    '/divisions/real-estate_/listings': {
+      id: '/divisions/real-estate_/listings'
+      path: '/divisions/real-estate/listings'
       fullPath: '/divisions/real-estate/listings'
       preLoaderRoute: typeof DivisionsRealEstateListingsRouteImport
-      parentRoute: typeof DivisionsRealEstateRoute
+      parentRoute: typeof rootRouteImport
     }
-    '/divisions/innovation-lab/submit': {
-      id: '/divisions/innovation-lab/submit'
-      path: '/submit'
+    '/divisions/innovation-lab_/submit': {
+      id: '/divisions/innovation-lab_/submit'
+      path: '/divisions/innovation-lab/submit'
       fullPath: '/divisions/innovation-lab/submit'
       preLoaderRoute: typeof DivisionsInnovationLabSubmitRouteImport
-      parentRoute: typeof DivisionsInnovationLabRoute
+      parentRoute: typeof rootRouteImport
     }
     '/api/stripe/webhook': {
       id: '/api/stripe/webhook'
@@ -1672,8 +1674,8 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApexPortalAdminIndexRouteImport
       parentRoute: typeof ApexRoute
     }
-    '/divisions/real-estate/listings/$state': {
-      id: '/divisions/real-estate/listings/$state'
+    '/divisions/real-estate_/listings/$state': {
+      id: '/divisions/real-estate_/listings/$state'
       path: '/$state'
       fullPath: '/divisions/real-estate/listings/$state'
       preLoaderRoute: typeof DivisionsRealEstateListingsStateRouteImport
@@ -1819,8 +1821,8 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApexPortalDivisionsAgritechIndexRouteImport
       parentRoute: typeof ApexPortalDivisionsAgritechRoute
     }
-    '/divisions/real-estate/listings/$state/$id': {
-      id: '/divisions/real-estate/listings/$state/$id'
+    '/divisions/real-estate_/listings/$state/$id': {
+      id: '/divisions/real-estate_/listings/$state/$id'
       path: '/$id'
       fullPath: '/divisions/real-estate/listings/$state/$id'
       preLoaderRoute: typeof DivisionsRealEstateListingsStateIdRouteImport
@@ -2374,20 +2376,6 @@ const PortalRouteChildren: PortalRouteChildren = {
 const PortalRouteWithChildren =
   PortalRoute._addFileChildren(PortalRouteChildren)
 
-interface DivisionsInnovationLabRouteChildren {
-  DivisionsInnovationLabSubmitRoute: typeof DivisionsInnovationLabSubmitRoute
-}
-
-const DivisionsInnovationLabRouteChildren: DivisionsInnovationLabRouteChildren =
-  {
-    DivisionsInnovationLabSubmitRoute: DivisionsInnovationLabSubmitRoute,
-  }
-
-const DivisionsInnovationLabRouteWithChildren =
-  DivisionsInnovationLabRoute._addFileChildren(
-    DivisionsInnovationLabRouteChildren,
-  )
-
 interface DivisionsRealEstateListingsStateRouteChildren {
   DivisionsRealEstateListingsStateIdRoute: typeof DivisionsRealEstateListingsStateIdRoute
 }
@@ -2418,18 +2406,6 @@ const DivisionsRealEstateListingsRouteWithChildren =
     DivisionsRealEstateListingsRouteChildren,
   )
 
-interface DivisionsRealEstateRouteChildren {
-  DivisionsRealEstateListingsRoute: typeof DivisionsRealEstateListingsRouteWithChildren
-}
-
-const DivisionsRealEstateRouteChildren: DivisionsRealEstateRouteChildren = {
-  DivisionsRealEstateListingsRoute:
-    DivisionsRealEstateListingsRouteWithChildren,
-}
-
-const DivisionsRealEstateRouteWithChildren =
-  DivisionsRealEstateRoute._addFileChildren(DivisionsRealEstateRouteChildren)
-
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ApexRoute: ApexRouteWithChildren,
@@ -2450,16 +2426,19 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   DivisionsAgritechRoute: DivisionsAgritechRoute,
-  DivisionsInnovationLabRoute: DivisionsInnovationLabRouteWithChildren,
+  DivisionsInnovationLabRoute: DivisionsInnovationLabRoute,
   DivisionsIntelligenceRoute: DivisionsIntelligenceRoute,
   DivisionsLogisticsRoute: DivisionsLogisticsRoute,
-  DivisionsRealEstateRoute: DivisionsRealEstateRouteWithChildren,
+  DivisionsRealEstateRoute: DivisionsRealEstateRoute,
   DivisionsTechnologyRoute: DivisionsTechnologyRoute,
   DivisionsIndexRoute: DivisionsIndexRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicStripeWebhookRoute: ApiPublicStripeWebhookRoute,
   ApiPublicTrackRoute: ApiPublicTrackRoute,
   ApiStripeWebhookRoute: ApiStripeWebhookRoute,
+  DivisionsInnovationLabSubmitRoute: DivisionsInnovationLabSubmitRoute,
+  DivisionsRealEstateListingsRoute:
+    DivisionsRealEstateListingsRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

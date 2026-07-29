@@ -11,7 +11,7 @@ import { SiteLayout } from "@/components/site/SiteLayout";
 import { PageHero, Section } from "@/components/site/sections";
 import { resolveImageUrl, cn } from "@/lib/utils";
 
-export const Route = createFileRoute("/divisions/real-estate/listings/$state")({
+export const Route = createFileRoute("/divisions/real-estate_/listings/$state")({
   head: ({ params }) => ({
     meta: [
       { title: `Properties in ${params.state} — UIG Real Estate` },

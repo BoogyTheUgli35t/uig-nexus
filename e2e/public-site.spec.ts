@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { requireHydration } from "./helpers";
 
 test.describe("Public site smoke", () => {
   test("home page loads", async ({ page }) => {
@@ -18,6 +19,7 @@ test.describe("Public site smoke", () => {
     await page.goto("/");
     await page.evaluate(() => window.localStorage.clear());
     await page.reload();
+    await requireHydration(page);
     const banner = page.getByText(/essential cookies/i);
     await expect(banner).toBeVisible();
     await page.getByRole("button", { name: /accept all/i }).click();

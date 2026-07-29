@@ -11,7 +11,9 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "test:e2e": "playwright test",
-    "test": "vitest run"
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "start": "node .output/server/index.mjs"
   },
   "dependencies": {
     "@cloudflare/vite-plugin": "^1.25.5",

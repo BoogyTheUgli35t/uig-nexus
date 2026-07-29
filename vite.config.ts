@@ -9,6 +9,15 @@ import { mcpPlugin } from "@lovable.dev/mcp-js/stacks/tanstack/vite";
 
 export default defineConfig({
   vite: {
+    // @tanstack/start-client-core reads process.env.NODE_ENV inside
+    // createClientRpc. The production build replaces it, but the dev server
+    // does not — so every page hydrated with a server-function import threw
+    // "process is not defined", leaving client-fetched views (e.g. /status)
+    // stuck on their loading state. Defining it here fixes dev without
+    // affecting the build.
+    define: {
+      "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV ?? "development"),
+    },
     plugins: [
       // Only enable MCP plugin in production build, not local dev (path issue on Windows)
       process.env.NODE_ENV === "production" ? mcpPlugin() : [],
