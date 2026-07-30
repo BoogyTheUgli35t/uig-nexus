@@ -1,4 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
+import { FLAGS } from "@/lib/flags";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { Lightbulb, CheckCircle2, ArrowLeft } from "lucide-react";
@@ -10,6 +11,11 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
 export const Route = createFileRoute("/divisions/innovation-lab_/submit")({
+  // Gated by VITE_FLAG_INNOVATION_INTAKE — lets the public intake be closed
+  // (e.g. between cohorts) without a redeploy of the division page itself.
+  beforeLoad: () => {
+    if (!FLAGS.innovationIntake) throw redirect({ to: "/divisions/innovation-lab" });
+  },
   head: () => ({
     meta: [
       { title: "Submit Your Idea — UIG Innovation Lab" },

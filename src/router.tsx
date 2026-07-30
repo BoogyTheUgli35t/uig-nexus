@@ -1,8 +1,17 @@
+import { useEffect } from "react";
 import { createRouter, useRouter } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
+import { reportClientError } from "./lib/report-error";
 
 function DefaultErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   const router = useRouter();
+
+  // Anything that reaches this screen is a real, user-visible failure — report
+  // it so it shows up in the admin audit log rather than only on the visitor's
+  // screen.
+  useEffect(() => {
+    reportClientError(error);
+  }, [error]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">

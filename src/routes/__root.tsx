@@ -1,6 +1,7 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { installGlobalErrorReporting } from "@/lib/report-error";
 import { Toaster } from "@/components/ui/sonner";
 
 import appCss from "../styles.css?url";
@@ -104,6 +105,7 @@ function RootComponent() {
   // and produced a run of phantom test failures.
   useEffect(() => {
     (window as unknown as { __UIG_HYDRATED__?: boolean }).__UIG_HYDRATED__ = true;
+    installGlobalErrorReporting();
   }, []);
 
   return <Outlet />;

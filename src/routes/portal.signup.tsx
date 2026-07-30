@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Logo } from "@/components/site/Logo";
 import { toast } from "sonner";
 import { logPortalEvent } from "@/lib/portal.functions";
+import { FLAGS } from "@/lib/flags";
 
 export const Route = createFileRoute("/portal/signup")({
   head: () => ({
@@ -18,6 +19,9 @@ export const Route = createFileRoute("/portal/signup")({
     ],
   }),
   beforeLoad: async () => {
+    // Self-serve signup can be closed (invite/access-request only) via
+    // VITE_FLAG_SELF_SERVE_SIGNUP=off without removing the route.
+    if (!FLAGS.selfServeSignup) throw redirect({ to: "/portal/login" });
     if (typeof window === "undefined") return;
     const { data } = await supabase.auth.getSession();
     if (data.session) {

@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { MapPin, Home, ArrowRight, Building2 } from "lucide-react";
 import { getListingLocations } from "@/lib/public-listings.functions";
@@ -7,8 +7,15 @@ import { PageHero, Section, Eyebrow } from "@/components/site/sections";
 import { NigeriaListingsMap } from "@/components/site/NigeriaListingsMap";
 import { resolveImageUrl } from "@/lib/utils";
 import { sizedImage } from "@/lib/media";
+import { FLAGS } from "@/lib/flags";
 
 export const Route = createFileRoute("/divisions/real-estate_/listings")({
+  // Gated by VITE_FLAG_REAL_ESTATE_LISTINGS so the public browse experience can
+  // be dark-launched (deployed but not exposed) ahead of the division going
+  // live — the Phase 6 release-behind-a-flag step.
+  beforeLoad: () => {
+    if (!FLAGS.realEstateListings) throw redirect({ to: "/divisions/real-estate" });
+  },
   head: () => ({
     meta: [
       { title: "Browse Listings by Location — UIG Real Estate" },

@@ -45,6 +45,8 @@ import { Route as DivisionsInnovationLabSubmitRouteImport } from './routes/divis
 import { Route as ApiStripeWebhookRouteImport } from './routes/api.stripe.webhook'
 import { Route as ApiPublicTrackRouteImport } from './routes/api/public/track'
 import { Route as ApiPublicStripeWebhookRouteImport } from './routes/api/public/stripe-webhook'
+import { Route as ApiPublicHealthRouteImport } from './routes/api/public/health'
+import { Route as ApiPublicClientErrorRouteImport } from './routes/api/public/client-error'
 import { Route as ApexPortalSettingsRouteImport } from './routes/_apex.portal.settings'
 import { Route as ApexPortalMessagesRouteImport } from './routes/_apex.portal.messages'
 import { Route as ApexPortalDriverTasksRouteImport } from './routes/_apex.portal.driver-tasks'
@@ -294,6 +296,16 @@ const ApiPublicTrackRoute = ApiPublicTrackRouteImport.update({
 const ApiPublicStripeWebhookRoute = ApiPublicStripeWebhookRouteImport.update({
   id: '/api/public/stripe-webhook',
   path: '/api/public/stripe-webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicHealthRoute = ApiPublicHealthRouteImport.update({
+  id: '/api/public/health',
+  path: '/api/public/health',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicClientErrorRoute = ApiPublicClientErrorRouteImport.update({
+  id: '/api/public/client-error',
+  path: '/api/public/client-error',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApexPortalSettingsRoute = ApexPortalSettingsRouteImport.update({
@@ -723,6 +735,8 @@ export interface FileRoutesByFullPath {
   '/portal/driver-tasks': typeof ApexPortalDriverTasksRoute
   '/portal/messages': typeof ApexPortalMessagesRoute
   '/portal/settings': typeof ApexPortalSettingsRoute
+  '/api/public/client-error': typeof ApiPublicClientErrorRoute
+  '/api/public/health': typeof ApiPublicHealthRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/api/public/track': typeof ApiPublicTrackRoute
   '/api/stripe/webhook': typeof ApiStripeWebhookRoute
@@ -826,6 +840,8 @@ export interface FileRoutesByTo {
   '/portal/driver-tasks': typeof ApexPortalDriverTasksRoute
   '/portal/messages': typeof ApexPortalMessagesRoute
   '/portal/settings': typeof ApexPortalSettingsRoute
+  '/api/public/client-error': typeof ApiPublicClientErrorRoute
+  '/api/public/health': typeof ApiPublicHealthRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/api/public/track': typeof ApiPublicTrackRoute
   '/api/stripe/webhook': typeof ApiStripeWebhookRoute
@@ -926,6 +942,8 @@ export interface FileRoutesById {
   '/_apex/portal/driver-tasks': typeof ApexPortalDriverTasksRoute
   '/_apex/portal/messages': typeof ApexPortalMessagesRoute
   '/_apex/portal/settings': typeof ApexPortalSettingsRoute
+  '/api/public/client-error': typeof ApiPublicClientErrorRoute
+  '/api/public/health': typeof ApiPublicHealthRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/api/public/track': typeof ApiPublicTrackRoute
   '/api/stripe/webhook': typeof ApiStripeWebhookRoute
@@ -1032,6 +1050,8 @@ export interface FileRouteTypes {
     | '/portal/driver-tasks'
     | '/portal/messages'
     | '/portal/settings'
+    | '/api/public/client-error'
+    | '/api/public/health'
     | '/api/public/stripe-webhook'
     | '/api/public/track'
     | '/api/stripe/webhook'
@@ -1135,6 +1155,8 @@ export interface FileRouteTypes {
     | '/portal/driver-tasks'
     | '/portal/messages'
     | '/portal/settings'
+    | '/api/public/client-error'
+    | '/api/public/health'
     | '/api/public/stripe-webhook'
     | '/api/public/track'
     | '/api/stripe/webhook'
@@ -1234,6 +1256,8 @@ export interface FileRouteTypes {
     | '/_apex/portal/driver-tasks'
     | '/_apex/portal/messages'
     | '/_apex/portal/settings'
+    | '/api/public/client-error'
+    | '/api/public/health'
     | '/api/public/stripe-webhook'
     | '/api/public/track'
     | '/api/stripe/webhook'
@@ -1326,6 +1350,8 @@ export interface RootRouteChildren {
   DivisionsTechnologyRoute: typeof DivisionsTechnologyRoute
   DivisionsIndexRoute: typeof DivisionsIndexRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
+  ApiPublicClientErrorRoute: typeof ApiPublicClientErrorRoute
+  ApiPublicHealthRoute: typeof ApiPublicHealthRoute
   ApiPublicStripeWebhookRoute: typeof ApiPublicStripeWebhookRoute
   ApiPublicTrackRoute: typeof ApiPublicTrackRoute
   ApiStripeWebhookRoute: typeof ApiStripeWebhookRoute
@@ -1585,6 +1611,20 @@ declare module '@tanstack/react-router' {
       path: '/api/public/stripe-webhook'
       fullPath: '/api/public/stripe-webhook'
       preLoaderRoute: typeof ApiPublicStripeWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/health': {
+      id: '/api/public/health'
+      path: '/api/public/health'
+      fullPath: '/api/public/health'
+      preLoaderRoute: typeof ApiPublicHealthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/client-error': {
+      id: '/api/public/client-error'
+      path: '/api/public/client-error'
+      fullPath: '/api/public/client-error'
+      preLoaderRoute: typeof ApiPublicClientErrorRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_apex/portal/settings': {
@@ -2404,6 +2444,8 @@ const rootRouteChildren: RootRouteChildren = {
   DivisionsTechnologyRoute: DivisionsTechnologyRoute,
   DivisionsIndexRoute: DivisionsIndexRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
+  ApiPublicClientErrorRoute: ApiPublicClientErrorRoute,
+  ApiPublicHealthRoute: ApiPublicHealthRoute,
   ApiPublicStripeWebhookRoute: ApiPublicStripeWebhookRoute,
   ApiPublicTrackRoute: ApiPublicTrackRoute,
   ApiStripeWebhookRoute: ApiStripeWebhookRoute,
