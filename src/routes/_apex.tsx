@@ -1,6 +1,6 @@
 import { Outlet, createFileRoute, redirect, Link, useNavigate, useRouter } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { LayoutDashboard, FolderKanban, Settings, LogOut, ChevronRight, AlertTriangle, ShieldAlert, ShieldCheck, ScrollText, Truck, UserCheck, Users as Users2, FileText, MessageSquare, CreditCard } from "lucide-react";
+import { LayoutDashboard, FolderKanban, Settings, LogOut, ChevronRight, AlertTriangle, ShieldAlert, ShieldCheck, ScrollText, Truck, UserCheck, Users as Users2, FileText, MessageSquare, CreditCard, Home, TrendingUp } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Logo } from "@/components/site/Logo";
 import { Button } from "@/components/ui/button";
@@ -241,6 +241,16 @@ const NAV_ITEMS: NavItem[] = [
   { to: "/portal/messages", label: "Messages", icon: MessageSquare, roles: ALL_ROLES },
   { to: "/portal/billing", label: "Billing", icon: CreditCard, roles: ALL_ROLES },
   { to: "/portal/driver-tasks", label: "Driver tasks", icon: Truck, roles: ["driver", "admin", "staff"] },
+  // Self-service surfaces for the non-staff roles. Each page explains itself
+  // when the signed-in account isn't linked to a tenancy / investor record,
+  // so staff and admins can open them to see exactly what those users see.
+  { to: "/portal/my-tenancy", label: "My tenancy", icon: Home, roles: ["client", "admin", "staff"] },
+  {
+    to: "/portal/my-investments",
+    label: "My investments",
+    icon: TrendingUp,
+    roles: ["investor", "admin", "staff"],
+  },
   { to: "/portal/admin", label: "Admin", icon: ShieldCheck, roles: ["admin"] },
   { to: "/portal/admin/access-requests", label: "Access requests", icon: UserCheck, roles: ["admin"] },
   { to: "/portal/admin/users", label: "Users", icon: Users2, roles: ["admin"] },

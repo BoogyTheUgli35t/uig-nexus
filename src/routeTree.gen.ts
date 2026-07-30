@@ -47,6 +47,8 @@ import { Route as ApexPortalDashboardRouteImport } from './routes/_apex.portal.d
 import { Route as ApexPortalDocumentsRouteImport } from './routes/_apex.portal.documents'
 import { Route as ApexPortalDriverTasksRouteImport } from './routes/_apex.portal.driver-tasks'
 import { Route as ApexPortalMessagesRouteImport } from './routes/_apex.portal.messages'
+import { Route as ApexPortalMyInvestmentsRouteImport } from './routes/_apex.portal.my-investments'
+import { Route as ApexPortalMyTenancyRouteImport } from './routes/_apex.portal.my-tenancy'
 import { Route as ApexPortalSettingsRouteImport } from './routes/_apex.portal.settings'
 import { Route as ApiPublicClientErrorRouteImport } from './routes/api/public/client-error'
 import { Route as ApiPublicHealthRouteImport } from './routes/api/public/health'
@@ -305,6 +307,16 @@ const ApexPortalDriverTasksRoute = ApexPortalDriverTasksRouteImport.update({
 const ApexPortalMessagesRoute = ApexPortalMessagesRouteImport.update({
   id: '/portal/messages',
   path: '/portal/messages',
+  getParentRoute: () => ApexRoute,
+} as any)
+const ApexPortalMyInvestmentsRoute = ApexPortalMyInvestmentsRouteImport.update({
+  id: '/portal/my-investments',
+  path: '/portal/my-investments',
+  getParentRoute: () => ApexRoute,
+} as any)
+const ApexPortalMyTenancyRoute = ApexPortalMyTenancyRouteImport.update({
+  id: '/portal/my-tenancy',
+  path: '/portal/my-tenancy',
   getParentRoute: () => ApexRoute,
 } as any)
 const ApexPortalSettingsRoute = ApexPortalSettingsRouteImport.update({
@@ -734,6 +746,8 @@ export interface FileRoutesByFullPath {
   '/portal/documents': typeof ApexPortalDocumentsRoute
   '/portal/driver-tasks': typeof ApexPortalDriverTasksRoute
   '/portal/messages': typeof ApexPortalMessagesRoute
+  '/portal/my-investments': typeof ApexPortalMyInvestmentsRoute
+  '/portal/my-tenancy': typeof ApexPortalMyTenancyRoute
   '/portal/settings': typeof ApexPortalSettingsRoute
   '/api/public/client-error': typeof ApiPublicClientErrorRoute
   '/api/public/health': typeof ApiPublicHealthRoute
@@ -839,6 +853,8 @@ export interface FileRoutesByTo {
   '/portal/documents': typeof ApexPortalDocumentsRoute
   '/portal/driver-tasks': typeof ApexPortalDriverTasksRoute
   '/portal/messages': typeof ApexPortalMessagesRoute
+  '/portal/my-investments': typeof ApexPortalMyInvestmentsRoute
+  '/portal/my-tenancy': typeof ApexPortalMyTenancyRoute
   '/portal/settings': typeof ApexPortalSettingsRoute
   '/api/public/client-error': typeof ApiPublicClientErrorRoute
   '/api/public/health': typeof ApiPublicHealthRoute
@@ -941,6 +957,8 @@ export interface FileRoutesById {
   '/_apex/portal/documents': typeof ApexPortalDocumentsRoute
   '/_apex/portal/driver-tasks': typeof ApexPortalDriverTasksRoute
   '/_apex/portal/messages': typeof ApexPortalMessagesRoute
+  '/_apex/portal/my-investments': typeof ApexPortalMyInvestmentsRoute
+  '/_apex/portal/my-tenancy': typeof ApexPortalMyTenancyRoute
   '/_apex/portal/settings': typeof ApexPortalSettingsRoute
   '/api/public/client-error': typeof ApiPublicClientErrorRoute
   '/api/public/health': typeof ApiPublicHealthRoute
@@ -1049,6 +1067,8 @@ export interface FileRouteTypes {
     | '/portal/documents'
     | '/portal/driver-tasks'
     | '/portal/messages'
+    | '/portal/my-investments'
+    | '/portal/my-tenancy'
     | '/portal/settings'
     | '/api/public/client-error'
     | '/api/public/health'
@@ -1154,6 +1174,8 @@ export interface FileRouteTypes {
     | '/portal/documents'
     | '/portal/driver-tasks'
     | '/portal/messages'
+    | '/portal/my-investments'
+    | '/portal/my-tenancy'
     | '/portal/settings'
     | '/api/public/client-error'
     | '/api/public/health'
@@ -1255,6 +1277,8 @@ export interface FileRouteTypes {
     | '/_apex/portal/documents'
     | '/_apex/portal/driver-tasks'
     | '/_apex/portal/messages'
+    | '/_apex/portal/my-investments'
+    | '/_apex/portal/my-tenancy'
     | '/_apex/portal/settings'
     | '/api/public/client-error'
     | '/api/public/health'
@@ -1625,6 +1649,20 @@ declare module '@tanstack/react-router' {
       path: '/portal/messages'
       fullPath: '/portal/messages'
       preLoaderRoute: typeof ApexPortalMessagesRouteImport
+      parentRoute: typeof ApexRoute
+    }
+    '/_apex/portal/my-investments': {
+      id: '/_apex/portal/my-investments'
+      path: '/portal/my-investments'
+      fullPath: '/portal/my-investments'
+      preLoaderRoute: typeof ApexPortalMyInvestmentsRouteImport
+      parentRoute: typeof ApexRoute
+    }
+    '/_apex/portal/my-tenancy': {
+      id: '/_apex/portal/my-tenancy'
+      path: '/portal/my-tenancy'
+      fullPath: '/portal/my-tenancy'
+      preLoaderRoute: typeof ApexPortalMyTenancyRouteImport
       parentRoute: typeof ApexRoute
     }
     '/_apex/portal/settings': {
@@ -2301,6 +2339,8 @@ interface ApexRouteChildren {
   ApexPortalDocumentsRoute: typeof ApexPortalDocumentsRoute
   ApexPortalDriverTasksRoute: typeof ApexPortalDriverTasksRoute
   ApexPortalMessagesRoute: typeof ApexPortalMessagesRoute
+  ApexPortalMyInvestmentsRoute: typeof ApexPortalMyInvestmentsRoute
+  ApexPortalMyTenancyRoute: typeof ApexPortalMyTenancyRoute
   ApexPortalSettingsRoute: typeof ApexPortalSettingsRoute
   ApexPortalAdminAccessRequestsRoute: typeof ApexPortalAdminAccessRequestsRoute
   ApexPortalAdminAuditRoute: typeof ApexPortalAdminAuditRoute
@@ -2327,6 +2367,8 @@ const ApexRouteChildren: ApexRouteChildren = {
   ApexPortalDocumentsRoute: ApexPortalDocumentsRoute,
   ApexPortalDriverTasksRoute: ApexPortalDriverTasksRoute,
   ApexPortalMessagesRoute: ApexPortalMessagesRoute,
+  ApexPortalMyInvestmentsRoute: ApexPortalMyInvestmentsRoute,
+  ApexPortalMyTenancyRoute: ApexPortalMyTenancyRoute,
   ApexPortalSettingsRoute: ApexPortalSettingsRoute,
   ApexPortalAdminAccessRequestsRoute: ApexPortalAdminAccessRequestsRoute,
   ApexPortalAdminAuditRoute: ApexPortalAdminAuditRoute,

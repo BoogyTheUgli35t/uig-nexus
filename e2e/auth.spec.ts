@@ -38,7 +38,10 @@ test.describe("Portal auth smoke", () => {
 
   test("visiting a portal route while signed out redirects to login", async ({ page }) => {
     await page.goto("/portal/dashboard");
-    await expect(page).toHaveURL(/\/portal\/login/);
+    // The guard runs client-side and awaits a Supabase session lookup, so the
+    // redirect lands a beat after load — the 5s default was tight enough to
+    // flake under parallel workers.
+    await expect(page).toHaveURL(/\/portal\/login/, { timeout: 20_000 });
   });
 });
 
