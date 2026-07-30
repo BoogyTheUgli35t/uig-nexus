@@ -22,8 +22,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 const MAX = { message: 500, stack: 2000, route: 300, agent: 200 } as const;
 
-const clip = (v: unknown, max: number): string =>
-  typeof v === "string" ? v.slice(0, max) : "";
+const clip = (v: unknown, max: number): string => (typeof v === "string" ? v.slice(0, max) : "");
 
 export const Route = createFileRoute("/api/public/client-error")({
   server: {

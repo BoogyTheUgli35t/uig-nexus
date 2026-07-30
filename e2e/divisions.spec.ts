@@ -28,9 +28,7 @@ test.describe("Division marketing pages", () => {
       // hit before, and it renders as a 0x0 image rather than a visible error.
       const hero = page.locator("img").first();
       await expect(hero).toBeVisible();
-      const naturalWidth = await hero.evaluate(
-        (img) => (img as HTMLImageElement).naturalWidth,
-      );
+      const naturalWidth = await hero.evaluate((img) => (img as HTMLImageElement).naturalWidth);
       expect(naturalWidth).toBeGreaterThan(0);
 
       // Every division page ends with the "explore the rest of UIG" strip.
@@ -112,11 +110,9 @@ test.describe("Public status page", () => {
 
     await requireHydration(page);
     // Components load client-side; either statuses render or the empty state does.
-    await expect(
-      page
-        .getByText(/operational|degraded|outage|no components/i)
-        .first(),
-    ).toBeVisible({ timeout: 20_000 });
+    await expect(page.getByText(/operational|degraded|outage|no components/i).first()).toBeVisible({
+      timeout: 20_000,
+    });
   });
 });
 

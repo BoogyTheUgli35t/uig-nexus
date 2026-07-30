@@ -26,9 +26,7 @@ export default defineConfig({
       // dies. Deploys build on Linux, where the plugin still runs — so this
       // costs nothing in production and unblocks local `npm run build`
       // (which is what E2E and the pre-flight checklist depend on).
-      process.env.NODE_ENV === "production" && process.platform !== "win32"
-        ? mcpPlugin()
-        : [],
+      process.env.NODE_ENV === "production" && process.platform !== "win32" ? mcpPlugin() : [],
     ],
   },
 });

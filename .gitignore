@@ -37,3 +37,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local build/test scratch logs
+*-log.txt
+e2e-log.txt
+

@@ -1,7 +1,16 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Database, Sprout, Building2, Truck, BrainCircuit, FlaskConical, Cpu, ArrowRight } from "lucide-react";
+import {
+  Database,
+  Sprout,
+  Building2,
+  Truck,
+  BrainCircuit,
+  FlaskConical,
+  Cpu,
+  ArrowRight,
+} from "lucide-react";
 import { toast } from "sonner";
 import { getDivisionDataCounts, ensureDivisionAccess } from "@/lib/admin-seed.functions";
 import { seedTechnologyData } from "@/lib/technology.seed";
@@ -116,8 +125,16 @@ function AdminDataPage() {
       </div>
 
       <div className="grid gap-4 sm:grid-cols-3">
-        <KpiStat icon={Database} label="Records platform-wide" value={isLoading ? "—" : totals.toLocaleString()} />
-        <KpiStat icon={Building2} label="Divisions populated" value={isLoading ? "—" : `${populated}/6`} />
+        <KpiStat
+          icon={Database}
+          label="Records platform-wide"
+          value={isLoading ? "—" : totals.toLocaleString()}
+        />
+        <KpiStat
+          icon={Building2}
+          label="Divisions populated"
+          value={isLoading ? "—" : `${populated}/6`}
+        />
         <KpiStat
           icon={Sprout}
           label="Empty workspaces"
@@ -203,8 +220,8 @@ function AdminDataPage() {
             division automatically so the workspace opens straight away.
           </li>
           <li>
-            · Sample data is realistic Nigerian operating data — use it for demos and onboarding, and
-            clear it before a division goes live with real customers.
+            · Sample data is realistic Nigerian operating data — use it for demos and onboarding,
+            and clear it before a division goes live with real customers.
           </li>
         </ul>
       </DataPanel>

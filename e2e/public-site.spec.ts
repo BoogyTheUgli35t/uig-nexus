@@ -9,7 +9,14 @@ test.describe("Public site smoke", () => {
 
   test("divisions index lists all six divisions", async ({ page }) => {
     await page.goto("/divisions");
-    for (const name of ["Technology", "AgriTech", "Real Estate", "Logistics", "Intelligence", "Innovation"]) {
+    for (const name of [
+      "Technology",
+      "AgriTech",
+      "Real Estate",
+      "Logistics",
+      "Intelligence",
+      "Innovation",
+    ]) {
       await expect(page.getByText(name, { exact: false }).first()).toBeVisible();
     }
   });

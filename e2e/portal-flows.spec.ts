@@ -76,9 +76,9 @@ test.describe("Portal division flows", () => {
     await page.getByRole("button", { name: /send/i }).click();
     // Either a reply arrives, or the AI gateway reports it isn't configured —
     // both prove the round-trip works; a silent nothing does not.
-    await expect(
-      page.getByText(/thinking|not configured|rate limit|credits/i).first(),
-    ).toBeVisible({ timeout: 20_000 });
+    await expect(page.getByText(/thinking|not configured|rate limit|credits/i).first()).toBeVisible(
+      { timeout: 20_000 },
+    );
   });
 
   test("innovation lab experiment can be logged against a hypothesis", async ({ page }) => {

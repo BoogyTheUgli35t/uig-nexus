@@ -1,16 +1,18 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import type { Database } from "@/integrations/supabase/types";
 
 /** Throws unless the caller has the admin role. */
 async function assertAdmin(
-  supabase: { from: (t: string) => any },
-  userId: string,
+  supabase: SupabaseClient<Database>,
+  userId: string | undefined,
 ): Promise<void> {
+  if (!userId) throw new Error("Admins only");
   const { data } = await supabase.from("user_roles").select("role").eq("user_id", userId);
-  if (!data?.some((r: { role: string }) => r.role === "admin")) {
+  if (!data?.some((r) => r.role === "admin")) {
     throw new Error("Admins only");
   }
 }
@@ -21,7 +23,14 @@ type TableName = keyof Database["public"]["Tables"];
  * one place so the admin data console and the seeders agree on what counts. */
 export const DIVISION_DATA_TABLES: Record<string, TableName[]> = {
   technology: ["tech_projects", "tech_tasks", "integrations", "deployments", "automation_rules"],
-  "real-estate": ["properties", "property_units", "property_images", "tenants", "investors", "leads"],
+  "real-estate": [
+    "properties",
+    "property_units",
+    "property_images",
+    "tenants",
+    "investors",
+    "leads",
+  ],
   agritech: ["farmers", "fields", "sensor_data", "yield_predictions", "agri_alerts"],
   logistics: ["shipments", "drivers", "vehicles", "routes", "shipment_events"],
   intelligence: ["datasets", "models", "predictions"],
@@ -44,7 +53,11 @@ export const getDivisionDataCounts = createServerFn({ method: "GET" })
       let total = 0;
       for (const table of tables) {
         try {
-          const { count } = await supabaseAdmin
+          // `table` is a union of ~30 table names; passing it straight to
+          // .from() makes TypeScript instantiate the full row type for every
+          // member and blow its depth limit (TS2589). We only need the count,
+          // never the rows, so widen deliberately here.
+          const { count } = await (supabaseAdmin as SupabaseClient)
             .from(table)
             .select("*", { count: "exact", head: true });
           counts[table] = count ?? 0;

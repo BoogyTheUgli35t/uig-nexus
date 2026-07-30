@@ -26,7 +26,9 @@ test.describe("Portal auth smoke", () => {
     await requireHydration(page);
     await page.getByLabel(/email/i).fill(`nobody-${Date.now()}@example.com`);
     await page.getByRole("button", { name: /send reset link/i }).click();
-    await expect(page.getByRole("heading", { name: /check your email/i })).toBeVisible({ timeout: 10_000 });
+    await expect(page.getByRole("heading", { name: /check your email/i })).toBeVisible({
+      timeout: 10_000,
+    });
   });
 
   test("signup page renders create-account form", async ({ page }) => {

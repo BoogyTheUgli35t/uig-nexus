@@ -32,7 +32,9 @@ if (!CLOUDINARY_URL) {
   process.exit(1);
 }
 const cu = new URL(CLOUDINARY_URL);
-const CLOUD = cu.hostname, KEY = cu.username, SECRET = cu.password;
+const CLOUD = cu.hostname,
+  KEY = cu.username,
+  SECRET = cu.password;
 const auth = "Basic " + Buffer.from(`${KEY}:${SECRET}`).toString("base64");
 const GEN_URL = `https://api.cloudinary.com/v2/generate/${CLOUD}/text_to_image`;
 const TASK_URL = (id) => `https://api.cloudinary.com/v2/generate/${CLOUD}/tasks/${id}`;
@@ -43,7 +45,9 @@ const DRY = args.has("--dry-run");
 const scopes = ["--brand", "--divisions", "--listings"].filter((s) => args.has(s));
 const inScope = (s) => scopes.length === 0 || scopes.includes(`--${s}`);
 
-const manifest = JSON.parse(readFileSync(new URL("./image-manifest.json", import.meta.url), "utf8"));
+const manifest = JSON.parse(
+  readFileSync(new URL("./image-manifest.json", import.meta.url), "utf8"),
+);
 const urlMapPath = new URL("./url-map.json", import.meta.url);
 const urlMap = existsSync(urlMapPath) ? JSON.parse(readFileSync(urlMapPath, "utf8")) : {};
 const mediaModulePath = new URL("../src/lib/generated-media.ts", import.meta.url);
@@ -90,8 +94,16 @@ async function tryGenerateTo(publicId, prompt, opts) {
 }
 
 async function generateTo(publicId, prompt, { model, aspectRatio, resolution = "1K" }) {
-  if (urlMap[publicId] && !FORCE) { console.log(`skip (done): ${publicId}`); return urlMap[publicId]; }
-  if (DRY) { console.log(`[dry-run] ${publicId} <- "${prompt.slice(0, 70)}..." (${model.family}/${model.tier})`); return null; }
+  if (urlMap[publicId] && !FORCE) {
+    console.log(`skip (done): ${publicId}`);
+    return urlMap[publicId];
+  }
+  if (DRY) {
+    console.log(
+      `[dry-run] ${publicId} <- "${prompt.slice(0, 70)}..." (${model.family}/${model.tier})`,
+    );
+    return null;
+  }
 
   const res = await fetch(GEN_URL, {
     method: "POST",
@@ -110,11 +122,13 @@ async function generateTo(publicId, prompt, { model, aspectRatio, resolution = "
     const q = json.limits?.addons_quota?.find((a) => a.type === "image_generation");
     throw new QuotaExceeded(
       `Generation quota exhausted (${q ? `${q.remaining}/${q.limit} remaining` : "see console"}). ` +
-      `${json.error?.message ?? ""} Progress is saved in url-map.json — rerun later to resume.`,
+        `${json.error?.message ?? ""} Progress is saved in url-map.json — rerun later to resume.`,
     );
   }
   if (!res.ok && res.status !== 202) {
-    throw new Error(`Generation API ${res.status} for ${publicId}: ${JSON.stringify(json).slice(0, 400)}`);
+    throw new Error(
+      `Generation API ${res.status} for ${publicId}: ${JSON.stringify(json).slice(0, 400)}`,
+    );
   }
 
   let assets = json.data?.assets;
@@ -126,8 +140,12 @@ async function generateTo(publicId, prompt, { model, aspectRatio, resolution = "
       const tRes = await fetch(TASK_URL(taskId), { headers: { Authorization: auth } });
       const tJson = await tRes.json().catch(() => ({}));
       const status = tJson.data?.status;
-      if (status === "completed") { assets = tJson.data.result?.assets; break; }
-      if (status === "failed") throw new Error(`Task failed for ${publicId}: ${JSON.stringify(tJson).slice(0, 300)}`);
+      if (status === "completed") {
+        assets = tJson.data.result?.assets;
+        break;
+      }
+      if (status === "failed")
+        throw new Error(`Task failed for ${publicId}: ${JSON.stringify(tJson).slice(0, 300)}`);
     }
   }
 
@@ -140,13 +158,18 @@ async function generateTo(publicId, prompt, { model, aspectRatio, resolution = "
   return url;
 }
 
-const slugify = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+const slugify = (s) =>
+  s
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
 
 // ---------- scopes ----------
 async function runBrand() {
   for (const slot of manifest.brand) {
     await tryGenerateTo(slot.publicId, `${slot.prompt}, ${manifest.defaults.style}`, {
-      model: MODELS.standard, aspectRatio: slot.aspectRatio || "4:3",
+      model: MODELS.standard,
+      aspectRatio: slot.aspectRatio || "4:3",
     });
   }
 }
@@ -154,7 +177,9 @@ async function runBrand() {
 async function runDivisions() {
   for (const d of manifest.divisions) {
     await tryGenerateTo(`uig/divisions/${d.slug}/hero`, `${d.hero}, ${manifest.defaults.style}`, {
-      model: MODELS.hero, aspectRatio: "16:9", resolution: "2K",
+      model: MODELS.hero,
+      aspectRatio: "16:9",
+      resolution: "2K",
     });
     for (let i = 0; i < d.gallery.length; i++) {
       await tryGenerateTo(
@@ -187,19 +212,26 @@ async function runListings() {
   try {
     for (const p of props) {
       const stateFolder = slugify(p.state || p.city || "unassigned");
-      const rows = imgs.filter((i) => i.property_id === p.id).sort((a, b) => a.position - b.position);
+      const rows = imgs
+        .filter((i) => i.property_id === p.id)
+        .sort((a, b) => a.position - b.position);
       for (const row of rows) {
         const angle = t.angles[row.position % t.angles.length];
         const subject = t.subjects[p.property_type] || t.subjects.residential;
         const prompt = t.promptTemplate
-          .replace("{subject}", subject).replace("{city}", p.city || "Lagos").replace("{angle}", angle);
+          .replace("{subject}", subject)
+          .replace("{city}", p.city || "Lagos")
+          .replace("{angle}", angle);
         const publicId = `uig/listings/${stateFolder}/${p.id}/${row.position}`;
-        const url = await tryGenerateTo(publicId, prompt, { model: MODELS.standard, aspectRatio: "16:9" });
+        const url = await tryGenerateTo(publicId, prompt, {
+          model: MODELS.standard,
+          aspectRatio: "16:9",
+        });
         if (url) {
           sql.push(
             `UPDATE public.property_images SET storage_path = '${url}', is_render = true, ` +
-            `caption = 'Illustrative render — ' || COALESCE(NULLIF(caption, ''), '${angle.replace(/'/g, "''")}') ` +
-            `WHERE id = '${row.id}';`,
+              `caption = 'Illustrative render — ' || COALESCE(NULLIF(caption, ''), '${angle.replace(/'/g, "''")}') ` +
+              `WHERE id = '${row.id}';`,
           );
         }
       }

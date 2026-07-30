@@ -27,7 +27,10 @@ export function reportClientError(error: unknown, context?: { route?: string }) 
   try {
     // sendBeacon survives navigation/unload, which is exactly when errors bite.
     if (navigator.sendBeacon) {
-      navigator.sendBeacon("/api/public/client-error", new Blob([body], { type: "application/json" }));
+      navigator.sendBeacon(
+        "/api/public/client-error",
+        new Blob([body], { type: "application/json" }),
+      );
       return;
     }
     void fetch("/api/public/client-error", {

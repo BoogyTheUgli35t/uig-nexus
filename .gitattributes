@@ -1,0 +1,21 @@
+# Normalise line endings in the repository to LF.
+#
+# Lovable's cloud editor writes LF; Windows checkouts were converting to CRLF,
+# which made `npm run lint` report ~25,000 phantom prettier errors locally
+# (every line of every file) while CI on Linux stayed clean. That noise buries
+# real lint failures and tempts a whole-repo reformat that would collide with
+# Lovable's own commits.
+#
+# Paired with prettier's "endOfLine": "auto" so neither side fights the other.
+* text=auto eol=lf
+
+# Binary assets must never be line-ending converted.
+*.jpg binary
+*.jpeg binary
+*.png binary
+*.webp binary
+*.svg text eol=lf
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.lockb binary
