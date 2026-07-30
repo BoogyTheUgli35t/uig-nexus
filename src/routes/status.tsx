@@ -1,4 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
+import { FLAGS } from "@/lib/flags";
 import { useQuery } from "@tanstack/react-query";
 import { CheckCircle2, AlertTriangle, AlertOctagon, Activity } from "lucide-react";
 import { getSystemStatus } from "@/lib/public-status.functions";
@@ -7,6 +8,12 @@ import { PageHero, Section } from "@/components/site/sections";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/status")({
+  // Gated by VITE_FLAG_STATUS_PAGE. A status page that itself is broken or
+  // reporting nonsense is worse than none, so it can be pulled without a
+  // code change.
+  beforeLoad: () => {
+    if (!FLAGS.statusPage) throw redirect({ to: "/" });
+  },
   head: () => ({
     meta: [
       { title: "System Status — UIG" },

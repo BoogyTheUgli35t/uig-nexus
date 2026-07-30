@@ -45,10 +45,14 @@ hiding a division.
 | `VITE_FLAG_INNOVATION_INTAKE` | Public idea submission form |
 | `VITE_FLAG_STATUS_PAGE` | Public status page |
 | `VITE_FLAG_SELF_SERVE_SIGNUP` | Portal signup (vs. access-request only) |
-| `VITE_FLAG_PAYMENTS` | Stripe checkout surfaces |
 
 Set to `off` to disable; the route redirects to its parent instead of 404ing,
-so links stay valid. Flags are build-time — changing one needs a redeploy.
+so links stay valid, and the page drops out of `/sitemap.xml` so crawlers
+aren't sent to a redirect. Flags are build-time — changing one needs a redeploy.
+
+There is deliberately **no payments flag**: Stripe surfaces are already gated at
+runtime by whether `STRIPE_SECRET_KEY` is configured, which can't drift out of
+sync with whether checkout actually works.
 
 ## Monitoring
 

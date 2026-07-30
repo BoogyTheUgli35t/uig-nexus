@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
+import { FLAGS } from "@/lib/flags";
 
 const BASE_URL = "https://unifiedinnovationsgroup.online";
 
@@ -14,12 +15,18 @@ const paths = [
   "/divisions/logistics",
   "/divisions/intelligence",
   "/divisions/innovation-lab",
-  "/divisions/real-estate/listings",
-  "/divisions/innovation-lab/submit",
   "/careers",
   "/insights",
   "/contact",
-  "/status",
+];
+
+/** Pages behind feature flags. Advertising a URL that redirects wastes crawl
+ * budget and can look like cloaking, so a dark-launched page stays out of the
+ * sitemap until it's actually live. */
+const flaggedPaths: [string, boolean][] = [
+  ["/divisions/real-estate/listings", FLAGS.realEstateListings],
+  ["/divisions/innovation-lab/submit", FLAGS.innovationIntake],
+  ["/status", FLAGS.statusPage],
 ];
 
 const insightSlugs: string[] = [
@@ -32,7 +39,11 @@ export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
       GET: async () => {
-        const all = [...paths, ...insightSlugs.map((s) => `/insights/${s}`)];
+        const all = [
+          ...paths,
+          ...flaggedPaths.filter(([, enabled]) => enabled).map(([p]) => p),
+          ...insightSlugs.map((s) => `/insights/${s}`),
+        ];
         const urls = all
           .map(
             (p) =>

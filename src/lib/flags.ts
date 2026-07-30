@@ -27,8 +27,11 @@ export const FLAGS = {
   statusPage: readFlag("STATUS_PAGE"),
   /** Portal self-service signup (vs. invite/access-request only). */
   selfServeSignup: readFlag("SELF_SERVE_SIGNUP"),
-  /** Stripe checkout surfaces. */
-  payments: readFlag("PAYMENTS"),
+  // Note: there is deliberately no `payments` flag. Checkout is already gated
+  // at runtime by whether STRIPE_SECRET_KEY is configured
+  // (paymentsConfigured() in billing.functions.ts), which is strictly better
+  // than a build-time flag — it can't drift out of sync with whether payments
+  // actually work. A second switch would just be a way to lie about it.
 } as const;
 
 export type FeatureFlag = keyof typeof FLAGS;
