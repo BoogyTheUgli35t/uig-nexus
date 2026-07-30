@@ -19,8 +19,16 @@ export default defineConfig({
       "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV ?? "development"),
     },
     plugins: [
-      // Only enable MCP plugin in production build, not local dev (path issue on Windows)
-      process.env.NODE_ENV === "production" ? mcpPlugin() : [],
+      // MCP plugin runs for production builds only, and never on Windows.
+      // @lovable.dev/mcp-js asserts that routesDir resolves under a
+      // forward-slash root; since vite 7.3.6 the root arrives as a Windows
+      // path ("C:\UIG\nexus"), so the assertion throws and the local build
+      // dies. Deploys build on Linux, where the plugin still runs — so this
+      // costs nothing in production and unblocks local `npm run build`
+      // (which is what E2E and the pre-flight checklist depend on).
+      process.env.NODE_ENV === "production" && process.platform !== "win32"
+        ? mcpPlugin()
+        : [],
     ],
   },
 });

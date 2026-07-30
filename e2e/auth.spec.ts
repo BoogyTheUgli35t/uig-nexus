@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { requireHydration } from "./helpers";
 
 test.describe("Portal auth smoke", () => {
   test("login page renders sign-in form", async ({ page }) => {
@@ -10,6 +11,7 @@ test.describe("Portal auth smoke", () => {
 
   test("bad credentials show an error toast, not a silent failure", async ({ page }) => {
     await page.goto("/portal/login");
+    await requireHydration(page);
     await page.getByLabel(/email/i).fill(`nobody-${Date.now()}@example.com`);
     await page.getByLabel(/password/i).fill("wrong-password-123");
     await page.getByRole("button", { name: /sign in/i }).click();
@@ -21,6 +23,7 @@ test.describe("Portal auth smoke", () => {
   test("forgot password page renders and accepts an email", async ({ page }) => {
     await page.goto("/portal/forgot-password");
     await expect(page.getByRole("heading", { name: /forgot your password/i })).toBeVisible();
+    await requireHydration(page);
     await page.getByLabel(/email/i).fill(`nobody-${Date.now()}@example.com`);
     await page.getByRole("button", { name: /send reset link/i }).click();
     await expect(page.getByRole("heading", { name: /check your email/i })).toBeVisible({ timeout: 10_000 });
