@@ -109,5 +109,32 @@ Honest list of what is *not* production-hardened yet:
 4. **E2E authenticated flows** only run when `E2E_TEST_EMAIL` /
    `E2E_TEST_PASSWORD` secrets are configured; they are currently unset, so
    portal flows self-skip in CI.
-5. **Dependency vulnerabilities** — 15 open Dependabot alerts (5 high) at last
-   check.
+5. **Dependency vulnerabilities** — 8 open at last check (1 high, 6 moderate,
+   1 low). See below.
+
+## Dependency vulnerabilities
+
+Current state (verified with `npm audit` *after* a clean reinstall, which is
+the only number worth trusting — see the warning below):
+
+| Severity | Package | Fix available? |
+|---|---|---|
+| high | `undici` | only by downgrading `@cloudflare/vite-plugin` 1.51 → 1.12 |
+| moderate | `@cloudflare/vite-plugin`, `miniflare` | same major downgrade |
+| moderate | `@lovable.dev/mcp-js`, `@modelcontextprotocol/sdk`, `@hono/node-server` | none published |
+| low | `esbuild` | yes, but pulled back in transitively |
+
+**Why the high severity is accepted for now.** `undici` reaches the tree only
+through `@cloudflare/vite-plugin → miniflare/wrangler` — the local Workers
+emulator and the deploy CLI. It is not part of the deployed worker bundle, so
+it is not reachable by visitors. The only remedy npm offers is a 39-minor
+downgrade of the Cloudflare plugin, which is the deploy target for this app;
+that trade (near-certain build breakage against a build-tooling advisory) is
+not worth taking. Revisit when Cloudflare ships a patched miniflare.
+
+**Warning learned the hard way.** `npm audit fix` updates the lockfile, but a
+later plain `npm install` can re-resolve ranges and silently undo part of it —
+this repo went 20 → 4 → back to 14 that way, and the regression was only caught
+because GitHub's Dependabot count disagreed with the local one. Always re-run
+`npm install` *then* `npm audit` before believing a number, and prefer
+`overrides` in package.json for anything that keeps reverting.
