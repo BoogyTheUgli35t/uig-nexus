@@ -1,5 +1,5 @@
 import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
-import { ArrowLeft, Lock, LayoutGrid, Building2, Users, TrendingUp, Kanban, BarChart3, Settings } from "lucide-react";
+import { ArrowLeft, Lock, LayoutGrid, Building2, Users, TrendingUp, Kanban, BarChart3, Settings, Wrench } from "lucide-react";
 import { getDivision } from "@/lib/divisions";
 import { useDivisionAccess } from "@/hooks/use-division-access";
 import { HeroBanner, EmptyState } from "@/components/portal/blocks";
@@ -19,6 +19,7 @@ const TABS = [
   { to: "/portal/divisions/real-estate/tenants", label: "Tenants", icon: Users },
   { to: "/portal/divisions/real-estate/investors", label: "Investors", icon: TrendingUp },
   { to: "/portal/divisions/real-estate/leads", label: "Leads", icon: Kanban },
+  { to: "/portal/divisions/real-estate/maintenance", label: "Maintenance", icon: Wrench },
   { to: "/portal/divisions/real-estate/reports", label: "Reports", icon: BarChart3 },
   { to: "/portal/divisions/real-estate/settings", label: "Settings", icon: Settings },
 ] as const;
