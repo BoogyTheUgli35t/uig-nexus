@@ -110,7 +110,7 @@ const randomCode = () => "TRK-" + Math.random().toString(36).slice(2, 8).toUpper
 
 export const addShipment = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => AddShipmentSchema.parse(i))
+  .validator((i: unknown) => AddShipmentSchema.parse(i))
   .handler(async ({ context, data }) => {
     const reference = "UIG-SHP-" + Math.floor(10000 + Math.random() * 89999);
     const trackingCode = randomCode();
@@ -151,7 +151,7 @@ const UpdateShipmentStatusSchema = z.object({
 
 export const updateShipmentStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => UpdateShipmentStatusSchema.parse(i))
+  .validator((i: unknown) => UpdateShipmentStatusSchema.parse(i))
   .handler(async ({ context, data }) => {
     const patch: { status: (typeof SHIPMENT_STATUSES)[number]; delivered_at?: string } = {
       status: data.status,
@@ -177,7 +177,7 @@ const AssignShipmentSchema = z.object({
 
 export const assignShipment = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => AssignShipmentSchema.parse(i))
+  .validator((i: unknown) => AssignShipmentSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase
       .from("shipments")
@@ -192,7 +192,7 @@ export const assignShipment = createServerFn({ method: "POST" })
 
 /** Shipment detail: full row + driver/route names + full event timeline. */
 export const getShipmentDetail = createServerFn({ method: "GET" })
-  .inputValidator((i: unknown) => z.object({ id: z.string().uuid() }).parse(i))
+  .validator((i: unknown) => z.object({ id: z.string().uuid() }).parse(i))
   .middleware([requireSupabaseAuth])
   .handler(async ({ context, data }) => {
     const { data: shipment, error } = await context.supabase
@@ -227,7 +227,7 @@ const PodSchema = z.object({
  * divisions' direct-to-storage uploads); this just records the resulting URL. */
 export const completeDeliveryWithPod = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => PodSchema.parse(i))
+  .validator((i: unknown) => PodSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { data: shipment, error } = await context.supabase
       .from("shipments")
@@ -271,7 +271,7 @@ const UpdateVehicleStatusSchema = z.object({
 
 export const updateVehicleStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => UpdateVehicleStatusSchema.parse(i))
+  .validator((i: unknown) => UpdateVehicleStatusSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase
       .from("vehicles")
@@ -292,7 +292,7 @@ const AddMaintenanceLogSchema = z.object({
 
 export const addMaintenanceLog = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => AddMaintenanceLogSchema.parse(i))
+  .validator((i: unknown) => AddMaintenanceLogSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase.from("vehicle_maintenance_logs").insert({
       vehicle_id: data.vehicle_id,
@@ -334,7 +334,7 @@ const AddRouteStopSchema = z.object({
 
 export const addRouteStop = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => AddRouteStopSchema.parse(i))
+  .validator((i: unknown) => AddRouteStopSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase.from("route_stops").insert({
       route_id: data.route_id,
@@ -350,7 +350,7 @@ const ToggleRouteStopSchema = z.object({ id: z.string().uuid(), completed: z.boo
 
 export const toggleRouteStop = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => ToggleRouteStopSchema.parse(i))
+  .validator((i: unknown) => ToggleRouteStopSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase
       .from("route_stops")
@@ -378,7 +378,7 @@ const AssignRouteDriverSchema = z.object({
 
 export const assignRouteDriver = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => AssignRouteDriverSchema.parse(i))
+  .validator((i: unknown) => AssignRouteDriverSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase
       .from("routes")
@@ -398,7 +398,7 @@ const LinkDriverSchema = z.object({
 
 export const linkDriverAccount = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => LinkDriverSchema.parse(i))
+  .validator((i: unknown) => LinkDriverSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: list, error: listErr } = await supabaseAdmin.auth.admin.listUsers({
@@ -460,7 +460,7 @@ const UpdateMyDriverStatusSchema = z.object({ status: z.enum(DRIVER_STATUSES) })
 
 export const updateMyDriverStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => UpdateMyDriverStatusSchema.parse(i))
+  .validator((i: unknown) => UpdateMyDriverStatusSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase
       .from("drivers")

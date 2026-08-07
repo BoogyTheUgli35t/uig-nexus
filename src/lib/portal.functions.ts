@@ -204,7 +204,7 @@ const ProjectIdSchema = z.object({ id: z.string().uuid() });
 
 export const getProject = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => ProjectIdSchema.parse(i))
+  .validator((i: unknown) => ProjectIdSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { supabase } = context;
     const [{ data: project, error }, { data: tasks }, { data: documents }] = await Promise.all([
@@ -232,7 +232,7 @@ const CreateProjectSchema = z.object({
 
 export const createProject = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => CreateProjectSchema.parse(i))
+  .validator((i: unknown) => CreateProjectSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { supabase, userId } = context;
     const { data: profile } = await supabase
@@ -264,7 +264,7 @@ const CreateTaskSchema = z.object({
 
 export const createTask = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => CreateTaskSchema.parse(i))
+  .validator((i: unknown) => CreateTaskSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { supabase, userId } = context;
     const { error } = await supabase.from("tasks").insert({
@@ -285,7 +285,7 @@ const UpdateTaskStatusSchema = z.object({
 
 export const updateTaskStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => UpdateTaskStatusSchema.parse(i))
+  .validator((i: unknown) => UpdateTaskStatusSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase
       .from("tasks")
@@ -319,7 +319,7 @@ const AuditEventSchema = z.object({
  * session claims.
  */
 export const logPortalEvent = createServerFn({ method: "POST" })
-  .inputValidator((i: unknown) => AuditEventSchema.parse(i))
+  .validator((i: unknown) => AuditEventSchema.parse(i))
   .handler(async ({ data }) => {
     let ip: string | null = null;
     let ua: string | null = null;
@@ -389,7 +389,7 @@ const AccessRequestSchema = z.object({
 });
 
 export const submitAccessRequest = createServerFn({ method: "POST" })
-  .inputValidator((i: unknown) => AccessRequestSchema.parse(i))
+  .validator((i: unknown) => AccessRequestSchema.parse(i))
   .handler(async ({ data }) => {
     const { error } = await supabaseAdmin.from("access_requests").insert({
       user_id: data.user_id ?? null,
@@ -518,7 +518,7 @@ const ReviewAccessRequestSchema = z.object({
  * the grants (or uses the Users page once they exist). */
 export const approveAccessRequest = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => ReviewAccessRequestSchema.parse(i))
+  .validator((i: unknown) => ReviewAccessRequestSchema.parse(i))
   .handler(async ({ context, data }) => {
     await requireAdmin(context.supabase, context.userId);
 
@@ -556,7 +556,7 @@ export const approveAccessRequest = createServerFn({ method: "POST" })
 
 export const rejectAccessRequest = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => z.object({ id: z.string().uuid() }).parse(i))
+  .validator((i: unknown) => z.object({ id: z.string().uuid() }).parse(i))
   .handler(async ({ context, data }) => {
     await requireAdmin(context.supabase, context.userId);
     const { error } = await supabaseAdmin
@@ -617,7 +617,7 @@ const UpdateUserAccessSchema = z.object({
 
 export const updateUserAccess = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => UpdateUserAccessSchema.parse(i))
+  .validator((i: unknown) => UpdateUserAccessSchema.parse(i))
   .handler(async ({ context, data }) => {
     await requireAdmin(context.supabase, context.userId);
 
@@ -659,7 +659,7 @@ const RegisterUserDivisionsSchema = z.object({
  */
 export const registerUserDivisions = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => RegisterUserDivisionsSchema.parse(i))
+  .validator((i: unknown) => RegisterUserDivisionsSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { userId } = context;
 

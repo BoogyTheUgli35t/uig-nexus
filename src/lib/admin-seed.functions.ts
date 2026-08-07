@@ -85,7 +85,7 @@ const GrantSelfSchema = z.object({
  */
 export const ensureDivisionAccess = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => GrantSelfSchema.parse(i))
+  .validator((i: unknown) => GrantSelfSchema.parse(i))
   .handler(async ({ context, data }) => {
     await assertAdmin(context.supabase, context.userId);
 

@@ -35,7 +35,7 @@ export type AuditFilter = z.infer<typeof AuditFilterSchema>;
  */
 export const queryAuditLog = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => AuditFilterSchema.parse(i ?? {}))
+  .validator((i: unknown) => AuditFilterSchema.parse(i ?? {}))
   .handler(async ({ context, data }) => {
     await assertAdmin(context.supabase, context.userId);
 
@@ -151,7 +151,7 @@ const BroadcastSchema = z.object({
 
 export const sendBroadcast = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => BroadcastSchema.parse(i))
+  .validator((i: unknown) => BroadcastSchema.parse(i))
   .handler(async ({ context, data }) => {
     await assertAdmin(context.supabase, context.userId);
 
@@ -226,7 +226,7 @@ const DivisionGrantSchema = z.object({
 
 export const grantDivisionAccess = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => DivisionGrantSchema.parse(i))
+  .validator((i: unknown) => DivisionGrantSchema.parse(i))
   .handler(async ({ context, data }) => {
     await assertAdmin(context.supabase, context.userId);
     const { error } = await supabaseAdmin
@@ -241,7 +241,7 @@ export const grantDivisionAccess = createServerFn({ method: "POST" })
 
 export const revokeDivisionAccess = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => DivisionGrantSchema.parse(i))
+  .validator((i: unknown) => DivisionGrantSchema.parse(i))
   .handler(async ({ context, data }) => {
     await assertAdmin(context.supabase, context.userId);
     const { error } = await supabaseAdmin

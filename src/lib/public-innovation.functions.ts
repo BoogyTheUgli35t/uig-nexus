@@ -22,7 +22,7 @@ const SubmitPublicIdeaSchema = z.object({
 });
 
 export const submitPublicIdea = createServerFn({ method: "POST" })
-  .inputValidator((i: unknown) => SubmitPublicIdeaSchema.parse(i))
+  .validator((i: unknown) => SubmitPublicIdeaSchema.parse(i))
   .handler(async ({ data }) => {
     if (data.website) return { ok: true };
 

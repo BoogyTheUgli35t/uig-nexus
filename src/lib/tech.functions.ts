@@ -76,7 +76,7 @@ const ListProjectsSchema = z.object({
 
 export const listTechProjects = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => ListProjectsSchema.parse(i ?? {}))
+  .validator((i: unknown) => ListProjectsSchema.parse(i ?? {}))
   .handler(async ({ context, data }) => {
     let query = context.supabase
       .from("tech_projects")
@@ -97,7 +97,7 @@ const ProjectIdSchema = z.object({ id: z.string().uuid() });
 
 export const getTechProjectDetail = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => ProjectIdSchema.parse(i))
+  .validator((i: unknown) => ProjectIdSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { supabase } = context;
     const [
@@ -156,7 +156,7 @@ const CreateProjectSchema = z.object({
 
 export const createTechProject = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => CreateProjectSchema.parse(i))
+  .validator((i: unknown) => CreateProjectSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { data: row, error } = await context.supabase
       .from("tech_projects")
@@ -184,7 +184,7 @@ const UpdateProjectStatusSchema = z.object({
 
 export const updateTechProjectStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => UpdateProjectStatusSchema.parse(i))
+  .validator((i: unknown) => UpdateProjectStatusSchema.parse(i))
   .handler(async ({ context, data }) => {
     const progress =
       data.status === "live"
@@ -216,7 +216,7 @@ const AddTaskSchema = z.object({
 
 export const addTechTask = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => AddTaskSchema.parse(i))
+  .validator((i: unknown) => AddTaskSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase.from("tech_tasks").insert({
       tech_project_id: data.tech_project_id,
@@ -237,7 +237,7 @@ const ToggleTaskSchema = z.object({
 
 export const updateTechTaskStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => ToggleTaskSchema.parse(i))
+  .validator((i: unknown) => ToggleTaskSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase
       .from("tech_tasks")
@@ -259,7 +259,7 @@ const AddDeploymentSchema = z.object({
 
 export const addDeployment = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => AddDeploymentSchema.parse(i))
+  .validator((i: unknown) => AddDeploymentSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase.from("deployments").insert({
       tech_project_id: data.tech_project_id,
@@ -284,7 +284,7 @@ const AddInvoiceSchema = z.object({
 
 export const addInvoice = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => AddInvoiceSchema.parse(i))
+  .validator((i: unknown) => AddInvoiceSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase.from("project_invoices").insert({
       tech_project_id: data.tech_project_id,
@@ -304,7 +304,7 @@ const UpdateInvoiceStatusSchema = z.object({
 
 export const updateInvoiceStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => UpdateInvoiceStatusSchema.parse(i))
+  .validator((i: unknown) => UpdateInvoiceStatusSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase
       .from("project_invoices")
@@ -339,7 +339,7 @@ const CreateRuleSchema = z.object({
 
 export const createAutomationRule = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => CreateRuleSchema.parse(i))
+  .validator((i: unknown) => CreateRuleSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase.from("automation_rules").insert({
       name: data.name,
@@ -356,7 +356,7 @@ const ToggleRuleSchema = z.object({ id: z.string().uuid(), enabled: z.boolean() 
 
 export const toggleAutomationRule = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => ToggleRuleSchema.parse(i))
+  .validator((i: unknown) => ToggleRuleSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase
       .from("automation_rules")
@@ -376,7 +376,7 @@ const RunRuleSchema = z.object({ id: z.string().uuid() });
 
 export const runAutomationRuleNow = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => RunRuleSchema.parse(i))
+  .validator((i: unknown) => RunRuleSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { data: rule, error: fetchErr } = await context.supabase
       .from("automation_rules")
@@ -407,7 +407,7 @@ export const runAutomationRuleNow = createServerFn({ method: "POST" })
 
 export const getClientProjects = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => z.object({ client_name: z.string().trim().min(1) }).parse(i))
+  .validator((i: unknown) => z.object({ client_name: z.string().trim().min(1) }).parse(i))
   .handler(async ({ context, data }) => {
     const [{ data: projects }] = await Promise.all([
       context.supabase
@@ -462,7 +462,7 @@ const UpdateComponentStatusSchema = z.object({
 
 export const updateComponentStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => UpdateComponentStatusSchema.parse(i))
+  .validator((i: unknown) => UpdateComponentStatusSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase
       .from("status_components")
@@ -493,7 +493,7 @@ const CreateIncidentSchema = z.object({
 
 export const createIncident = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => CreateIncidentSchema.parse(i))
+  .validator((i: unknown) => CreateIncidentSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase.from("status_incidents").insert({
       title: data.title,
@@ -513,7 +513,7 @@ const UpdateIncidentSchema = z.object({
 
 export const updateIncidentStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => UpdateIncidentSchema.parse(i))
+  .validator((i: unknown) => UpdateIncidentSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase
       .from("status_incidents")

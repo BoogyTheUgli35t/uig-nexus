@@ -89,7 +89,7 @@ const AddDatasetSchema = z.object({
 
 export const addDataset = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => AddDatasetSchema.parse(i))
+  .validator((i: unknown) => AddDatasetSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase.from("datasets").insert({
       name: data.name,
@@ -115,7 +115,7 @@ const CreateModelSchema = z.object({
 
 export const createModel = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => CreateModelSchema.parse(i))
+  .validator((i: unknown) => CreateModelSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase.from("models").insert({
       name: data.name,
@@ -136,7 +136,7 @@ const AdvanceModelSchema = z.object({ id: z.string().uuid() });
 /** Move a model to the next lifecycle stage. "training" → "trained" simulates an evaluation accuracy. */
 export const advanceModel = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => AdvanceModelSchema.parse(i))
+  .validator((i: unknown) => AdvanceModelSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { data: model, error: readErr } = await context.supabase
       .from("models")
@@ -201,7 +201,7 @@ const RunPredictionSchema = z.object({
 /** Run a live AI prediction against a model and persist the result. */
 export const runPrediction = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => RunPredictionSchema.parse(i))
+  .validator((i: unknown) => RunPredictionSchema.parse(i))
   .handler(async ({ context, data }) => {
     let modelContext = "a general-purpose UIG Intelligence model";
     if (data.model_id) {
@@ -266,7 +266,7 @@ const SendChatMessageSchema = z.object({
  * a genuine conversation thread rather than a one-shot Q&A. */
 export const sendChatMessage = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => SendChatMessageSchema.parse(i))
+  .validator((i: unknown) => SendChatMessageSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { data: history } = await context.supabase
       .from("ai_chat_messages")

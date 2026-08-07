@@ -78,7 +78,7 @@ const ListingsByLocationSchema = z.object({
 });
 
 export const getListingsByLocation = createServerFn({ method: "GET" })
-  .inputValidator((i: unknown) => ListingsByLocationSchema.parse(i))
+  .validator((i: unknown) => ListingsByLocationSchema.parse(i))
   .handler(async ({ data }) => {
     let query = supabase
       .from("properties")
@@ -120,7 +120,7 @@ export const getListingsByLocation = createServerFn({ method: "GET" })
 const ListingIdSchema = z.object({ id: z.string().uuid() });
 
 export const getListingDetail = createServerFn({ method: "GET" })
-  .inputValidator((i: unknown) => ListingIdSchema.parse(i))
+  .validator((i: unknown) => ListingIdSchema.parse(i))
   .handler(async ({ data }) => {
     const [{ data: property, error }, { data: images }] = await Promise.all([
       supabase

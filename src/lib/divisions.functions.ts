@@ -55,7 +55,7 @@ const NotificationIdSchema = z.object({ id: z.string().uuid() });
 
 export const markNotificationRead = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => NotificationIdSchema.parse(i))
+  .validator((i: unknown) => NotificationIdSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase
       .from("notifications")
@@ -85,7 +85,7 @@ const ListMessagesSchema = z.object({
 
 export const listMessages = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => ListMessagesSchema.parse(i))
+  .validator((i: unknown) => ListMessagesSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { data: rows, error } = await context.supabase
       .from("messages")
@@ -106,7 +106,7 @@ const SendMessageSchema = z.object({
 
 export const sendMessage = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => SendMessageSchema.parse(i))
+  .validator((i: unknown) => SendMessageSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase.from("messages").insert({
       division: data.division,

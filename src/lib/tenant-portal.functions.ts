@@ -106,7 +106,7 @@ const RaiseRequestSchema = z.object({
 /** File a maintenance request against the caller's own tenancy. */
 export const raiseMaintenanceRequest = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => RaiseRequestSchema.parse(i))
+  .validator((i: unknown) => RaiseRequestSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { supabase, userId } = context;
 
@@ -159,7 +159,7 @@ const UpdateRequestSchema = z.object({
 
 export const updateMaintenanceRequest = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => UpdateRequestSchema.parse(i))
+  .validator((i: unknown) => UpdateRequestSchema.parse(i))
   .handler(async ({ context, data }) => {
     const resolved = data.status === "resolved" || data.status === "closed";
     const { error } = await context.supabase
@@ -187,7 +187,7 @@ const LinkTenantSchema = z.object({
  */
 export const linkTenantAccount = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((i: unknown) => LinkTenantSchema.parse(i))
+  .validator((i: unknown) => LinkTenantSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: list, error: listErr } = await supabaseAdmin.auth.admin.listUsers({

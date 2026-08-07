@@ -10,7 +10,7 @@ const ContactSchema = z.object({
 });
 
 export const submitContact = createServerFn({ method: "POST" })
-  .inputValidator((input: unknown) => ContactSchema.parse(input))
+  .validator((input: unknown) => ContactSchema.parse(input))
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { error } = await supabaseAdmin.from("contact_submissions").insert({
