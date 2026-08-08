@@ -114,7 +114,7 @@ const ListPropertiesSchema = z.object({
 
 export const listPropertiesFiltered = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => ListPropertiesSchema.parse(i ?? {}))
+  .inputValidator((i: unknown) => ListPropertiesSchema.parse(i ?? {}))
   .handler(async ({ context, data }) => {
     let query = context.supabase
       .from("properties")
@@ -162,7 +162,7 @@ const PropertyIdSchema = z.object({ id: z.string().uuid() });
 
 export const getPropertyDetail = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => PropertyIdSchema.parse(i))
+  .inputValidator((i: unknown) => PropertyIdSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { supabase } = context;
     const [{ data: property, error }, { data: images }, { data: units }, { data: tenants }, { data: leads }] =
@@ -243,7 +243,7 @@ const CreatePropertySchema = z.object({
 
 export const createProperty = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => CreatePropertySchema.parse(i))
+  .inputValidator((i: unknown) => CreatePropertySchema.parse(i))
   .handler(async ({ context, data }) => {
     const { data: row, error } = await context.supabase
       .from("properties")
@@ -281,7 +281,7 @@ const UpdatePropertySchema = z.object({
 
 export const updateProperty = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => UpdatePropertySchema.parse(i))
+  .inputValidator((i: unknown) => UpdatePropertySchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase
       .from("properties")
@@ -305,7 +305,7 @@ const UpdatePropertyStatusSchema = z.object({
 
 export const updatePropertyStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => UpdatePropertyStatusSchema.parse(i))
+  .inputValidator((i: unknown) => UpdatePropertyStatusSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase
       .from("properties")
@@ -329,7 +329,7 @@ const AddUnitSchema = z.object({
 
 export const addUnit = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => AddUnitSchema.parse(i))
+  .inputValidator((i: unknown) => AddUnitSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase.from("property_units").insert({
       property_id: data.property_id,
@@ -353,7 +353,7 @@ const UpdateUnitStatusSchema = z.object({
 
 export const updateUnitStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => UpdateUnitStatusSchema.parse(i))
+  .inputValidator((i: unknown) => UpdateUnitStatusSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase
       .from("property_units")
@@ -372,7 +372,7 @@ const UnitIdSchema = z.object({ id: z.string().uuid() });
 
 export const getUnitDetail = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => UnitIdSchema.parse(i))
+  .inputValidator((i: unknown) => UnitIdSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { supabase } = context;
     const { data: unit, error } = await supabase
@@ -420,7 +420,7 @@ const CreateTenantSchema = z.object({
 
 export const createTenant = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => CreateTenantSchema.parse(i))
+  .inputValidator((i: unknown) => CreateTenantSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { data: row, error } = await context.supabase
       .from("tenants")
@@ -454,7 +454,7 @@ const AssignTenantSchema = z.object({
 
 export const assignTenantToUnit = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => AssignTenantSchema.parse(i))
+  .inputValidator((i: unknown) => AssignTenantSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase
       .from("property_units")
@@ -472,7 +472,7 @@ const UpdateTenantPaymentSchema = z.object({
 
 export const updateTenantPaymentStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => UpdateTenantPaymentSchema.parse(i))
+  .inputValidator((i: unknown) => UpdateTenantPaymentSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase
       .from("tenants")
@@ -491,7 +491,7 @@ const UploadLeaseDocSchema = z.object({ id: z.string().uuid(), file_path: z.stri
 
 export const attachLeaseDocument = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => UploadLeaseDocSchema.parse(i))
+  .inputValidator((i: unknown) => UploadLeaseDocSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase
       .from("tenants")
@@ -505,7 +505,7 @@ const TenantIdSchema = z.object({ id: z.string().uuid() });
 
 export const sendLeaseForSignature = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => TenantIdSchema.parse(i))
+  .inputValidator((i: unknown) => TenantIdSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase
       .from("tenants")
@@ -519,7 +519,7 @@ const RecordSignatureSchema = z.object({ id: z.string().uuid(), signed_name: z.s
 
 export const recordLeaseSignature = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => RecordSignatureSchema.parse(i))
+  .inputValidator((i: unknown) => RecordSignatureSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase
       .from("tenants")
@@ -535,7 +535,7 @@ export const recordLeaseSignature = createServerFn({ method: "POST" })
 
 export const voidLease = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => TenantIdSchema.parse(i))
+  .inputValidator((i: unknown) => TenantIdSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase
       .from("tenants")
@@ -558,7 +558,7 @@ const AddLeadSchema = z.object({
 
 export const addLead = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => AddLeadSchema.parse(i))
+  .inputValidator((i: unknown) => AddLeadSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase.from("leads").insert({
       full_name: data.full_name,
@@ -581,7 +581,7 @@ const UpdateLeadStageSchema = z.object({
 
 export const updateLeadStage = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => UpdateLeadStageSchema.parse(i))
+  .inputValidator((i: unknown) => UpdateLeadStageSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { data: lead, error } = await context.supabase
       .from("leads")
@@ -618,7 +618,7 @@ const AddLeadActivitySchema = z.object({
 
 export const addLeadActivity = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => AddLeadActivitySchema.parse(i))
+  .inputValidator((i: unknown) => AddLeadActivitySchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase.from("crm_activities").insert({
       lead_id: data.lead_id,
@@ -638,7 +638,7 @@ export const addLeadActivity = createServerFn({ method: "POST" })
 
 export const listLeadActivities = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => z.object({ lead_id: z.string().uuid() }).parse(i))
+  .inputValidator((i: unknown) => z.object({ lead_id: z.string().uuid() }).parse(i))
   .handler(async ({ context, data }) => {
     const { data: rows, error } = await context.supabase
       .from("crm_activities")
@@ -723,7 +723,7 @@ const LinkInvestorSchema = z.object({
 
 export const linkInvestorAccount = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => LinkInvestorSchema.parse(i))
+  .inputValidator((i: unknown) => LinkInvestorSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: list, error: listErr } = await supabaseAdmin.auth.admin.listUsers({

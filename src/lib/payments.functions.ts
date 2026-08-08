@@ -19,7 +19,7 @@ const CheckoutSchema = z.object({
 
 export const createCheckoutSession = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => CheckoutSchema.parse(i))
+  .inputValidator((i: unknown) => CheckoutSchema.parse(i))
   .handler(async ({ data, context }) => {
     const key = process.env.STRIPE_SECRET_KEY;
     if (!key) throw new Error("Payments are not configured. Missing STRIPE_SECRET_KEY.");

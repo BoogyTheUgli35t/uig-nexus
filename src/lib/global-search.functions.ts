@@ -12,7 +12,7 @@ const SearchSchema = z.object({ query: z.string().trim().min(2).max(120) });
  */
 export const searchPortal = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => SearchSchema.parse(i))
+  .inputValidator((i: unknown) => SearchSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { supabase } = context;
     // Escape PostgREST filter metacharacters so the raw query cannot inject

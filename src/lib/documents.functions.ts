@@ -24,7 +24,7 @@ const RecordDocumentSchema = z.object({
 
 export const recordDocument = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => RecordDocumentSchema.parse(i))
+  .inputValidator((i: unknown) => RecordDocumentSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase.from("document_library").insert({
       owner_id: context.userId,
@@ -43,7 +43,7 @@ const DeleteDocumentSchema = z.object({ id: z.string(), file_path: z.string() })
 
 export const deleteDocument = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => DeleteDocumentSchema.parse(i))
+  .inputValidator((i: unknown) => DeleteDocumentSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error: storageErr } = await context.supabase.storage
       .from("document-library")

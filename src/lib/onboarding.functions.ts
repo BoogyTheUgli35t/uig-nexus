@@ -22,7 +22,7 @@ const ChooseDivisionsSchema = z.object({
  */
 export const chooseDivisions = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => ChooseDivisionsSchema.parse(i))
+  .inputValidator((i: unknown) => ChooseDivisionsSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { supabase, userId } = context;
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");

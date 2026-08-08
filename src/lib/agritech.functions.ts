@@ -96,7 +96,7 @@ const OnboardFarmerSchema = z.object({
  * first field in one go. */
 export const onboardFarmer = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => OnboardFarmerSchema.parse(i))
+  .inputValidator((i: unknown) => OnboardFarmerSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { data: farmer, error } = await context.supabase
       .from("farmers")
@@ -136,7 +136,7 @@ const UpdateFieldStatusSchema = z.object({
  * change) so it surfaces on the alerting panel. */
 export const updateFieldStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => UpdateFieldStatusSchema.parse(i))
+  .inputValidator((i: unknown) => UpdateFieldStatusSchema.parse(i))
   .handler(async ({ context, data }) => {
     const health = data.status === "healthy" ? 90 : data.status === "at_risk" ? 60 : 30;
     const { data: field, error } = await context.supabase
@@ -175,7 +175,7 @@ export const updateFieldStatus = createServerFn({ method: "POST" })
 
 export const acknowledgeAlert = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => z.object({ id: z.string().uuid() }).parse(i))
+  .inputValidator((i: unknown) => z.object({ id: z.string().uuid() }).parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase
       .from("agri_alerts")
@@ -194,7 +194,7 @@ const RenameCooperativeSchema = z.object({
 
 export const renameCooperative = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => RenameCooperativeSchema.parse(i))
+  .inputValidator((i: unknown) => RenameCooperativeSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase
       .from("farmers")
@@ -207,7 +207,7 @@ export const renameCooperative = createServerFn({ method: "POST" })
 /** Field detail: field row + farmer + sensor history + images. */
 export const getFieldDetail = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => z.object({ id: z.string().uuid() }).parse(i))
+  .inputValidator((i: unknown) => z.object({ id: z.string().uuid() }).parse(i))
   .handler(async ({ context, data }) => {
     const { data: field, error } = await context.supabase
       .from("fields")
@@ -254,7 +254,7 @@ const AddFieldImageSchema = z.object({
 
 export const addFieldImage = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => AddFieldImageSchema.parse(i))
+  .inputValidator((i: unknown) => AddFieldImageSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase.from("field_images").insert({
       field_id: data.field_id,
@@ -269,7 +269,7 @@ export const addFieldImage = createServerFn({ method: "POST" })
 
 export const removeFieldImage = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => z.object({ id: z.string().uuid() }).parse(i))
+  .inputValidator((i: unknown) => z.object({ id: z.string().uuid() }).parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase.from("field_images").delete().eq("id", data.id);
     if (error) throw new Error(error.message);
@@ -290,7 +290,7 @@ const LinkFarmerSchema = z.object({
 
 export const linkFarmerAccount = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => LinkFarmerSchema.parse(i))
+  .inputValidator((i: unknown) => LinkFarmerSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: list, error: listErr } = await supabaseAdmin.auth.admin.listUsers({

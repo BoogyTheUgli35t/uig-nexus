@@ -42,7 +42,7 @@ const SubmitIdeaSchema = z.object({
 
 export const submitIdea = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => SubmitIdeaSchema.parse(i))
+  .inputValidator((i: unknown) => SubmitIdeaSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase.from("ideas").insert({
       title: data.title,
@@ -65,7 +65,7 @@ const CreatePrototypeSchema = z.object({
 
 export const createPrototype = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => CreatePrototypeSchema.parse(i))
+  .inputValidator((i: unknown) => CreatePrototypeSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase.from("prototypes").insert({
       idea_id: data.idea_id,
@@ -85,7 +85,7 @@ const UpdatePrototypeStatusSchema = z.object({
 
 export const updatePrototypeStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => UpdatePrototypeStatusSchema.parse(i))
+  .inputValidator((i: unknown) => UpdatePrototypeStatusSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase
       .from("prototypes")
@@ -102,7 +102,7 @@ const UpdateIdeaStatusSchema = z.object({
 
 export const updateIdeaStatus = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => UpdateIdeaStatusSchema.parse(i))
+  .inputValidator((i: unknown) => UpdateIdeaStatusSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase
       .from("ideas")
@@ -120,7 +120,7 @@ const AddPartnerSchema = z.object({
 
 export const addPartner = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => AddPartnerSchema.parse(i))
+  .inputValidator((i: unknown) => AddPartnerSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase.from("partners").insert({
       name: data.name,
@@ -140,7 +140,7 @@ const AddScreenshotSchema = z.object({
 
 export const addPrototypeScreenshot = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => AddScreenshotSchema.parse(i))
+  .inputValidator((i: unknown) => AddScreenshotSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { data: proto, error: readErr } = await context.supabase
       .from("prototypes")
@@ -159,7 +159,7 @@ export const addPrototypeScreenshot = createServerFn({ method: "POST" })
 
 export const removePrototypeScreenshot = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => AddScreenshotSchema.parse(i))
+  .inputValidator((i: unknown) => AddScreenshotSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { data: proto, error: readErr } = await context.supabase
       .from("prototypes")
@@ -195,7 +195,7 @@ async function callLovableAI(messages: { role: string; content: string }[]) {
 
 export const listChecklist = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => z.object({ idea_id: z.string().uuid() }).parse(i))
+  .inputValidator((i: unknown) => z.object({ idea_id: z.string().uuid() }).parse(i))
   .handler(async ({ context, data }) => {
     const { data: items, error } = await context.supabase
       .from("mvp_checklist_items")
@@ -211,7 +211,7 @@ export const listChecklist = createServerFn({ method: "GET" })
  * for a new phase without losing progress on existing items. */
 export const generateMvpChecklist = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => z.object({ idea_id: z.string().uuid() }).parse(i))
+  .inputValidator((i: unknown) => z.object({ idea_id: z.string().uuid() }).parse(i))
   .handler(async ({ context, data }) => {
     const { data: idea, error: ideaErr } = await context.supabase
       .from("ideas")
@@ -250,7 +250,7 @@ export const generateMvpChecklist = createServerFn({ method: "POST" })
 
 export const toggleChecklistItem = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => z.object({ id: z.string().uuid(), done: z.boolean() }).parse(i))
+  .inputValidator((i: unknown) => z.object({ id: z.string().uuid(), done: z.boolean() }).parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase
       .from("mvp_checklist_items")
@@ -283,7 +283,7 @@ const CreateDemoDaySchema = z.object({
 
 export const createDemoDay = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => CreateDemoDaySchema.parse(i))
+  .inputValidator((i: unknown) => CreateDemoDaySchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase
       .from("demo_days")
@@ -300,7 +300,7 @@ const ScheduleSlotSchema = z.object({
 
 export const scheduleSlot = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => ScheduleSlotSchema.parse(i))
+  .inputValidator((i: unknown) => ScheduleSlotSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase.from("demo_day_slots").insert({
       demo_day_id: data.demo_day_id,
@@ -313,7 +313,7 @@ export const scheduleSlot = createServerFn({ method: "POST" })
 
 export const unscheduleSlot = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => z.object({ id: z.string().uuid() }).parse(i))
+  .inputValidator((i: unknown) => z.object({ id: z.string().uuid() }).parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase.from("demo_day_slots").delete().eq("id", data.id);
     if (error) throw new Error(error.message);
@@ -355,7 +355,7 @@ const CreateExperimentSchema = z.object({
 
 export const createExperiment = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => CreateExperimentSchema.parse(i))
+  .inputValidator((i: unknown) => CreateExperimentSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase.from("experiments").insert({
       idea_id: data.idea_id || null,
@@ -378,7 +378,7 @@ const UpdateExperimentSchema = z.object({
 
 export const updateExperiment = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => UpdateExperimentSchema.parse(i))
+  .inputValidator((i: unknown) => UpdateExperimentSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase
       .from("experiments")
@@ -419,7 +419,7 @@ const ReviewSubmissionSchema = z.object({
 
 export const reviewSubmission = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => ReviewSubmissionSchema.parse(i))
+  .inputValidator((i: unknown) => ReviewSubmissionSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase
       .from("innovation_submissions")

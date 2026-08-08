@@ -6,7 +6,7 @@ const NewsletterSchema = z.object({
 });
 
 export const subscribeNewsletter = createServerFn({ method: "POST" })
-  .validator((input: unknown) => NewsletterSchema.parse(input))
+  .inputValidator((input: unknown) => NewsletterSchema.parse(input))
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { error } = await supabaseAdmin
