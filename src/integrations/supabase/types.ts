@@ -1030,69 +1030,6 @@ export type Database = {
         }
         Relationships: []
       }
-      maintenance_requests: {
-        Row: {
-          category: string
-          created_at: string
-          description: string | null
-          id: string
-          priority: string
-          property_id: string | null
-          resolved_at: string | null
-          staff_notes: string | null
-          status: string
-          tenant_id: string
-          title: string
-          unit_id: string | null
-          updated_at: string
-        }
-        Insert: {
-          category?: string
-          created_at?: string
-          description?: string | null
-          id?: string
-          priority?: string
-          property_id?: string | null
-          resolved_at?: string | null
-          staff_notes?: string | null
-          status?: string
-          tenant_id: string
-          title: string
-          unit_id?: string | null
-          updated_at?: string
-        }
-        Update: {
-          category?: string
-          created_at?: string
-          description?: string | null
-          id?: string
-          priority?: string
-          property_id?: string | null
-          resolved_at?: string | null
-          staff_notes?: string | null
-          status?: string
-          tenant_id?: string
-          title?: string
-          unit_id?: string | null
-          updated_at?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "maintenance_requests_tenant_id_fkey"
-            columns: ["tenant_id"]
-            isOneToOne: false
-            referencedRelation: "tenants"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "maintenance_requests_property_id_fkey"
-            columns: ["property_id"]
-            isOneToOne: false
-            referencedRelation: "properties"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       models: {
         Row: {
           accuracy: number
@@ -2235,7 +2172,6 @@ export type Database = {
           rent_amount: number
           unit_id: string | null
           updated_at: string
-          user_id: string | null
         }
         Insert: {
           created_at?: string
@@ -2254,7 +2190,6 @@ export type Database = {
           property_id?: string | null
           rent_amount?: number
           unit_id?: string | null
-          user_id?: string | null
           updated_at?: string
         }
         Update: {
@@ -2274,7 +2209,6 @@ export type Database = {
           property_id?: string | null
           rent_amount?: number
           unit_id?: string | null
-          user_id?: string | null
           updated_at?: string
         }
         Relationships: [
