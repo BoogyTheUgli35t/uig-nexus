@@ -33,7 +33,7 @@ const CreateCheckoutSchema = z.object({
 
 export const createCheckoutSession = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((i: unknown) => CreateCheckoutSchema.parse(i))
+  .inputValidator((i: unknown) => CreateCheckoutSchema.parse(i))
   .handler(async ({ context, data }) => {
     const stripe = getStripe(); // throws a clear "not configured" error if no key
 
