@@ -28,13 +28,27 @@ function IdeasPage() {
   const [ideaDesc, setIdeaDesc] = useState("");
   const [ideaTags, setIdeaTags] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [sortBy, setSortBy] = useState<"votes" | "recent">("votes");
 
   const { data, isLoading } = useQuery({
     queryKey: ["innovation-workspace"],
     queryFn: async () => getInnovationWorkspace({ headers: await authHeaders() }),
   });
 
+  const { data: votes } = useQuery({
+    queryKey: ["innovation-idea-votes"],
+    queryFn: async () => listIdeaVotes({ headers: await authHeaders() }),
+  });
+
   const invalidate = () => qc.invalidateQueries({ queryKey: ["innovation-workspace"] });
+
+  const voteMut = useMutation({
+    mutationFn: async (idea_id: string) => toggleIdeaVote({ data: { idea_id }, headers: await authHeaders() }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["innovation-idea-votes"] }),
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+
 
   const ideaMut = useMutation({
     mutationFn: async () =>
