@@ -1,12 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, Lightbulb } from "lucide-react";
+import { Plus, Lightbulb, ChevronUp } from "lucide-react";
 import { toast } from "sonner";
 import {
   getInnovationWorkspace,
   submitIdea,
   updateIdeaStatus,
+  listIdeaVotes,
+  toggleIdeaVote,
   IDEA_STATUSES,
 } from "@/lib/innovation.functions";
 import { authHeaders } from "@/lib/auth-headers";
