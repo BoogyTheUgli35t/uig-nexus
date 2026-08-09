@@ -38,39 +38,45 @@ export function NotificationBell() {
   };
 
   useEffect(() => {
-    let channel: ReturnType<typeof supabase.channel> | null = null;
+    let cancelled = false;
+    // Unique topic per mount: a shared topic name is reused by supabase-js,
+    // so a second mount would try to add callbacks after subscribe().
+    const channel = supabase.channel(
+      `notifications:${Math.random().toString(36).slice(2)}`,
+    );
 
     const init = async () => {
       await fetchNotifications();
       const {
         data: { user },
       } = await supabase.auth.getUser();
+      if (cancelled) return;
       const meta = user?.user_metadata as { notif_portal?: boolean } | undefined;
       if (typeof meta?.notif_portal === "boolean") setEnabled(meta.notif_portal);
-      if (user) {
-        channel = supabase
-          .channel("public:notifications")
-          .on(
-            "postgres_changes",
-            {
-              event: "*",
-              schema: "public",
-              table: "notifications",
-              filter: `user_id=eq.${user.id}`,
-            },
-            () => {
-              fetchNotifications();
-            },
-          )
-          .subscribe();
-      }
+      if (!user) return;
+      channel
+        .on(
+          "postgres_changes",
+          {
+            event: "*",
+            schema: "public",
+            table: "notifications",
+            filter: `user_id=eq.${user.id}`,
+          },
+          () => {
+            fetchNotifications();
+          },
+        )
+        .subscribe();
     };
     init();
 
     return () => {
-      if (channel) supabase.removeChannel(channel);
+      cancelled = true;
+      supabase.removeChannel(channel);
     };
   }, []);
+
 
   const unreadCount = notifications.filter((n) => !n.read_at).length;
 

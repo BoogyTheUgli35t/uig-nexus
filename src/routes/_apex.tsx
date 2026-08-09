@@ -1,3 +1,4 @@
+import { divisionPath } from "@/lib/division-paths";
 import { Outlet, createFileRoute, redirect, Link, useNavigate, useRouter } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { LayoutDashboard, FolderKanban, Settings, LogOut, ChevronRight, AlertTriangle, ShieldAlert, ShieldCheck, ScrollText, Truck, UserCheck, Users as Users2, FileText, MessageSquare, CreditCard, Home, TrendingUp } from "lucide-react";
@@ -339,8 +340,7 @@ function PortalShell() {
               {myDivisions.map((d) => (
                 <Link
                   key={d.slug}
-                  to="/portal/divisions/$slug"
-                  params={{ slug: d.slug }}
+                  to={divisionPath(d.slug)}
                   className={`${d.accentClass} flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-surface-elevated hover:text-foreground transition`}
                   activeProps={{ className: "bg-surface-elevated text-foreground" }}
                 >
@@ -385,7 +385,7 @@ function PortalShell() {
             </Link>
           ))}
           {myDivisions.map((d) => (
-            <Link key={d.slug} to="/portal/divisions/$slug" params={{ slug: d.slug }} className="px-3 py-1.5 rounded-md text-sm text-muted-foreground hover:text-foreground whitespace-nowrap" activeProps={{ className: "bg-surface-elevated text-foreground" }}>
+            <Link key={d.slug} to={divisionPath(d.slug)} className="px-3 py-1.5 rounded-md text-sm text-muted-foreground hover:text-foreground whitespace-nowrap" activeProps={{ className: "bg-surface-elevated text-foreground" }}>
               {d.short}
             </Link>
           ))}

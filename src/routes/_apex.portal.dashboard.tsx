@@ -1,3 +1,4 @@
+import { divisionPath } from "@/lib/division-paths";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -147,8 +148,7 @@ function DashboardPage() {
               return (
                 <Link
                   key={d.slug}
-                  to="/portal/divisions/$slug"
-                  params={{ slug: d.slug }}
+                  to={divisionPath(d.slug)}
                   className={`${d.accentClass} group relative overflow-hidden rounded-xl border border-border bg-surface p-5 transition hover:acc-border-soft`}
                 >
                   <div className="flex items-center gap-3">

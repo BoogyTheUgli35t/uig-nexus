@@ -17,9 +17,9 @@ export const Route = createFileRoute("/portal/login")({
       { name: "robots", content: "noindex" },
     ],
   }),
-  validateSearch: (s: Record<string, unknown>) => ({
-    next: typeof s['next'] === "string" ? s['next'] : undefined,
-  }),
+  validateSearch: (s: Record<string, unknown>): { next?: string } =>
+    typeof s['next'] === "string" ? { next: s['next'] } : {},
+
   beforeLoad: async ({ search }) => {
     if (typeof window === "undefined") return;
     const { data } = await supabase.auth.getSession();
