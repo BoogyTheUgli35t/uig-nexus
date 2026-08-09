@@ -80,7 +80,17 @@ function IdeasPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
-  const ideas = (data?.ideas ?? []).filter((i) => statusFilter === "all" || i.status === statusFilter);
+  const voteCount = (id: string) => votes?.counts?.[id] ?? 0;
+  const hasVoted = (id: string) => votes?.mine?.includes(id) ?? false;
+
+  const ideas = (data?.ideas ?? [])
+    .filter((i) => statusFilter === "all" || i.status === statusFilter)
+    .slice()
+    .sort((a, b) =>
+      sortBy === "votes"
+        ? voteCount(b.id) - voteCount(a.id)
+        : new Date(b.created_at ?? 0).getTime() - new Date(a.created_at ?? 0).getTime(),
+    );
 
   return (
     <div className="space-y-6">
