@@ -1,3 +1,4 @@
+import { divisionPath } from "@/lib/division-paths";
 import * as React from "react";
 import {
   CommandDialog,
@@ -226,8 +227,7 @@ export function GlobalSearch() {
                         onSelect={() =>
                           runCommand(() =>
                             navigate({
-                              to: "/portal/divisions/$slug",
-                              params: { slug: d.slug },
+                              to: divisionPath(d.slug),
                             }),
                           )
                         }
