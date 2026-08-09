@@ -17,19 +17,31 @@ export const Route = createFileRoute("/portal/login")({
       { name: "robots", content: "noindex" },
     ],
   }),
-  beforeLoad: async () => {
+  validateSearch: (s: Record<string, unknown>) => ({
+    next: typeof s['next'] === "string" ? s['next'] : undefined,
+  }),
+  beforeLoad: async ({ search }) => {
     if (typeof window === "undefined") return;
     const { data } = await supabase.auth.getSession();
-    // Already signed in → go straight to the workspace.
+    // Already signed in → go straight to the workspace (or the pending return target).
     if (data.session) {
+      const target = safeNext(search.next);
+      if (target) throw redirect({ href: target });
       throw redirect({ to: "/portal/dashboard" });
     }
   },
   component: LoginPage,
 });
 
+/** Only allow same-origin relative paths as a post-login return target. */
+function safeNext(next?: string) {
+  if (!next || !next.startsWith("/") || next.startsWith("//")) return null;
+  return next;
+}
+
 function LoginPage() {
   const navigate = useNavigate();
+  const { next } = Route.useSearch();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -56,17 +68,19 @@ function LoginPage() {
     }
     if (data.session) {
       toast.success("Welcome back.");
+      const target = safeNext(next) ?? "/portal/dashboard";
       // Use setTimeout to ensure toast appears before redirect
       setTimeout(() => {
-        window.location.href = "/portal/dashboard";
+        window.location.href = target;
       }, 800);
     }
   }
 
   async function onGoogle() {
     setLoading(true);
+    const target = safeNext(next);
     const result = await lovable.auth.signInWithOAuth("google", {
-      redirect_uri: window.location.origin + "/portal/signup",
+      redirect_uri: window.location.origin + (target ?? "/portal/signup"),
     });
     if (result.error) {
       setLoading(false);
