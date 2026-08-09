@@ -40,6 +40,7 @@ import { Route as PortalForgotPasswordRouteImport } from './routes/portal.forgot
 import { Route as PortalLoginRouteImport } from './routes/portal.login'
 import { Route as PortalResetPasswordRouteImport } from './routes/portal.reset-password'
 import { Route as PortalSignupRouteImport } from './routes/portal.signup'
+import { Route as DotlovableOauthConsentRouteImport } from './routes/[.]lovable.oauth.consent'
 import { Route as Char91DotmcpChar93InvokeToolToolRouteImport } from './routes/[.mcp]/invoke-tool/$tool'
 import { Route as ApexPortalAuditRouteImport } from './routes/_apex.portal.audit'
 import { Route as ApexPortalBillingRouteImport } from './routes/_apex.portal.billing'
@@ -273,6 +274,11 @@ const PortalSignupRoute = PortalSignupRouteImport.update({
   id: '/signup',
   path: '/signup',
   getParentRoute: () => PortalRoute,
+} as any)
+const DotlovableOauthConsentRoute = DotlovableOauthConsentRouteImport.update({
+  id: '/.lovable/oauth/consent',
+  path: '/.lovable/oauth/consent',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const Char91DotmcpChar93InvokeToolToolRoute =
   Char91DotmcpChar93InvokeToolToolRouteImport.update({
@@ -746,6 +752,7 @@ export interface FileRoutesByFullPath {
   '/portal/signup': typeof PortalSignupRoute
   '/divisions/': typeof DivisionsIndexRoute
   '/portal/': typeof PortalIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/portal/audit': typeof ApexPortalAuditRoute
   '/portal/billing': typeof ApexPortalBillingRoute
@@ -854,6 +861,7 @@ export interface FileRoutesByTo {
   '/portal/signup': typeof PortalSignupRoute
   '/divisions': typeof DivisionsIndexRoute
   '/portal': typeof PortalIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/portal/audit': typeof ApexPortalAuditRoute
   '/portal/billing': typeof ApexPortalBillingRoute
@@ -959,6 +967,7 @@ export interface FileRoutesById {
   '/portal/signup': typeof PortalSignupRoute
   '/divisions/': typeof DivisionsIndexRoute
   '/portal/': typeof PortalIndexRoute
+  '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
   '/_apex/portal/audit': typeof ApexPortalAuditRoute
   '/_apex/portal/billing': typeof ApexPortalBillingRoute
@@ -1070,6 +1079,7 @@ export interface FileRouteTypes {
     | '/portal/signup'
     | '/divisions/'
     | '/portal/'
+    | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/portal/audit'
     | '/portal/billing'
@@ -1178,6 +1188,7 @@ export interface FileRouteTypes {
     | '/portal/signup'
     | '/divisions'
     | '/portal'
+    | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/portal/audit'
     | '/portal/billing'
@@ -1282,6 +1293,7 @@ export interface FileRouteTypes {
     | '/portal/signup'
     | '/divisions/'
     | '/portal/'
+    | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
     | '/_apex/portal/audit'
     | '/_apex/portal/billing'
@@ -1386,6 +1398,7 @@ export interface RootRouteChildren {
   DivisionsRealEstateRoute: typeof DivisionsRealEstateRoute
   DivisionsTechnologyRoute: typeof DivisionsTechnologyRoute
   DivisionsIndexRoute: typeof DivisionsIndexRoute
+  DotlovableOauthConsentRoute: typeof DotlovableOauthConsentRoute
   Char91DotmcpChar93InvokeToolToolRoute: typeof Char91DotmcpChar93InvokeToolToolRoute
   ApiPublicClientErrorRoute: typeof ApiPublicClientErrorRoute
   ApiPublicHealthRoute: typeof ApiPublicHealthRoute
@@ -1614,6 +1627,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/portal/signup'
       preLoaderRoute: typeof PortalSignupRouteImport
       parentRoute: typeof PortalRoute
+    }
+    '/.lovable/oauth/consent': {
+      id: '/.lovable/oauth/consent'
+      path: '/.lovable/oauth/consent'
+      fullPath: '/.lovable/oauth/consent'
+      preLoaderRoute: typeof DotlovableOauthConsentRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/.mcp/invoke-tool/$tool': {
       id: '/.mcp/invoke-tool/$tool'
@@ -2508,6 +2528,7 @@ const rootRouteChildren: RootRouteChildren = {
   DivisionsRealEstateRoute: DivisionsRealEstateRoute,
   DivisionsTechnologyRoute: DivisionsTechnologyRoute,
   DivisionsIndexRoute: DivisionsIndexRoute,
+  DotlovableOauthConsentRoute: DotlovableOauthConsentRoute,
   Char91DotmcpChar93InvokeToolToolRoute: Char91DotmcpChar93InvokeToolToolRoute,
   ApiPublicClientErrorRoute: ApiPublicClientErrorRoute,
   ApiPublicHealthRoute: ApiPublicHealthRoute,
