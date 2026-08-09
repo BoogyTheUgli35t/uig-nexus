@@ -432,3 +432,43 @@ export const reviewSubmission = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
+/** Upvote tallies for the idea board: total votes per idea + which ones the caller voted for. */
+export const listIdeaVotes = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data, error } = await context.supabase.from("idea_votes").select("idea_id, user_id");
+    if (error) throw new Error(error.message);
+    const counts: Record<string, number> = {};
+    const mine: string[] = [];
+    for (const row of data ?? []) {
+      counts[row.idea_id] = (counts[row.idea_id] ?? 0) + 1;
+      if (row.user_id === context.userId) mine.push(row.idea_id);
+    }
+    return { counts, mine };
+  });
+
+const ToggleIdeaVoteSchema = z.object({ idea_id: z.string().uuid() });
+
+export const toggleIdeaVote = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((i: unknown) => ToggleIdeaVoteSchema.parse(i))
+  .handler(async ({ context, data }) => {
+    const { supabase, userId } = context;
+    const { data: existing } = await supabase
+      .from("idea_votes")
+      .select("id")
+      .eq("idea_id", data.idea_id)
+      .eq("user_id", userId)
+      .maybeSingle();
+
+    if (existing) {
+      const { error } = await supabase.from("idea_votes").delete().eq("id", existing.id);
+      if (error) throw new Error(error.message);
+      return { voted: false };
+    }
+
+    const { error } = await supabase.from("idea_votes").insert({ idea_id: data.idea_id, user_id: userId });
+    if (error) throw new Error(error.message);
+    return { voted: true };
+  });
