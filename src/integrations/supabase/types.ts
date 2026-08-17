@@ -457,6 +457,8 @@ export type Database = {
           file_type: string | null
           id: string
           owner_id: string
+          record_id: string | null
+          record_table: string | null
           size_bytes: number | null
           title: string
         }
@@ -468,6 +470,8 @@ export type Database = {
           file_type?: string | null
           id?: string
           owner_id: string
+          record_id?: string | null
+          record_table?: string | null
           size_bytes?: number | null
           title: string
         }
@@ -479,6 +483,8 @@ export type Database = {
           file_type?: string | null
           id?: string
           owner_id?: string
+          record_id?: string | null
+          record_table?: string | null
           size_bytes?: number | null
           title?: string
         }
