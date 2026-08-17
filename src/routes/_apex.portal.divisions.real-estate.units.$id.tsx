@@ -13,6 +13,7 @@ import {
 } from "@/lib/realestate.functions";
 import { authHeaders } from "@/lib/auth-headers";
 import { DataPanel, EmptyState, StatusBadge, KpiStat } from "@/components/portal/blocks";
+import { RecordDocuments } from "@/components/portal/RecordDocuments";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -272,6 +273,7 @@ function UnitDetailPage() {
           </div>
         )}
       </DataPanel>
+      <RecordDocuments recordTable="property_units" recordId={id} division="real-estate" title="Unit documents" />
     </div>
   );
 }
