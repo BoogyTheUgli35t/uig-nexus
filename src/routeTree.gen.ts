@@ -112,6 +112,7 @@ import { Route as ApexPortalDivisionsLogisticsShipmentsIdRouteImport } from './r
 import { Route as ApexPortalDivisionsRealEstatePropertiesIndexRouteImport } from './routes/_apex.portal.divisions.real-estate.properties.index'
 import { Route as ApexPortalDivisionsRealEstatePropertiesIdRouteImport } from './routes/_apex.portal.divisions.real-estate.properties.$id'
 import { Route as ApexPortalDivisionsRealEstatePropertiesNewRouteImport } from './routes/_apex.portal.divisions.real-estate.properties.new'
+import { Route as ApexPortalDivisionsRealEstateUnitsIndexRouteImport } from './routes/_apex.portal.divisions.real-estate.units.index'
 import { Route as ApexPortalDivisionsRealEstateUnitsIdRouteImport } from './routes/_apex.portal.divisions.real-estate.units.$id'
 import { Route as ApexPortalDivisionsTechnologyClientsNameRouteImport } from './routes/_apex.portal.divisions.technology.clients.$name'
 import { Route as ApexPortalDivisionsTechnologyProjectsIndexRouteImport } from './routes/_apex.portal.divisions.technology.projects.index'
@@ -684,6 +685,12 @@ const ApexPortalDivisionsRealEstatePropertiesNewRoute =
     path: '/properties/new',
     getParentRoute: () => ApexPortalDivisionsRealEstateRoute,
   } as any)
+const ApexPortalDivisionsRealEstateUnitsIndexRoute =
+  ApexPortalDivisionsRealEstateUnitsIndexRouteImport.update({
+    id: '/units/',
+    path: '/units/',
+    getParentRoute: () => ApexPortalDivisionsRealEstateRoute,
+  } as any)
 const ApexPortalDivisionsRealEstateUnitsIdRoute =
   ApexPortalDivisionsRealEstateUnitsIdRouteImport.update({
     id: '/units/$id',
@@ -822,6 +829,7 @@ export interface FileRoutesByFullPath {
   '/portal/divisions/intelligence/models/': typeof ApexPortalDivisionsIntelligenceModelsIndexRoute
   '/portal/divisions/logistics/shipments/': typeof ApexPortalDivisionsLogisticsShipmentsIndexRoute
   '/portal/divisions/real-estate/properties/': typeof ApexPortalDivisionsRealEstatePropertiesIndexRoute
+  '/portal/divisions/real-estate/units/': typeof ApexPortalDivisionsRealEstateUnitsIndexRoute
   '/portal/divisions/technology/projects/': typeof ApexPortalDivisionsTechnologyProjectsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -924,6 +932,7 @@ export interface FileRoutesByTo {
   '/portal/divisions/intelligence/models': typeof ApexPortalDivisionsIntelligenceModelsIndexRoute
   '/portal/divisions/logistics/shipments': typeof ApexPortalDivisionsLogisticsShipmentsIndexRoute
   '/portal/divisions/real-estate/properties': typeof ApexPortalDivisionsRealEstatePropertiesIndexRoute
+  '/portal/divisions/real-estate/units': typeof ApexPortalDivisionsRealEstateUnitsIndexRoute
   '/portal/divisions/technology/projects': typeof ApexPortalDivisionsTechnologyProjectsIndexRoute
 }
 export interface FileRoutesById {
@@ -1035,6 +1044,7 @@ export interface FileRoutesById {
   '/_apex/portal/divisions/intelligence/models/': typeof ApexPortalDivisionsIntelligenceModelsIndexRoute
   '/_apex/portal/divisions/logistics/shipments/': typeof ApexPortalDivisionsLogisticsShipmentsIndexRoute
   '/_apex/portal/divisions/real-estate/properties/': typeof ApexPortalDivisionsRealEstatePropertiesIndexRoute
+  '/_apex/portal/divisions/real-estate/units/': typeof ApexPortalDivisionsRealEstateUnitsIndexRoute
   '/_apex/portal/divisions/technology/projects/': typeof ApexPortalDivisionsTechnologyProjectsIndexRoute
 }
 export interface FileRouteTypes {
@@ -1146,6 +1156,7 @@ export interface FileRouteTypes {
     | '/portal/divisions/intelligence/models/'
     | '/portal/divisions/logistics/shipments/'
     | '/portal/divisions/real-estate/properties/'
+    | '/portal/divisions/real-estate/units/'
     | '/portal/divisions/technology/projects/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -1248,6 +1259,7 @@ export interface FileRouteTypes {
     | '/portal/divisions/intelligence/models'
     | '/portal/divisions/logistics/shipments'
     | '/portal/divisions/real-estate/properties'
+    | '/portal/divisions/real-estate/units'
     | '/portal/divisions/technology/projects'
   id:
     | '__root__'
@@ -1358,6 +1370,7 @@ export interface FileRouteTypes {
     | '/_apex/portal/divisions/intelligence/models/'
     | '/_apex/portal/divisions/logistics/shipments/'
     | '/_apex/portal/divisions/real-estate/properties/'
+    | '/_apex/portal/divisions/real-estate/units/'
     | '/_apex/portal/divisions/technology/projects/'
   fileRoutesById: FileRoutesById
 }
@@ -2120,6 +2133,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApexPortalDivisionsRealEstatePropertiesNewRouteImport
       parentRoute: typeof ApexPortalDivisionsRealEstateRoute
     }
+    '/_apex/portal/divisions/real-estate/units/': {
+      id: '/_apex/portal/divisions/real-estate/units/'
+      path: '/units'
+      fullPath: '/portal/divisions/real-estate/units/'
+      preLoaderRoute: typeof ApexPortalDivisionsRealEstateUnitsIndexRouteImport
+      parentRoute: typeof ApexPortalDivisionsRealEstateRoute
+    }
     '/_apex/portal/divisions/real-estate/units/$id': {
       id: '/_apex/portal/divisions/real-estate/units/$id'
       path: '/units/$id'
@@ -2290,6 +2310,7 @@ interface ApexPortalDivisionsRealEstateRouteChildren {
   ApexPortalDivisionsRealEstatePropertiesNewRoute: typeof ApexPortalDivisionsRealEstatePropertiesNewRoute
   ApexPortalDivisionsRealEstateUnitsIdRoute: typeof ApexPortalDivisionsRealEstateUnitsIdRoute
   ApexPortalDivisionsRealEstatePropertiesIndexRoute: typeof ApexPortalDivisionsRealEstatePropertiesIndexRoute
+  ApexPortalDivisionsRealEstateUnitsIndexRoute: typeof ApexPortalDivisionsRealEstateUnitsIndexRoute
 }
 
 const ApexPortalDivisionsRealEstateRouteChildren: ApexPortalDivisionsRealEstateRouteChildren =
@@ -2316,6 +2337,8 @@ const ApexPortalDivisionsRealEstateRouteChildren: ApexPortalDivisionsRealEstateR
       ApexPortalDivisionsRealEstateUnitsIdRoute,
     ApexPortalDivisionsRealEstatePropertiesIndexRoute:
       ApexPortalDivisionsRealEstatePropertiesIndexRoute,
+    ApexPortalDivisionsRealEstateUnitsIndexRoute:
+      ApexPortalDivisionsRealEstateUnitsIndexRoute,
   }
 
 const ApexPortalDivisionsRealEstateRouteWithChildren =
