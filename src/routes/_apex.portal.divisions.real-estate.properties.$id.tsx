@@ -28,6 +28,7 @@ import {
 import { authHeaders } from "@/lib/auth-headers";
 import { supabase } from "@/integrations/supabase/client";
 import { DataPanel, EmptyState, StatusBadge, KpiStat } from "@/components/portal/blocks";
+import { RecordDocuments } from "@/components/portal/RecordDocuments";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -436,6 +437,7 @@ function PropertyDetailPage() {
           </div>
         )}
       </DataPanel>
+      <RecordDocuments recordTable="properties" recordId={id} division="real-estate" title="Property documents" />
     </div>
   );
 }

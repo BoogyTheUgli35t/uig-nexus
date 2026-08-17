@@ -68,12 +68,12 @@ function LoginPage() {
     }
     if (data.session) {
       toast.success("Welcome back.");
+      // Navigate immediately — the old 800ms setTimeout + full page reload made
+      // sign-in feel like it hung before the workspace appeared.
       const target = safeNext(next) ?? "/portal/dashboard";
-      // Use setTimeout to ensure toast appears before redirect
-      setTimeout(() => {
-        window.location.href = target;
-      }, 800);
+      navigate({ href: target, replace: true });
     }
+
   }
 
   async function onGoogle() {

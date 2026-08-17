@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -162,7 +162,7 @@ function TenantsPage() {
               <div key={t.id} className="py-4 first:pt-0 last:pb-0">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <div className="font-medium">{t.full_name}</div>
+                    <Link to="/portal/divisions/real-estate/tenants/$id" params={{ id: t.id }} className="font-medium hover:underline">{t.full_name}</Link>
                     <div className="mt-0.5 text-xs text-muted-foreground">
                       {t.property_id ? (propertyTitle.get(t.property_id) ?? "—") : "—"}
                     </div>

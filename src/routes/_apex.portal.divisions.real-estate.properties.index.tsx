@@ -1,16 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { Building2, Plus, Search, X, Scale, BedDouble, Bath, Ruler, Star } from "lucide-react";
-import {
-  listPropertiesFiltered,
-  PROPERTY_TYPES,
-  PROPERTY_STATUSES,
-} from "@/lib/realestate.functions";
+import { PROPERTY_TYPES, PROPERTY_STATUSES } from "@/lib/realestate.functions";
+import { listPropertiesPaged, PROPERTY_SORTS } from "@/lib/realestate-crud.functions";
 import { authHeaders } from "@/lib/auth-headers";
 import { EmptyState, StatusBadge } from "@/components/portal/blocks";
+import { Pagination } from "@/components/portal/Pagination";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { resolveImageUrl } from "@/lib/utils";
 
 export const Route = createFileRoute("/_apex/portal/divisions/real-estate/properties/")({
@@ -24,6 +23,13 @@ const naira = (n: number) => {
   return `₦${n}`;
 };
 
+const SORT_LABEL: Record<(typeof PROPERTY_SORTS)[number], string> = {
+  created_at: "Date added",
+  price: "Price",
+  title: "Title",
+  area_sqm: "Area",
+};
+
 function coverUrl(path: string | null) {
   if (!path) return null;
   return resolveImageUrl("property-images", path);
@@ -34,23 +40,32 @@ function PropertiesPage() {
   const [type, setType] = useState<string>("");
   const [status, setStatus] = useState<string>("");
   const [city, setCity] = useState("");
+  const [sortBy, setSortBy] = useState<(typeof PROPERTY_SORTS)[number]>("created_at");
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
+  const [page, setPage] = useState(1);
+  const pageSize = 12;
   const [compareIds, setCompareIds] = useState<string[]>([]);
 
   const { data, isLoading } = useQuery({
-    queryKey: ["realestate-properties", search, type, status, city],
+    queryKey: ["realestate-properties", search, type, status, city, sortBy, sortDir, page],
+    placeholderData: keepPreviousData,
     queryFn: async () =>
-      listPropertiesFiltered({
+      listPropertiesPaged({
         headers: await authHeaders(),
         data: {
           search: search || undefined,
           propertyType: (type || undefined) as (typeof PROPERTY_TYPES)[number] | undefined,
           status: (status || undefined) as (typeof PROPERTY_STATUSES)[number] | undefined,
           city: city || undefined,
+          sortBy,
+          sortDir,
+          page,
+          pageSize,
         },
       }),
   });
 
-  const properties = data ?? [];
+  const properties = data?.rows ?? [];
   const compareItems = useMemo(
     () => properties.filter((p) => compareIds.includes(p.id)),
     [properties, compareIds],
@@ -62,13 +77,15 @@ function PropertiesPage() {
     );
   }
 
+
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-lg font-semibold">Property listings</h2>
           <p className="text-sm text-muted-foreground">
-            {properties.length} propert{properties.length === 1 ? "y" : "ies"} in the portfolio.
+            {data?.total ?? 0} propert{(data?.total ?? 0) === 1 ? "y" : "ies"} in the portfolio.
+
           </p>
         </div>
         <Button asChild className="bg-gold text-gold-foreground hover:bg-gold/90">
@@ -86,12 +103,18 @@ function PropertiesPage() {
             className="pl-9"
             placeholder="Search by title…"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setPage(1);
+            }}
           />
         </div>
         <select
           value={type}
-          onChange={(e) => setType(e.target.value)}
+          onChange={(e) => {
+            setType(e.target.value);
+            setPage(1);
+          }}
           className="h-9 rounded-md border border-input bg-transparent px-3 text-sm"
         >
           <option value="">All types</option>
@@ -103,7 +126,10 @@ function PropertiesPage() {
         </select>
         <select
           value={status}
-          onChange={(e) => setStatus(e.target.value)}
+          onChange={(e) => {
+            setStatus(e.target.value);
+            setPage(1);
+          }}
           className="h-9 rounded-md border border-input bg-transparent px-3 text-sm"
         >
           <option value="">All statuses</option>
@@ -117,8 +143,35 @@ function PropertiesPage() {
           className="max-w-[160px]"
           placeholder="City"
           value={city}
-          onChange={(e) => setCity(e.target.value)}
+          onChange={(e) => {
+            setCity(e.target.value);
+            setPage(1);
+          }}
         />
+        <div className="flex items-end gap-2">
+          <Label htmlFor="prop-sort" className="sr-only">
+            Sort properties
+          </Label>
+          <select
+            id="prop-sort"
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value as (typeof PROPERTY_SORTS)[number])}
+            className="h-9 rounded-md border border-input bg-transparent px-3 text-sm"
+          >
+            {PROPERTY_SORTS.map((s) => (
+              <option key={s} value={s}>
+                Sort: {SORT_LABEL[s]}
+              </option>
+            ))}
+          </select>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setSortDir((d) => (d === "asc" ? "desc" : "asc"))}
+          >
+            {sortDir === "asc" ? "Ascending" : "Descending"}
+          </Button>
+        </div>
         {(search || type || status || city) && (
           <Button
             variant="ghost"
@@ -281,6 +334,16 @@ function PropertiesPage() {
             </div>
           ))}
         </div>
+      )}
+
+      {(data?.total ?? 0) > 0 && (
+        <Pagination
+          page={data?.page ?? 1}
+          pageSize={data?.pageSize ?? pageSize}
+          total={data?.total ?? 0}
+          onPageChange={setPage}
+          label="properties"
+        />
       )}
     </div>
   );

@@ -1,5 +1,5 @@
 import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
-import { ArrowLeft, Lock, LayoutGrid, Building2, Users, TrendingUp, Kanban, BarChart3, Settings, Wrench } from "lucide-react";
+import { ArrowLeft, Lock, LayoutGrid, Building2, DoorOpen, Users, TrendingUp, Kanban, BarChart3, Settings, Wrench } from "lucide-react";
 import { getDivision } from "@/lib/divisions";
 import { useDivisionAccess } from "@/hooks/use-division-access";
 import { HeroBanner, EmptyState } from "@/components/portal/blocks";
@@ -16,7 +16,9 @@ export const Route = createFileRoute("/_apex/portal/divisions/real-estate")({
 const TABS = [
   { to: "/portal/divisions/real-estate", label: "Overview", icon: LayoutGrid, exact: true },
   { to: "/portal/divisions/real-estate/properties", label: "Properties", icon: Building2 },
+  { to: "/portal/divisions/real-estate/units", label: "Units", icon: DoorOpen },
   { to: "/portal/divisions/real-estate/tenants", label: "Tenants", icon: Users },
+
   { to: "/portal/divisions/real-estate/investors", label: "Investors", icon: TrendingUp },
   { to: "/portal/divisions/real-estate/leads", label: "Leads", icon: Kanban },
   { to: "/portal/divisions/real-estate/maintenance", label: "Maintenance", icon: Wrench },
