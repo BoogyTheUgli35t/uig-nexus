@@ -1,16 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { Building2, Plus, Search, X, Scale, BedDouble, Bath, Ruler, Star } from "lucide-react";
-import {
-  listPropertiesFiltered,
-  PROPERTY_TYPES,
-  PROPERTY_STATUSES,
-} from "@/lib/realestate.functions";
+import { PROPERTY_TYPES, PROPERTY_STATUSES } from "@/lib/realestate.functions";
+import { listPropertiesPaged, PROPERTY_SORTS } from "@/lib/realestate-crud.functions";
 import { authHeaders } from "@/lib/auth-headers";
 import { EmptyState, StatusBadge } from "@/components/portal/blocks";
+import { Pagination } from "@/components/portal/Pagination";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { resolveImageUrl } from "@/lib/utils";
 
 export const Route = createFileRoute("/_apex/portal/divisions/real-estate/properties/")({
@@ -24,6 +23,13 @@ const naira = (n: number) => {
   return `₦${n}`;
 };
 
+const SORT_LABEL: Record<(typeof PROPERTY_SORTS)[number], string> = {
+  created_at: "Date added",
+  price: "Price",
+  title: "Title",
+  area_sqm: "Area",
+};
+
 function coverUrl(path: string | null) {
   if (!path) return null;
   return resolveImageUrl("property-images", path);
@@ -34,23 +40,32 @@ function PropertiesPage() {
   const [type, setType] = useState<string>("");
   const [status, setStatus] = useState<string>("");
   const [city, setCity] = useState("");
+  const [sortBy, setSortBy] = useState<(typeof PROPERTY_SORTS)[number]>("created_at");
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
+  const [page, setPage] = useState(1);
+  const pageSize = 12;
   const [compareIds, setCompareIds] = useState<string[]>([]);
 
   const { data, isLoading } = useQuery({
-    queryKey: ["realestate-properties", search, type, status, city],
+    queryKey: ["realestate-properties", search, type, status, city, sortBy, sortDir, page],
+    placeholderData: keepPreviousData,
     queryFn: async () =>
-      listPropertiesFiltered({
+      listPropertiesPaged({
         headers: await authHeaders(),
         data: {
           search: search || undefined,
           propertyType: (type || undefined) as (typeof PROPERTY_TYPES)[number] | undefined,
           status: (status || undefined) as (typeof PROPERTY_STATUSES)[number] | undefined,
           city: city || undefined,
+          sortBy,
+          sortDir,
+          page,
+          pageSize,
         },
       }),
   });
 
-  const properties = data ?? [];
+  const properties = data?.rows ?? [];
   const compareItems = useMemo(
     () => properties.filter((p) => compareIds.includes(p.id)),
     [properties, compareIds],
@@ -61,6 +76,7 @@ function PropertiesPage() {
       prev.includes(id) ? prev.filter((x) => x !== id) : prev.length < 3 ? [...prev, id] : prev,
     );
   }
+
 
   return (
     <div className="space-y-6">
