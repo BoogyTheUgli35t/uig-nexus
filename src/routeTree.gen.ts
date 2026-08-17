@@ -118,6 +118,7 @@ import { Route as ApexPortalDivisionsTechnologyClientsNameRouteImport } from './
 import { Route as ApexPortalDivisionsTechnologyProjectsIndexRouteImport } from './routes/_apex.portal.divisions.technology.projects.index'
 import { Route as ApexPortalDivisionsTechnologyProjectsIdRouteImport } from './routes/_apex.portal.divisions.technology.projects.$id'
 import { Route as ApexPortalDivisionsTechnologyProjectsNewRouteImport } from './routes/_apex.portal.divisions.technology.projects.new'
+import { Route as ApexPortalDivisionsRealEstatePropertiesIdEditRouteImport } from './routes/_apex.portal.divisions.real-estate.properties.$id_.edit'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -721,6 +722,12 @@ const ApexPortalDivisionsTechnologyProjectsNewRoute =
     path: '/projects/new',
     getParentRoute: () => ApexPortalDivisionsTechnologyRoute,
   } as any)
+const ApexPortalDivisionsRealEstatePropertiesIdEditRoute =
+  ApexPortalDivisionsRealEstatePropertiesIdEditRouteImport.update({
+    id: '/properties/$id_/edit',
+    path: '/properties/$id/edit',
+    getParentRoute: () => ApexPortalDivisionsRealEstateRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -831,6 +838,7 @@ export interface FileRoutesByFullPath {
   '/portal/divisions/real-estate/properties/': typeof ApexPortalDivisionsRealEstatePropertiesIndexRoute
   '/portal/divisions/real-estate/units/': typeof ApexPortalDivisionsRealEstateUnitsIndexRoute
   '/portal/divisions/technology/projects/': typeof ApexPortalDivisionsTechnologyProjectsIndexRoute
+  '/portal/divisions/real-estate/properties/$id/edit': typeof ApexPortalDivisionsRealEstatePropertiesIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -934,6 +942,7 @@ export interface FileRoutesByTo {
   '/portal/divisions/real-estate/properties': typeof ApexPortalDivisionsRealEstatePropertiesIndexRoute
   '/portal/divisions/real-estate/units': typeof ApexPortalDivisionsRealEstateUnitsIndexRoute
   '/portal/divisions/technology/projects': typeof ApexPortalDivisionsTechnologyProjectsIndexRoute
+  '/portal/divisions/real-estate/properties/$id/edit': typeof ApexPortalDivisionsRealEstatePropertiesIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -1046,6 +1055,7 @@ export interface FileRoutesById {
   '/_apex/portal/divisions/real-estate/properties/': typeof ApexPortalDivisionsRealEstatePropertiesIndexRoute
   '/_apex/portal/divisions/real-estate/units/': typeof ApexPortalDivisionsRealEstateUnitsIndexRoute
   '/_apex/portal/divisions/technology/projects/': typeof ApexPortalDivisionsTechnologyProjectsIndexRoute
+  '/_apex/portal/divisions/real-estate/properties/$id_/edit': typeof ApexPortalDivisionsRealEstatePropertiesIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -1158,6 +1168,7 @@ export interface FileRouteTypes {
     | '/portal/divisions/real-estate/properties/'
     | '/portal/divisions/real-estate/units/'
     | '/portal/divisions/technology/projects/'
+    | '/portal/divisions/real-estate/properties/$id/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -1261,6 +1272,7 @@ export interface FileRouteTypes {
     | '/portal/divisions/real-estate/properties'
     | '/portal/divisions/real-estate/units'
     | '/portal/divisions/technology/projects'
+    | '/portal/divisions/real-estate/properties/$id/edit'
   id:
     | '__root__'
     | '/'
@@ -1372,6 +1384,7 @@ export interface FileRouteTypes {
     | '/_apex/portal/divisions/real-estate/properties/'
     | '/_apex/portal/divisions/real-estate/units/'
     | '/_apex/portal/divisions/technology/projects/'
+    | '/_apex/portal/divisions/real-estate/properties/$id_/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -2175,6 +2188,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApexPortalDivisionsTechnologyProjectsNewRouteImport
       parentRoute: typeof ApexPortalDivisionsTechnologyRoute
     }
+    '/_apex/portal/divisions/real-estate/properties/$id_/edit': {
+      id: '/_apex/portal/divisions/real-estate/properties/$id_/edit'
+      path: '/properties/$id/edit'
+      fullPath: '/portal/divisions/real-estate/properties/$id/edit'
+      preLoaderRoute: typeof ApexPortalDivisionsRealEstatePropertiesIdEditRouteImport
+      parentRoute: typeof ApexPortalDivisionsRealEstateRoute
+    }
   }
 }
 
@@ -2311,6 +2331,7 @@ interface ApexPortalDivisionsRealEstateRouteChildren {
   ApexPortalDivisionsRealEstateUnitsIdRoute: typeof ApexPortalDivisionsRealEstateUnitsIdRoute
   ApexPortalDivisionsRealEstatePropertiesIndexRoute: typeof ApexPortalDivisionsRealEstatePropertiesIndexRoute
   ApexPortalDivisionsRealEstateUnitsIndexRoute: typeof ApexPortalDivisionsRealEstateUnitsIndexRoute
+  ApexPortalDivisionsRealEstatePropertiesIdEditRoute: typeof ApexPortalDivisionsRealEstatePropertiesIdEditRoute
 }
 
 const ApexPortalDivisionsRealEstateRouteChildren: ApexPortalDivisionsRealEstateRouteChildren =
@@ -2339,6 +2360,8 @@ const ApexPortalDivisionsRealEstateRouteChildren: ApexPortalDivisionsRealEstateR
       ApexPortalDivisionsRealEstatePropertiesIndexRoute,
     ApexPortalDivisionsRealEstateUnitsIndexRoute:
       ApexPortalDivisionsRealEstateUnitsIndexRoute,
+    ApexPortalDivisionsRealEstatePropertiesIdEditRoute:
+      ApexPortalDivisionsRealEstatePropertiesIdEditRoute,
   }
 
 const ApexPortalDivisionsRealEstateRouteWithChildren =
