@@ -103,12 +103,18 @@ function PropertiesPage() {
             className="pl-9"
             placeholder="Search by title…"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setPage(1);
+            }}
           />
         </div>
         <select
           value={type}
-          onChange={(e) => setType(e.target.value)}
+          onChange={(e) => {
+            setType(e.target.value);
+            setPage(1);
+          }}
           className="h-9 rounded-md border border-input bg-transparent px-3 text-sm"
         >
           <option value="">All types</option>
@@ -120,7 +126,10 @@ function PropertiesPage() {
         </select>
         <select
           value={status}
-          onChange={(e) => setStatus(e.target.value)}
+          onChange={(e) => {
+            setStatus(e.target.value);
+            setPage(1);
+          }}
           className="h-9 rounded-md border border-input bg-transparent px-3 text-sm"
         >
           <option value="">All statuses</option>
@@ -134,8 +143,35 @@ function PropertiesPage() {
           className="max-w-[160px]"
           placeholder="City"
           value={city}
-          onChange={(e) => setCity(e.target.value)}
+          onChange={(e) => {
+            setCity(e.target.value);
+            setPage(1);
+          }}
         />
+        <div className="flex items-end gap-2">
+          <Label htmlFor="prop-sort" className="sr-only">
+            Sort properties
+          </Label>
+          <select
+            id="prop-sort"
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value as (typeof PROPERTY_SORTS)[number])}
+            className="h-9 rounded-md border border-input bg-transparent px-3 text-sm"
+          >
+            {PROPERTY_SORTS.map((s) => (
+              <option key={s} value={s}>
+                Sort: {SORT_LABEL[s]}
+              </option>
+            ))}
+          </select>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setSortDir((d) => (d === "asc" ? "desc" : "asc"))}
+          >
+            {sortDir === "asc" ? "Ascending" : "Descending"}
+          </Button>
+        </div>
         {(search || type || status || city) && (
           <Button
             variant="ghost"
@@ -298,6 +334,16 @@ function PropertiesPage() {
             </div>
           ))}
         </div>
+      )}
+
+      {(data?.total ?? 0) > 0 && (
+        <Pagination
+          page={data?.page ?? 1}
+          pageSize={data?.pageSize ?? pageSize}
+          total={data?.total ?? 0}
+          onPageChange={setPage}
+          label="properties"
+        />
       )}
     </div>
   );
