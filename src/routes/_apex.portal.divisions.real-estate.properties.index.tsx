@@ -84,7 +84,8 @@ function PropertiesPage() {
         <div>
           <h2 className="text-lg font-semibold">Property listings</h2>
           <p className="text-sm text-muted-foreground">
-            {properties.length} propert{properties.length === 1 ? "y" : "ies"} in the portfolio.
+            {data?.total ?? 0} propert{(data?.total ?? 0) === 1 ? "y" : "ies"} in the portfolio.
+
           </p>
         </div>
         <Button asChild className="bg-gold text-gold-foreground hover:bg-gold/90">
