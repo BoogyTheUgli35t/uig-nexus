@@ -1,5 +1,5 @@
 import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
-import { ArrowLeft, Lock, LayoutGrid, Building2, Users, TrendingUp, Kanban, BarChart3, Settings, Wrench } from "lucide-react";
+import { ArrowLeft, Lock, LayoutGrid, Building2, DoorOpen, Users, TrendingUp, Kanban, BarChart3, Settings, Wrench } from "lucide-react";
 import { getDivision } from "@/lib/divisions";
 import { useDivisionAccess } from "@/hooks/use-division-access";
 import { HeroBanner, EmptyState } from "@/components/portal/blocks";
