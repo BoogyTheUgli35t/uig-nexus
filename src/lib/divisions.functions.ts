@@ -17,22 +17,31 @@ export const getMyWorkspace = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     const { supabase, userId } = context;
-    const [{ data: roles }, { data: userDivisions }, { data: unread }] = await Promise.all([
-      supabase.from("user_roles").select("role").eq("user_id", userId),
-      supabase.from("user_divisions").select("division_slug").eq("user_id", userId),
-      supabase
-        .from("notifications")
-        .select("id", { count: "exact", head: true })
-        .is("read_at", null),
-    ]);
+    const [{ data: roles }, { data: userDivisions }, { data: unread }, { data: divAdmin }] =
+      await Promise.all([
+        supabase.from("user_roles").select("role").eq("user_id", userId),
+        supabase.from("user_divisions").select("division_slug").eq("user_id", userId),
+        supabase
+          .from("notifications")
+          .select("id", { count: "exact", head: true })
+          .is("read_at", null),
+        supabase.from("division_admins").select("division_slug").eq("user_id", userId),
+      ]);
     const roleList = (roles ?? []).map((r) => r.role as string);
     const isAdmin = roleList.includes("admin");
-    const slugs = isAdmin ? [...DIVISION_SLUGS] : (userDivisions ?? []).map((d) => d.division_slug);
+    const adminOf = (divAdmin ?? []).map((d) => d.division_slug);
+    // Division admins always reach their own workspace, even without a
+    // user_divisions row (appointment implies access).
+    const granted = (userDivisions ?? []).map((d) => d.division_slug);
+    const slugs = isAdmin
+      ? [...DIVISION_SLUGS]
+      : Array.from(new Set([...granted, ...adminOf]));
     return {
       userId,
       roles: roleList,
       isAdmin,
       divisionSlugs: slugs,
+      divisionAdminOf: isAdmin ? [...DIVISION_SLUGS] : adminOf,
       unreadNotifications: unread?.length ?? 0,
     };
   });

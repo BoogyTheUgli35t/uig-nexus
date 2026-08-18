@@ -1,7 +1,7 @@
 import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
-import { ArrowLeft, Lock, LayoutGrid, FolderKanban, Workflow, Plug } from "lucide-react";
+import { ArrowLeft, Lock, LayoutGrid, FolderKanban, Workflow, Plug, Users2 } from "lucide-react";
 import { getDivision } from "@/lib/divisions";
-import { useDivisionAccess } from "@/hooks/use-division-access";
+import { useDivisionAccess, useIsDivisionAdmin } from "@/hooks/use-division-access";
 import { HeroBanner, EmptyState } from "@/components/portal/blocks";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -24,6 +24,7 @@ function TechnologyLayout() {
   const division = getDivision("technology")!;
   const navigate = useNavigate();
   const hasAccess = useDivisionAccess("technology");
+  const isDivisionAdmin = useIsDivisionAdmin("technology");
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   if (hasAccess === null) return <div className="text-muted-foreground">Loading workspace…</div>;
@@ -77,6 +78,17 @@ function TechnologyLayout() {
             </Link>
           );
         })}
+              {isDivisionAdmin && (
+          <Link
+            to="/portal/divisions/technology/team"
+            className={cn(
+              "inline-flex items-center gap-2 rounded-lg px-3.5 py-2 text-sm font-medium text-muted-foreground transition hover:text-foreground",
+              pathname.startsWith("/portal/divisions/technology/team") && "acc-bg-soft acc-text",
+            )}
+          >
+            <Users2 className="h-4 w-4" /> Team
+          </Link>
+        )}
       </nav>
 
       <Outlet />

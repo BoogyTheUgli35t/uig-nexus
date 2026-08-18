@@ -50,6 +50,12 @@ const QUICK_LINKS = [
     icon: Database,
   },
   {
+    to: "/portal/admin/division-access" as const,
+    label: "Division access",
+    description: "Appoint division admins who manage their own division's team.",
+    icon: ShieldCheck,
+  },
+  {
     to: "/portal/billing" as const,
     label: "Billing",
     description: "Stripe transactions across every division.",

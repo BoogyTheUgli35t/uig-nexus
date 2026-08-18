@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -25,6 +25,7 @@ import {
   UNIT_STATUSES,
   AMENITY_OPTIONS,
 } from "@/lib/realestate.functions";
+import { deleteProperty } from "@/lib/realestate-crud.functions";
 import { authHeaders } from "@/lib/auth-headers";
 import { supabase } from "@/integrations/supabase/client";
 import { DataPanel, EmptyState, StatusBadge, KpiStat } from "@/components/portal/blocks";
@@ -32,6 +33,17 @@ import { RecordDocuments } from "@/components/portal/RecordDocuments";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { cn, resolveImageUrl } from "@/lib/utils";
 
 export const Route = createFileRoute("/_apex/portal/divisions/real-estate/properties/$id")({
@@ -52,6 +64,7 @@ function imgUrl(path: string) {
 function PropertyDetailPage() {
   const { id } = Route.useParams();
   const qc = useQueryClient();
+  const navigate = useNavigate();
 
   const { data, isLoading } = useQuery({
     queryKey: ["realestate-property", id],
@@ -127,6 +140,16 @@ function PropertyDetailPage() {
     mutationFn: async (v: { unitId: string; status: (typeof UNIT_STATUSES)[number] }) =>
       updateUnitStatus({ data: { id: v.unitId, status: v.status }, headers: await authHeaders() }),
     onSuccess: invalidate,
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const deleteMut = useMutation({
+    mutationFn: async () => deleteProperty({ data: { id }, headers: await authHeaders() }),
+    onSuccess: () => {
+      toast.success("Property deleted");
+      qc.invalidateQueries({ queryKey: ["realestate-properties"] });
+      navigate({ to: "/portal/divisions/real-estate/properties" });
+    },
     onError: (e: Error) => toast.error(e.message),
   });
 
@@ -290,9 +313,36 @@ function PropertyDetailPage() {
               </Button>
             </div>
           ) : (
-            <Button size="sm" variant="ghost" onClick={startEditing}>
-              <Pencil className="mr-1 h-3.5 w-3.5" /> Edit
-            </Button>
+            <div className="flex gap-2">
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button size="sm" variant="ghost" className="text-destructive">
+                    <Trash2 className="mr-1 h-3.5 w-3.5" /> Delete
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Delete this property?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This permanently removes the listing, its units, photos and documents. This
+                      cannot be undone.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={() => deleteMut.mutate()}
+                      disabled={deleteMut.isPending}
+                    >
+                      {deleteMut.isPending ? "Deleting…" : "Delete property"}
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+              <Button size="sm" variant="ghost" onClick={startEditing}>
+                <Pencil className="mr-1 h-3.5 w-3.5" /> Edit
+              </Button>
+            </div>
           )
         }
       >

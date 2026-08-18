@@ -17,6 +17,7 @@ export type Database = {
       access_requests: {
         Row: {
           created_at: string
+          division_slug: string | null
           email: string
           id: string
           name: string
@@ -28,6 +29,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
+          division_slug?: string | null
           email: string
           id?: string
           name: string
@@ -39,6 +41,7 @@ export type Database = {
         }
         Update: {
           created_at?: string
+          division_slug?: string | null
           email?: string
           id?: string
           name?: string
@@ -48,7 +51,15 @@ export type Database = {
           updated_at?: string
           user_id?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "access_requests_division_slug_fkey"
+            columns: ["division_slug"]
+            isOneToOne: false
+            referencedRelation: "divisions"
+            referencedColumns: ["slug"]
+          },
+        ]
       }
       agri_alerts: {
         Row: {
@@ -418,6 +429,35 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "tech_projects"
             referencedColumns: ["id"]
+          },
+        ]
+      }
+      division_admins: {
+        Row: {
+          created_at: string
+          division_slug: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          division_slug: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          division_slug?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "division_admins_division_slug_fkey"
+            columns: ["division_slug"]
+            isOneToOne: false
+            referencedRelation: "divisions"
+            referencedColumns: ["slug"]
           },
         ]
       }
