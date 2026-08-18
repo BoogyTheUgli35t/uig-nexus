@@ -8,6 +8,15 @@ on:
 jobs:
   verify:
     runs-on: ubuntu-latest
+    env:
+      # Dummy values so lint/typecheck/test/build that import VITE_/SUPABASE_* at
+      # module-load time don't fail in CI. The real project keys are only
+      # required for the e2e job which uses repository secrets.
+      VITE_SUPABASE_URL: "https://ci-placeholder.supabase.co"
+      VITE_SUPABASE_PUBLISHABLE_KEY: "ci-placeholder"
+      SUPABASE_URL: "https://ci-placeholder.supabase.co"
+      SUPABASE_PUBLISHABLE_KEY: "ci-placeholder"
+      SUPABASE_SERVICE_ROLE_KEY: "ci-placeholder"
     steps:
       - uses: actions/checkout@v4
 
