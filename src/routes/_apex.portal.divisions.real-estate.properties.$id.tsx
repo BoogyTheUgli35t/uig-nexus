@@ -340,8 +340,9 @@ function PropertyDetailPage() {
                 </AlertDialogContent>
               </AlertDialog>
               <Button size="sm" variant="ghost" onClick={startEditing}>
-              <Pencil className="mr-1 h-3.5 w-3.5" /> Edit
-            </Button>
+                <Pencil className="mr-1 h-3.5 w-3.5" /> Edit
+              </Button>
+            </div>
           )
         }
       >
