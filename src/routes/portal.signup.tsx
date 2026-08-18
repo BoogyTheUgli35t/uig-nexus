@@ -41,6 +41,7 @@ export const Route = createFileRoute("/portal/signup")({
 });
 
 function SignupPage() {
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -76,9 +77,8 @@ function SignupPage() {
     }
     if (data.session) {
       toast.success("Account created. Welcome to Apex.");
-      setTimeout(() => {
-        window.location.href = "/portal/choose-division";
-      }, 1000);
+      // Use SPA navigation instead of a full-page reload so UX matches login flow
+      navigate({ to: "/portal/choose-division", replace: true });
     } else {
       setEmailSent(true);
       toast.success("Check your email to confirm your account.");
