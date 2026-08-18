@@ -1,61 +1,43 @@
-# UIG Nexus — Recovery + Build Plan
+# Division Admin Role + End-to-End Real Estate Walkthrough
 
-## Context / findings
+Two pieces of work: (1) verify the full user journey actually works end to end, (2) add a per-division admin role so your team can manage people inside their own division.
 
-The live database is out of sync with the repo. Confirmed missing from the live schema: **every migration from `20260709130000` onward was never applied** — roughly 16 files. This is why `document_library`, `billing_transactions`, and the investor/farmer self-service columns don't appear in `src/integrations/supabase/types.ts`.
+## Part 1 — Verify the journey
 
-Missing tables include: `property_units`, `property_images`, `crm_activities`, `deployments`, `automation_rules`, `project_invoices`, `tech_project_documents`, `shipment_events`, `route_stops`, `vehicle_maintenance_logs`, `field_images`, `agri_alerts`, `ai_chat_messages`, `mvp_checklist_items`, `demo_days`, `demo_day_slots`, `newsletter_subscribers`, `document_library`, `billing_transactions` — plus lease e-sign columns on `tenants` and `user_id` columns on `investors`/`farmers`.
+Drive the real app in a headless browser and fix anything that breaks along the way:
 
-Load-bearing files you flagged (`_apex.tsx` roles/nav, `portal.choose-division.tsx` role-intent selector, `package.json` stripe/playwright deps, all `supabase/migrations/`) are present and will be preserved, not reverted.
+1. Sign in
+2. Choose divisions (onboarding)
+3. Create a property
+4. Upload a document to that property
+5. Edit the property
+6. Delete the document, then the property
 
-Two items I cannot do as literally described (explained in chat): I can't `git pull` from your GitHub repo (Lovable manages git internally), and on Lovable Cloud the service-role key / DB password / a separate Supabase dashboard login are not accessible — local dev uses the anon key + URL already in `.env`.
+Any failure found (broken route, missing delete action, storage permission error) gets fixed in the same pass. Today there is no delete action on properties or units in the portal — that will be added with a confirmation dialog and cascade-safe checks (block deleting a property that still has units/tenants, with a clear message).
 
----
+## Part 2 — Division admin role
 
-## Phase 1 — Apply pending migrations + regenerate types  (do first, then PAUSE)
+Based on your answers:
 
-Re-run the SQL of each unapplied migration through the migration tool, **in dependency order** (each requires your approval). Most use `IF NOT EXISTS` / `ADD COLUMN IF NOT EXISTS`, so already-present objects are skipped safely.
+- Applies to **all six divisions**, not just Real Estate.
+- **Members keep full record editing** — nothing they can do today is taken away.
+- **Division admins additionally manage people**: grant/revoke access to their own division, see who is in it, and approve access requests scoped to that division.
+- **Only global admins** can appoint or remove a division admin.
 
-Order:
-1. `newsletter_subscribers`
-2. Division expansions: `real_estate` → `technology` → `logistics` → `agritech` → `intelligence` → `innovation_lab` (+ RLS tighten, notifications insert fix)
-3. `documents_center` (`document_library` + storage policies)
-4. `messaging`
-5. `lease_esign_stub` (depends on `tenants`)
-6. `billing_stripe` (`billing_transactions`)
-7. `investor_farmer_self_service` (depends on `agritech` tables: `field_images`, `agri_alerts`)
+### What changes for users
 
-After all migrations run, the types file regenerates automatically from the live schema. I'll then verify each new table/column exists via read queries and run the DB linter for new RLS gaps.
-
-**Stop here and report verification results before feature work.**
-
----
-
-## Phase 2 — Real Estate core CRUD + division-scoped RLS
-
-Working create/edit/delete for **properties, units, tenants, leads, documents**, all scoped to `real-estate` division access:
-- Server functions in `src/lib/realestate.functions.ts` (CRUD + list/detail), guarded by `requireSupabaseAuth` + division-access check.
-- Wire existing routes: `properties.index/$id/new`, `real-estate.units.$id`, `tenants`, `leads`, plus a documents surface backed by `document_library`.
-- Verify RLS: only users with `real-estate` in `user_divisions` can read/write; confirm inserts set owner/division correctly.
-
-## Phase 3 — Technology portal + access-request approval flow
-
-- Technology KPIs + searchable project/document library + project/workflow management tied to the selected division (builds on existing `tech.functions.ts`).
-- "Request access to another division" UI → writes to `access_requests`.
-- Admin approval flow (admin route) that, on approval, updates `user_divisions` and lets the user route into the new workspace. Reuses the `getMyAccessRequestStatus` pattern already in `_apex.tsx`.
-
-## Phase 4 — Creative upgrades (largest; sequenced after core is stable)
-
-Real Estate: virtual tours, mortgage/ROI calculator, neighborhood scoring · AgriTech: weather-linked yield forecasts, produce marketplace · Logistics: live GPS map, route suggestions · Intelligence: anomaly-detection alerts · Innovation Lab: idea submission + upvoting board · Cross-cutting: NGN/USD dual-currency display, PWA install, WhatsApp notifications. (Paystack/Flutterwave deferred — Stripe sandbox stays for now.)
-
-## Phase 5 — Playwright regression tests
-
-Cover sign up → choose division → dashboard, and sign in → dashboard → sign out → sign in, asserting redirects/routing never regress. Uses existing `@playwright/test` dep + `test:e2e` script.
-
----
+- Global admin panel gains a "Division access" screen: search a user, toggle which divisions they belong to, and mark them as admin of a division.
+- A division admin sees a new "Team" tab inside their division workspace listing members, with add/remove and pending access requests for that division only.
+- Ordinary members do not see the Team tab.
 
 ## Technical notes
-- Migrations applied via the migration tool (not raw psql) so approval + type regen happen correctly; run strictly in the order above to satisfy FK/column dependencies.
-- All new server logic uses `createServerFn` + `requireSupabaseAuth` (no edge functions for app logic); admin-only actions verify role via `has_role`.
-- New public tables (if any arise) get GRANTs in the same migration.
-- I'll also quietly fix the current realtime notifications runtime error (a `postgres_changes` callback added after `subscribe()`).
+
+- New table `public.division_admins (user_id, division_slug)`, unique per pair, with GRANTs, RLS, and a `private.is_division_admin(uid, slug)` security-definer helper.
+- Only global admins can write to `division_admins` (RLS), matching your answer on who assigns.
+- `user_divisions` policies extended: division admins may insert/delete rows **only** for their own division slug; global admin policy stays as-is.
+- `access_requests`: division admins can read and resolve requests whose requested division matches one they administer.
+- `getMyWorkspace` returns `divisionAdminOf: string[]`; a `useIsDivisionAdmin(slug)` hook gates the Team tab.
+- New `src/lib/division-team.functions.ts` (auth-middleware, RLS-scoped): `listDivisionMembers`, `grantDivisionAccess`, `revokeDivisionAccess`, `listDivisionAccessRequests`, `resolveAccessRequest`. Server side re-checks the caller administers the target slug — the route guard is UX only.
+- New route `src/routes/_apex.portal.divisions.<slug>.team.tsx` per division (shared component), plus an admin screen at `/portal/admin/division-access`.
+- Record-record deletes for properties/units reuse existing `realestate-crud.functions.ts` patterns with new `deleteProperty` / `deleteUnit` functions.
+- All member/team actions are written to `portal_audit_log` so they show up in the existing audit viewer.
