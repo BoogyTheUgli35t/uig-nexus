@@ -80,6 +80,7 @@ import { Route as ApexPortalDivisionsAgritechCooperativesRouteImport } from './r
 import { Route as ApexPortalDivisionsAgritechFarmersRouteImport } from './routes/_apex.portal.divisions.agritech.farmers'
 import { Route as ApexPortalDivisionsAgritechPredictionsRouteImport } from './routes/_apex.portal.divisions.agritech.predictions'
 import { Route as ApexPortalDivisionsAgritechSensorsRouteImport } from './routes/_apex.portal.divisions.agritech.sensors'
+import { Route as ApexPortalDivisionsAgritechTeamRouteImport } from './routes/_apex.portal.divisions.agritech.team'
 import { Route as ApexPortalDivisionsInnovationLabIndexRouteImport } from './routes/_apex.portal.divisions.innovation-lab.index'
 import { Route as ApexPortalDivisionsInnovationLabExperimentsRouteImport } from './routes/_apex.portal.divisions.innovation-lab.experiments'
 import { Route as ApexPortalDivisionsInnovationLabIdeasRouteImport } from './routes/_apex.portal.divisions.innovation-lab.ideas'
@@ -498,6 +499,12 @@ const ApexPortalDivisionsAgritechSensorsRoute =
     path: '/sensors',
     getParentRoute: () => ApexPortalDivisionsAgritechRoute,
   } as any)
+const ApexPortalDivisionsAgritechTeamRoute =
+  ApexPortalDivisionsAgritechTeamRouteImport.update({
+    id: '/team',
+    path: '/team',
+    getParentRoute: () => ApexPortalDivisionsAgritechRoute,
+  } as any)
 const ApexPortalDivisionsInnovationLabIndexRoute =
   ApexPortalDivisionsInnovationLabIndexRouteImport.update({
     id: '/',
@@ -827,6 +834,7 @@ export interface FileRoutesByFullPath {
   '/portal/divisions/agritech/farmers': typeof ApexPortalDivisionsAgritechFarmersRoute
   '/portal/divisions/agritech/predictions': typeof ApexPortalDivisionsAgritechPredictionsRoute
   '/portal/divisions/agritech/sensors': typeof ApexPortalDivisionsAgritechSensorsRoute
+  '/portal/divisions/agritech/team': typeof ApexPortalDivisionsAgritechTeamRoute
   '/portal/divisions/innovation-lab/experiments': typeof ApexPortalDivisionsInnovationLabExperimentsRoute
   '/portal/divisions/innovation-lab/ideas': typeof ApexPortalDivisionsInnovationLabIdeasRoute
   '/portal/divisions/innovation-lab/prototypes': typeof ApexPortalDivisionsInnovationLabPrototypesRoute
@@ -935,6 +943,7 @@ export interface FileRoutesByTo {
   '/portal/divisions/agritech/farmers': typeof ApexPortalDivisionsAgritechFarmersRoute
   '/portal/divisions/agritech/predictions': typeof ApexPortalDivisionsAgritechPredictionsRoute
   '/portal/divisions/agritech/sensors': typeof ApexPortalDivisionsAgritechSensorsRoute
+  '/portal/divisions/agritech/team': typeof ApexPortalDivisionsAgritechTeamRoute
   '/portal/divisions/innovation-lab/experiments': typeof ApexPortalDivisionsInnovationLabExperimentsRoute
   '/portal/divisions/innovation-lab/ideas': typeof ApexPortalDivisionsInnovationLabIdeasRoute
   '/portal/divisions/innovation-lab/prototypes': typeof ApexPortalDivisionsInnovationLabPrototypesRoute
@@ -1052,6 +1061,7 @@ export interface FileRoutesById {
   '/_apex/portal/divisions/agritech/farmers': typeof ApexPortalDivisionsAgritechFarmersRoute
   '/_apex/portal/divisions/agritech/predictions': typeof ApexPortalDivisionsAgritechPredictionsRoute
   '/_apex/portal/divisions/agritech/sensors': typeof ApexPortalDivisionsAgritechSensorsRoute
+  '/_apex/portal/divisions/agritech/team': typeof ApexPortalDivisionsAgritechTeamRoute
   '/_apex/portal/divisions/innovation-lab/experiments': typeof ApexPortalDivisionsInnovationLabExperimentsRoute
   '/_apex/portal/divisions/innovation-lab/ideas': typeof ApexPortalDivisionsInnovationLabIdeasRoute
   '/_apex/portal/divisions/innovation-lab/prototypes': typeof ApexPortalDivisionsInnovationLabPrototypesRoute
@@ -1169,6 +1179,7 @@ export interface FileRouteTypes {
     | '/portal/divisions/agritech/farmers'
     | '/portal/divisions/agritech/predictions'
     | '/portal/divisions/agritech/sensors'
+    | '/portal/divisions/agritech/team'
     | '/portal/divisions/innovation-lab/experiments'
     | '/portal/divisions/innovation-lab/ideas'
     | '/portal/divisions/innovation-lab/prototypes'
@@ -1277,6 +1288,7 @@ export interface FileRouteTypes {
     | '/portal/divisions/agritech/farmers'
     | '/portal/divisions/agritech/predictions'
     | '/portal/divisions/agritech/sensors'
+    | '/portal/divisions/agritech/team'
     | '/portal/divisions/innovation-lab/experiments'
     | '/portal/divisions/innovation-lab/ideas'
     | '/portal/divisions/innovation-lab/prototypes'
@@ -1393,6 +1405,7 @@ export interface FileRouteTypes {
     | '/_apex/portal/divisions/agritech/farmers'
     | '/_apex/portal/divisions/agritech/predictions'
     | '/_apex/portal/divisions/agritech/sensors'
+    | '/_apex/portal/divisions/agritech/team'
     | '/_apex/portal/divisions/innovation-lab/experiments'
     | '/_apex/portal/divisions/innovation-lab/ideas'
     | '/_apex/portal/divisions/innovation-lab/prototypes'
@@ -1974,6 +1987,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApexPortalDivisionsAgritechSensorsRouteImport
       parentRoute: typeof ApexPortalDivisionsAgritechRoute
     }
+    '/_apex/portal/divisions/agritech/team': {
+      id: '/_apex/portal/divisions/agritech/team'
+      path: '/team'
+      fullPath: '/portal/divisions/agritech/team'
+      preLoaderRoute: typeof ApexPortalDivisionsAgritechTeamRouteImport
+      parentRoute: typeof ApexPortalDivisionsAgritechRoute
+    }
     '/_apex/portal/divisions/innovation-lab/': {
       id: '/_apex/portal/divisions/innovation-lab/'
       path: '/'
@@ -2284,6 +2304,7 @@ interface ApexPortalDivisionsAgritechRouteChildren {
   ApexPortalDivisionsAgritechFarmersRoute: typeof ApexPortalDivisionsAgritechFarmersRoute
   ApexPortalDivisionsAgritechPredictionsRoute: typeof ApexPortalDivisionsAgritechPredictionsRoute
   ApexPortalDivisionsAgritechSensorsRoute: typeof ApexPortalDivisionsAgritechSensorsRoute
+  ApexPortalDivisionsAgritechTeamRoute: typeof ApexPortalDivisionsAgritechTeamRoute
   ApexPortalDivisionsAgritechIndexRoute: typeof ApexPortalDivisionsAgritechIndexRoute
   ApexPortalDivisionsAgritechFieldsIdRoute: typeof ApexPortalDivisionsAgritechFieldsIdRoute
   ApexPortalDivisionsAgritechFieldsIndexRoute: typeof ApexPortalDivisionsAgritechFieldsIndexRoute
@@ -2301,6 +2322,7 @@ const ApexPortalDivisionsAgritechRouteChildren: ApexPortalDivisionsAgritechRoute
       ApexPortalDivisionsAgritechPredictionsRoute,
     ApexPortalDivisionsAgritechSensorsRoute:
       ApexPortalDivisionsAgritechSensorsRoute,
+    ApexPortalDivisionsAgritechTeamRoute: ApexPortalDivisionsAgritechTeamRoute,
     ApexPortalDivisionsAgritechIndexRoute:
       ApexPortalDivisionsAgritechIndexRoute,
     ApexPortalDivisionsAgritechFieldsIdRoute:
