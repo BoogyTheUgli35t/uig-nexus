@@ -71,7 +71,8 @@ function LoginPage() {
       // Navigate immediately — the old 800ms setTimeout + full page reload made
       // sign-in feel like it hung before the workspace appeared.
       const target = safeNext(next) ?? "/portal/dashboard";
-      navigate({ href: target, replace: true });
+      // useNavigate expects a `to` property. `href` was preventing navigation.
+      navigate({ to: target, replace: true });
     }
 
   }
