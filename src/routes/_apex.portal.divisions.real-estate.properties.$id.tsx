@@ -142,6 +142,16 @@ function PropertyDetailPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const deleteMut = useMutation({
+    mutationFn: async () => deleteProperty({ data: { id }, headers: await authHeaders() }),
+    onSuccess: () => {
+      toast.success("Property deleted");
+      qc.invalidateQueries({ queryKey: ["realestate-properties"] });
+      navigate({ to: "/portal/divisions/real-estate/properties" });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
   async function onUploadPhoto(e: React.ChangeEvent<HTMLInputElement>) {
     const files = e.target.files;
     if (!files || files.length === 0) return;
