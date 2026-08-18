@@ -47,7 +47,7 @@ async function requireDivisionAuthority(userId: string, slug: string): Promise<A
 async function audit(
   userId: string,
   event_type: string,
-  metadata: Record<string, unknown>,
+  metadata: Record<string, string>,
 ): Promise<void> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   await supabaseAdmin.from("portal_audit_log").insert({ user_id: userId, event_type, metadata });
