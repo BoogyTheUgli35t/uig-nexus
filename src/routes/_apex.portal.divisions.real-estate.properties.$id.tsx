@@ -64,6 +64,7 @@ function imgUrl(path: string) {
 function PropertyDetailPage() {
   const { id } = Route.useParams();
   const qc = useQueryClient();
+  const navigate = useNavigate();
 
   const { data, isLoading } = useQuery({
     queryKey: ["realestate-property", id],
