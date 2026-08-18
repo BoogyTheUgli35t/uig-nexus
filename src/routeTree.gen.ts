@@ -98,6 +98,7 @@ import { Route as ApexPortalDivisionsRealEstateLeadsRouteImport } from './routes
 import { Route as ApexPortalDivisionsRealEstateMaintenanceRouteImport } from './routes/_apex.portal.divisions.real-estate.maintenance'
 import { Route as ApexPortalDivisionsRealEstateReportsRouteImport } from './routes/_apex.portal.divisions.real-estate.reports'
 import { Route as ApexPortalDivisionsRealEstateSettingsRouteImport } from './routes/_apex.portal.divisions.real-estate.settings'
+import { Route as ApexPortalDivisionsRealEstateTeamRouteImport } from './routes/_apex.portal.divisions.real-estate.team'
 import { Route as ApexPortalDivisionsRealEstateTenantsRouteImport } from './routes/_apex.portal.divisions.real-estate.tenants'
 import { Route as ApexPortalDivisionsTechnologyIndexRouteImport } from './routes/_apex.portal.divisions.technology.index'
 import { Route as ApexPortalDivisionsTechnologyAutomationRouteImport } from './routes/_apex.portal.divisions.technology.automation'
@@ -604,6 +605,12 @@ const ApexPortalDivisionsRealEstateSettingsRoute =
     path: '/settings',
     getParentRoute: () => ApexPortalDivisionsRealEstateRoute,
   } as any)
+const ApexPortalDivisionsRealEstateTeamRoute =
+  ApexPortalDivisionsRealEstateTeamRouteImport.update({
+    id: '/team',
+    path: '/team',
+    getParentRoute: () => ApexPortalDivisionsRealEstateRoute,
+  } as any)
 const ApexPortalDivisionsRealEstateTenantsRoute =
   ApexPortalDivisionsRealEstateTenantsRouteImport.update({
     id: '/tenants',
@@ -827,6 +834,7 @@ export interface FileRoutesByFullPath {
   '/portal/divisions/real-estate/maintenance': typeof ApexPortalDivisionsRealEstateMaintenanceRoute
   '/portal/divisions/real-estate/reports': typeof ApexPortalDivisionsRealEstateReportsRoute
   '/portal/divisions/real-estate/settings': typeof ApexPortalDivisionsRealEstateSettingsRoute
+  '/portal/divisions/real-estate/team': typeof ApexPortalDivisionsRealEstateTeamRoute
   '/portal/divisions/real-estate/tenants': typeof ApexPortalDivisionsRealEstateTenantsRoute
   '/portal/divisions/technology/automation': typeof ApexPortalDivisionsTechnologyAutomationRoute
   '/portal/divisions/technology/integrations': typeof ApexPortalDivisionsTechnologyIntegrationsRoute
@@ -933,6 +941,7 @@ export interface FileRoutesByTo {
   '/portal/divisions/real-estate/maintenance': typeof ApexPortalDivisionsRealEstateMaintenanceRoute
   '/portal/divisions/real-estate/reports': typeof ApexPortalDivisionsRealEstateReportsRoute
   '/portal/divisions/real-estate/settings': typeof ApexPortalDivisionsRealEstateSettingsRoute
+  '/portal/divisions/real-estate/team': typeof ApexPortalDivisionsRealEstateTeamRoute
   '/portal/divisions/real-estate/tenants': typeof ApexPortalDivisionsRealEstateTenantsRoute
   '/portal/divisions/technology/automation': typeof ApexPortalDivisionsTechnologyAutomationRoute
   '/portal/divisions/technology/integrations': typeof ApexPortalDivisionsTechnologyIntegrationsRoute
@@ -1048,6 +1057,7 @@ export interface FileRoutesById {
   '/_apex/portal/divisions/real-estate/maintenance': typeof ApexPortalDivisionsRealEstateMaintenanceRoute
   '/_apex/portal/divisions/real-estate/reports': typeof ApexPortalDivisionsRealEstateReportsRoute
   '/_apex/portal/divisions/real-estate/settings': typeof ApexPortalDivisionsRealEstateSettingsRoute
+  '/_apex/portal/divisions/real-estate/team': typeof ApexPortalDivisionsRealEstateTeamRoute
   '/_apex/portal/divisions/real-estate/tenants': typeof ApexPortalDivisionsRealEstateTenantsRoute
   '/_apex/portal/divisions/technology/automation': typeof ApexPortalDivisionsTechnologyAutomationRoute
   '/_apex/portal/divisions/technology/integrations': typeof ApexPortalDivisionsTechnologyIntegrationsRoute
@@ -1163,6 +1173,7 @@ export interface FileRouteTypes {
     | '/portal/divisions/real-estate/maintenance'
     | '/portal/divisions/real-estate/reports'
     | '/portal/divisions/real-estate/settings'
+    | '/portal/divisions/real-estate/team'
     | '/portal/divisions/real-estate/tenants'
     | '/portal/divisions/technology/automation'
     | '/portal/divisions/technology/integrations'
@@ -1269,6 +1280,7 @@ export interface FileRouteTypes {
     | '/portal/divisions/real-estate/maintenance'
     | '/portal/divisions/real-estate/reports'
     | '/portal/divisions/real-estate/settings'
+    | '/portal/divisions/real-estate/team'
     | '/portal/divisions/real-estate/tenants'
     | '/portal/divisions/technology/automation'
     | '/portal/divisions/technology/integrations'
@@ -1383,6 +1395,7 @@ export interface FileRouteTypes {
     | '/_apex/portal/divisions/real-estate/maintenance'
     | '/_apex/portal/divisions/real-estate/reports'
     | '/_apex/portal/divisions/real-estate/settings'
+    | '/_apex/portal/divisions/real-estate/team'
     | '/_apex/portal/divisions/real-estate/tenants'
     | '/_apex/portal/divisions/technology/automation'
     | '/_apex/portal/divisions/technology/integrations'
@@ -2074,6 +2087,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApexPortalDivisionsRealEstateSettingsRouteImport
       parentRoute: typeof ApexPortalDivisionsRealEstateRoute
     }
+    '/_apex/portal/divisions/real-estate/team': {
+      id: '/_apex/portal/divisions/real-estate/team'
+      path: '/team'
+      fullPath: '/portal/divisions/real-estate/team'
+      preLoaderRoute: typeof ApexPortalDivisionsRealEstateTeamRouteImport
+      parentRoute: typeof ApexPortalDivisionsRealEstateRoute
+    }
     '/_apex/portal/divisions/real-estate/tenants': {
       id: '/_apex/portal/divisions/real-estate/tenants'
       path: '/tenants'
@@ -2364,6 +2384,7 @@ interface ApexPortalDivisionsRealEstateRouteChildren {
   ApexPortalDivisionsRealEstateMaintenanceRoute: typeof ApexPortalDivisionsRealEstateMaintenanceRoute
   ApexPortalDivisionsRealEstateReportsRoute: typeof ApexPortalDivisionsRealEstateReportsRoute
   ApexPortalDivisionsRealEstateSettingsRoute: typeof ApexPortalDivisionsRealEstateSettingsRoute
+  ApexPortalDivisionsRealEstateTeamRoute: typeof ApexPortalDivisionsRealEstateTeamRoute
   ApexPortalDivisionsRealEstateTenantsRoute: typeof ApexPortalDivisionsRealEstateTenantsRoute
   ApexPortalDivisionsRealEstateIndexRoute: typeof ApexPortalDivisionsRealEstateIndexRoute
   ApexPortalDivisionsRealEstateLeadsIdRoute: typeof ApexPortalDivisionsRealEstateLeadsIdRoute
@@ -2388,6 +2409,8 @@ const ApexPortalDivisionsRealEstateRouteChildren: ApexPortalDivisionsRealEstateR
       ApexPortalDivisionsRealEstateReportsRoute,
     ApexPortalDivisionsRealEstateSettingsRoute:
       ApexPortalDivisionsRealEstateSettingsRoute,
+    ApexPortalDivisionsRealEstateTeamRoute:
+      ApexPortalDivisionsRealEstateTeamRoute,
     ApexPortalDivisionsRealEstateTenantsRoute:
       ApexPortalDivisionsRealEstateTenantsRoute,
     ApexPortalDivisionsRealEstateIndexRoute:
