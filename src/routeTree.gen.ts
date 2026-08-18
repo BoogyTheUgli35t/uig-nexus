@@ -85,6 +85,7 @@ import { Route as ApexPortalDivisionsInnovationLabIndexRouteImport } from './rou
 import { Route as ApexPortalDivisionsInnovationLabExperimentsRouteImport } from './routes/_apex.portal.divisions.innovation-lab.experiments'
 import { Route as ApexPortalDivisionsInnovationLabIdeasRouteImport } from './routes/_apex.portal.divisions.innovation-lab.ideas'
 import { Route as ApexPortalDivisionsInnovationLabPrototypesRouteImport } from './routes/_apex.portal.divisions.innovation-lab.prototypes'
+import { Route as ApexPortalDivisionsInnovationLabTeamRouteImport } from './routes/_apex.portal.divisions.innovation-lab.team'
 import { Route as ApexPortalDivisionsIntelligenceIndexRouteImport } from './routes/_apex.portal.divisions.intelligence.index'
 import { Route as ApexPortalDivisionsIntelligenceAssistantRouteImport } from './routes/_apex.portal.divisions.intelligence.assistant'
 import { Route as ApexPortalDivisionsIntelligenceDatasetsRouteImport } from './routes/_apex.portal.divisions.intelligence.datasets'
@@ -531,6 +532,12 @@ const ApexPortalDivisionsInnovationLabPrototypesRoute =
     path: '/prototypes',
     getParentRoute: () => ApexPortalDivisionsInnovationLabRoute,
   } as any)
+const ApexPortalDivisionsInnovationLabTeamRoute =
+  ApexPortalDivisionsInnovationLabTeamRouteImport.update({
+    id: '/team',
+    path: '/team',
+    getParentRoute: () => ApexPortalDivisionsInnovationLabRoute,
+  } as any)
 const ApexPortalDivisionsIntelligenceIndexRoute =
   ApexPortalDivisionsIntelligenceIndexRouteImport.update({
     id: '/',
@@ -852,6 +859,7 @@ export interface FileRoutesByFullPath {
   '/portal/divisions/innovation-lab/experiments': typeof ApexPortalDivisionsInnovationLabExperimentsRoute
   '/portal/divisions/innovation-lab/ideas': typeof ApexPortalDivisionsInnovationLabIdeasRoute
   '/portal/divisions/innovation-lab/prototypes': typeof ApexPortalDivisionsInnovationLabPrototypesRoute
+  '/portal/divisions/innovation-lab/team': typeof ApexPortalDivisionsInnovationLabTeamRoute
   '/portal/divisions/intelligence/assistant': typeof ApexPortalDivisionsIntelligenceAssistantRoute
   '/portal/divisions/intelligence/datasets': typeof ApexPortalDivisionsIntelligenceDatasetsRoute
   '/portal/divisions/intelligence/integrations': typeof ApexPortalDivisionsIntelligenceIntegrationsRoute
@@ -963,6 +971,7 @@ export interface FileRoutesByTo {
   '/portal/divisions/innovation-lab/experiments': typeof ApexPortalDivisionsInnovationLabExperimentsRoute
   '/portal/divisions/innovation-lab/ideas': typeof ApexPortalDivisionsInnovationLabIdeasRoute
   '/portal/divisions/innovation-lab/prototypes': typeof ApexPortalDivisionsInnovationLabPrototypesRoute
+  '/portal/divisions/innovation-lab/team': typeof ApexPortalDivisionsInnovationLabTeamRoute
   '/portal/divisions/intelligence/assistant': typeof ApexPortalDivisionsIntelligenceAssistantRoute
   '/portal/divisions/intelligence/datasets': typeof ApexPortalDivisionsIntelligenceDatasetsRoute
   '/portal/divisions/intelligence/integrations': typeof ApexPortalDivisionsIntelligenceIntegrationsRoute
@@ -1083,6 +1092,7 @@ export interface FileRoutesById {
   '/_apex/portal/divisions/innovation-lab/experiments': typeof ApexPortalDivisionsInnovationLabExperimentsRoute
   '/_apex/portal/divisions/innovation-lab/ideas': typeof ApexPortalDivisionsInnovationLabIdeasRoute
   '/_apex/portal/divisions/innovation-lab/prototypes': typeof ApexPortalDivisionsInnovationLabPrototypesRoute
+  '/_apex/portal/divisions/innovation-lab/team': typeof ApexPortalDivisionsInnovationLabTeamRoute
   '/_apex/portal/divisions/intelligence/assistant': typeof ApexPortalDivisionsIntelligenceAssistantRoute
   '/_apex/portal/divisions/intelligence/datasets': typeof ApexPortalDivisionsIntelligenceDatasetsRoute
   '/_apex/portal/divisions/intelligence/integrations': typeof ApexPortalDivisionsIntelligenceIntegrationsRoute
@@ -1203,6 +1213,7 @@ export interface FileRouteTypes {
     | '/portal/divisions/innovation-lab/experiments'
     | '/portal/divisions/innovation-lab/ideas'
     | '/portal/divisions/innovation-lab/prototypes'
+    | '/portal/divisions/innovation-lab/team'
     | '/portal/divisions/intelligence/assistant'
     | '/portal/divisions/intelligence/datasets'
     | '/portal/divisions/intelligence/integrations'
@@ -1314,6 +1325,7 @@ export interface FileRouteTypes {
     | '/portal/divisions/innovation-lab/experiments'
     | '/portal/divisions/innovation-lab/ideas'
     | '/portal/divisions/innovation-lab/prototypes'
+    | '/portal/divisions/innovation-lab/team'
     | '/portal/divisions/intelligence/assistant'
     | '/portal/divisions/intelligence/datasets'
     | '/portal/divisions/intelligence/integrations'
@@ -1433,6 +1445,7 @@ export interface FileRouteTypes {
     | '/_apex/portal/divisions/innovation-lab/experiments'
     | '/_apex/portal/divisions/innovation-lab/ideas'
     | '/_apex/portal/divisions/innovation-lab/prototypes'
+    | '/_apex/portal/divisions/innovation-lab/team'
     | '/_apex/portal/divisions/intelligence/assistant'
     | '/_apex/portal/divisions/intelligence/datasets'
     | '/_apex/portal/divisions/intelligence/integrations'
@@ -2048,6 +2061,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApexPortalDivisionsInnovationLabPrototypesRouteImport
       parentRoute: typeof ApexPortalDivisionsInnovationLabRoute
     }
+    '/_apex/portal/divisions/innovation-lab/team': {
+      id: '/_apex/portal/divisions/innovation-lab/team'
+      path: '/team'
+      fullPath: '/portal/divisions/innovation-lab/team'
+      preLoaderRoute: typeof ApexPortalDivisionsInnovationLabTeamRouteImport
+      parentRoute: typeof ApexPortalDivisionsInnovationLabRoute
+    }
     '/_apex/portal/divisions/intelligence/': {
       id: '/_apex/portal/divisions/intelligence/'
       path: '/'
@@ -2380,6 +2400,7 @@ interface ApexPortalDivisionsInnovationLabRouteChildren {
   ApexPortalDivisionsInnovationLabExperimentsRoute: typeof ApexPortalDivisionsInnovationLabExperimentsRoute
   ApexPortalDivisionsInnovationLabIdeasRoute: typeof ApexPortalDivisionsInnovationLabIdeasRoute
   ApexPortalDivisionsInnovationLabPrototypesRoute: typeof ApexPortalDivisionsInnovationLabPrototypesRoute
+  ApexPortalDivisionsInnovationLabTeamRoute: typeof ApexPortalDivisionsInnovationLabTeamRoute
   ApexPortalDivisionsInnovationLabIndexRoute: typeof ApexPortalDivisionsInnovationLabIndexRoute
 }
 
@@ -2391,6 +2412,8 @@ const ApexPortalDivisionsInnovationLabRouteChildren: ApexPortalDivisionsInnovati
       ApexPortalDivisionsInnovationLabIdeasRoute,
     ApexPortalDivisionsInnovationLabPrototypesRoute:
       ApexPortalDivisionsInnovationLabPrototypesRoute,
+    ApexPortalDivisionsInnovationLabTeamRoute:
+      ApexPortalDivisionsInnovationLabTeamRoute,
     ApexPortalDivisionsInnovationLabIndexRoute:
       ApexPortalDivisionsInnovationLabIndexRoute,
   }
