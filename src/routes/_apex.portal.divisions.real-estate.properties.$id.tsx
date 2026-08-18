@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -25,6 +25,7 @@ import {
   UNIT_STATUSES,
   AMENITY_OPTIONS,
 } from "@/lib/realestate.functions";
+import { deleteProperty } from "@/lib/realestate-crud.functions";
 import { authHeaders } from "@/lib/auth-headers";
 import { supabase } from "@/integrations/supabase/client";
 import { DataPanel, EmptyState, StatusBadge, KpiStat } from "@/components/portal/blocks";
@@ -32,6 +33,17 @@ import { RecordDocuments } from "@/components/portal/RecordDocuments";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { cn, resolveImageUrl } from "@/lib/utils";
 
 export const Route = createFileRoute("/_apex/portal/divisions/real-estate/properties/$id")({
