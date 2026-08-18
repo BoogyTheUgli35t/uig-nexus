@@ -89,6 +89,7 @@ import { Route as ApexPortalDivisionsIntelligenceIndexRouteImport } from './rout
 import { Route as ApexPortalDivisionsIntelligenceAssistantRouteImport } from './routes/_apex.portal.divisions.intelligence.assistant'
 import { Route as ApexPortalDivisionsIntelligenceDatasetsRouteImport } from './routes/_apex.portal.divisions.intelligence.datasets'
 import { Route as ApexPortalDivisionsIntelligenceIntegrationsRouteImport } from './routes/_apex.portal.divisions.intelligence.integrations'
+import { Route as ApexPortalDivisionsIntelligenceTeamRouteImport } from './routes/_apex.portal.divisions.intelligence.team'
 import { Route as ApexPortalDivisionsLogisticsIndexRouteImport } from './routes/_apex.portal.divisions.logistics.index'
 import { Route as ApexPortalDivisionsLogisticsDriversRouteImport } from './routes/_apex.portal.divisions.logistics.drivers'
 import { Route as ApexPortalDivisionsLogisticsFleetRouteImport } from './routes/_apex.portal.divisions.logistics.fleet'
@@ -554,6 +555,12 @@ const ApexPortalDivisionsIntelligenceIntegrationsRoute =
     path: '/integrations',
     getParentRoute: () => ApexPortalDivisionsIntelligenceRoute,
   } as any)
+const ApexPortalDivisionsIntelligenceTeamRoute =
+  ApexPortalDivisionsIntelligenceTeamRouteImport.update({
+    id: '/team',
+    path: '/team',
+    getParentRoute: () => ApexPortalDivisionsIntelligenceRoute,
+  } as any)
 const ApexPortalDivisionsLogisticsIndexRoute =
   ApexPortalDivisionsLogisticsIndexRouteImport.update({
     id: '/',
@@ -848,6 +855,7 @@ export interface FileRoutesByFullPath {
   '/portal/divisions/intelligence/assistant': typeof ApexPortalDivisionsIntelligenceAssistantRoute
   '/portal/divisions/intelligence/datasets': typeof ApexPortalDivisionsIntelligenceDatasetsRoute
   '/portal/divisions/intelligence/integrations': typeof ApexPortalDivisionsIntelligenceIntegrationsRoute
+  '/portal/divisions/intelligence/team': typeof ApexPortalDivisionsIntelligenceTeamRoute
   '/portal/divisions/logistics/drivers': typeof ApexPortalDivisionsLogisticsDriversRoute
   '/portal/divisions/logistics/fleet': typeof ApexPortalDivisionsLogisticsFleetRoute
   '/portal/divisions/logistics/routes': typeof ApexPortalDivisionsLogisticsRoutesRoute
@@ -958,6 +966,7 @@ export interface FileRoutesByTo {
   '/portal/divisions/intelligence/assistant': typeof ApexPortalDivisionsIntelligenceAssistantRoute
   '/portal/divisions/intelligence/datasets': typeof ApexPortalDivisionsIntelligenceDatasetsRoute
   '/portal/divisions/intelligence/integrations': typeof ApexPortalDivisionsIntelligenceIntegrationsRoute
+  '/portal/divisions/intelligence/team': typeof ApexPortalDivisionsIntelligenceTeamRoute
   '/portal/divisions/logistics/drivers': typeof ApexPortalDivisionsLogisticsDriversRoute
   '/portal/divisions/logistics/fleet': typeof ApexPortalDivisionsLogisticsFleetRoute
   '/portal/divisions/logistics/routes': typeof ApexPortalDivisionsLogisticsRoutesRoute
@@ -1077,6 +1086,7 @@ export interface FileRoutesById {
   '/_apex/portal/divisions/intelligence/assistant': typeof ApexPortalDivisionsIntelligenceAssistantRoute
   '/_apex/portal/divisions/intelligence/datasets': typeof ApexPortalDivisionsIntelligenceDatasetsRoute
   '/_apex/portal/divisions/intelligence/integrations': typeof ApexPortalDivisionsIntelligenceIntegrationsRoute
+  '/_apex/portal/divisions/intelligence/team': typeof ApexPortalDivisionsIntelligenceTeamRoute
   '/_apex/portal/divisions/logistics/drivers': typeof ApexPortalDivisionsLogisticsDriversRoute
   '/_apex/portal/divisions/logistics/fleet': typeof ApexPortalDivisionsLogisticsFleetRoute
   '/_apex/portal/divisions/logistics/routes': typeof ApexPortalDivisionsLogisticsRoutesRoute
@@ -1196,6 +1206,7 @@ export interface FileRouteTypes {
     | '/portal/divisions/intelligence/assistant'
     | '/portal/divisions/intelligence/datasets'
     | '/portal/divisions/intelligence/integrations'
+    | '/portal/divisions/intelligence/team'
     | '/portal/divisions/logistics/drivers'
     | '/portal/divisions/logistics/fleet'
     | '/portal/divisions/logistics/routes'
@@ -1306,6 +1317,7 @@ export interface FileRouteTypes {
     | '/portal/divisions/intelligence/assistant'
     | '/portal/divisions/intelligence/datasets'
     | '/portal/divisions/intelligence/integrations'
+    | '/portal/divisions/intelligence/team'
     | '/portal/divisions/logistics/drivers'
     | '/portal/divisions/logistics/fleet'
     | '/portal/divisions/logistics/routes'
@@ -1424,6 +1436,7 @@ export interface FileRouteTypes {
     | '/_apex/portal/divisions/intelligence/assistant'
     | '/_apex/portal/divisions/intelligence/datasets'
     | '/_apex/portal/divisions/intelligence/integrations'
+    | '/_apex/portal/divisions/intelligence/team'
     | '/_apex/portal/divisions/logistics/drivers'
     | '/_apex/portal/divisions/logistics/fleet'
     | '/_apex/portal/divisions/logistics/routes'
@@ -2063,6 +2076,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApexPortalDivisionsIntelligenceIntegrationsRouteImport
       parentRoute: typeof ApexPortalDivisionsIntelligenceRoute
     }
+    '/_apex/portal/divisions/intelligence/team': {
+      id: '/_apex/portal/divisions/intelligence/team'
+      path: '/team'
+      fullPath: '/portal/divisions/intelligence/team'
+      preLoaderRoute: typeof ApexPortalDivisionsIntelligenceTeamRouteImport
+      parentRoute: typeof ApexPortalDivisionsIntelligenceRoute
+    }
     '/_apex/portal/divisions/logistics/': {
       id: '/_apex/portal/divisions/logistics/'
       path: '/'
@@ -2384,6 +2404,7 @@ interface ApexPortalDivisionsIntelligenceRouteChildren {
   ApexPortalDivisionsIntelligenceAssistantRoute: typeof ApexPortalDivisionsIntelligenceAssistantRoute
   ApexPortalDivisionsIntelligenceDatasetsRoute: typeof ApexPortalDivisionsIntelligenceDatasetsRoute
   ApexPortalDivisionsIntelligenceIntegrationsRoute: typeof ApexPortalDivisionsIntelligenceIntegrationsRoute
+  ApexPortalDivisionsIntelligenceTeamRoute: typeof ApexPortalDivisionsIntelligenceTeamRoute
   ApexPortalDivisionsIntelligenceIndexRoute: typeof ApexPortalDivisionsIntelligenceIndexRoute
   ApexPortalDivisionsIntelligenceModelsIdRoute: typeof ApexPortalDivisionsIntelligenceModelsIdRoute
   ApexPortalDivisionsIntelligenceModelsIndexRoute: typeof ApexPortalDivisionsIntelligenceModelsIndexRoute
@@ -2397,6 +2418,8 @@ const ApexPortalDivisionsIntelligenceRouteChildren: ApexPortalDivisionsIntellige
       ApexPortalDivisionsIntelligenceDatasetsRoute,
     ApexPortalDivisionsIntelligenceIntegrationsRoute:
       ApexPortalDivisionsIntelligenceIntegrationsRoute,
+    ApexPortalDivisionsIntelligenceTeamRoute:
+      ApexPortalDivisionsIntelligenceTeamRoute,
     ApexPortalDivisionsIntelligenceIndexRoute:
       ApexPortalDivisionsIntelligenceIndexRoute,
     ApexPortalDivisionsIntelligenceModelsIdRoute:
