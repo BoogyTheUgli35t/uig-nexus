@@ -313,7 +313,33 @@ function PropertyDetailPage() {
               </Button>
             </div>
           ) : (
-            <Button size="sm" variant="ghost" onClick={startEditing}>
+            <div className="flex gap-2">
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button size="sm" variant="ghost" className="text-destructive">
+                    <Trash2 className="mr-1 h-3.5 w-3.5" /> Delete
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Delete this property?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This permanently removes the listing, its units, photos and documents. This
+                      cannot be undone.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={() => deleteMut.mutate()}
+                      disabled={deleteMut.isPending}
+                    >
+                      {deleteMut.isPending ? "Deleting…" : "Delete property"}
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+              <Button size="sm" variant="ghost" onClick={startEditing}>
               <Pencil className="mr-1 h-3.5 w-3.5" /> Edit
             </Button>
           )
