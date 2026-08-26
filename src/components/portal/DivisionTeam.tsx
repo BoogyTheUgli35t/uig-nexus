@@ -8,6 +8,7 @@ import {
   revokeDivisionAccess,
   listDivisionAccessRequests,
   resolveDivisionAccessRequest,
+  listDivisionAuditEvents,
 } from "@/lib/division-team.functions";
 import { authHeaders } from "@/lib/auth-headers";
 import { useIsDivisionAdmin } from "@/hooks/use-division-access";
