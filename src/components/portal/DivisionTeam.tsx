@@ -40,9 +40,16 @@ export function DivisionTeam({ slug }: { slug: DivisionSlug }) {
       listDivisionAccessRequests({ data: { slug }, headers: await authHeaders() }),
   });
 
+  const events = useQuery({
+    queryKey: ["division-audit", slug],
+    enabled: isDivisionAdmin,
+    queryFn: async () => listDivisionAuditEvents({ data: { slug }, headers: await authHeaders() }),
+  });
+
   const refresh = () => {
     qc.invalidateQueries({ queryKey: ["division-members", slug] });
     qc.invalidateQueries({ queryKey: ["division-requests", slug] });
+    qc.invalidateQueries({ queryKey: ["division-audit", slug] });
   };
 
   const grantMut = useMutation({
