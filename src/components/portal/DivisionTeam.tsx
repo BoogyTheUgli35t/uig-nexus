@@ -196,6 +196,30 @@ export function DivisionTeam({ slug }: { slug: DivisionSlug }) {
           </ul>
         )}
       </DataPanel>
+
+      <DataPanel title="Recent team activity">
+        {events.isLoading ? (
+          <p className="text-sm text-muted-foreground">Loading activity…</p>
+        ) : (events.data ?? []).length === 0 ? (
+          <p className="text-sm text-muted-foreground">No team changes recorded yet.</p>
+        ) : (
+          <ul className="divide-y divide-border">
+            {(events.data ?? []).map((e) => (
+              <li key={e.id} className="flex items-center justify-between gap-4 py-2.5 text-sm">
+                <span className="truncate">
+                  <span className="font-medium">{e.eventType.replace(/_/g, " ")}</span>
+                  {e.targetUser ? (
+                    <span className="text-muted-foreground"> · {e.targetUser}</span>
+                  ) : null}
+                </span>
+                <time className="shrink-0 text-xs text-muted-foreground" dateTime={e.createdAt}>
+                  {new Date(e.createdAt).toLocaleString()}
+                </time>
+              </li>
+            ))}
+          </ul>
+        )}
+      </DataPanel>
     </div>
   );
 }
