@@ -98,6 +98,7 @@ import { Route as ApexPortalDivisionsLogisticsFleetRouteImport } from './routes/
 import { Route as ApexPortalDivisionsLogisticsRoutesRouteImport } from './routes/_apex.portal.divisions.logistics.routes'
 import { Route as ApexPortalDivisionsLogisticsTeamRouteImport } from './routes/_apex.portal.divisions.logistics.team'
 import { Route as ApexPortalDivisionsRealEstateIndexRouteImport } from './routes/_apex.portal.divisions.real-estate.index'
+import { Route as ApexPortalDivisionsRealEstateImportRouteImport } from './routes/_apex.portal.divisions.real-estate.import'
 import { Route as ApexPortalDivisionsRealEstateInvestorsRouteImport } from './routes/_apex.portal.divisions.real-estate.investors'
 import { Route as ApexPortalDivisionsRealEstateLeadsRouteImport } from './routes/_apex.portal.divisions.real-estate.leads'
 import { Route as ApexPortalDivisionsRealEstateMaintenanceRouteImport } from './routes/_apex.portal.divisions.real-estate.maintenance'
@@ -611,6 +612,12 @@ const ApexPortalDivisionsRealEstateIndexRoute =
     path: '/',
     getParentRoute: () => ApexPortalDivisionsRealEstateRoute,
   } as any)
+const ApexPortalDivisionsRealEstateImportRoute =
+  ApexPortalDivisionsRealEstateImportRouteImport.update({
+    id: '/import',
+    path: '/import',
+    getParentRoute: () => ApexPortalDivisionsRealEstateRoute,
+  } as any)
 const ApexPortalDivisionsRealEstateInvestorsRoute =
   ApexPortalDivisionsRealEstateInvestorsRouteImport.update({
     id: '/investors',
@@ -876,6 +883,7 @@ export interface FileRoutesByFullPath {
   '/portal/divisions/logistics/fleet': typeof ApexPortalDivisionsLogisticsFleetRoute
   '/portal/divisions/logistics/routes': typeof ApexPortalDivisionsLogisticsRoutesRoute
   '/portal/divisions/logistics/team': typeof ApexPortalDivisionsLogisticsTeamRoute
+  '/portal/divisions/real-estate/import': typeof ApexPortalDivisionsRealEstateImportRoute
   '/portal/divisions/real-estate/investors': typeof ApexPortalDivisionsRealEstateInvestorsRoute
   '/portal/divisions/real-estate/leads': typeof ApexPortalDivisionsRealEstateLeadsRoute
   '/portal/divisions/real-estate/maintenance': typeof ApexPortalDivisionsRealEstateMaintenanceRoute
@@ -989,6 +997,7 @@ export interface FileRoutesByTo {
   '/portal/divisions/logistics/fleet': typeof ApexPortalDivisionsLogisticsFleetRoute
   '/portal/divisions/logistics/routes': typeof ApexPortalDivisionsLogisticsRoutesRoute
   '/portal/divisions/logistics/team': typeof ApexPortalDivisionsLogisticsTeamRoute
+  '/portal/divisions/real-estate/import': typeof ApexPortalDivisionsRealEstateImportRoute
   '/portal/divisions/real-estate/investors': typeof ApexPortalDivisionsRealEstateInvestorsRoute
   '/portal/divisions/real-estate/leads': typeof ApexPortalDivisionsRealEstateLeadsRoute
   '/portal/divisions/real-estate/maintenance': typeof ApexPortalDivisionsRealEstateMaintenanceRoute
@@ -1111,6 +1120,7 @@ export interface FileRoutesById {
   '/_apex/portal/divisions/logistics/fleet': typeof ApexPortalDivisionsLogisticsFleetRoute
   '/_apex/portal/divisions/logistics/routes': typeof ApexPortalDivisionsLogisticsRoutesRoute
   '/_apex/portal/divisions/logistics/team': typeof ApexPortalDivisionsLogisticsTeamRoute
+  '/_apex/portal/divisions/real-estate/import': typeof ApexPortalDivisionsRealEstateImportRoute
   '/_apex/portal/divisions/real-estate/investors': typeof ApexPortalDivisionsRealEstateInvestorsRoute
   '/_apex/portal/divisions/real-estate/leads': typeof ApexPortalDivisionsRealEstateLeadsRoute
   '/_apex/portal/divisions/real-estate/maintenance': typeof ApexPortalDivisionsRealEstateMaintenanceRoute
@@ -1233,6 +1243,7 @@ export interface FileRouteTypes {
     | '/portal/divisions/logistics/fleet'
     | '/portal/divisions/logistics/routes'
     | '/portal/divisions/logistics/team'
+    | '/portal/divisions/real-estate/import'
     | '/portal/divisions/real-estate/investors'
     | '/portal/divisions/real-estate/leads'
     | '/portal/divisions/real-estate/maintenance'
@@ -1346,6 +1357,7 @@ export interface FileRouteTypes {
     | '/portal/divisions/logistics/fleet'
     | '/portal/divisions/logistics/routes'
     | '/portal/divisions/logistics/team'
+    | '/portal/divisions/real-estate/import'
     | '/portal/divisions/real-estate/investors'
     | '/portal/divisions/real-estate/leads'
     | '/portal/divisions/real-estate/maintenance'
@@ -1467,6 +1479,7 @@ export interface FileRouteTypes {
     | '/_apex/portal/divisions/logistics/fleet'
     | '/_apex/portal/divisions/logistics/routes'
     | '/_apex/portal/divisions/logistics/team'
+    | '/_apex/portal/divisions/real-estate/import'
     | '/_apex/portal/divisions/real-estate/investors'
     | '/_apex/portal/divisions/real-estate/leads'
     | '/_apex/portal/divisions/real-estate/maintenance'
@@ -2165,6 +2178,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApexPortalDivisionsRealEstateIndexRouteImport
       parentRoute: typeof ApexPortalDivisionsRealEstateRoute
     }
+    '/_apex/portal/divisions/real-estate/import': {
+      id: '/_apex/portal/divisions/real-estate/import'
+      path: '/import'
+      fullPath: '/portal/divisions/real-estate/import'
+      preLoaderRoute: typeof ApexPortalDivisionsRealEstateImportRouteImport
+      parentRoute: typeof ApexPortalDivisionsRealEstateRoute
+    }
     '/_apex/portal/divisions/real-estate/investors': {
       id: '/_apex/portal/divisions/real-estate/investors'
       path: '/investors'
@@ -2510,6 +2530,7 @@ const ApexPortalDivisionsLogisticsRouteWithChildren =
   )
 
 interface ApexPortalDivisionsRealEstateRouteChildren {
+  ApexPortalDivisionsRealEstateImportRoute: typeof ApexPortalDivisionsRealEstateImportRoute
   ApexPortalDivisionsRealEstateInvestorsRoute: typeof ApexPortalDivisionsRealEstateInvestorsRoute
   ApexPortalDivisionsRealEstateLeadsRoute: typeof ApexPortalDivisionsRealEstateLeadsRoute
   ApexPortalDivisionsRealEstateMaintenanceRoute: typeof ApexPortalDivisionsRealEstateMaintenanceRoute
@@ -2530,6 +2551,8 @@ interface ApexPortalDivisionsRealEstateRouteChildren {
 
 const ApexPortalDivisionsRealEstateRouteChildren: ApexPortalDivisionsRealEstateRouteChildren =
   {
+    ApexPortalDivisionsRealEstateImportRoute:
+      ApexPortalDivisionsRealEstateImportRoute,
     ApexPortalDivisionsRealEstateInvestorsRoute:
       ApexPortalDivisionsRealEstateInvestorsRoute,
     ApexPortalDivisionsRealEstateLeadsRoute:

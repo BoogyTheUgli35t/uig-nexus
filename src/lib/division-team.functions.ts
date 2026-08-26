@@ -319,3 +319,27 @@ export const removeDivisionAdmin = createServerFn({ method: "POST" })
     });
     return { ok: true };
   });
+
+/** Recent team-management events for a division, for the Team panel feed. */
+export const listDivisionAuditEvents = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((i: unknown) => z.object({ slug: DivisionSlugSchema }).parse(i))
+  .handler(async ({ context, data }) => {
+    await requireDivisionAuthority(context.userId, data.slug);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: rows, error } = await supabaseAdmin
+      .from("portal_audit_log")
+      .select("id, user_id, email, event_type, metadata, created_at")
+      .eq("metadata->>division", data.slug)
+      .order("created_at", { ascending: false })
+      .limit(50);
+    if (error) throw new Error(error.message);
+    return (rows ?? []).map((r) => ({
+      id: r.id,
+      eventType: r.event_type,
+      actorId: r.user_id,
+      actorEmail: r.email ?? "",
+      targetUser: ((r.metadata ?? {}) as Record<string, string>)["target_user"] ?? "",
+      createdAt: r.created_at,
+    }));
+  });

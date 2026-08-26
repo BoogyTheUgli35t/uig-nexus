@@ -8,6 +8,7 @@ import {
   revokeDivisionAccess,
   listDivisionAccessRequests,
   resolveDivisionAccessRequest,
+  listDivisionAuditEvents,
 } from "@/lib/division-team.functions";
 import { authHeaders } from "@/lib/auth-headers";
 import { useIsDivisionAdmin } from "@/hooks/use-division-access";
@@ -39,9 +40,16 @@ export function DivisionTeam({ slug }: { slug: DivisionSlug }) {
       listDivisionAccessRequests({ data: { slug }, headers: await authHeaders() }),
   });
 
+  const events = useQuery({
+    queryKey: ["division-audit", slug],
+    enabled: isDivisionAdmin,
+    queryFn: async () => listDivisionAuditEvents({ data: { slug }, headers: await authHeaders() }),
+  });
+
   const refresh = () => {
     qc.invalidateQueries({ queryKey: ["division-members", slug] });
     qc.invalidateQueries({ queryKey: ["division-requests", slug] });
+    qc.invalidateQueries({ queryKey: ["division-audit", slug] });
   };
 
   const grantMut = useMutation({
@@ -183,6 +191,30 @@ export function DivisionTeam({ slug }: { slug: DivisionSlug }) {
                     <X className="mr-2 h-4 w-4" /> Decline
                   </Button>
                 </div>
+              </li>
+            ))}
+          </ul>
+        )}
+      </DataPanel>
+
+      <DataPanel title="Recent team activity">
+        {events.isLoading ? (
+          <p className="text-sm text-muted-foreground">Loading activity…</p>
+        ) : (events.data ?? []).length === 0 ? (
+          <p className="text-sm text-muted-foreground">No team changes recorded yet.</p>
+        ) : (
+          <ul className="divide-y divide-border">
+            {(events.data ?? []).map((e) => (
+              <li key={e.id} className="flex items-center justify-between gap-4 py-2.5 text-sm">
+                <span className="truncate">
+                  <span className="font-medium">{e.eventType.replace(/_/g, " ")}</span>
+                  {e.targetUser ? (
+                    <span className="text-muted-foreground"> · {e.targetUser}</span>
+                  ) : null}
+                </span>
+                <time className="shrink-0 text-xs text-muted-foreground" dateTime={e.createdAt}>
+                  {new Date(e.createdAt).toLocaleString()}
+                </time>
               </li>
             ))}
           </ul>
