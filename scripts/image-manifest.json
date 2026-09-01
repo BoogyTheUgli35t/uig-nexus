@@ -99,13 +99,55 @@
     }
   ],
   "listings": {
-    "promptTemplate": "Professional real-estate photograph of {subject}, {city} Nigeria, {angle}, bright natural light, wide-angle interior-exterior architecture photography, photorealistic, no people, no text",
-    "angles": ["exterior front elevation", "living space interior", "aerial neighborhood context"],
+    "promptTemplate": "Professional real-estate photograph of {subject}, {city} Nigeria, {angle}, bright natural light, wide-angle architectural photography, photorealistic, no people, no text, no watermarks",
     "subjects": {
       "residential": "a modern upscale home",
       "commercial": "a contemporary commercial building",
       "land": "a cleared serviced plot of land with survey markers",
       "mixed_use": "a modern mixed-use development"
+    },
+    "slots": {
+      "exterior-01": {
+        "section": "exterior",
+        "angle": "exterior front elevation from the street",
+        "caption": "Front elevation"
+      },
+      "exterior-02": {
+        "section": "exterior",
+        "angle": "side elevation showing the compound and driveway",
+        "caption": "Side elevation and compound"
+      },
+      "interior-01": {
+        "section": "interior",
+        "angle": "living space interior, furnished, natural light",
+        "caption": "Living room interior"
+      },
+      "interior-02": {
+        "section": "interior",
+        "angle": "fitted kitchen interior",
+        "caption": "Fitted kitchen interior"
+      },
+      "interior-03": {
+        "section": "interior",
+        "angle": "primary bedroom interior with en-suite doorway",
+        "caption": "Primary bedroom interior"
+      },
+      "other-01": {
+        "section": "other",
+        "angle": "aerial neighbourhood context at golden hour",
+        "caption": "Aerial view of the surrounding area"
+      },
+      "other-02": {
+        "section": "other",
+        "angle": "access road and street frontage",
+        "caption": "Access road to the site"
+      }
+    },
+    "slotPlans": {
+      "residential": ["exterior-01", "interior-01", "interior-02", "interior-03", "other-01"],
+      "mixed_use": ["exterior-01", "exterior-02", "interior-01", "interior-02", "other-01"],
+      "commercial": ["exterior-01", "interior-01", "interior-02", "other-01"],
+      "land": ["exterior-01", "other-01", "other-02"]
     }
   }
 }

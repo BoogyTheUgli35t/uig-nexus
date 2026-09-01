@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, Bed, Bath, Ruler, MapPin, Star, Building2 } from "lucide-react";
@@ -8,11 +8,17 @@ import {
   LISTING_PROPERTY_TYPES,
 } from "@/lib/public-listings.functions";
 import { SiteLayout } from "@/components/site/SiteLayout";
+import { FLAGS } from "@/lib/flags";
 import { PageHero, Section } from "@/components/site/sections";
 import { resolveImageUrl, cn } from "@/lib/utils";
 import { sizedImage } from "@/lib/media";
 
-export const Route = createFileRoute("/divisions/real-estate_/listings/$state")({
+export const Route = createFileRoute("/divisions/real-estate_/listings/$state/")({
+  // Same VITE_FLAG_REAL_ESTATE_LISTINGS gate as the listings index. Repeated
+  // rather than inherited: the index is a leaf route, not this route's parent.
+  beforeLoad: () => {
+    if (!FLAGS.realEstateListings) throw redirect({ to: "/divisions/real-estate" });
+  },
   head: ({ params }) => ({
     meta: [
       { title: `Properties in ${params.state} — UIG Real Estate` },

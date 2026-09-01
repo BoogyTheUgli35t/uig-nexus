@@ -9,10 +9,12 @@ import { resolveImageUrl } from "@/lib/utils";
 import { sizedImage } from "@/lib/media";
 import { FLAGS } from "@/lib/flags";
 
-export const Route = createFileRoute("/divisions/real-estate_/listings")({
+export const Route = createFileRoute("/divisions/real-estate_/listings/")({
   // Gated by VITE_FLAG_REAL_ESTATE_LISTINGS so the public browse experience can
   // be dark-launched (deployed but not exposed) ahead of the division going
-  // live — the Phase 6 release-behind-a-flag step.
+  // live — the Phase 6 release-behind-a-flag step. The state and detail routes
+  // repeat this guard: this file is `.index` (a leaf at /listings), so it is no
+  // longer their parent and its beforeLoad no longer runs for them.
   beforeLoad: () => {
     if (!FLAGS.realEstateListings) throw redirect({ to: "/divisions/real-estate" });
   },

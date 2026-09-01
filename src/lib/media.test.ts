@@ -98,3 +98,48 @@ describe("sizedImage", () => {
     expect(media.sizedImage(undefined, 400)).toBeNull();
   });
 });
+
+describe("listingImageSection", () => {
+  const cases: [string, string][] = [
+    // Captions taken verbatim from the seeded property_images rows.
+    ["Living room interior", "interior"],
+    ["Daytime exterior view", "exterior"],
+    ["Frontage detail", "exterior"],
+    ["Side elevation", "exterior"],
+    ["Low angle view of the building", "exterior"],
+    ["Plaza exterior, Central Business District", "exterior"],
+    ["Aerial view of the surrounding land", "other"],
+    ["Aerial view of the free trade zone plots", "other"],
+    ["Access road to the site", "other"],
+    ["Estate street view", "other"],
+    ["Estate skyline at dusk", "other"],
+    ["Cityscape featuring the development and waterfront", "other"],
+    ["Development underway on adjoining plot", "other"],
+    // A street scene that mentions buildings is context, not a shot of the house.
+    ["Road and residential buildings, Old GRA", "other"],
+    // Fitted kitchen beats the word "estate" appearing nearby.
+    ["Fitted kitchen in the estate show home", "interior"],
+  ];
+
+  it.each(cases)("classifies %s as %s", async (caption, expected) => {
+    expect(media.listingImageSection(caption, 0)).toBe(expected);
+  });
+
+  it("falls back to position when there is no caption", async () => {
+    expect(media.listingImageSection(null, 0)).toBe("exterior");
+    expect(media.listingImageSection("", 1)).toBe("interior");
+    expect(media.listingImageSection(null, 2)).toBe("other");
+    expect(media.listingImageSection(null, 7)).toBe("other");
+  });
+
+  it("groups images into sections and drops the empty ones", async () => {
+    const imgs = [
+      { caption: "Daytime exterior view", position: 0 },
+      { caption: "Living room interior", position: 1 },
+      { caption: "Kitchen", position: 2 },
+    ];
+    const groups = media.groupListingImages(imgs);
+    expect(groups.map((g) => g.section)).toEqual(["exterior", "interior"]);
+    expect(groups[1].images).toHaveLength(2);
+  });
+});

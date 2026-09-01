@@ -1,5 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { createFileRoute, Link, redirect } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import {
   ArrowLeft,
@@ -7,24 +6,28 @@ import {
   Bath,
   Ruler,
   MapPin,
-  Star,
   Building2,
   MessageCircle,
   FileCheck,
   Calendar,
-  ChevronLeft,
-  ChevronRight,
 } from "lucide-react";
 import { getListingDetail } from "@/lib/public-listings.functions";
 import { SiteLayout } from "@/components/site/SiteLayout";
+import { FLAGS } from "@/lib/flags";
 import { Section } from "@/components/site/sections";
 import { MortgageCalculator } from "@/components/site/MortgageCalculator";
 import { JsonLd } from "@/components/site/JsonLd";
 import { SITE_URL } from "@/lib/seo";
+import { ListingGallery } from "@/components/site/ListingGallery";
 import { resolveImageUrl, cn } from "@/lib/utils";
 import { sizedImage } from "@/lib/media";
 
 export const Route = createFileRoute("/divisions/real-estate_/listings/$state/$id")({
+  // Same VITE_FLAG_REAL_ESTATE_LISTINGS gate as the listings index. Repeated
+  // rather than inherited: the index is a leaf route, not this route's parent.
+  beforeLoad: () => {
+    if (!FLAGS.realEstateListings) throw redirect({ to: "/divisions/real-estate" });
+  },
   head: ({ params }) => ({
     meta: [{ title: `Property in ${params.state} — UIG Real Estate` }],
   }),
@@ -41,7 +44,6 @@ function imgUrl(path: string) {
 
 function ListingDetailPage() {
   const { state, id } = Route.useParams();
-  const [activeImage, setActiveImage] = useState(0);
 
   const { data, isLoading } = useQuery({
     queryKey: ["public-listing-detail", id],
@@ -79,12 +81,6 @@ function ListingDetailPage() {
 
   const { property, images, similar } = data;
   const isLand = property.property_type === "land";
-  const gallery =
-    images.length > 0
-      ? images
-      : [{ id: "placeholder", storage_path: "", position: 0, caption: null, is_render: false }];
-  const active = gallery[activeImage] ?? gallery[0];
-  const hasRenders = images.some((img) => img.is_render);
 
   const waMessage = `Hi UIG — I'm interested in "${property.title}" (${property.city || state}, ${naira(Number(property.price))}${property.listing_type === "rent" ? "/yr" : ""}). Could you share more details?`;
   const waHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(waMessage)}`;
@@ -142,75 +138,12 @@ function ListingDetailPage() {
         <div className="mt-6 grid gap-10 lg:grid-cols-5">
           {/* Gallery */}
           <div className="lg:col-span-3">
-            <div className="relative aspect-[4/3] overflow-hidden rounded-xl border border-border bg-background">
-              {active.storage_path ? (
-                <img
-                  src={imgUrl(active.storage_path)}
-                  alt={active.caption ?? property.title}
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                <div className="flex h-full w-full items-center justify-center text-muted-foreground">
-                  <Building2 className="h-10 w-10" />
-                </div>
-              )}
-              {hasRenders && (
-                <span className="absolute top-3 left-3 rounded-full border border-border bg-background/80 px-3 py-1 text-[11px] text-muted-foreground backdrop-blur">
-                  Illustrative imagery — actual photos to follow
-                </span>
-              )}
-              {gallery.length > 1 && (
-                <>
-                  <button
-                    onClick={() => setActiveImage((i) => (i - 1 + gallery.length) % gallery.length)}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-2 hover:bg-background"
-                    aria-label="Previous photo"
-                  >
-                    <ChevronLeft className="h-4 w-4" />
-                  </button>
-                  <button
-                    onClick={() => setActiveImage((i) => (i + 1) % gallery.length)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full bg-background/80 p-2 hover:bg-background"
-                    aria-label="Next photo"
-                  >
-                    <ChevronRight className="h-4 w-4" />
-                  </button>
-                </>
-              )}
-              {property.featured && (
-                <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-background/90 px-2.5 py-1 text-xs font-semibold text-gold">
-                  <Star className="h-3 w-3 fill-current" /> Featured
-                </span>
-              )}
-            </div>
-            {gallery.length > 1 && (
-              <div className="mt-3 grid grid-cols-5 gap-2">
-                {gallery.map((img, i) => (
-                  <button
-                    key={img.id}
-                    onClick={() => setActiveImage(i)}
-                    className={cn(
-                      "aspect-square overflow-hidden rounded-lg border-2 transition",
-                      i === activeImage
-                        ? "border-gold"
-                        : "border-transparent opacity-70 hover:opacity-100",
-                    )}
-                  >
-                    {img.storage_path && (
-                      <img
-                        src={sizedImage(imgUrl(img.storage_path), 200) ?? undefined}
-                        alt=""
-                        loading="lazy"
-                        className="h-full w-full object-cover"
-                      />
-                    )}
-                  </button>
-                ))}
-              </div>
-            )}
-            {active.caption && (
-              <p className="mt-2 text-xs text-muted-foreground">{active.caption}</p>
-            )}
+            <ListingGallery
+              images={images}
+              title={property.title}
+              featured={property.featured}
+              resolve={imgUrl}
+            />
           </div>
 
           {/* Details */}

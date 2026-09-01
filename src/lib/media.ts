@@ -65,3 +65,132 @@ export function divisionGallery(slug: string): string[] {
     .filter((url): url is string => Boolean(url))
     .map((url) => withTransform(url, "gallery"));
 }
+
+// =============== Listing gallery sections ===============
+//
+// Buyers browse a property in three passes: what it looks like from the
+// street, what it looks like inside, and where it sits. `property_images` has
+// no category column, so the section is derived from the caption (which every
+// seeded row has) and falls back to position. Deriving rather than storing
+// keeps this working for portal uploads and generated renders alike; when a
+// real column arrives, only this function changes.
+
+export const LISTING_SECTIONS = ["exterior", "interior", "other"] as const;
+
+export type ListingSection = (typeof LISTING_SECTIONS)[number];
+
+export const LISTING_SECTION_LABELS: Record<ListingSection, string> = {
+  exterior: "Outside",
+  interior: "Indoors",
+  other: "Area & more",
+};
+
+// Order matters. Unambiguous interior words win outright; then explicit
+// exterior words ("exterior", "frontage", "elevation"); then context shots,
+// so "Road and residential buildings" reads as street context rather than a
+// picture of the house; then softer exterior words.
+const INTERIOR = [
+  "interior",
+  "indoor",
+  "inside",
+  "living room",
+  "sitting room",
+  "bedroom",
+  "kitchen",
+  "bathroom",
+  "washroom",
+  "lounge",
+  "dining",
+  "hallway",
+  "corridor",
+  "staircase",
+  "stairwell",
+  "en-suite",
+  "ensuite",
+  "wardrobe",
+  "ceiling",
+  "flooring",
+  "fitted",
+];
+
+const EXTERIOR_STRONG = ["exterior", "facade", "façade", "frontage", "elevation", "front view"];
+
+const CONTEXT = [
+  "aerial",
+  "drone",
+  "street",
+  "road",
+  "neighbourhood",
+  "neighborhood",
+  "skyline",
+  "cityscape",
+  "district",
+  "surrounding",
+  "adjoining",
+  "access",
+  "plot",
+  "land",
+  "survey",
+  "map",
+  "waterfront",
+  "waterside",
+  "estate street",
+  "context",
+];
+
+const EXTERIOR_SOFT = [
+  "building",
+  "house",
+  "home",
+  "bungalow",
+  "duplex",
+  "compound",
+  "gate",
+  "garden",
+  "pool",
+  "driveway",
+  "carport",
+  "backyard",
+  "roof",
+  "balcony",
+  "terrace",
+  "porch",
+  "verandah",
+  "veranda",
+];
+
+const hits = (haystack: string, needles: string[]) => needles.some((n) => haystack.includes(n));
+
+/**
+ * Classify one listing photo into a gallery section.
+ *
+ * `caption` is the signal; `position` is the tiebreak for uncaptioned rows,
+ * mirroring how the generator lays slots out (first shot outside, second
+ * inside, the rest context).
+ */
+export function listingImageSection(
+  caption: string | null | undefined,
+  position = 0,
+): ListingSection {
+  const c = (caption ?? "").toLowerCase();
+  if (c) {
+    if (hits(c, INTERIOR)) return "interior";
+    if (hits(c, EXTERIOR_STRONG)) return "exterior";
+    if (hits(c, CONTEXT)) return "other";
+    if (hits(c, EXTERIOR_SOFT)) return "exterior";
+  }
+  if (position === 0) return "exterior";
+  if (position === 1) return "interior";
+  return "other";
+}
+
+/** Group images into sections, preserving order and dropping empty sections. */
+export function groupListingImages<T extends { caption: string | null; position: number }>(
+  images: T[],
+): { section: ListingSection; label: string; images: T[] }[] {
+  return LISTING_SECTIONS.map((section) => ({
+    section,
+    label: LISTING_SECTION_LABELS[section],
+    images: images.filter((i) => listingImageSection(i.caption, i.position) === section),
+  })).filter((g) => g.images.length > 0);
+}

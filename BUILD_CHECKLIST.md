@@ -19,6 +19,13 @@ Visit each in preview and confirm hero loads + no console errors:
 - `/services`
 - `/careers`
 - `/insights` and one article (`/insights/nigeria-agriculture-tech-opportunity`)
+- `/divisions/real-estate/listings` → click a state → click a property.
+  Both hops used to dead-end on the hub: `listings.tsx` and `$state.tsx` were
+  parent routes rendering a component with no `<Outlet />`, so every child URL
+  fell back to the parent. They are `.index` leaves now — if either regresses,
+  this walk is what catches it.
+- On a listing: gallery arrows, the Outside/Indoors/Area chips, the thumbnail
+  rail scrolling sideways, and the full-screen viewer closing on Escape
 - `/contact`
 - `/portal/login` → sign in → `/portal/dashboard`
 - `/portal/projects` → New project dialog opens
