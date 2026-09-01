@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { getRequestHeader, getRequestIP } from "@tanstack/react-start/server";
 import { z } from "zod";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 import type { Database } from "@/integrations/supabase/types";
@@ -53,13 +54,26 @@ export const getDashboard = createServerFn({ method: "GET" })
 
 // =============== Cross-division pulse (real per-division live counts) ===============
 
+/**
+ * The slice of the PostgREST filter builder the pulse queries actually use.
+ * Declared structurally on purpose: `from(cfg.table)` resolves to a union of
+ * per-table builders whose concrete generic type has no nameable form here,
+ * so the call site bridges to it with an explicit cast rather than `any`.
+ */
+type PulseFilter = {
+  eq(column: string, value: unknown): PulseFilter;
+  neq(column: string, value: unknown): PulseFilter;
+  in(column: string, values: readonly unknown[]): PulseFilter;
+  not(column: string, operator: string, value: unknown): PulseFilter;
+};
+
 const PULSE_QUERIES: Record<
   string,
   {
     table: keyof Database["public"]["Tables"];
     label: string;
     select: string;
-    filter?: (q: any) => any;
+    filter?: (q: PulseFilter) => PulseFilter;
   }
 > = {
   technology: {
@@ -124,8 +138,12 @@ export const getCrossDivisionPulse = createServerFn({ method: "GET" })
     const results = await Promise.all(
       slugs.map(async (slug) => {
         const cfg = PULSE_QUERIES[slug];
-        let q = context.supabase.from(cfg.table).select(cfg.select, { count: "exact", head: true });
-        if (cfg.filter) q = cfg.filter(q);
+        const base = context.supabase
+          .from(cfg.table)
+          .select(cfg.select, { count: "exact", head: true });
+        const q = cfg.filter
+          ? (cfg.filter(base as unknown as PulseFilter) as unknown as typeof base)
+          : base;
         const { count } = await q;
         return { slug, count: count ?? 0, label: cfg.label };
       }),
@@ -145,7 +163,8 @@ async function callLovableAI(messages: { role: string; content: string }[]) {
     body: JSON.stringify({ model: "google/gemini-3-flash-preview", messages }),
   });
   if (res.status === 429) throw new Error("AI rate limit reached. Please try again in a moment.");
-  if (res.status === 402) throw new Error("AI credits exhausted. Add credits in your workspace to continue.");
+  if (res.status === 402)
+    throw new Error("AI credits exhausted. Add credits in your workspace to continue.");
   if (!res.ok) throw new Error(`AI request failed (${res.status}).`);
   const json = (await res.json()) as { choices?: { message?: { content?: string } }[] };
   return json.choices?.[0]?.message?.content?.trim() ?? "";
@@ -182,7 +201,10 @@ export const getDashboardInsight = createServerFn({ method: "GET" })
         },
         { role: "user", content: `User: ${profile?.full_name ?? "there"}\n${summaryLines}` },
       ]);
-      return { insight: insight || "Everything's tracking — check your division workspaces for the latest." };
+      return {
+        insight:
+          insight || "Everything's tracking — check your division workspaces for the latest.",
+      };
     } catch {
       // AI gateway may not be configured in every environment — fail soft, not loud.
       return { insight: "Check your division workspaces below for what needs attention today." };
@@ -383,7 +405,9 @@ export const listAuditLog = createServerFn({ method: "GET" })
 const AccessRequestSchema = z.object({
   name: z.string().trim().min(1).max(120),
   email: z.string().trim().email().max(200),
-  requested_role: z.enum(["admin", "staff", "client", "investor", "farmer", "driver"]).default("client"),
+  requested_role: z
+    .enum(["admin", "staff", "client", "investor", "farmer", "driver"])
+    .default("client"),
   reason: z.string().trim().max(2000).optional().or(z.literal("")),
   user_id: z.string().uuid().optional().nullable(),
 });
@@ -414,10 +438,7 @@ export const submitAccessRequest = createServerFn({ method: "POST" })
  * own RLS-scoped client — reading a user's own row from user_roles is allowed
  * by the "users read own roles" policy, so no service-role client is needed
  * just for this check. */
-async function requireAdmin(
-  supabase: { from: (table: string) => any },
-  userId: string,
-): Promise<void> {
+async function requireAdmin(supabase: SupabaseClient<Database>, userId: string): Promise<void> {
   const { data: roles } = await supabase.from("user_roles").select("role").eq("user_id", userId);
   if (!roles?.some((r: { role: string }) => r.role === "admin")) {
     throw new Error("Admins only");
@@ -460,7 +481,10 @@ export const getAdminOverview = createServerFn({ method: "GET" })
       { data: billing },
     ] = await Promise.all([
       supabaseAdmin.auth.admin.listUsers({ page: 1, perPage: 1000 }),
-      supabaseAdmin.from("access_requests").select("id", { count: "exact", head: true }).eq("status", "pending"),
+      supabaseAdmin
+        .from("access_requests")
+        .select("id", { count: "exact", head: true })
+        .eq("status", "pending"),
       supabaseAdmin.from("user_roles").select("role"),
       supabaseAdmin
         .from("portal_audit_log")
@@ -488,7 +512,11 @@ export const getAdminOverview = createServerFn({ method: "GET" })
       pendingRequests: pendingRequests ?? 0,
       roleCounts,
       recentAudit: recentAudit ?? [],
-      billing: { totalPaidKobo, pendingCount: pendingBillingCount, transactionCount: billingRows.length },
+      billing: {
+        totalPaidKobo,
+        pendingCount: pendingBillingCount,
+        transactionCount: billingRows.length,
+      },
     };
   });
 
@@ -541,7 +569,9 @@ export const approveAccessRequest = createServerFn({ method: "POST" })
         await supabaseAdmin.from("user_divisions").delete().eq("user_id", approvedUserId);
         const { error: divErr } = await supabaseAdmin
           .from("user_divisions")
-          .insert(data.division_slugs.map((slug) => ({ user_id: approvedUserId, division_slug: slug })));
+          .insert(
+            data.division_slugs.map((slug) => ({ user_id: approvedUserId, division_slug: slug })),
+          );
         if (divErr) throw new Error(divErr.message);
       }
 
@@ -577,13 +607,17 @@ export const listAllPortalUsers = createServerFn({ method: "GET" })
   .handler(async ({ context }) => {
     await requireAdmin(context.supabase, context.userId);
 
-    const [{ data: authUsers, error: listErr }, { data: roles }, { data: divisions }, { data: profiles }] =
-      await Promise.all([
-        supabaseAdmin.auth.admin.listUsers({ page: 1, perPage: 1000 }),
-        supabaseAdmin.from("user_roles").select("user_id, role"),
-        supabaseAdmin.from("user_divisions").select("user_id, division_slug"),
-        supabaseAdmin.from("profiles").select("id, full_name"),
-      ]);
+    const [
+      { data: authUsers, error: listErr },
+      { data: roles },
+      { data: divisions },
+      { data: profiles },
+    ] = await Promise.all([
+      supabaseAdmin.auth.admin.listUsers({ page: 1, perPage: 1000 }),
+      supabaseAdmin.from("user_roles").select("user_id, role"),
+      supabaseAdmin.from("user_divisions").select("user_id, division_slug"),
+      supabaseAdmin.from("profiles").select("id, full_name"),
+    ]);
     if (listErr) throw new Error(listErr.message);
 
     const roleByUser = new Map<string, string>();
@@ -630,7 +664,9 @@ export const updateUserAccess = createServerFn({ method: "POST" })
     if (data.division_slugs.length > 0) {
       const { error: divErr } = await supabaseAdmin
         .from("user_divisions")
-        .insert(data.division_slugs.map((slug) => ({ user_id: data.user_id, division_slug: slug })));
+        .insert(
+          data.division_slugs.map((slug) => ({ user_id: data.user_id, division_slug: slug })),
+        );
       if (divErr) throw new Error(divErr.message);
     }
     return { ok: true };

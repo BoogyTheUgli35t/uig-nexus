@@ -1,6 +1,7 @@
 import { divisionPath } from "@/lib/division-paths";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import type { Session } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
 import { getDashboard, getCrossDivisionPulse, getDashboardInsight } from "@/lib/portal.functions";
 import { getMyWorkspace } from "@/lib/divisions.functions";
@@ -30,7 +31,7 @@ function DashboardPage() {
   useEffect(() => {
     let active = true;
 
-    const fetchData = async (session: any) => {
+    const fetchData = async (session: Session | null) => {
       if (!session) return;
       try {
         const headers = { authorization: `Bearer ${session.access_token}` };
@@ -129,9 +130,7 @@ function DashboardPage() {
           <Sparkles className="h-5 w-5 text-gold mt-0.5" />
           <div>
             <h3 className="font-semibold">AI insight</h3>
-            <p className="mt-1 text-sm text-muted-foreground">
-              {insight ?? "Thinking…"}
-            </p>
+            <p className="mt-1 text-sm text-muted-foreground">{insight ?? "Thinking…"}</p>
           </div>
         </div>
       </div>

@@ -1,13 +1,12 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
+import type { Database } from "@/integrations/supabase/types";
 
 /** Throws unless the caller has the admin role. */
-async function assertAdmin(
-  supabase: { from: (t: string) => any },
-  userId: string,
-): Promise<void> {
+async function assertAdmin(supabase: SupabaseClient<Database>, userId: string): Promise<void> {
   const { data } = await supabase.from("user_roles").select("role").eq("user_id", userId);
   if (!data?.some((r: { role: string }) => r.role === "admin")) {
     throw new Error("Admins only");

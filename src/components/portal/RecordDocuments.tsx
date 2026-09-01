@@ -64,7 +64,8 @@ export function RecordDocuments({
   });
 
   const deleteMut = useMutation({
-    mutationFn: async (id: string) => deleteRecordDocument({ data: { id }, headers: await authHeaders() }),
+    mutationFn: async (id: string) =>
+      deleteRecordDocument({ data: { id }, headers: await authHeaders() }),
     onSuccess: () => {
       toast.success("Document removed");
       qc.invalidateQueries({ queryKey });
@@ -93,7 +94,7 @@ export function RecordDocuments({
         data: { user },
       } = await supabase.auth.getUser();
       if (!user) throw new Error("Not signed in");
-      const safeName = file.name.replace(/[^\w.\-]+/g, "_");
+      const safeName = file.name.replace(/[^\w.-]+/g, "_");
       const path = `${user.id}/${recordTable}/${recordId}/${Date.now()}-${safeName}`;
       const { error: upErr } = await supabase.storage.from("document-library").upload(path, file);
       if (upErr) throw upErr;

@@ -6,7 +6,7 @@ export function JsonLd({ data }: { data: Record<string, unknown> }) {
   return (
     <script
       type="application/ld+json"
-      // eslint-disable-next-line react/no-danger
+      // Safe: `data` is app-authored structured data, never user input.
       dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
     />
   );
