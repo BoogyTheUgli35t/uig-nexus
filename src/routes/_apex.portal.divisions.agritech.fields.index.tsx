@@ -33,13 +33,19 @@ function FieldsPage() {
     <div className="space-y-6">
       <div>
         <h2 className="text-lg font-semibold">Field dashboard</h2>
-        <p className="text-sm text-muted-foreground">Live sensor readings and crop health per field.</p>
+        <p className="text-sm text-muted-foreground">
+          Live sensor readings and crop health per field.
+        </p>
       </div>
 
       {isLoading ? (
         <div className="text-sm text-muted-foreground">Loading fields…</div>
       ) : (data?.fields.length ?? 0) === 0 ? (
-        <EmptyState icon={MapPinned} title="No fields yet" description="Onboard a farmer to begin monitoring." />
+        <EmptyState
+          icon={MapPinned}
+          title="No fields yet"
+          description="Onboard a farmer to begin monitoring."
+        />
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {(data?.fields ?? []).map((f) => {

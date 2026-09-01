@@ -39,7 +39,9 @@ export function MortgageCalculator({ price }: { price: number }) {
         <div>
           <div className="flex items-center justify-between text-xs">
             <span className="text-muted-foreground">Down payment</span>
-            <span className="font-medium">{downPaymentPct}% · {naira(result.downPayment)}</span>
+            <span className="font-medium">
+              {downPaymentPct}% · {naira(result.downPayment)}
+            </span>
           </div>
           <input
             type="range"
@@ -71,7 +73,9 @@ export function MortgageCalculator({ price }: { price: number }) {
         <div>
           <div className="flex items-center justify-between text-xs">
             <span className="text-muted-foreground">Loan tenure</span>
-            <span className="font-medium">{tenureYears} yr{tenureYears === 1 ? "" : "s"}</span>
+            <span className="font-medium">
+              {tenureYears} yr{tenureYears === 1 ? "" : "s"}
+            </span>
           </div>
           <input
             type="range"

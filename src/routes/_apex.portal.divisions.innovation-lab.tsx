@@ -64,7 +64,8 @@ function InnovationLabLayout() {
 
       <nav className="flex flex-wrap gap-1 rounded-xl border border-border bg-surface p-1.5">
         {TABS.map((tab) => {
-          const active = "exact" in tab && tab.exact ? pathname === tab.to : pathname.startsWith(tab.to);
+          const active =
+            "exact" in tab && tab.exact ? pathname === tab.to : pathname.startsWith(tab.to);
           return (
             <Link
               key={tab.to}
@@ -78,12 +79,13 @@ function InnovationLabLayout() {
             </Link>
           );
         })}
-              {isDivisionAdmin && (
+        {isDivisionAdmin && (
           <Link
             to="/portal/divisions/innovation-lab/team"
             className={cn(
               "inline-flex items-center gap-2 rounded-lg px-3.5 py-2 text-sm font-medium text-muted-foreground transition hover:text-foreground",
-              pathname.startsWith("/portal/divisions/innovation-lab/team") && "acc-bg-soft acc-text",
+              pathname.startsWith("/portal/divisions/innovation-lab/team") &&
+                "acc-bg-soft acc-text",
             )}
           >
             <Users2 className="h-4 w-4" /> Team

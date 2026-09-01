@@ -1,6 +1,16 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { UserCheck, Users, ScrollText, CreditCard, ShieldCheck, ArrowRight, Megaphone, Activity, Database } from "lucide-react";
+import {
+  UserCheck,
+  Users,
+  ScrollText,
+  CreditCard,
+  ShieldCheck,
+  ArrowRight,
+  Megaphone,
+  Activity,
+  Database,
+} from "lucide-react";
 import { getAdminOverview } from "@/lib/portal.functions";
 import { authHeaders } from "@/lib/auth-headers";
 import { DataPanel, EmptyState, KpiStat } from "@/components/portal/blocks";
@@ -82,7 +92,11 @@ function AdminOverviewPage() {
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <KpiStat icon={Users} label="Portal accounts" value={isLoading ? "—" : (data?.totalUsers ?? 0)} />
+        <KpiStat
+          icon={Users}
+          label="Portal accounts"
+          value={isLoading ? "—" : (data?.totalUsers ?? 0)}
+        />
         <KpiStat
           icon={UserCheck}
           label="Pending access requests"
@@ -142,7 +156,10 @@ function AdminOverviewPage() {
         )}
       </DataPanel>
 
-      <DataPanel title="Recent activity" action={{ to: "/portal/admin/audit", label: "View full log" }}>
+      <DataPanel
+        title="Recent activity"
+        action={{ to: "/portal/admin/audit", label: "View full log" }}
+      >
         {isLoading ? (
           <div className="text-sm text-muted-foreground">Loading…</div>
         ) : !data || data.recentAudit.length === 0 ? (
@@ -150,7 +167,10 @@ function AdminOverviewPage() {
         ) : (
           <div className="divide-y divide-border">
             {data.recentAudit.map((entry) => (
-              <div key={entry.id} className="flex items-center justify-between gap-3 py-2.5 text-sm">
+              <div
+                key={entry.id}
+                className="flex items-center justify-between gap-3 py-2.5 text-sm"
+              >
                 <div className="min-w-0">
                   <span className="capitalize">{entry.event_type.replace(/_/g, " ")}</span>
                   {entry.email && <span className="text-muted-foreground"> · {entry.email}</span>}

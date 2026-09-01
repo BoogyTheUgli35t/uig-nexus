@@ -3,7 +3,16 @@ import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { TrendingUp, Wallet, Link2 } from "lucide-react";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 import { getRealEstateWorkspace, linkInvestorAccount } from "@/lib/realestate.functions";
 import { authHeaders } from "@/lib/auth-headers";
 import { DataPanel, EmptyState, KpiStat } from "@/components/portal/blocks";
@@ -54,7 +63,9 @@ function InvestorsPage() {
     <div className="space-y-6">
       <div>
         <h2 className="text-lg font-semibold">Investor ROI dashboard</h2>
-        <p className="text-sm text-muted-foreground">Portfolio value, gains and expected returns.</p>
+        <p className="text-sm text-muted-foreground">
+          Portfolio value, gains and expected returns.
+        </p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-3">
@@ -109,8 +120,18 @@ function InvestorsPage() {
                   formatter={(v: number) => naira(v)}
                 />
                 <Legend wrapperStyle={{ fontSize: 12 }} />
-                <Bar dataKey="invested" name="Invested" radius={[6, 6, 0, 0]} fill="var(--muted-foreground)" />
-                <Bar dataKey="value" name="Current value" radius={[6, 6, 0, 0]} fill="var(--acc, var(--gold))" />
+                <Bar
+                  dataKey="invested"
+                  name="Invested"
+                  radius={[6, 6, 0, 0]}
+                  fill="var(--muted-foreground)"
+                />
+                <Bar
+                  dataKey="value"
+                  name="Current value"
+                  radius={[6, 6, 0, 0]}
+                  fill="var(--acc, var(--gold))"
+                />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -134,14 +155,18 @@ function InvestorsPage() {
                       </div>
                     </div>
                     <div className="shrink-0 text-right">
-                      <div className="text-sm font-medium acc-text">{Number(i.expected_roi)}% ROI</div>
+                      <div className="text-sm font-medium acc-text">
+                        {Number(i.expected_roi)}% ROI
+                      </div>
                       <div className="text-xs text-emerald-400">+{naira(gain)}</div>
                     </div>
                   </div>
 
                   <div className="mt-2 flex items-center justify-between gap-2 border-t border-border pt-2">
                     {i.user_id ? (
-                      <span className="text-[11px] text-muted-foreground">Portal account linked</span>
+                      <span className="text-[11px] text-muted-foreground">
+                        Portal account linked
+                      </span>
                     ) : linkingId === i.id ? (
                       <div className="flex flex-1 items-center gap-1.5">
                         <Input
@@ -156,7 +181,9 @@ function InvestorsPage() {
                           size="sm"
                           className="h-7 text-xs"
                           disabled={!linkEmail.trim() || linkMut.isPending}
-                          onClick={() => linkMut.mutate({ investor_id: i.id, email: linkEmail.trim() })}
+                          onClick={() =>
+                            linkMut.mutate({ investor_id: i.id, email: linkEmail.trim() })
+                          }
                         >
                           Link
                         </Button>

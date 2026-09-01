@@ -18,7 +18,7 @@ export const Route = createFileRoute("/portal/login")({
     ],
   }),
   validateSearch: (s: Record<string, unknown>): { next?: string } =>
-    typeof s['next'] === "string" ? { next: s['next'] } : {},
+    typeof s["next"] === "string" ? { next: s["next"] } : {},
 
   beforeLoad: async ({ search }) => {
     if (typeof window === "undefined") return;
@@ -58,12 +58,18 @@ function LoginPage() {
     setLoading(false);
     if (error) {
       const refId = "UIG-" + Math.random().toString(36).slice(2, 8).toUpperCase();
-      logPortalEvent({ data: { event_type: "access_denied", email, metadata: { reason: error.message, stage: "password_sign_in", ref_id: refId } } }).catch(() => {});
+      logPortalEvent({
+        data: {
+          event_type: "access_denied",
+          email,
+          metadata: { reason: error.message, stage: "password_sign_in", ref_id: refId },
+        },
+      }).catch(() => {});
       const friendly = /invalid login credentials/i.test(error.message)
         ? "Email or password is incorrect."
         : /email not confirmed/i.test(error.message)
-        ? "Please confirm your email before signing in."
-        : "We couldn't sign you in. Please try again.";
+          ? "Please confirm your email before signing in."
+          : "We couldn't sign you in. Please try again.";
       return toast.error(`${friendly} Reference: ${refId}`);
     }
     if (data.session) {
@@ -74,7 +80,6 @@ function LoginPage() {
       // useNavigate expects a `to` property. `href` was preventing navigation.
       navigate({ to: target, replace: true });
     }
-
   }
 
   async function onGoogle() {
@@ -107,7 +112,9 @@ function LoginPage() {
       </div>
       <div className="flex items-center justify-center p-6 sm:p-12">
         <div className="w-full max-w-sm">
-          <div className="lg:hidden mb-8"><Logo /></div>
+          <div className="lg:hidden mb-8">
+            <Logo />
+          </div>
           <h1 className="text-3xl font-bold">Sign in</h1>
           <p className="mt-2 text-sm text-muted-foreground">Access your UIG workspace.</p>
 
@@ -122,7 +129,13 @@ function LoginPage() {
           <form onSubmit={onSubmit} className="space-y-4">
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
+              <Input
+                id="email"
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
@@ -131,18 +144,33 @@ function LoginPage() {
                   Forgot password?
                 </Link>
               </div>
-              <Input id="password" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
+              <Input
+                id="password"
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </div>
-            <Button type="submit" disabled={loading} className="w-full bg-gold text-gold-foreground hover:bg-gold/90">
+            <Button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-gold text-gold-foreground hover:bg-gold/90"
+            >
               {loading ? "Signing in…" : "Sign in"}
             </Button>
           </form>
 
           <p className="mt-6 text-sm text-muted-foreground text-center">
-            New to UIG? <Link to="/portal/signup" className="text-gold hover:underline">Create an account</Link>
+            New to UIG?{" "}
+            <Link to="/portal/signup" className="text-gold hover:underline">
+              Create an account
+            </Link>
           </p>
           <p className="mt-2 text-xs text-muted-foreground text-center">
-            <Link to="/" className="hover:text-foreground">← Back to UIG</Link>
+            <Link to="/" className="hover:text-foreground">
+              ← Back to UIG
+            </Link>
           </p>
         </div>
       </div>

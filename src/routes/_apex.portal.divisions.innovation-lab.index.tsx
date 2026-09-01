@@ -222,7 +222,8 @@ function InnovationLabWorkspace() {
 
   const { data: checklist, isLoading: checklistLoading } = useQuery({
     queryKey: ["innovation-checklist", checklistIdea],
-    queryFn: async () => listChecklist({ headers: await authHeaders(), data: { idea_id: checklistIdea! } }),
+    queryFn: async () =>
+      listChecklist({ headers: await authHeaders(), data: { idea_id: checklistIdea! } }),
     enabled: Boolean(checklistIdea),
   });
 
@@ -245,13 +246,16 @@ function InnovationLabWorkspace() {
 
   const { data: demoData } = useQuery({
     queryKey: ["innovation-demo-days"],
-    
+
     queryFn: async () => listDemoDays({ headers: await authHeaders() }),
   });
 
   const createDemoDayMut = useMutation({
     mutationFn: async () =>
-      createDemoDay({ data: { title: demoTitle, event_date: demoDate }, headers: await authHeaders() }),
+      createDemoDay({
+        data: { title: demoTitle, event_date: demoDate },
+        headers: await authHeaders(),
+      }),
     onSuccess: () => {
       toast.success("Demo day scheduled");
       setDemoTitle("");
@@ -275,27 +279,32 @@ function InnovationLabWorkspace() {
   });
 
   const unscheduleSlotMut = useMutation({
-    mutationFn: async (id: string) => unscheduleSlot({ data: { id }, headers: await authHeaders() }),
+    mutationFn: async (id: string) =>
+      unscheduleSlot({ data: { id }, headers: await authHeaders() }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["innovation-demo-days"] }),
     onError: (e: Error) => toast.error(e.message),
   });
 
   const { data: experiments } = useQuery({
     queryKey: ["innovation-experiments"],
-    
+
     queryFn: async () => listExperiments({ headers: await authHeaders() }),
   });
 
   const { data: linkableModels } = useQuery({
     queryKey: ["innovation-linkable-models"],
-    
+
     queryFn: async () => listLinkableModels({ headers: await authHeaders() }),
   });
 
   const createExperimentMut = useMutation({
     mutationFn: async () =>
       createExperiment({
-        data: { hypothesis: expHypothesis, idea_id: expIdeaId || undefined, model_id: expModelId || undefined },
+        data: {
+          hypothesis: expHypothesis,
+          idea_id: expIdeaId || undefined,
+          model_id: expModelId || undefined,
+        },
         headers: await authHeaders(),
       }),
     onSuccess: () => {
@@ -421,7 +430,9 @@ function InnovationLabWorkspace() {
                         </div>
                         <div className="flex flex-wrap items-center gap-1">
                           <button
-                            onClick={() => setChecklistIdea(checklistIdea === idea.id ? null : idea.id)}
+                            onClick={() =>
+                              setChecklistIdea(checklistIdea === idea.id ? null : idea.id)
+                            }
                             className="inline-flex items-center gap-1 rounded border border-border px-2 py-0.5 text-[10px] text-muted-foreground transition hover:border-gold hover:text-foreground"
                           >
                             <ListChecks className="h-3 w-3" /> MVP checklist
@@ -469,10 +480,17 @@ function InnovationLabWorkspace() {
                                     type="checkbox"
                                     checked={item.done}
                                     onChange={(e) =>
-                                      toggleChecklistMut.mutate({ id: item.id, done: e.target.checked })
+                                      toggleChecklistMut.mutate({
+                                        id: item.id,
+                                        done: e.target.checked,
+                                      })
                                     }
                                   />
-                                  <span className={item.done ? "text-muted-foreground line-through" : ""}>
+                                  <span
+                                    className={
+                                      item.done ? "text-muted-foreground line-through" : ""
+                                    }
+                                  >
                                     {item.task}
                                   </span>
                                 </li>
@@ -546,7 +564,11 @@ function InnovationLabWorkspace() {
                 maxLength={180}
               />
               <Input type="date" value={demoDate} onChange={(e) => setDemoDate(e.target.value)} />
-              <Button type="submit" variant="outline" disabled={!demoTitle.trim() || !demoDate || createDemoDayMut.isPending}>
+              <Button
+                type="submit"
+                variant="outline"
+                disabled={!demoTitle.trim() || !demoDate || createDemoDayMut.isPending}
+              >
                 <Calendar className="h-4 w-4" />
               </Button>
             </form>
@@ -609,7 +631,12 @@ function InnovationLabWorkspace() {
                               </option>
                             ))}
                         </select>
-                        <Button type="submit" size="sm" className="h-8 text-[11px]" disabled={!slotProto || slotDay !== day.id}>
+                        <Button
+                          type="submit"
+                          size="sm"
+                          className="h-8 text-[11px]"
+                          disabled={!slotProto || slotDay !== day.id}
+                        >
                           Add
                         </Button>
                       </form>
@@ -661,7 +688,11 @@ function InnovationLabWorkspace() {
                   ))}
                 </select>
               </div>
-              <Button type="submit" size="sm" disabled={!expHypothesis.trim() || createExperimentMut.isPending}>
+              <Button
+                type="submit"
+                size="sm"
+                disabled={!expHypothesis.trim() || createExperimentMut.isPending}
+              >
                 <FlaskConical className="mr-1.5 h-3.5 w-3.5" /> Log experiment
               </Button>
             </form>
@@ -848,10 +879,19 @@ function InnovationLabWorkspace() {
                         {Array.isArray(p.screenshots) && p.screenshots.length > 0 ? (
                           <div className="mt-2 grid grid-cols-3 gap-1.5">
                             {(p.screenshots as string[]).map((path) => (
-                              <div key={path} className="group relative overflow-hidden rounded border border-border">
-                                <img src={shotUrl(path)} alt="" className="h-14 w-full object-cover" />
+                              <div
+                                key={path}
+                                className="group relative overflow-hidden rounded border border-border"
+                              >
+                                <img
+                                  src={shotUrl(path)}
+                                  alt=""
+                                  className="h-14 w-full object-cover"
+                                />
                                 <button
-                                  onClick={() => removeShotMut.mutate({ prototype_id: p.id, storage_path: path })}
+                                  onClick={() =>
+                                    removeShotMut.mutate({ prototype_id: p.id, storage_path: path })
+                                  }
                                   className="absolute right-0.5 top-0.5 rounded bg-background/80 p-0.5 opacity-0 transition group-hover:opacity-100"
                                 >
                                   <Trash2 className="h-2.5 w-2.5 text-destructive" />
@@ -860,7 +900,9 @@ function InnovationLabWorkspace() {
                             ))}
                           </div>
                         ) : (
-                          <p className="mt-1.5 text-[10px] text-muted-foreground">No screenshots yet.</p>
+                          <p className="mt-1.5 text-[10px] text-muted-foreground">
+                            No screenshots yet.
+                          </p>
                         )}
                       </div>
                     </div>

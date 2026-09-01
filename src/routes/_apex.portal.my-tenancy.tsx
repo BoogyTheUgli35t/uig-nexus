@@ -32,7 +32,9 @@ export const Route = createFileRoute("/_apex/portal/my-tenancy")({
 
 const naira = (n: number) => `₦${Number(n ?? 0).toLocaleString()}`;
 const fmtDate = (d: string | null) =>
-  d ? new Date(d).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" }) : "—";
+  d
+    ? new Date(d).toLocaleDateString(undefined, { day: "numeric", month: "short", year: "numeric" })
+    : "—";
 
 function MyTenancyPage() {
   const qc = useQueryClient();
@@ -86,7 +88,11 @@ function MyTenancyPage() {
         <p className="text-sm uppercase tracking-wider text-gold">My tenancy</p>
         <h1 className="mt-2 text-3xl font-bold">{property?.title ?? "Your home"}</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          {[unit?.unit_number ? `Unit ${unit.unit_number}` : null, property?.address, property?.city]
+          {[
+            unit?.unit_number ? `Unit ${unit.unit_number}` : null,
+            property?.address,
+            property?.city,
+          ]
             .filter(Boolean)
             .join(" · ") || "Lease details below."}
         </p>
@@ -105,14 +111,19 @@ function MyTenancyPage() {
         <div className="flex items-start gap-3 rounded-xl border border-amber-500/30 bg-amber-500/5 p-4 text-sm text-amber-600">
           <CalendarClock className="mt-0.5 h-4 w-4 shrink-0" />
           <div>
-            Your lease ends in {summary.daysRemaining} days ({fmtDate(tenant.lease_end)}). Renewal is
-            usually agreed a month ahead.
+            Your lease ends in {summary.daysRemaining} days ({fmtDate(tenant.lease_end)}). Renewal
+            is usually agreed a month ahead.
           </div>
         </div>
       )}
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <KpiStat icon={CreditCard} label="Rent" value={naira(tenant.rent_amount)} hint="per period" />
+        <KpiStat
+          icon={CreditCard}
+          label="Rent"
+          value={naira(tenant.rent_amount)}
+          hint="per period"
+        />
         <KpiStat
           icon={CalendarClock}
           label="Lease ends"
@@ -193,7 +204,9 @@ function MyTenancyPage() {
             <select
               aria-label="Category"
               value={category}
-              onChange={(e) => setCategory(e.target.value as (typeof MAINTENANCE_CATEGORIES)[number])}
+              onChange={(e) =>
+                setCategory(e.target.value as (typeof MAINTENANCE_CATEGORIES)[number])
+              }
               className="h-10 rounded-md border border-border bg-background px-3 text-sm capitalize"
             >
               {MAINTENANCE_CATEGORIES.map((c) => (
@@ -205,7 +218,9 @@ function MyTenancyPage() {
             <select
               aria-label="Priority"
               value={priority}
-              onChange={(e) => setPriority(e.target.value as (typeof MAINTENANCE_PRIORITIES)[number])}
+              onChange={(e) =>
+                setPriority(e.target.value as (typeof MAINTENANCE_PRIORITIES)[number])
+              }
               className="h-10 rounded-md border border-border bg-background px-3 text-sm capitalize"
             >
               {MAINTENANCE_PRIORITIES.map((p) => (

@@ -143,8 +143,10 @@ function LeadsPage() {
                   </div>
                 ) : (
                   items.map((l) => {
-                    const nextIdx = LEAD_STAGES.indexOf(l.stage as (typeof LEAD_STAGES)[number]) + 1;
-                    const next = nextIdx > 0 && nextIdx < LEAD_STAGES.length ? LEAD_STAGES[nextIdx] : null;
+                    const nextIdx =
+                      LEAD_STAGES.indexOf(l.stage as (typeof LEAD_STAGES)[number]) + 1;
+                    const next =
+                      nextIdx > 0 && nextIdx < LEAD_STAGES.length ? LEAD_STAGES[nextIdx] : null;
                     return (
                       <button
                         key={l.id}
@@ -153,7 +155,9 @@ function LeadsPage() {
                       >
                         <div className="flex items-start justify-between gap-2">
                           <div className="text-sm font-medium leading-snug">{l.full_name}</div>
-                          {isOverdue(l) && <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-destructive" />}
+                          {isOverdue(l) && (
+                            <AlertTriangle className="h-3.5 w-3.5 shrink-0 text-destructive" />
+                          )}
                         </div>
                         {l.property_id && (
                           <div className="mt-0.5 truncate text-[11px] text-muted-foreground">
@@ -236,7 +240,12 @@ function LeadDetailDialog({
   const addActivityMut = useMutation({
     mutationFn: async () =>
       addLeadActivity({
-        data: { lead_id: leadId, activity_type: activityType, notes, next_follow_up_date: followUp },
+        data: {
+          lead_id: leadId,
+          activity_type: activityType,
+          notes,
+          next_follow_up_date: followUp,
+        },
         headers: await authHeaders(),
       }),
     onSuccess: () => {
@@ -304,7 +313,9 @@ function LeadDetailDialog({
             activities.map((a) => (
               <div key={a.id} className="rounded-lg border border-border bg-surface p-3 text-sm">
                 <div className="flex items-center justify-between">
-                  <span className="font-medium capitalize">{a.activity_type.replace(/_/g, " ")}</span>
+                  <span className="font-medium capitalize">
+                    {a.activity_type.replace(/_/g, " ")}
+                  </span>
                   <span className="text-[11px] text-muted-foreground">
                     {new Date(a.created_at).toLocaleDateString()}
                   </span>

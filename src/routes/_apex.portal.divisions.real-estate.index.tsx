@@ -142,7 +142,9 @@ function RealEstateOverview() {
                     </div>
                     <StatusBadge status={p.status} />
                   </div>
-                  <div className="mt-2 text-sm font-semibold acc-text">{naira(Number(p.price))}</div>
+                  <div className="mt-2 text-sm font-semibold acc-text">
+                    {naira(Number(p.price))}
+                  </div>
                 </div>
               </Link>
             ))}

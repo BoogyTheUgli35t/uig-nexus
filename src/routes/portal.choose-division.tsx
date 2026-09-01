@@ -23,11 +23,31 @@ import { toast } from "sonner";
 type Intent = "client" | "investor" | "farmer" | "driver" | "staff";
 
 const INTENT_OPTIONS: { value: Intent; label: string; hint: string }[] = [
-  { value: "client", label: "Company / Client", hint: "Browse division workspaces and manage your projects." },
-  { value: "investor", label: "Investor", hint: "Track holdings and returns across UIG Real Estate & ventures." },
-  { value: "farmer", label: "Farmer / Cooperative", hint: "Manage produce, land, and AgriTech program participation." },
-  { value: "driver", label: "Driver / Fleet partner", hint: "Accept and manage UIG Logistics delivery jobs." },
-  { value: "staff", label: "UIG team member", hint: "Internal staff needing division tooling access." },
+  {
+    value: "client",
+    label: "Company / Client",
+    hint: "Browse division workspaces and manage your projects.",
+  },
+  {
+    value: "investor",
+    label: "Investor",
+    hint: "Track holdings and returns across UIG Real Estate & ventures.",
+  },
+  {
+    value: "farmer",
+    label: "Farmer / Cooperative",
+    hint: "Manage produce, land, and AgriTech program participation.",
+  },
+  {
+    value: "driver",
+    label: "Driver / Fleet partner",
+    hint: "Accept and manage UIG Logistics delivery jobs.",
+  },
+  {
+    value: "staff",
+    label: "UIG team member",
+    hint: "Internal staff needing division tooling access.",
+  },
 ];
 
 export const Route = createFileRoute("/portal/choose-division")({
@@ -95,7 +115,9 @@ function ChooseDivisionPage() {
       // Access rows may still have been written; surface the error but let the
       // user continue to their dashboard rather than getting stuck here.
       toast.error(
-        err instanceof Error ? err.message : "We couldn't finish setup, taking you to your dashboard.",
+        err instanceof Error
+          ? err.message
+          : "We couldn't finish setup, taking you to your dashboard.",
       );
     } finally {
       setLoading(false);
@@ -182,12 +204,17 @@ function ChooseDivisionPage() {
         <Logo />
         <h1 className="mt-8 text-3xl font-bold">Set up your workspace</h1>
         <p className="mt-2 text-sm text-muted-foreground">
-          Hello {email || "there"}! Tell us how you'll be using UIG Apex so we can get you to the right place.
+          Hello {email || "there"}! Tell us how you'll be using UIG Apex so we can get you to the
+          right place.
         </p>
 
         <div className="mt-6 space-y-2">
           <Label>How will you use UIG Apex?</Label>
-          <RadioGroup value={intent} onValueChange={(v) => setIntent(v as Intent)} className="grid gap-3 sm:grid-cols-2">
+          <RadioGroup
+            value={intent}
+            onValueChange={(v) => setIntent(v as Intent)}
+            className="grid gap-3 sm:grid-cols-2"
+          >
             {INTENT_OPTIONS.map((opt) => (
               <label
                 key={opt.value}
@@ -288,8 +315,8 @@ function ChooseDivisionPage() {
                 Request {INTENT_OPTIONS.find((o) => o.value === intent)?.label} access
               </h2>
               <p className="text-xs text-muted-foreground mt-1">
-                A UIG administrator will review and approve your request. You'll keep standard client
-                access to browse divisions in the meantime.
+                A UIG administrator will review and approve your request. You'll keep standard
+                client access to browse divisions in the meantime.
               </p>
             </div>
             <div className="space-y-2">
@@ -339,7 +366,9 @@ function ChooseDivisionPage() {
         )}
 
         <p className="mt-6 text-center text-xs text-muted-foreground">
-          <Link to="/" className="hover:text-foreground">← Back to UIG</Link>
+          <Link to="/" className="hover:text-foreground">
+            ← Back to UIG
+          </Link>
         </p>
       </main>
     </div>

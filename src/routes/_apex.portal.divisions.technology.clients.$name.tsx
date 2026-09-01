@@ -56,7 +56,9 @@ function ClientView() {
                 </div>
                 <Progress value={p.progress} className="mt-3 h-1.5" />
                 {p.due_date && (
-                  <div className="mt-2 text-xs text-muted-foreground">Target date: {p.due_date}</div>
+                  <div className="mt-2 text-xs text-muted-foreground">
+                    Target date: {p.due_date}
+                  </div>
                 )}
               </div>
             ))}

@@ -36,7 +36,9 @@ function BroadcastPage() {
         headers: await authHeaders(),
       }),
     onSuccess: (res) => {
-      toast.success(`Broadcast delivered to ${res.delivered} account${res.delivered === 1 ? "" : "s"}.`);
+      toast.success(
+        `Broadcast delivered to ${res.delivered} account${res.delivered === 1 ? "" : "s"}.`,
+      );
       setTitle("");
       setBody("");
     },

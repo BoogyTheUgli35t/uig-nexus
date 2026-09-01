@@ -25,7 +25,9 @@ function IntegrationsPage() {
     // clearly-labelled stub rather than a fake "success" response.
     await new Promise((r) => setTimeout(r, 600));
     setTesting(null);
-    toast(`${name}: no live credentials configured — this is a UI stub, not a real connection test.`);
+    toast(
+      `${name}: no live credentials configured — this is a UI stub, not a real connection test.`,
+    );
   }
 
   const integrations = data?.integrations ?? [];
@@ -58,7 +60,9 @@ function IntegrationsPage() {
                   <div className="min-w-0">
                     <div className="truncate text-sm font-medium">{i.name}</div>
                     <div className="text-xs text-muted-foreground">
-                      {i.last_sync ? `Synced ${new Date(i.last_sync).toLocaleString()}` : "Never synced"}
+                      {i.last_sync
+                        ? `Synced ${new Date(i.last_sync).toLocaleString()}`
+                        : "Never synced"}
                     </div>
                   </div>
                 </div>
@@ -71,7 +75,9 @@ function IntegrationsPage() {
                     disabled={testing === i.name}
                     onClick={() => onTestConnection(i.name)}
                   >
-                    <RefreshCw className={`mr-1 h-3 w-3 ${testing === i.name ? "animate-spin" : ""}`} />
+                    <RefreshCw
+                      className={`mr-1 h-3 w-3 ${testing === i.name ? "animate-spin" : ""}`}
+                    />
                     Test connection
                   </Button>
                 </div>

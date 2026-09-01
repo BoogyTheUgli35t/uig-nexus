@@ -70,8 +70,8 @@ function BillingPage() {
         <p className="text-sm text-gold uppercase tracking-wider">Shared infra</p>
         <h1 className="mt-2 text-3xl font-bold">Billing</h1>
         <p className="mt-1 text-sm text-muted-foreground">
-          Payments run through Stripe Checkout. Invoices across divisions (like Technology
-          milestone billing) can also be paid directly from their own page.
+          Payments run through Stripe Checkout. Invoices across divisions (like Technology milestone
+          billing) can also be paid directly from their own page.
         </p>
       </div>
 
@@ -114,7 +114,8 @@ function BillingPage() {
             disabled={creating || !description.trim() || !amount}
             className="self-end bg-gold text-gold-foreground hover:bg-gold/90"
           >
-            <CreditCard className="mr-2 h-4 w-4" /> {creating ? "Redirecting…" : "Checkout with Stripe"}
+            <CreditCard className="mr-2 h-4 w-4" />{" "}
+            {creating ? "Redirecting…" : "Checkout with Stripe"}
           </Button>
         </form>
       </DataPanel>
@@ -127,7 +128,10 @@ function BillingPage() {
         ) : (
           <div className="divide-y divide-border">
             {data.map((t) => (
-              <div key={t.id} className="flex flex-wrap items-center justify-between gap-3 py-3 first:pt-0 last:pb-0">
+              <div
+                key={t.id}
+                className="flex flex-wrap items-center justify-between gap-3 py-3 first:pt-0 last:pb-0"
+              >
                 <div className="min-w-0">
                   <div className="truncate text-sm font-medium">{t.description}</div>
                   <div className="mt-0.5 text-xs text-muted-foreground">

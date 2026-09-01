@@ -80,7 +80,8 @@ function TenantDetailPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
-  if (isLoading || !form) return <div className="text-sm text-muted-foreground">Loading tenant…</div>;
+  if (isLoading || !form)
+    return <div className="text-sm text-muted-foreground">Loading tenant…</div>;
   if (!data?.tenant) return <EmptyState icon={Users} title="Tenant not found" />;
 
   function set<K extends keyof FormState>(key: K, value: FormState[K]) {
@@ -89,11 +90,11 @@ function TenantDetailPage() {
 
   function validate(values: FormState) {
     const next: Record<string, string> = {};
-    if (!values.full_name.trim()) next['full_name'] = "Name is required";
+    if (!values.full_name.trim()) next["full_name"] = "Name is required";
     if (values.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email))
-      next['email'] = "Enter a valid email";
+      next["email"] = "Enter a valid email";
     if (values.lease_start && values.lease_end && values.lease_end < values.lease_start)
-      next['lease_end'] = "Lease end must be after the start date";
+      next["lease_end"] = "Lease end must be after the start date";
     setErrors(next);
     return Object.keys(next).length === 0;
   }
@@ -143,10 +144,12 @@ function TenantDetailPage() {
             <Input
               id="full_name"
               value={form.full_name}
-              aria-invalid={!!errors['full_name']}
+              aria-invalid={!!errors["full_name"]}
               onChange={(e) => set("full_name", e.target.value)}
             />
-            {errors['full_name'] && <p className="text-xs text-destructive">{errors['full_name']}</p>}
+            {errors["full_name"] && (
+              <p className="text-xs text-destructive">{errors["full_name"]}</p>
+            )}
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="email">Email</Label>
@@ -154,10 +157,10 @@ function TenantDetailPage() {
               id="email"
               type="email"
               value={form.email}
-              aria-invalid={!!errors['email']}
+              aria-invalid={!!errors["email"]}
               onChange={(e) => set("email", e.target.value)}
             />
-            {errors['email'] && <p className="text-xs text-destructive">{errors['email']}</p>}
+            {errors["email"] && <p className="text-xs text-destructive">{errors["email"]}</p>}
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="phone">Phone</Label>
@@ -219,10 +222,12 @@ function TenantDetailPage() {
               id="lease_end"
               type="date"
               value={form.lease_end}
-              aria-invalid={!!errors['lease_end']}
+              aria-invalid={!!errors["lease_end"]}
               onChange={(e) => set("lease_end", e.target.value)}
             />
-            {errors['lease_end'] && <p className="text-xs text-destructive">{errors['lease_end']}</p>}
+            {errors["lease_end"] && (
+              <p className="text-xs text-destructive">{errors["lease_end"]}</p>
+            )}
           </div>
           <div className="sm:col-span-2 flex justify-end">
             <Button
@@ -236,7 +241,12 @@ function TenantDetailPage() {
         </form>
       </DataPanel>
 
-      <RecordDocuments recordTable="tenants" recordId={id} division="real-estate" title="Tenant documents" />
+      <RecordDocuments
+        recordTable="tenants"
+        recordId={id}
+        division="real-estate"
+        title="Tenant documents"
+      />
     </div>
   );
 }

@@ -308,7 +308,10 @@ export const addMaintenanceLog = createServerFn({ method: "POST" })
     if (data.next_due) {
       await context.supabase
         .from("vehicles")
-        .update({ last_service: data.performed_at || new Date().toISOString().slice(0, 10), next_service_due: data.next_due })
+        .update({
+          last_service: data.performed_at || new Date().toISOString().slice(0, 10),
+          next_service_due: data.next_due,
+        })
         .eq("id", data.vehicle_id);
     }
     return { ok: true };
@@ -354,7 +357,10 @@ export const toggleRouteStop = createServerFn({ method: "POST" })
   .handler(async ({ context, data }) => {
     const { error } = await context.supabase
       .from("route_stops")
-      .update({ completed: data.completed, completed_at: data.completed ? new Date().toISOString() : null })
+      .update({
+        completed: data.completed,
+        completed_at: data.completed ? new Date().toISOString() : null,
+      })
       .eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true };

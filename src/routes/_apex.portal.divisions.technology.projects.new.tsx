@@ -64,15 +64,27 @@ function NewProjectPage() {
 
       <h1 className="text-2xl font-bold">New engagement</h1>
 
-      <form onSubmit={onSubmit} className="rounded-xl border border-border bg-surface p-6 space-y-4">
+      <form
+        onSubmit={onSubmit}
+        className="rounded-xl border border-border bg-surface p-6 space-y-4"
+      >
         <div className="space-y-2">
           <Label>Title</Label>
-          <Input value={title} onChange={(e) => setTitle(e.target.value)} maxLength={150} required />
+          <Input
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            maxLength={150}
+            required
+          />
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-2">
             <Label>Client name</Label>
-            <Input value={clientName} onChange={(e) => setClientName(e.target.value)} maxLength={150} />
+            <Input
+              value={clientName}
+              onChange={(e) => setClientName(e.target.value)}
+              maxLength={150}
+            />
           </div>
           <div className="space-y-2">
             <Label>Client email</Label>
@@ -99,7 +111,12 @@ function NewProjectPage() {
           </div>
           <div className="space-y-2">
             <Label>Budget (₦)</Label>
-            <Input type="number" min={0} value={budget} onChange={(e) => setBudget(e.target.value)} />
+            <Input
+              type="number"
+              min={0}
+              value={budget}
+              onChange={(e) => setBudget(e.target.value)}
+            />
           </div>
           <div className="space-y-2">
             <Label>SLA (hours)</Label>
@@ -126,7 +143,11 @@ function NewProjectPage() {
             disabled={!title.trim() || creating}
             className="bg-gold text-gold-foreground hover:bg-gold/90"
           >
-            {creating ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Check className="mr-2 h-4 w-4" />}
+            {creating ? (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              <Check className="mr-2 h-4 w-4" />
+            )}
             {creating ? "Creating…" : "Create project"}
           </Button>
         </div>

@@ -71,7 +71,9 @@ function ModelDetailPage() {
   });
 
   const model = (data?.models ?? []).find((m) => m.id === id);
-  const dataset = model?.dataset_id ? (data?.datasets ?? []).find((d) => d.id === model.dataset_id) : undefined;
+  const dataset = model?.dataset_id
+    ? (data?.datasets ?? []).find((d) => d.id === model.dataset_id)
+    : undefined;
   const modelPredictions = (data?.predictions ?? []).filter((p) => p.model_id === id);
   const canPredict = model && ["trained", "deployed", "monitoring"].includes(model.status);
 
@@ -111,7 +113,11 @@ function ModelDetailPage() {
           </div>
         </div>
         {NEXT_LABEL[model.status] && (
-          <Button onClick={() => advanceMut.mutate()} disabled={advanceMut.isPending} variant="outline">
+          <Button
+            onClick={() => advanceMut.mutate()}
+            disabled={advanceMut.isPending}
+            variant="outline"
+          >
             <Zap className="mr-2 h-4 w-4" /> {NEXT_LABEL[model.status]}
           </Button>
         )}
@@ -186,7 +192,8 @@ function ModelDetailPage() {
                 rows={3}
               />
               <Button type="submit" disabled={!predPrompt.trim() || predMut.isPending}>
-                <Send className="mr-2 h-4 w-4" /> {predMut.isPending ? "Running…" : "Run prediction"}
+                <Send className="mr-2 h-4 w-4" />{" "}
+                {predMut.isPending ? "Running…" : "Run prediction"}
               </Button>
             </form>
             {predResult && (
@@ -215,9 +222,13 @@ function ModelDetailPage() {
               <div key={p.id} className="rounded-lg border border-border bg-background p-3">
                 <div className="flex items-center justify-between gap-2">
                   <div className="text-xs font-medium leading-snug">{p.prompt}</div>
-                  <span className="shrink-0 text-[11px] acc-text">{Number(p.confidence).toFixed(0)}%</span>
+                  <span className="shrink-0 text-[11px] acc-text">
+                    {Number(p.confidence).toFixed(0)}%
+                  </span>
                 </div>
-                {p.result && <p className="mt-1 text-xs text-muted-foreground leading-relaxed">{p.result}</p>}
+                {p.result && (
+                  <p className="mt-1 text-xs text-muted-foreground leading-relaxed">{p.result}</p>
+                )}
               </div>
             ))}
           </div>

@@ -97,8 +97,7 @@ function ResetPasswordPage() {
             <>
               <h1 className="text-3xl font-bold">Link expired</h1>
               <p className="mt-2 text-sm text-muted-foreground">
-                This reset link is invalid or has expired. Request a new one from the sign-in
-                page.
+                This reset link is invalid or has expired. Request a new one from the sign-in page.
               </p>
               <Button
                 className="mt-6 w-full bg-gold text-gold-foreground hover:bg-gold/90"
@@ -110,9 +109,7 @@ function ResetPasswordPage() {
           ) : done ? (
             <>
               <h1 className="text-3xl font-bold">Password updated</h1>
-              <p className="mt-2 text-sm text-muted-foreground">
-                Taking you to your dashboard…
-              </p>
+              <p className="mt-2 text-sm text-muted-foreground">Taking you to your dashboard…</p>
             </>
           ) : !ready ? (
             <p className="text-sm text-muted-foreground">Verifying your reset link…</p>

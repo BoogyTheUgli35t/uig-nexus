@@ -57,7 +57,10 @@ function DriversPage() {
             {(data?.drivers ?? []).map((d) => {
               const licenseSoon = d.license_expiry && new Date(d.license_expiry) <= in30;
               return (
-                <div key={d.id} className="flex flex-wrap items-center justify-between gap-3 py-3 first:pt-0 last:pb-0">
+                <div
+                  key={d.id}
+                  className="flex flex-wrap items-center justify-between gap-3 py-3 first:pt-0 last:pb-0"
+                >
                   <div className="min-w-0">
                     <div className="truncate text-sm font-medium">{d.full_name}</div>
                     <div className="truncate text-xs text-muted-foreground">
@@ -83,7 +86,12 @@ function DriversPage() {
                           onChange={(e) => setEmail(e.target.value)}
                           className="h-8 max-w-[220px] text-xs"
                         />
-                        <Button type="submit" size="sm" className="h-8" disabled={linkMut.isPending}>
+                        <Button
+                          type="submit"
+                          size="sm"
+                          className="h-8"
+                          disabled={linkMut.isPending}
+                        >
                           Link
                         </Button>
                       </form>

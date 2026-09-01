@@ -36,7 +36,9 @@ export const getRealEstateWorkspace = createServerFn({ method: "GET" })
           .order("created_at", { ascending: true }),
         supabase
           .from("investors")
-          .select("id, full_name, email, phone, amount_invested, portfolio_value, expected_roi, user_id")
+          .select(
+            "id, full_name, email, phone, amount_invested, portfolio_value, expected_roi, user_id",
+          )
           .order("portfolio_value", { ascending: false }),
         supabase
           .from("leads")
@@ -147,7 +149,8 @@ export const listPropertiesFiltered = createServerFn({ method: "GET" })
 
     const coverByProperty = new Map<string, string>();
     for (const img of images ?? []) {
-      if (!coverByProperty.has(img.property_id)) coverByProperty.set(img.property_id, img.storage_path);
+      if (!coverByProperty.has(img.property_id))
+        coverByProperty.set(img.property_id, img.storage_path);
     }
 
     return (properties ?? []).map((p) => ({
@@ -165,26 +168,31 @@ export const getPropertyDetail = createServerFn({ method: "GET" })
   .inputValidator((i: unknown) => PropertyIdSchema.parse(i))
   .handler(async ({ context, data }) => {
     const { supabase } = context;
-    const [{ data: property, error }, { data: images }, { data: units }, { data: tenants }, { data: leads }] =
-      await Promise.all([
-        supabase.from("properties").select("*").eq("id", data.id).maybeSingle(),
-        supabase
-          .from("property_images")
-          .select("*")
-          .eq("property_id", data.id)
-          .order("position", { ascending: true }),
-        supabase
-          .from("property_units")
-          .select("*")
-          .eq("property_id", data.id)
-          .order("unit_number", { ascending: true }),
-        supabase.from("tenants").select("*").eq("property_id", data.id),
-        supabase
-          .from("leads")
-          .select("id, full_name, stage, email, phone, created_at")
-          .eq("property_id", data.id)
-          .order("created_at", { ascending: false }),
-      ]);
+    const [
+      { data: property, error },
+      { data: images },
+      { data: units },
+      { data: tenants },
+      { data: leads },
+    ] = await Promise.all([
+      supabase.from("properties").select("*").eq("id", data.id).maybeSingle(),
+      supabase
+        .from("property_images")
+        .select("*")
+        .eq("property_id", data.id)
+        .order("position", { ascending: true }),
+      supabase
+        .from("property_units")
+        .select("*")
+        .eq("property_id", data.id)
+        .order("unit_number", { ascending: true }),
+      supabase.from("tenants").select("*").eq("property_id", data.id),
+      supabase
+        .from("leads")
+        .select("id, full_name, stage, email, phone, created_at")
+        .eq("property_id", data.id)
+        .order("created_at", { ascending: false }),
+    ]);
     if (error) throw new Error(error.message);
     if (!property) throw new Error("Property not found");
 
@@ -461,7 +469,10 @@ export const assignTenantToUnit = createServerFn({ method: "POST" })
       .update({ status: "occupied", tenant_id: data.tenant_id })
       .eq("id", data.unit_id);
     if (error) throw new Error(error.message);
-    await context.supabase.from("tenants").update({ unit_id: data.unit_id }).eq("id", data.tenant_id);
+    await context.supabase
+      .from("tenants")
+      .update({ unit_id: data.unit_id })
+      .eq("id", data.tenant_id);
     return { ok: true };
   });
 
@@ -515,7 +526,10 @@ export const sendLeaseForSignature = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
-const RecordSignatureSchema = z.object({ id: z.string().uuid(), signed_name: z.string().trim().min(1).max(150) });
+const RecordSignatureSchema = z.object({
+  id: z.string().uuid(),
+  signed_name: z.string().trim().min(1).max(150),
+});
 
 export const recordLeaseSignature = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -682,7 +696,9 @@ export const getRealEstateReports = createServerFn({ method: "GET" })
       .slice(0, 5);
 
     const occupiedUnits = unitRows.filter((u) => u.status === "occupied").length;
-    const occupancyRate = unitRows.length ? Math.round((occupiedUnits / unitRows.length) * 100) : null;
+    const occupancyRate = unitRows.length
+      ? Math.round((occupiedUnits / unitRows.length) * 100)
+      : null;
 
     const pipeline = LEAD_STAGES.map((stage) => ({
       stage,

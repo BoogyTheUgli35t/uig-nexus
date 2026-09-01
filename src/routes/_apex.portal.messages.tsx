@@ -12,7 +12,9 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 export const Route = createFileRoute("/_apex/portal/messages")({
-  head: () => ({ meta: [{ title: "Messages — UIG Apex" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({
+    meta: [{ title: "Messages — UIG Apex" }, { name: "robots", content: "noindex" }],
+  }),
   component: MessagesPage,
 });
 
@@ -163,7 +165,9 @@ function MessagesPage() {
                       <div key={m.id} className={`flex ${mine ? "justify-end" : "justify-start"}`}>
                         <div
                           className={`max-w-[75%] rounded-lg px-3 py-2 text-sm ${
-                            mine ? "bg-gold/15 text-foreground" : "bg-background border border-border"
+                            mine
+                              ? "bg-gold/15 text-foreground"
+                              : "bg-background border border-border"
                           }`}
                         >
                           {!mine && (

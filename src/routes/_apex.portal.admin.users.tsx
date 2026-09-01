@@ -89,7 +89,9 @@ function UsersPage() {
                   <span className="rounded-full border border-border px-2 py-0.5 capitalize">
                     {u.role ?? "no role"}
                   </span>
-                  <span>{u.division_slugs.length} division{u.division_slugs.length === 1 ? "" : "s"}</span>
+                  <span>
+                    {u.division_slugs.length} division{u.division_slugs.length === 1 ? "" : "s"}
+                  </span>
                 </div>
               </button>
             ))}
@@ -97,9 +99,7 @@ function UsersPage() {
         )}
       </DataPanel>
 
-      {editingRow && (
-        <EditUserDialog user={editingRow} onClose={() => setEditingUser(null)} />
-      )}
+      {editingRow && <EditUserDialog user={editingRow} onClose={() => setEditingUser(null)} />}
     </div>
   );
 }
@@ -108,7 +108,13 @@ function EditUserDialog({
   user,
   onClose,
 }: {
-  user: { id: string; email: string; full_name: string; role: string | null; division_slugs: string[] };
+  user: {
+    id: string;
+    email: string;
+    full_name: string;
+    role: string | null;
+    division_slugs: string[];
+  };
   onClose: () => void;
 }) {
   const qc = useQueryClient();

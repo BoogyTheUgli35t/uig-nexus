@@ -19,17 +19,15 @@ export const Route = createFileRoute("/status")({
       { title: "System Status — UIG" },
       {
         name: "description",
-        content: "Live status for UIG's web platform, portal, listings, payments and logistics API.",
+        content:
+          "Live status for UIG's web platform, portal, listings, payments and logistics API.",
       },
     ],
   }),
   component: StatusPage,
 });
 
-const STATUS_META: Record<
-  string,
-  { label: string; color: string; icon: typeof CheckCircle2 }
-> = {
+const STATUS_META: Record<string, { label: string; color: string; icon: typeof CheckCircle2 }> = {
   operational: { label: "Operational", color: "text-emerald-400", icon: CheckCircle2 },
   degraded: { label: "Degraded performance", color: "text-amber-400", icon: Activity },
   partial_outage: { label: "Partial outage", color: "text-amber-400", icon: AlertTriangle },

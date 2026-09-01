@@ -67,13 +67,16 @@ function ReportsPage() {
         <KpiStat
           icon={Home}
           label="Occupancy rate"
-          value={
-            data.occupancy.occupancyRate !== null ? `${data.occupancy.occupancyRate}%` : "—"
-          }
+          value={data.occupancy.occupancyRate !== null ? `${data.occupancy.occupancyRate}%` : "—"}
           hint={`${data.occupancy.occupiedUnits}/${data.occupancy.totalUnits} units`}
         />
         <KpiStat icon={Wallet} label="Monthly rent roll" value={naira(data.revenue.monthlyRent)} />
-        <KpiStat icon={Wallet} label="Overdue rent" value={data.revenue.overdueRent} hint="tenants" />
+        <KpiStat
+          icon={Wallet}
+          label="Overdue rent"
+          value={data.revenue.overdueRent}
+          hint="tenants"
+        />
         <KpiStat
           icon={Kanban}
           label="Lead conversion"

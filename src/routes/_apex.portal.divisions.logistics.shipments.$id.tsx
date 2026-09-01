@@ -175,7 +175,9 @@ function ShipmentDetailPage() {
                       <div className="mt-1 w-px flex-1 bg-border" />
                     </div>
                     <div className="pb-2">
-                      <div className="text-sm font-medium capitalize">{ev.status.replace(/_/g, " ")}</div>
+                      <div className="text-sm font-medium capitalize">
+                        {ev.status.replace(/_/g, " ")}
+                      </div>
                       {ev.note && <div className="text-xs text-muted-foreground">{ev.note}</div>}
                       <div className="mt-0.5 text-[11px] text-muted-foreground">
                         {new Date(ev.created_at).toLocaleString()}
@@ -198,7 +200,12 @@ function ShipmentDetailPage() {
               >
                 <div className="space-y-1.5">
                   <Label className="text-xs">Delivery photo</Label>
-                  <Input type="file" accept="image/*" onChange={onPhotoSelected} disabled={uploading} />
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    onChange={onPhotoSelected}
+                    disabled={uploading}
+                  />
                   {photoPath && (
                     <img
                       src={podUrl(photoPath)}

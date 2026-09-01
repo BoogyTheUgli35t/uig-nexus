@@ -31,16 +31,37 @@ function SensorsPage() {
 
   const avg = (key: "soil_moisture" | "temperature" | "humidity") =>
     readings.length
-      ? Math.round((readings.reduce((s, r) => s + Number(r[key] ?? 0), 0) / readings.length) * 10) / 10
+      ? Math.round((readings.reduce((s, r) => s + Number(r[key] ?? 0), 0) / readings.length) * 10) /
+        10
       : 0;
 
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <KpiStat icon={Radio} label="Fields reporting" value={isLoading ? "—" : reporting} hint={`${silent} silent`} />
-        <KpiStat icon={Droplets} label="Avg soil moisture" value={isLoading ? "—" : `${avg("soil_moisture")}%`} hint="latest readings" />
-        <KpiStat icon={Thermometer} label="Avg temperature" value={isLoading ? "—" : `${avg("temperature")}°C`} hint="latest readings" />
-        <KpiStat icon={Wind} label="Avg humidity" value={isLoading ? "—" : `${avg("humidity")}%`} hint="latest readings" />
+        <KpiStat
+          icon={Radio}
+          label="Fields reporting"
+          value={isLoading ? "—" : reporting}
+          hint={`${silent} silent`}
+        />
+        <KpiStat
+          icon={Droplets}
+          label="Avg soil moisture"
+          value={isLoading ? "—" : `${avg("soil_moisture")}%`}
+          hint="latest readings"
+        />
+        <KpiStat
+          icon={Thermometer}
+          label="Avg temperature"
+          value={isLoading ? "—" : `${avg("temperature")}°C`}
+          hint="latest readings"
+        />
+        <KpiStat
+          icon={Wind}
+          label="Avg humidity"
+          value={isLoading ? "—" : `${avg("humidity")}%`}
+          hint="latest readings"
+        />
       </div>
 
       <DataPanel title="Sensor network — latest reading per field">
@@ -77,8 +98,12 @@ function SensorsPage() {
                       <td className="py-2.5 pr-4">{Number(r.soil_moisture).toFixed(1)}%</td>
                       <td className="py-2.5 pr-4">{Number(r.temperature).toFixed(1)}°C</td>
                       <td className="py-2.5 pr-4">{Number(r.humidity).toFixed(1)}%</td>
-                      <td className="py-2.5 pr-4">{field ? <StatusBadge status={field.status} /> : "—"}</td>
-                      <td className="py-2.5 pr-4 text-xs text-muted-foreground">{freshness(r.recorded_at)}</td>
+                      <td className="py-2.5 pr-4">
+                        {field ? <StatusBadge status={field.status} /> : "—"}
+                      </td>
+                      <td className="py-2.5 pr-4 text-xs text-muted-foreground">
+                        {freshness(r.recorded_at)}
+                      </td>
                       <td className="py-2.5 text-right">
                         {field && (
                           <Link
@@ -98,8 +123,9 @@ function SensorsPage() {
           </div>
         )}
         <p className="mt-4 rounded-lg border border-dashed border-border p-3 text-xs text-muted-foreground">
-          Device registration is managed per field — open a field and add readings/imagery there. Full
-          device provisioning (register hardware, assign to field) ships with the IoT gateway integration.
+          Device registration is managed per field — open a field and add readings/imagery there.
+          Full device provisioning (register hardware, assign to field) ships with the IoT gateway
+          integration.
         </p>
       </DataPanel>
     </div>

@@ -13,7 +13,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 export const Route = createFileRoute("/_apex/portal/documents")({
-  head: () => ({ meta: [{ title: "Documents — UIG Apex" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({
+    meta: [{ title: "Documents — UIG Apex" }, { name: "robots", content: "noindex" }],
+  }),
   component: DocumentsPage,
 });
 
@@ -128,7 +130,12 @@ function DocumentsPage() {
         <form onSubmit={onUpload} className="grid gap-4 sm:grid-cols-2">
           <div className="space-y-1.5">
             <Label htmlFor="doc-title">Title</Label>
-            <Input id="doc-title" value={title} onChange={(e) => setTitle(e.target.value)} required />
+            <Input
+              id="doc-title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              required
+            />
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="doc-division">Division</Label>
@@ -196,12 +203,17 @@ function DocumentsPage() {
         ) : (
           <div className="divide-y divide-border">
             {filtered.map((d) => (
-              <div key={d.id} className="flex flex-wrap items-center justify-between gap-3 py-3 first:pt-0 last:pb-0">
+              <div
+                key={d.id}
+                className="flex flex-wrap items-center justify-between gap-3 py-3 first:pt-0 last:pb-0"
+              >
                 <div className="min-w-0">
                   <div className="truncate text-sm font-medium">{d.title}</div>
                   <div className="mt-0.5 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
                     <span className="capitalize">
-                      {d.division ? DIVISIONS.find((x) => x.slug === d.division)?.short ?? d.division : "Company-wide"}
+                      {d.division
+                        ? (DIVISIONS.find((x) => x.slug === d.division)?.short ?? d.division)
+                        : "Company-wide"}
                     </span>
                     <span>·</span>
                     <span>{formatBytes(d.size_bytes)}</span>
@@ -210,7 +222,11 @@ function DocumentsPage() {
                   </div>
                 </div>
                 <div className="flex shrink-0 gap-1.5">
-                  <Button size="sm" variant="outline" onClick={() => onDownload(d.file_path, d.title)}>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => onDownload(d.file_path, d.title)}
+                  >
                     <Download className="h-3.5 w-3.5" />
                   </Button>
                   <Button

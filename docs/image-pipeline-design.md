@@ -106,6 +106,7 @@ is documented as early-version). Uploads use the Node SDK with `public_id`, `ove
 listing cards already fall back to the building icon.
 
 **Wiring into the app.**
+
 - Divisions/homepage: the script emits `url-map.json`; constants in `src/lib/divisions.ts`
   and `src/routes/index.tsx` are updated once (galleries can be repopulated from
   `uig/divisions/<slug>/gallery-*`).
@@ -138,14 +139,14 @@ flag. Division/homepage imagery has no such concern (it's brand art, not product
 
 ## 6. Trade-offs
 
-| Decision | Chosen | Rejected | Why |
-|---|---|---|---|
-| When to generate | Offline batch | Runtime on-the-fly | Deterministic cost, no latency, no API-instability exposure |
-| Where listing URLs live | DB (`storage_path`) | Code constants | Portal uploads already write there; zero schema change |
-| Where division URLs live | Code constants | DB | Marketing content is versioned with the site, reviewable in PRs |
-| Hero model | flux (premium) | nano-banana everywhere | 7 slots define the brand; the delta cost is a few credits |
-| Listing renders | Labeled "illustrative" | Pass off as photos | Legal/trust risk on real property listings |
-| Storage | Cloudinary folders | Supabase Storage | Generation + transforms + CDN in one system; Supabase Storage remains for portal-uploaded originals if desired |
+| Decision                 | Chosen                 | Rejected               | Why                                                                                                            |
+| ------------------------ | ---------------------- | ---------------------- | -------------------------------------------------------------------------------------------------------------- |
+| When to generate         | Offline batch          | Runtime on-the-fly     | Deterministic cost, no latency, no API-instability exposure                                                    |
+| Where listing URLs live  | DB (`storage_path`)    | Code constants         | Portal uploads already write there; zero schema change                                                         |
+| Where division URLs live | Code constants         | DB                     | Marketing content is versioned with the site, reviewable in PRs                                                |
+| Hero model               | flux (premium)         | nano-banana everywhere | 7 slots define the brand; the delta cost is a few credits                                                      |
+| Listing renders          | Labeled "illustrative" | Pass off as photos     | Legal/trust risk on real property listings                                                                     |
+| Storage                  | Cloudinary folders     | Supabase Storage       | Generation + transforms + CDN in one system; Supabase Storage remains for portal-uploaded originals if desired |
 
 ## 7. Revisit as it grows
 

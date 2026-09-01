@@ -66,7 +66,11 @@ function DatasetsPage() {
             min={0}
             className="w-28"
           />
-          <Button type="submit" disabled={!datasetName.trim() || datasetMut.isPending} variant="outline">
+          <Button
+            type="submit"
+            disabled={!datasetName.trim() || datasetMut.isPending}
+            variant="outline"
+          >
             <Plus className="mr-2 h-4 w-4" /> Add
           </Button>
         </form>
@@ -76,7 +80,11 @@ function DatasetsPage() {
         {isLoading ? (
           <div className="text-sm text-muted-foreground">Loading datasets…</div>
         ) : datasets.length === 0 ? (
-          <EmptyState icon={Database} title="No datasets yet" description="Add a dataset above to feed model training." />
+          <EmptyState
+            icon={Database}
+            title="No datasets yet"
+            description="Add a dataset above to feed model training."
+          />
         ) : (
           <div className="space-y-3">
             {datasets.map((d) => {
@@ -87,7 +95,8 @@ function DatasetsPage() {
                     <div className="min-w-0">
                       <div className="truncate text-sm font-medium">{d.name}</div>
                       <div className="mt-0.5 text-xs text-muted-foreground">
-                        {d.source_division} · {d.rows_count.toLocaleString()} rows · {Number(d.size_mb)} MB
+                        {d.source_division} · {d.rows_count.toLocaleString()} rows ·{" "}
+                        {Number(d.size_mb)} MB
                       </div>
                     </div>
                     <StatusBadge status={d.status} />
@@ -95,7 +104,10 @@ function DatasetsPage() {
                   {linkedModels.length > 0 && (
                     <div className="mt-2 flex flex-wrap gap-1.5">
                       {linkedModels.map((m) => (
-                        <span key={m.id} className="rounded-full acc-bg-soft acc-text px-2 py-0.5 text-[10px]">
+                        <span
+                          key={m.id}
+                          className="rounded-full acc-bg-soft acc-text px-2 py-0.5 text-[10px]"
+                        >
                           {m.name}
                         </span>
                       ))}

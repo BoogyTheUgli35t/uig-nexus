@@ -210,7 +210,11 @@ function MaintenanceDialog({
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
               <Label className="text-xs">Performed on</Label>
-              <Input type="date" value={performedAt} onChange={(e) => setPerformedAt(e.target.value)} />
+              <Input
+                type="date"
+                value={performedAt}
+                onChange={(e) => setPerformedAt(e.target.value)}
+              />
             </div>
             <div className="space-y-1.5">
               <Label className="text-xs">Next due</Label>
@@ -242,7 +246,9 @@ function MaintenanceDialog({
                 </div>
                 {l.notes && <p className="mt-1 text-xs text-muted-foreground">{l.notes}</p>}
                 {l.cost != null && (
-                  <p className="mt-1 text-xs text-muted-foreground">₦{Number(l.cost).toLocaleString()}</p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    ₦{Number(l.cost).toLocaleString()}
+                  </p>
                 )}
               </div>
             ))

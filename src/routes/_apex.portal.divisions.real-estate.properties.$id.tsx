@@ -255,7 +255,11 @@ function PropertyDetailPage() {
         }
       >
         {images.length === 0 ? (
-          <EmptyState icon={ImagePlus} title="No photos yet" description="Add the first one above." />
+          <EmptyState
+            icon={ImagePlus}
+            title="No photos yet"
+            description="Add the first one above."
+          />
         ) : (
           <div className="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-6">
             {images.map((img) => (
@@ -263,7 +267,11 @@ function PropertyDetailPage() {
                 key={img.id}
                 className="group relative aspect-square overflow-hidden rounded-lg border border-border"
               >
-                <img src={imgUrl(img.storage_path)} alt={img.caption ?? ""} className="h-full w-full object-cover" />
+                <img
+                  src={imgUrl(img.storage_path)}
+                  alt={img.caption ?? ""}
+                  className="h-full w-full object-cover"
+                />
                 <button
                   onClick={() => onRemovePhoto(img.id, img.storage_path)}
                   className="absolute right-1 top-1 rounded-full bg-background/90 p-1 opacity-0 transition group-hover:opacity-100"
@@ -287,11 +295,7 @@ function PropertyDetailPage() {
             analytics.occupancyRate !== null ? `${analytics.occupancyRate}% occupied` : undefined
           }
         />
-        <KpiStat
-          icon={Users}
-          label="Tenants on file"
-          value={data.tenants.length}
-        />
+        <KpiStat icon={Users} label="Tenants on file" value={data.tenants.length} />
         <KpiStat
           icon={Building2}
           label="Unit revenue / mo"
@@ -354,7 +358,11 @@ function PropertyDetailPage() {
               onChange={(e) => setEditDescription(e.target.value)}
             />
             <div className="max-w-[200px]">
-              <Input type="number" value={editPrice} onChange={(e) => setEditPrice(e.target.value)} />
+              <Input
+                type="number"
+                value={editPrice}
+                onChange={(e) => setEditPrice(e.target.value)}
+              />
             </div>
             <div className="flex flex-wrap gap-2">
               {AMENITY_OPTIONS.map((a) => (
@@ -436,7 +444,11 @@ function PropertyDetailPage() {
 
         {units.length === 0 ? (
           <div className="mt-4">
-            <EmptyState icon={DoorOpen} title="No units yet" description="Add units to track occupancy per-floor." />
+            <EmptyState
+              icon={DoorOpen}
+              title="No units yet"
+              description="Add units to track occupancy per-floor."
+            />
           </div>
         ) : (
           <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -487,7 +499,12 @@ function PropertyDetailPage() {
           </div>
         )}
       </DataPanel>
-      <RecordDocuments recordTable="properties" recordId={id} division="real-estate" title="Property documents" />
+      <RecordDocuments
+        recordTable="properties"
+        recordId={id}
+        division="real-estate"
+        title="Property documents"
+      />
     </div>
   );
 }

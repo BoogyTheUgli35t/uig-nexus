@@ -76,7 +76,10 @@ function ProjectDetailPage() {
 
   const taskMut = useMutation({
     mutationFn: async () =>
-      addTechTask({ data: { tech_project_id: id, title: taskTitle }, headers: await authHeaders() }),
+      addTechTask({
+        data: { tech_project_id: id, title: taskTitle },
+        headers: await authHeaders(),
+      }),
     onSuccess: () => {
       setTaskTitle("");
       invalidate();
@@ -86,7 +89,10 @@ function ProjectDetailPage() {
 
   const taskStatusMut = useMutation({
     mutationFn: async (v: { taskId: string; status: "todo" | "in_progress" | "done" }) =>
-      updateTechTaskStatus({ data: { id: v.taskId, status: v.status }, headers: await authHeaders() }),
+      updateTechTaskStatus({
+        data: { id: v.taskId, status: v.status },
+        headers: await authHeaders(),
+      }),
     onSuccess: invalidate,
     onError: (e: Error) => toast.error(e.message),
   });
@@ -115,7 +121,11 @@ function ProjectDetailPage() {
   const invoiceMut = useMutation({
     mutationFn: async () =>
       addInvoice({
-        data: { tech_project_id: id, milestone: invoiceMilestone, amount: Number(invoiceAmount) || 0 },
+        data: {
+          tech_project_id: id,
+          milestone: invoiceMilestone,
+          amount: Number(invoiceAmount) || 0,
+        },
         headers: await authHeaders(),
       }),
     onSuccess: () => {
@@ -129,7 +139,10 @@ function ProjectDetailPage() {
 
   const invoiceStatusMut = useMutation({
     mutationFn: async (v: { invoiceId: string; status: (typeof INVOICE_STATUSES)[number] }) =>
-      updateInvoiceStatus({ data: { id: v.invoiceId, status: v.status }, headers: await authHeaders() }),
+      updateInvoiceStatus({
+        data: { id: v.invoiceId, status: v.status },
+        headers: await authHeaders(),
+      }),
     onSuccess: invalidate,
     onError: (e: Error) => toast.error(e.message),
   });
@@ -166,7 +179,9 @@ function ProjectDetailPage() {
       const { data: sess } = await supabase.auth.getSession();
       const userId = sess.session?.user.id ?? null;
       const path = `${id}/${Date.now()}-${file.name}`;
-      const { error: upErr } = await supabase.storage.from("tech-project-documents").upload(path, file);
+      const { error: upErr } = await supabase.storage
+        .from("tech-project-documents")
+        .upload(path, file);
       if (upErr) throw upErr;
       const { error: dbErr } = await supabase.from("tech_project_documents").insert({
         tech_project_id: id,
@@ -213,7 +228,9 @@ function ProjectDetailPage() {
     : null;
   const slaBreached = project.sla_hours != null && slaHoursLeft != null && slaHoursLeft < 0;
   const totalInvoiced = invoices.reduce((s, i) => s + Number(i.amount), 0);
-  const totalPaid = invoices.filter((i) => i.status === "paid").reduce((s, i) => s + Number(i.amount), 0);
+  const totalPaid = invoices
+    .filter((i) => i.status === "paid")
+    .reduce((s, i) => s + Number(i.amount), 0);
 
   return (
     <div className="space-y-8">
@@ -228,7 +245,8 @@ function ProjectDetailPage() {
         <div>
           <h1 className="text-2xl font-bold">{project.title}</h1>
           <p className="mt-1 text-sm text-muted-foreground">
-            {project.client_name || "Internal"} {project.client_email ? `· ${project.client_email}` : ""}
+            {project.client_name || "Internal"}{" "}
+            {project.client_email ? `· ${project.client_email}` : ""}
           </p>
           {project.client_name && (
             <Link
@@ -266,9 +284,18 @@ function ProjectDetailPage() {
       )}
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <KpiStat icon={CheckSquare} label="Open tasks" value={tasks.filter((t) => t.status !== "done").length} />
+        <KpiStat
+          icon={CheckSquare}
+          label="Open tasks"
+          value={tasks.filter((t) => t.status !== "done").length}
+        />
         <KpiStat icon={Rocket} label="Deployments" value={deployments.length} />
-        <KpiStat icon={Receipt} label="Invoiced" value={naira(totalInvoiced)} hint={`${naira(totalPaid)} paid`} />
+        <KpiStat
+          icon={Receipt}
+          label="Invoiced"
+          value={naira(totalInvoiced)}
+          hint={`${naira(totalPaid)} paid`}
+        />
         <KpiStat
           icon={Clock}
           label="SLA target"
@@ -303,10 +330,16 @@ function ProjectDetailPage() {
         ) : (
           <ul className="mt-4 space-y-1.5">
             {tasks.map((t) => (
-              <li key={t.id} className="flex items-center justify-between gap-3 rounded-lg border border-border bg-background px-3 py-2">
+              <li
+                key={t.id}
+                className="flex items-center justify-between gap-3 rounded-lg border border-border bg-background px-3 py-2"
+              >
                 <button
                   onClick={() =>
-                    taskStatusMut.mutate({ taskId: t.id, status: t.status === "done" ? "todo" : "done" })
+                    taskStatusMut.mutate({
+                      taskId: t.id,
+                      status: t.status === "done" ? "todo" : "done",
+                    })
                   }
                   className="flex flex-1 items-center gap-2 text-left text-sm"
                 >
@@ -378,7 +411,9 @@ function ProjectDetailPage() {
                 <div className="flex items-center justify-between text-sm">
                   <div>
                     <span className="font-mono font-medium">{d.version}</span>{" "}
-                    <span className="text-xs text-muted-foreground capitalize">{d.environment}</span>
+                    <span className="text-xs text-muted-foreground capitalize">
+                      {d.environment}
+                    </span>
                   </div>
                   <div className="flex items-center gap-3">
                     <span className="text-[11px] text-muted-foreground">
@@ -416,7 +451,11 @@ function ProjectDetailPage() {
             value={invoiceAmount}
             onChange={(e) => setInvoiceAmount(e.target.value)}
           />
-          <Button type="submit" size="sm" disabled={!invoiceMilestone.trim() || invoiceMut.isPending}>
+          <Button
+            type="submit"
+            size="sm"
+            disabled={!invoiceMilestone.trim() || invoiceMut.isPending}
+          >
             <Receipt className="mr-1.5 h-3.5 w-3.5" /> Add invoice
           </Button>
         </form>

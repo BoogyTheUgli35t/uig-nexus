@@ -10,7 +10,9 @@ import { createCheckoutSession } from "@/lib/payments.functions";
 import { authHeaders } from "@/lib/auth-headers";
 
 export const Route = createFileRoute("/_apex/portal/settings")({
-  head: () => ({ meta: [{ title: "Settings — UIG Apex" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({
+    meta: [{ title: "Settings — UIG Apex" }, { name: "robots", content: "noindex" }],
+  }),
   component: SettingsPage,
 });
 
@@ -26,7 +28,11 @@ function SettingsPage() {
       const u = data.user;
       if (!u) return;
       setEmail(u.email ?? "");
-      const { data: prof } = await supabase.from("profiles").select("full_name").eq("id", u.id).maybeSingle();
+      const { data: prof } = await supabase
+        .from("profiles")
+        .select("full_name")
+        .eq("id", u.id)
+        .maybeSingle();
       setName(prof?.full_name ?? "");
     })();
   }, []);
@@ -44,7 +50,10 @@ function SettingsPage() {
     setSaving(true);
     const { data } = await supabase.auth.getUser();
     if (!data.user) return setSaving(false);
-    const { error } = await supabase.from("profiles").update({ full_name: name }).eq("id", data.user.id);
+    const { error } = await supabase
+      .from("profiles")
+      .update({ full_name: name })
+      .eq("id", data.user.id);
     setSaving(false);
     if (error) return toast.error(error.message);
     toast.success("Profile updated");
@@ -86,7 +95,11 @@ function SettingsPage() {
           <Label htmlFor="name">Full name</Label>
           <Input id="name" value={name} onChange={(e) => setName(e.target.value)} maxLength={100} />
         </div>
-        <Button type="submit" disabled={saving} className="bg-gold text-gold-foreground hover:bg-gold/90">
+        <Button
+          type="submit"
+          disabled={saving}
+          className="bg-gold text-gold-foreground hover:bg-gold/90"
+        >
           {saving ? "Saving…" : "Save"}
         </Button>
       </form>
@@ -98,8 +111,8 @@ function SettingsPage() {
         </div>
         <p className="text-sm text-muted-foreground">
           Payments run through Stripe in test mode. Use this to confirm checkout works — no real
-          charge is made. Use Stripe's test card <span className="font-mono">4242 4242 4242 4242</span>{" "}
-          with any future expiry and CVC.
+          charge is made. Use Stripe's test card{" "}
+          <span className="font-mono">4242 4242 4242 4242</span> with any future expiry and CVC.
         </p>
         <Button variant="outline" onClick={onTestCheckout} disabled={checkingOut}>
           <CreditCard className="mr-2 h-4 w-4" />

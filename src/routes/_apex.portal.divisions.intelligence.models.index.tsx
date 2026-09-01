@@ -46,7 +46,8 @@ function ModelsPage() {
   const invalidate = () => qc.invalidateQueries({ queryKey: ["intelligence-workspace"] });
 
   const modelMut = useMutation({
-    mutationFn: async () => createModel({ data: { name: modelName }, headers: await authHeaders() }),
+    mutationFn: async () =>
+      createModel({ data: { name: modelName }, headers: await authHeaders() }),
     onSuccess: () => {
       toast.success("Model created");
       setModelName("");
@@ -82,7 +83,9 @@ function ModelsPage() {
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <h2 className="text-lg font-semibold">Model lifecycle</h2>
-          <p className="text-sm text-muted-foreground">Upload → Train → Evaluate → Deploy → Monitor.</p>
+          <p className="text-sm text-muted-foreground">
+            Upload → Train → Evaluate → Deploy → Monitor.
+          </p>
         </div>
         <form
           className="flex gap-2"
@@ -98,7 +101,11 @@ function ModelsPage() {
             maxLength={180}
             className="w-56"
           />
-          <Button type="submit" disabled={!modelName.trim() || modelMut.isPending} variant="outline">
+          <Button
+            type="submit"
+            disabled={!modelName.trim() || modelMut.isPending}
+            variant="outline"
+          >
             <Plus className="mr-2 h-4 w-4" /> Create
           </Button>
         </form>
@@ -125,14 +132,19 @@ function ModelsPage() {
                     </div>
                   ) : (
                     items.map((mo) => (
-                      <div key={mo.id} className="rounded-lg border border-border bg-background p-3">
+                      <div
+                        key={mo.id}
+                        className="rounded-lg border border-border bg-background p-3"
+                      >
                         <Link
                           to="/portal/divisions/intelligence/models/$id"
                           params={{ id: mo.id }}
                           className="flex items-center justify-between gap-2 hover:acc-text"
                         >
                           <span className="text-sm font-medium leading-snug">{mo.name}</span>
-                          <span className="font-mono text-[10px] text-muted-foreground">{mo.version}</span>
+                          <span className="font-mono text-[10px] text-muted-foreground">
+                            {mo.version}
+                          </span>
                         </Link>
                         <div className="mt-1 flex flex-wrap gap-1 text-[11px] text-muted-foreground">
                           <span className="capitalize">{mo.model_type}</span>

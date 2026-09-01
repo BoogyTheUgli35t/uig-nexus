@@ -1,14 +1,43 @@
 import { divisionPath } from "@/lib/division-paths";
-import { Outlet, createFileRoute, redirect, Link, useNavigate, useRouter } from "@tanstack/react-router";
+import {
+  Outlet,
+  createFileRoute,
+  redirect,
+  Link,
+  useNavigate,
+  useRouter,
+} from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { LayoutDashboard, FolderKanban, Settings, LogOut, ChevronRight, AlertTriangle, ShieldAlert, ShieldCheck, ScrollText, Truck, UserCheck, Users as Users2, FileText, MessageSquare, CreditCard, Home, TrendingUp } from "lucide-react";
+import {
+  LayoutDashboard,
+  FolderKanban,
+  Settings,
+  LogOut,
+  ChevronRight,
+  AlertTriangle,
+  ShieldAlert,
+  ShieldCheck,
+  ScrollText,
+  Truck,
+  UserCheck,
+  Users as Users2,
+  FileText,
+  MessageSquare,
+  CreditCard,
+  Home,
+  TrendingUp,
+} from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Logo } from "@/components/site/Logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { logPortalEvent, submitAccessRequest, getMyAccessRequestStatus } from "@/lib/portal.functions";
+import {
+  logPortalEvent,
+  submitAccessRequest,
+  getMyAccessRequestStatus,
+} from "@/lib/portal.functions";
 import { getMyWorkspace } from "@/lib/divisions.functions";
 import { authHeaders } from "@/lib/auth-headers";
 import { DIVISIONS } from "@/lib/divisions";
@@ -16,11 +45,18 @@ import { NotificationBell } from "@/components/portal/NotificationBell";
 import { GlobalSearch } from "@/components/portal/GlobalSearch";
 import { toast } from "sonner";
 
-
 type AppRole = "admin" | "staff" | "client" | "investor" | "farmer" | "driver";
-const ALLOWED_ROLES: readonly AppRole[] = ["admin", "staff", "client", "investor", "farmer", "driver"];
+const ALLOWED_ROLES: readonly AppRole[] = [
+  "admin",
+  "staff",
+  "client",
+  "investor",
+  "farmer",
+  "driver",
+];
 
-const ACCESS_DENIED_MSG = "Your account does not yet have access to the Apex Portal. Request access below and a UIG administrator will review it.";
+const ACCESS_DENIED_MSG =
+  "Your account does not yet have access to the Apex Portal. Request access below and a UIG administrator will review it.";
 
 export const Route = createFileRoute("/_apex")({
   beforeLoad: async () => {
@@ -41,9 +77,18 @@ export const Route = createFileRoute("/_apex")({
     if (error) {
       throw new Error("Could not verify your portal access. Please try again.");
     }
-    const userRoles = (roles ?? []).map((r) => r.role as AppRole).filter((r) => ALLOWED_ROLES.includes(r));
+    const userRoles = (roles ?? [])
+      .map((r) => r.role as AppRole)
+      .filter((r) => ALLOWED_ROLES.includes(r));
     if (userRoles.length === 0) {
-      logPortalEvent({ data: { event_type: "access_denied", user_id: userId, email, metadata: { stage: "portal_load" } } }).catch(() => {});
+      logPortalEvent({
+        data: {
+          event_type: "access_denied",
+          user_id: userId,
+          email,
+          metadata: { stage: "portal_load" },
+        },
+      }).catch(() => {});
       throw new Error(ACCESS_DENIED_MSG);
     }
     return { roles: userRoles, userId, email };
@@ -66,20 +111,44 @@ function PortalErrorBoundary({ error, reset }: { error: Error; reset: () => void
             <ShieldAlert className="h-6 w-6" />
           </div>
           <h1 className="mt-6 text-2xl font-bold">Portal access issue</h1>
-          <p className="mt-3 text-sm text-muted-foreground">{error.message || "Something went wrong while loading the portal."}</p>
+          <p className="mt-3 text-sm text-muted-foreground">
+            {error.message || "Something went wrong while loading the portal."}
+          </p>
         </div>
 
         {isAccessIssue && <AccessRequestForm />}
 
         <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-          <Button onClick={() => { router.invalidate(); reset(); }} className="bg-gold text-gold-foreground hover:bg-gold/90">Try again</Button>
-          <Button variant="outline" onClick={async () => {
-            const { data } = await supabase.auth.getUser();
-            if (data.user) logPortalEvent({ data: { event_type: "sign_out", user_id: data.user.id, email: data.user.email ?? null } }).catch(() => {});
-            await supabase.auth.signOut();
-            navigate({ to: "/portal/login" });
-          }}>Sign out</Button>
-          <Button variant="ghost" asChild><Link to="/">Back to UIG</Link></Button>
+          <Button
+            onClick={() => {
+              router.invalidate();
+              reset();
+            }}
+            className="bg-gold text-gold-foreground hover:bg-gold/90"
+          >
+            Try again
+          </Button>
+          <Button
+            variant="outline"
+            onClick={async () => {
+              const { data } = await supabase.auth.getUser();
+              if (data.user)
+                logPortalEvent({
+                  data: {
+                    event_type: "sign_out",
+                    user_id: data.user.id,
+                    email: data.user.email ?? null,
+                  },
+                }).catch(() => {});
+              await supabase.auth.signOut();
+              navigate({ to: "/portal/login" });
+            }}
+          >
+            Sign out
+          </Button>
+          <Button variant="ghost" asChild>
+            <Link to="/">Back to UIG</Link>
+          </Button>
         </div>
       </div>
     </div>
@@ -90,7 +159,12 @@ function AccessRequestForm() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [checking, setChecking] = useState(true);
-  const [existing, setExisting] = useState<{ id: string; status: string; requested_role: string; created_at: string } | null>(null);
+  const [existing, setExisting] = useState<{
+    id: string;
+    status: string;
+    requested_role: string;
+    created_at: string;
+  } | null>(null);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [requestedRole, setRequestedRole] = useState<AppRole>("client");
@@ -160,7 +234,8 @@ function AccessRequestForm() {
         <div className="text-center">
           <AlertTriangle className="h-6 w-6 text-destructive mx-auto" />
           <p className="mt-3 text-sm">
-            Your previous request for {existing.requested_role} access was not approved. You may submit a new request below.
+            Your previous request for {existing.requested_role} access was not approved. You may
+            submit a new request below.
           </p>
         </div>
         {renderForm()}
@@ -172,10 +247,15 @@ function AccessRequestForm() {
 
   function renderForm() {
     return (
-      <form onSubmit={onSubmit} className="rounded-lg border border-border bg-surface p-6 space-y-4 text-left">
+      <form
+        onSubmit={onSubmit}
+        className="rounded-lg border border-border bg-surface p-6 space-y-4 text-left"
+      >
         <div>
           <h2 className="text-base font-semibold">Request portal access</h2>
-          <p className="text-xs text-muted-foreground mt-1">A UIG administrator will review your request.</p>
+          <p className="text-xs text-muted-foreground mt-1">
+            A UIG administrator will review your request.
+          </p>
         </div>
         <div className="space-y-2">
           <Label htmlFor="ar-name">Full name</Label>
@@ -183,7 +263,13 @@ function AccessRequestForm() {
         </div>
         <div className="space-y-2">
           <Label htmlFor="ar-email">Email</Label>
-          <Input id="ar-email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
+          <Input
+            id="ar-email"
+            type="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
         </div>
         <div className="space-y-2">
           <Label htmlFor="ar-role">Requested role</Label>
@@ -203,9 +289,19 @@ function AccessRequestForm() {
         </div>
         <div className="space-y-2">
           <Label htmlFor="ar-reason">Reason (optional)</Label>
-          <Textarea id="ar-reason" rows={3} value={reason} onChange={(e) => setReason(e.target.value)} placeholder="Tell us why you need access…" />
+          <Textarea
+            id="ar-reason"
+            rows={3}
+            value={reason}
+            onChange={(e) => setReason(e.target.value)}
+            placeholder="Tell us why you need access…"
+          />
         </div>
-        <Button type="submit" disabled={loading} className="w-full bg-gold text-gold-foreground hover:bg-gold/90">
+        <Button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-gold text-gold-foreground hover:bg-gold/90"
+        >
           {loading ? "Submitting…" : "Submit access request"}
         </Button>
       </form>
@@ -221,10 +317,16 @@ function PortalNotFound() {
           <AlertTriangle className="h-6 w-6" />
         </div>
         <h1 className="mt-6 text-2xl font-bold">Page not found</h1>
-        <p className="mt-3 text-sm text-muted-foreground">The portal page you are looking for does not exist.</p>
+        <p className="mt-3 text-sm text-muted-foreground">
+          The portal page you are looking for does not exist.
+        </p>
         <div className="mt-6 flex items-center justify-center gap-3">
-          <Button asChild className="bg-gold text-gold-foreground hover:bg-gold/90"><Link to="/portal/dashboard">Go to dashboard</Link></Button>
-          <Button asChild variant="outline"><Link to="/">Back to UIG</Link></Button>
+          <Button asChild className="bg-gold text-gold-foreground hover:bg-gold/90">
+            <Link to="/portal/dashboard">Go to dashboard</Link>
+          </Button>
+          <Button asChild variant="outline">
+            <Link to="/">Back to UIG</Link>
+          </Button>
         </div>
       </div>
     </div>
@@ -237,15 +339,30 @@ const ALL_ROLES: AppRole[] = ["admin", "staff", "client", "investor", "farmer", 
 
 const NAV_ITEMS: NavItem[] = [
   { to: "/portal/dashboard", label: "Dashboard", icon: LayoutDashboard, roles: ALL_ROLES },
-  { to: "/portal/projects", label: "Projects", icon: FolderKanban, roles: ["admin", "staff", "client"] },
+  {
+    to: "/portal/projects",
+    label: "Projects",
+    icon: FolderKanban,
+    roles: ["admin", "staff", "client"],
+  },
   { to: "/portal/documents", label: "Documents", icon: FileText, roles: ALL_ROLES },
   { to: "/portal/messages", label: "Messages", icon: MessageSquare, roles: ALL_ROLES },
   { to: "/portal/billing", label: "Billing", icon: CreditCard, roles: ALL_ROLES },
-  { to: "/portal/driver-tasks", label: "Driver tasks", icon: Truck, roles: ["driver", "admin", "staff"] },
+  {
+    to: "/portal/driver-tasks",
+    label: "Driver tasks",
+    icon: Truck,
+    roles: ["driver", "admin", "staff"],
+  },
   // Self-service surfaces for the non-staff roles. Each page explains itself
   // when the signed-in account isn't linked to a tenancy / investor record,
   // so staff and admins can open them to see exactly what those users see.
-  { to: "/portal/my-tenancy", label: "My tenancy", icon: Home, roles: ["client", "admin", "staff"] },
+  {
+    to: "/portal/my-tenancy",
+    label: "My tenancy",
+    icon: Home,
+    roles: ["client", "admin", "staff"],
+  },
   {
     to: "/portal/my-investments",
     label: "My investments",
@@ -253,7 +370,12 @@ const NAV_ITEMS: NavItem[] = [
     roles: ["investor", "admin", "staff"],
   },
   { to: "/portal/admin", label: "Admin", icon: ShieldCheck, roles: ["admin"] },
-  { to: "/portal/admin/access-requests", label: "Access requests", icon: UserCheck, roles: ["admin"] },
+  {
+    to: "/portal/admin/access-requests",
+    label: "Access requests",
+    icon: UserCheck,
+    roles: ["admin"],
+  },
   { to: "/portal/admin/users", label: "Users", icon: Users2, roles: ["admin"] },
   { to: "/portal/audit", label: "Audit log", icon: ScrollText, roles: ["admin"] },
   { to: "/portal/settings", label: "Settings", icon: Settings, roles: ALL_ROLES },
@@ -261,7 +383,11 @@ const NAV_ITEMS: NavItem[] = [
 
 function PortalShell() {
   const navigate = useNavigate();
-  const { roles, email: ctxEmail, userId } = Route.useRouteContext() as { roles: AppRole[]; email?: string | null; userId?: string };
+  const {
+    roles,
+    email: ctxEmail,
+    userId,
+  } = Route.useRouteContext() as { roles: AppRole[]; email?: string | null; userId?: string };
   const [email, setEmail] = useState<string>(ctxEmail ?? "");
 
   useEffect(() => {
@@ -271,7 +397,13 @@ function PortalShell() {
         if (event === "SIGNED_OUT") {
           // sign-out is logged by the button handler
         } else {
-          logPortalEvent({ data: { event_type: "session_expired", user_id: userId ?? null, email: ctxEmail ?? null } }).catch(() => {});
+          logPortalEvent({
+            data: {
+              event_type: "session_expired",
+              user_id: userId ?? null,
+              email: ctxEmail ?? null,
+            },
+          }).catch(() => {});
         }
         navigate({ to: "/portal/login" });
       }
@@ -279,18 +411,21 @@ function PortalShell() {
     return () => sub.subscription.unsubscribe();
   }, [navigate, ctxEmail, userId, email]);
 
-  const visibleNav = useMemo(() => NAV_ITEMS.filter((n) => n.roles.some((r) => roles.includes(r))), [roles]);
+  const visibleNav = useMemo(
+    () => NAV_ITEMS.filter((n) => n.roles.some((r) => roles.includes(r))),
+    [roles],
+  );
   const primaryRole = roles.includes("admin")
     ? "Admin"
     : roles.includes("staff")
-    ? "Staff"
-    : roles.includes("investor")
-    ? "Investor"
-    : roles.includes("farmer")
-    ? "Farmer"
-    : roles.includes("driver")
-    ? "Driver"
-    : "Client";
+      ? "Staff"
+      : roles.includes("investor")
+        ? "Investor"
+        : roles.includes("farmer")
+          ? "Farmer"
+          : roles.includes("driver")
+            ? "Driver"
+            : "Client";
 
   const [divisionSlugs, setDivisionSlugs] = useState<string[]>([]);
   useEffect(() => {
@@ -309,9 +444,11 @@ function PortalShell() {
     [divisionSlugs],
   );
 
-
   async function handleSignOut() {
-    if (userId) await logPortalEvent({ data: { event_type: "sign_out", user_id: userId, email: ctxEmail ?? null } }).catch(() => {});
+    if (userId)
+      await logPortalEvent({
+        data: { event_type: "sign_out", user_id: userId, email: ctxEmail ?? null },
+      }).catch(() => {});
     await supabase.auth.signOut();
     navigate({ to: "/portal/login" });
   }
@@ -319,9 +456,15 @@ function PortalShell() {
   return (
     <div className="min-h-screen flex">
       <aside className="hidden lg:flex w-64 flex-col border-r border-border bg-surface/60 p-4">
-        <div className="px-2 py-2"><Logo /></div>
-        <div className="mt-2 px-2 text-xs uppercase tracking-wider text-muted-foreground">Apex Portal</div>
-        <div className="mt-4 px-2"><GlobalSearch /></div>
+        <div className="px-2 py-2">
+          <Logo />
+        </div>
+        <div className="mt-2 px-2 text-xs uppercase tracking-wider text-muted-foreground">
+          Apex Portal
+        </div>
+        <div className="mt-4 px-2">
+          <GlobalSearch />
+        </div>
         <nav className="mt-6 flex-1 space-y-1">
           {visibleNav.map((n) => (
             <Link
@@ -336,7 +479,9 @@ function PortalShell() {
           ))}
           {myDivisions.length > 0 && (
             <div className="pt-4">
-              <div className="px-3 pb-1 text-[10px] uppercase tracking-wider text-muted-foreground">Divisions</div>
+              <div className="px-3 pb-1 text-[10px] uppercase tracking-wider text-muted-foreground">
+                Divisions
+              </div>
               {myDivisions.map((d) => (
                 <Link
                   key={d.slug}
@@ -362,7 +507,12 @@ function PortalShell() {
             </div>
             <NotificationBell />
           </div>
-          <Button onClick={handleSignOut} variant="ghost" size="sm" className="mt-2 w-full justify-start">
+          <Button
+            onClick={handleSignOut}
+            variant="ghost"
+            size="sm"
+            className="mt-2 w-full justify-start"
+          >
             <LogOut className="h-4 w-4 mr-2" /> Sign out
           </Button>
         </div>
@@ -370,7 +520,9 @@ function PortalShell() {
       <div className="flex-1 flex flex-col min-w-0">
         <header className="lg:hidden border-b border-border bg-surface/80 backdrop-blur px-4 h-14 flex items-center justify-between gap-2">
           <Logo />
-          <div className="flex-1 max-w-[180px]"><GlobalSearch /></div>
+          <div className="flex-1 max-w-[180px]">
+            <GlobalSearch />
+          </div>
           <div className="flex items-center gap-1">
             <NotificationBell />
             <Button onClick={handleSignOut} variant="ghost" size="sm" aria-label="Sign out">
@@ -380,18 +532,30 @@ function PortalShell() {
         </header>
         <div className="lg:hidden border-b border-border bg-surface/40 px-4 py-2 flex gap-1 overflow-x-auto">
           {visibleNav.map((n) => (
-            <Link key={n.to} to={n.to} className="px-3 py-1.5 rounded-md text-sm text-muted-foreground hover:text-foreground whitespace-nowrap" activeProps={{ className: "bg-surface-elevated text-foreground" }}>
+            <Link
+              key={n.to}
+              to={n.to}
+              className="px-3 py-1.5 rounded-md text-sm text-muted-foreground hover:text-foreground whitespace-nowrap"
+              activeProps={{ className: "bg-surface-elevated text-foreground" }}
+            >
               {n.label}
             </Link>
           ))}
           {myDivisions.map((d) => (
-            <Link key={d.slug} to={divisionPath(d.slug)} className="px-3 py-1.5 rounded-md text-sm text-muted-foreground hover:text-foreground whitespace-nowrap" activeProps={{ className: "bg-surface-elevated text-foreground" }}>
+            <Link
+              key={d.slug}
+              to={divisionPath(d.slug)}
+              className="px-3 py-1.5 rounded-md text-sm text-muted-foreground hover:text-foreground whitespace-nowrap"
+              activeProps={{ className: "bg-surface-elevated text-foreground" }}
+            >
               {d.short}
             </Link>
           ))}
         </div>
 
-        <main className="flex-1 p-6 sm:p-8 overflow-x-hidden"><Outlet /></main>
+        <main className="flex-1 p-6 sm:p-8 overflow-x-hidden">
+          <Outlet />
+        </main>
       </div>
     </div>
   );

@@ -44,7 +44,12 @@ function AutomationPage() {
   const createMut = useMutation({
     mutationFn: async () =>
       createAutomationRule({
-        data: { name, tech_project_id: projectId || undefined, trigger_type: triggerType, action_type: actionType },
+        data: {
+          name,
+          tech_project_id: projectId || undefined,
+          trigger_type: triggerType,
+          action_type: actionType,
+        },
         headers: await authHeaders(),
       }),
     onSuccess: () => {
@@ -156,40 +161,46 @@ function AutomationPage() {
               const projectTitle = (r as { tech_projects?: { title: string } | null }).tech_projects
                 ?.title;
               return (
-              <div
-                key={r.id}
-                className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-background p-4"
-              >
-                <div className="min-w-0">
-                  <div className="flex items-center gap-2">
-                    <Zap className="h-4 w-4 acc-text shrink-0" />
-                    <span className="font-medium text-sm">{r.name}</span>
+                <div
+                  key={r.id}
+                  className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-border bg-background p-4"
+                >
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2">
+                      <Zap className="h-4 w-4 acc-text shrink-0" />
+                      <span className="font-medium text-sm">{r.name}</span>
+                    </div>
+                    <div className="mt-1 text-xs text-muted-foreground">
+                      When{" "}
+                      <strong className="text-foreground">
+                        {r.trigger_type.replace(/_/g, " ")}
+                      </strong>{" "}
+                      →{" "}
+                      <strong className="text-foreground">
+                        {r.action_type.replace(/_/g, " ")}
+                      </strong>
+                      {projectTitle ? ` · ${projectTitle}` : " · all projects"}
+                    </div>
+                    <div className="mt-1 text-[11px] text-muted-foreground">
+                      Ran {r.run_count} time{r.run_count === 1 ? "" : "s"}
+                      {r.last_run_at ? ` · last ${new Date(r.last_run_at).toLocaleString()}` : ""}
+                    </div>
                   </div>
-                  <div className="mt-1 text-xs text-muted-foreground">
-                    When <strong className="text-foreground">{r.trigger_type.replace(/_/g, " ")}</strong>{" "}
-                    → <strong className="text-foreground">{r.action_type.replace(/_/g, " ")}</strong>
-                    {projectTitle ? ` · ${projectTitle}` : " · all projects"}
-                  </div>
-                  <div className="mt-1 text-[11px] text-muted-foreground">
-                    Ran {r.run_count} time{r.run_count === 1 ? "" : "s"}
-                    {r.last_run_at ? ` · last ${new Date(r.last_run_at).toLocaleString()}` : ""}
+                  <div className="flex items-center gap-3 shrink-0">
+                    <Switch
+                      checked={r.enabled}
+                      onCheckedChange={(v) => toggleMut.mutate({ id: r.id, enabled: v })}
+                    />
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      disabled={runMut.isPending}
+                      onClick={() => runMut.mutate(r.id)}
+                    >
+                      <Play className="mr-1.5 h-3.5 w-3.5" /> Run now
+                    </Button>
                   </div>
                 </div>
-                <div className="flex items-center gap-3 shrink-0">
-                  <Switch
-                    checked={r.enabled}
-                    onCheckedChange={(v) => toggleMut.mutate({ id: r.id, enabled: v })}
-                  />
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    disabled={runMut.isPending}
-                    onClick={() => runMut.mutate(r.id)}
-                  >
-                    <Play className="mr-1.5 h-3.5 w-3.5" /> Run now
-                  </Button>
-                </div>
-              </div>
               );
             })}
           </div>

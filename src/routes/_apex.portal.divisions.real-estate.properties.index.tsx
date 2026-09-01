@@ -77,7 +77,6 @@ function PropertiesPage() {
     );
   }
 
-
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -85,7 +84,6 @@ function PropertiesPage() {
           <h2 className="text-lg font-semibold">Property listings</h2>
           <p className="text-sm text-muted-foreground">
             {data?.total ?? 0} propert{(data?.total ?? 0) === 1 ? "y" : "ies"} in the portfolio.
-
           </p>
         </div>
         <Button asChild className="bg-gold text-gold-foreground hover:bg-gold/90">

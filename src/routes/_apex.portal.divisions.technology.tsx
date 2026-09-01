@@ -64,7 +64,8 @@ function TechnologyLayout() {
 
       <nav className="flex flex-wrap gap-1 rounded-xl border border-border bg-surface p-1.5">
         {TABS.map((tab) => {
-          const active = "exact" in tab && tab.exact ? pathname === tab.to : pathname.startsWith(tab.to);
+          const active =
+            "exact" in tab && tab.exact ? pathname === tab.to : pathname.startsWith(tab.to);
           return (
             <Link
               key={tab.to}
@@ -78,7 +79,7 @@ function TechnologyLayout() {
             </Link>
           );
         })}
-              {isDivisionAdmin && (
+        {isDivisionAdmin && (
           <Link
             to="/portal/divisions/technology/team"
             className={cn(

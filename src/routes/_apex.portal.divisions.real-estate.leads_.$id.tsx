@@ -40,8 +40,7 @@ function LeadDetailPage() {
 
   const [form, setForm] = useState<FormState | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [activityType, setActivityType] =
-    useState<(typeof ACTIVITY_TYPES)[number]>("call");
+  const [activityType, setActivityType] = useState<(typeof ACTIVITY_TYPES)[number]>("call");
   const [activityNote, setActivityNote] = useState("");
 
   useEffect(() => {
@@ -110,10 +109,10 @@ function LeadDetailPage() {
 
   function validate(values: FormState) {
     const next: Record<string, string> = {};
-    if (!values.full_name.trim()) next['full_name'] = "Name is required";
+    if (!values.full_name.trim()) next["full_name"] = "Name is required";
     if (values.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email))
-      next['email'] = "Enter a valid email";
-    if (!values.email && !values.phone) next['phone'] = "Add an email or a phone number";
+      next["email"] = "Enter a valid email";
+    if (!values.email && !values.phone) next["phone"] = "Add an email or a phone number";
     setErrors(next);
     return Object.keys(next).length === 0;
   }
@@ -147,10 +146,12 @@ function LeadDetailPage() {
             <Input
               id="full_name"
               value={form.full_name}
-              aria-invalid={!!errors['full_name']}
+              aria-invalid={!!errors["full_name"]}
               onChange={(e) => set("full_name", e.target.value)}
             />
-            {errors['full_name'] && <p className="text-xs text-destructive">{errors['full_name']}</p>}
+            {errors["full_name"] && (
+              <p className="text-xs text-destructive">{errors["full_name"]}</p>
+            )}
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="stage">Stage</Label>
@@ -173,20 +174,20 @@ function LeadDetailPage() {
               id="email"
               type="email"
               value={form.email}
-              aria-invalid={!!errors['email']}
+              aria-invalid={!!errors["email"]}
               onChange={(e) => set("email", e.target.value)}
             />
-            {errors['email'] && <p className="text-xs text-destructive">{errors['email']}</p>}
+            {errors["email"] && <p className="text-xs text-destructive">{errors["email"]}</p>}
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="phone">Phone</Label>
             <Input
               id="phone"
               value={form.phone}
-              aria-invalid={!!errors['phone']}
+              aria-invalid={!!errors["phone"]}
               onChange={(e) => set("phone", e.target.value)}
             />
-            {errors['phone'] && <p className="text-xs text-destructive">{errors['phone']}</p>}
+            {errors["phone"] && <p className="text-xs text-destructive">{errors["phone"]}</p>}
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="property">Interested property</Label>
@@ -299,7 +300,12 @@ function LeadDetailPage() {
         </ul>
       </DataPanel>
 
-      <RecordDocuments recordTable="leads" recordId={id} division="real-estate" title="Lead documents" />
+      <RecordDocuments
+        recordTable="leads"
+        recordId={id}
+        division="real-estate"
+        title="Lead documents"
+      />
     </div>
   );
 }

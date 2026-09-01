@@ -77,7 +77,7 @@ export const getOnboardingState = createServerFn({ method: "GET" })
     const completed = Boolean(prefs?.division_selection_completed) || hasDivisions;
     return {
       completed,
-      primary: prefs?.primary_division ?? (divisions?.[0]?.division_slug ?? null),
+      primary: prefs?.primary_division ?? divisions?.[0]?.division_slug ?? null,
       hasDivisions,
     };
   });

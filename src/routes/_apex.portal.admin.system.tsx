@@ -32,22 +32,22 @@ function SystemPage() {
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <KpiStat icon={Users} label="Total accounts" value={isLoading ? "—" : data?.totalUsers ?? 0} />
+        <KpiStat
+          icon={Users}
+          label="Total accounts"
+          value={isLoading ? "—" : (data?.totalUsers ?? 0)}
+        />
         <KpiStat
           icon={TrendingUp}
           label="Signups (7d)"
-          value={isLoading ? "—" : data?.signupsLast7 ?? 0}
+          value={isLoading ? "—" : (data?.signupsLast7 ?? 0)}
         />
         <KpiStat
           icon={TrendingUp}
           label="Signups (30d)"
-          value={isLoading ? "—" : data?.signupsLast30 ?? 0}
+          value={isLoading ? "—" : (data?.signupsLast30 ?? 0)}
         />
-        <KpiStat
-          icon={Layers}
-          label="Active divisions"
-          value={DIVISIONS.length}
-        />
+        <KpiStat icon={Layers} label="Active divisions" value={DIVISIONS.length} />
       </div>
 
       <DataPanel title="Users by division">
@@ -64,9 +64,7 @@ function SystemPage() {
                   <d.icon className="h-4 w-4 text-gold" />
                   {d.name}
                 </div>
-                <span className="text-lg font-semibold">
-                  {data?.usersByDivision[d.slug] ?? 0}
-                </span>
+                <span className="text-lg font-semibold">{data?.usersByDivision[d.slug] ?? 0}</span>
               </div>
             ))}
           </div>
@@ -83,8 +81,7 @@ function SystemPage() {
                 key={role}
                 className="rounded-full border border-border px-3 py-1 text-xs capitalize text-muted-foreground"
               >
-                {role}:{" "}
-                <span className="font-medium text-foreground">{count as number}</span>
+                {role}: <span className="font-medium text-foreground">{count as number}</span>
               </span>
             ))}
           </div>
@@ -117,7 +114,8 @@ function SystemPage() {
                         key={t}
                         className="rounded border border-border px-2 py-0.5 text-xs text-muted-foreground"
                       >
-                        {t}: <span className="text-foreground">{(c as number).toLocaleString()}</span>
+                        {t}:{" "}
+                        <span className="text-foreground">{(c as number).toLocaleString()}</span>
                       </span>
                     ))}
                   </div>

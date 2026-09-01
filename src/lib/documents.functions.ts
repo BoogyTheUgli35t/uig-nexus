@@ -7,7 +7,9 @@ export const listDocuments = createServerFn({ method: "GET" })
   .handler(async ({ context }) => {
     const { data, error } = await context.supabase
       .from("document_library")
-      .select("id, owner_id, division, title, description, file_path, file_type, size_bytes, created_at")
+      .select(
+        "id, owner_id, division, title, description, file_path, file_type, size_bytes, created_at",
+      )
       .order("created_at", { ascending: false });
     if (error) throw new Error(error.message);
     return data ?? [];

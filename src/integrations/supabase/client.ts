@@ -59,12 +59,14 @@ function createUnconfiguredClient(): unknown {
   return proxy;
 }
 
-
 function createSupabaseClient() {
   const { url, key } = readEnv();
 
   if (!url || !key) {
-    const missing = [...(!url ? ["SUPABASE_URL"] : []), ...(!key ? ["SUPABASE_PUBLISHABLE_KEY"] : [])];
+    const missing = [
+      ...(!url ? ["SUPABASE_URL"] : []),
+      ...(!key ? ["SUPABASE_PUBLISHABLE_KEY"] : []),
+    ];
     console.error(
       `[Supabase] Missing Supabase environment variable(s): ${missing.join(", ")}. Connect Supabase in Lovable Cloud.`,
     );

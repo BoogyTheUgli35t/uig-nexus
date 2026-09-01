@@ -441,7 +441,12 @@ export const STATUS_COMPONENT_STATUSES = [
   "partial_outage",
   "major_outage",
 ] as const;
-export const STATUS_INCIDENT_STATUSES = ["investigating", "identified", "monitoring", "resolved"] as const;
+export const STATUS_INCIDENT_STATUSES = [
+  "investigating",
+  "identified",
+  "monitoring",
+  "resolved",
+] as const;
 export const STATUS_INCIDENT_SEVERITIES = ["minor", "major", "critical"] as const;
 
 export const listStatusComponents = createServerFn({ method: "GET" })

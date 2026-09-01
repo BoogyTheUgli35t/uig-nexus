@@ -62,7 +62,12 @@ function TechnologyOverview() {
           value={stats?.openTasks ?? "—"}
           hint={stats?.overdueTasks ? `${stats.overdueTasks} overdue` : undefined}
         />
-        <KpiStat icon={Plug} label="Integrations" value={stats?.connectedIntegrations ?? "—"} hint="connected" />
+        <KpiStat
+          icon={Plug}
+          label="Integrations"
+          value={stats?.connectedIntegrations ?? "—"}
+          hint="connected"
+        />
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">
@@ -92,7 +97,11 @@ function TechnologyOverview() {
         {isLoading ? (
           <div className="text-sm text-muted-foreground">Loading…</div>
         ) : recent.length === 0 ? (
-          <EmptyState icon={FolderKanban} title="No projects yet" description="Start your first engagement." />
+          <EmptyState
+            icon={FolderKanban}
+            title="No projects yet"
+            description="Start your first engagement."
+          />
         ) : (
           <div className="divide-y divide-border">
             {recent.map((p) => (

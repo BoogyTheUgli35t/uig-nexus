@@ -56,7 +56,9 @@ export const UnitRowSchema = z.object({
 
 export const TenantRowSchema = z.object({
   full_name: z.string().trim().min(1, "full_name is required").max(150),
-  email: z.union([z.literal(""), z.string().trim().email("Enter a valid email").max(180)]).optional(),
+  email: z
+    .union([z.literal(""), z.string().trim().email("Enter a valid email").max(180)])
+    .optional(),
   phone: optionalText(40),
   property_title: optionalText(180),
   rent_amount: z.coerce.number().min(0).max(1_000_000_000).default(0),
@@ -67,7 +69,9 @@ export const TenantRowSchema = z.object({
 
 export const LeadRowSchema = z.object({
   full_name: z.string().trim().min(1, "full_name is required").max(150),
-  email: z.union([z.literal(""), z.string().trim().email("Enter a valid email").max(180)]).optional(),
+  email: z
+    .union([z.literal(""), z.string().trim().email("Enter a valid email").max(180)])
+    .optional(),
   phone: optionalText(40),
   stage: z.enum(LEAD_STAGES).default(LEAD_STAGES[0]),
   property_title: optionalText(180),

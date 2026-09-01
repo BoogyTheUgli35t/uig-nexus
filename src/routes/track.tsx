@@ -104,19 +104,27 @@ function TrackPage() {
                 <div>
                   <div className="font-mono text-sm text-muted-foreground">{result.reference}</div>
                   <div className="mt-1 flex items-center gap-1 text-lg font-semibold">
-                    <MapPin className="h-4 w-4" /> {result.pickup_city ?? "—"} → {result.dropoff_city ?? "—"}
+                    <MapPin className="h-4 w-4" /> {result.pickup_city ?? "—"} →{" "}
+                    {result.dropoff_city ?? "—"}
                   </div>
                 </div>
                 <StatusBadge status={result.status} />
               </div>
               <div className="mt-4 flex flex-wrap gap-4 text-sm text-muted-foreground">
                 {result.eta && <span>ETA {result.eta}</span>}
-                {result.priority !== "standard" && <span className="capitalize">{result.priority} priority</span>}
-                {result.delivered_at && <span>Delivered {new Date(result.delivered_at).toLocaleString()}</span>}
+                {result.priority !== "standard" && (
+                  <span className="capitalize">{result.priority} priority</span>
+                )}
+                {result.delivered_at && (
+                  <span>Delivered {new Date(result.delivered_at).toLocaleString()}</span>
+                )}
               </div>
               {result.pod_photo_url && (
                 <img
-                  src={supabase.storage.from("pod-photos").getPublicUrl(result.pod_photo_url).data.publicUrl}
+                  src={
+                    supabase.storage.from("pod-photos").getPublicUrl(result.pod_photo_url).data
+                      .publicUrl
+                  }
                   alt="Delivery proof"
                   className="mt-4 h-40 w-40 rounded-lg border border-border object-cover"
                 />

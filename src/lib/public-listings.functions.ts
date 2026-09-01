@@ -106,7 +106,8 @@ export const getListingsByLocation = createServerFn({ method: "GET" })
 
     const coverByProperty = new Map<string, string>();
     for (const img of images ?? []) {
-      if (!coverByProperty.has(img.property_id)) coverByProperty.set(img.property_id, img.storage_path);
+      if (!coverByProperty.has(img.property_id))
+        coverByProperty.set(img.property_id, img.storage_path);
     }
 
     return (properties ?? []).map((p) => ({
@@ -161,6 +162,9 @@ export const getListingDetail = createServerFn({ method: "GET" })
     return {
       property,
       images: images ?? [],
-      similar: (similar ?? []).map((s) => ({ ...s, coverImagePath: similarCover.get(s.id) ?? null })),
+      similar: (similar ?? []).map((s) => ({
+        ...s,
+        coverImagePath: similarCover.get(s.id) ?? null,
+      })),
     };
   });

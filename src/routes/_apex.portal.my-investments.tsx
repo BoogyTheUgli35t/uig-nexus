@@ -1,14 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import {
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  CartesianGrid,
-} from "recharts";
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
 import { TrendingUp, Wallet, PieChart, Percent } from "lucide-react";
 import { getMyInvestorProfile } from "@/lib/realestate.functions";
 import { authHeaders } from "@/lib/auth-headers";
@@ -35,7 +27,8 @@ function MyInvestmentsPage() {
   });
 
   if (error) return <div className="text-sm text-destructive">{(error as Error).message}</div>;
-  if (isLoading) return <div className="text-sm text-muted-foreground">Loading your portfolio…</div>;
+  if (isLoading)
+    return <div className="text-sm text-muted-foreground">Loading your portfolio…</div>;
 
   if (!data) {
     return (
@@ -126,8 +119,8 @@ function MyInvestmentsPage() {
         </dl>
         <p className="mt-4 rounded-lg border border-dashed border-border p-3 text-xs text-muted-foreground">
           Figures are maintained by your UIG relationship manager and reflect the last recorded
-          valuation — they are not a live market price, and nothing here is investment advice.
-          Raise any discrepancy with your manager.
+          valuation — they are not a live market price, and nothing here is investment advice. Raise
+          any discrepancy with your manager.
         </p>
       </DataPanel>
     </div>

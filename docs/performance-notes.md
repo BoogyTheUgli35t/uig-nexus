@@ -21,13 +21,13 @@ carries `f_auto,q_auto`, so browsers get AVIF/WebP where supported.
 
 Most division workspace loaders select entire tables with no `.limit()`:
 
-| Module | Selects | Bounded |
-|---|---|---|
-| `realestate.functions.ts` | 21 | 0 |
-| `logistics.functions.ts` | 13 | 0 |
-| `innovation.functions.ts` | 12 | 0 |
-| `agritech.functions.ts` | 13 | 3 |
-| `portal.functions.ts` | 30 | 5 |
+| Module                    | Selects | Bounded |
+| ------------------------- | ------- | ------- |
+| `realestate.functions.ts` | 21      | 0       |
+| `logistics.functions.ts`  | 13      | 0       |
+| `innovation.functions.ts` | 12      | 0       |
+| `agritech.functions.ts`   | 13      | 3       |
+| `portal.functions.ts`     | 30      | 5       |
 
 At today's data volumes (tens to low hundreds of rows) this is not a user-visible
 problem — which is why it hasn't been "fixed" yet.

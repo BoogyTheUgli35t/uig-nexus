@@ -58,7 +58,10 @@ function AssistantPage() {
 
   const predMut = useMutation({
     mutationFn: async () =>
-      runPrediction({ data: { model_id: predModelId, prompt: predPrompt }, headers: await authHeaders() }),
+      runPrediction({
+        data: { model_id: predModelId, prompt: predPrompt },
+        headers: await authHeaders(),
+      }),
     onSuccess: (r) => {
       setPredResult(r);
       setPredPrompt("");
@@ -138,7 +141,11 @@ function AssistantPage() {
             onChange={(e) => setChatInput(e.target.value)}
             maxLength={2000}
           />
-          <Button type="submit" disabled={!chatInput.trim() || chatMut.isPending} className="shrink-0">
+          <Button
+            type="submit"
+            disabled={!chatInput.trim() || chatMut.isPending}
+            className="shrink-0"
+          >
             <Sparkles className="mr-2 h-4 w-4" /> Send
           </Button>
         </form>
@@ -159,7 +166,10 @@ function AssistantPage() {
           >
             <option value="">General model</option>
             {(data?.models ?? [])
-              .filter((m) => m.status === "deployed" || m.status === "monitoring" || m.status === "trained")
+              .filter(
+                (m) =>
+                  m.status === "deployed" || m.status === "monitoring" || m.status === "trained",
+              )
               .map((m) => (
                 <option key={m.id} value={m.id}>
                   {m.name} ({m.target_division})

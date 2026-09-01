@@ -43,12 +43,11 @@ function IdeasPage() {
   const invalidate = () => qc.invalidateQueries({ queryKey: ["innovation-workspace"] });
 
   const voteMut = useMutation({
-    mutationFn: async (idea_id: string) => toggleIdeaVote({ data: { idea_id }, headers: await authHeaders() }),
+    mutationFn: async (idea_id: string) =>
+      toggleIdeaVote({ data: { idea_id }, headers: await authHeaders() }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["innovation-idea-votes"] }),
     onError: (e: Error) => toast.error(e.message),
   });
-
-
 
   const ideaMut = useMutation({
     mutationFn: async () =>
@@ -122,7 +121,11 @@ function IdeasPage() {
               onChange={(e) => setIdeaTags(e.target.value)}
               maxLength={200}
             />
-            <Button type="submit" disabled={!ideaTitle.trim() || ideaMut.isPending} className="shrink-0">
+            <Button
+              type="submit"
+              disabled={!ideaTitle.trim() || ideaMut.isPending}
+              className="shrink-0"
+            >
               <Plus className="mr-2 h-4 w-4" /> Submit
             </Button>
           </div>
@@ -167,67 +170,76 @@ function IdeasPage() {
         {isLoading ? (
           <div className="text-sm text-muted-foreground">Loading ideas…</div>
         ) : ideas.length === 0 ? (
-          <EmptyState icon={Lightbulb} title="No ideas here yet" description="Pitch the first one above." />
+          <EmptyState
+            icon={Lightbulb}
+            title="No ideas here yet"
+            description="Pitch the first one above."
+          />
         ) : (
           <div className="space-y-3">
             {ideas.map((idea) => {
               const tags = Array.isArray(idea.tags) ? (idea.tags as string[]) : [];
               const voted = hasVoted(idea.id);
               return (
-              <div key={idea.id} className="rounded-lg border border-border bg-background p-4">
-                <div className="flex flex-wrap items-center justify-between gap-2">
-                  <div className="flex items-center gap-2.5">
-                    <button
-                      type="button"
-                      onClick={() => voteMut.mutate(idea.id)}
-                      disabled={voteMut.isPending}
-                      aria-pressed={voted}
-                      aria-label={`${voted ? "Remove upvote from" : "Upvote"} ${idea.title}. ${voteCount(idea.id)} upvotes.`}
-                      className={`flex w-11 shrink-0 flex-col items-center rounded-md border px-1 py-1 text-[11px] transition ${
-                        voted
-                          ? "border-transparent acc-bg-soft acc-text"
-                          : "border-border text-muted-foreground hover:text-foreground"
-                      }`}
-                    >
-                      <ChevronUp className="h-3.5 w-3.5" />
-                      <span className="font-medium tabular-nums">{voteCount(idea.id)}</span>
-                    </button>
-                    <div className="text-sm font-medium">{idea.title}</div>
-                  </div>
+                <div key={idea.id} className="rounded-lg border border-border bg-background p-4">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex items-center gap-2.5">
+                      <button
+                        type="button"
+                        onClick={() => voteMut.mutate(idea.id)}
+                        disabled={voteMut.isPending}
+                        aria-pressed={voted}
+                        aria-label={`${voted ? "Remove upvote from" : "Upvote"} ${idea.title}. ${voteCount(idea.id)} upvotes.`}
+                        className={`flex w-11 shrink-0 flex-col items-center rounded-md border px-1 py-1 text-[11px] transition ${
+                          voted
+                            ? "border-transparent acc-bg-soft acc-text"
+                            : "border-border text-muted-foreground hover:text-foreground"
+                        }`}
+                      >
+                        <ChevronUp className="h-3.5 w-3.5" />
+                        <span className="font-medium tabular-nums">{voteCount(idea.id)}</span>
+                      </button>
+                      <div className="text-sm font-medium">{idea.title}</div>
+                    </div>
 
-                  <div className="flex items-center gap-2">
-                    <StatusBadge status={idea.status ?? "concept"} />
-                    <select
-                      value={idea.status ?? "concept"}
-                      onChange={(e) =>
-                        statusMut.mutate({
-                          id: idea.id,
-                          status: e.target.value as (typeof IDEA_STATUSES)[number],
-                        })
-                      }
-                      className="h-7 rounded-md border border-border bg-background px-1.5 text-[11px] capitalize"
-                    >
-                      {IDEA_STATUSES.map((s) => (
-                        <option key={s} value={s}>
-                          {s}
-                        </option>
+                    <div className="flex items-center gap-2">
+                      <StatusBadge status={idea.status ?? "concept"} />
+                      <select
+                        value={idea.status ?? "concept"}
+                        onChange={(e) =>
+                          statusMut.mutate({
+                            id: idea.id,
+                            status: e.target.value as (typeof IDEA_STATUSES)[number],
+                          })
+                        }
+                        className="h-7 rounded-md border border-border bg-background px-1.5 text-[11px] capitalize"
+                      >
+                        {IDEA_STATUSES.map((s) => (
+                          <option key={s} value={s}>
+                            {s}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                  {idea.description && (
+                    <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed">
+                      {idea.description}
+                    </p>
+                  )}
+                  {tags.length > 0 && (
+                    <div className="mt-2 flex flex-wrap gap-1.5">
+                      {tags.map((t) => (
+                        <span
+                          key={t}
+                          className="rounded-full acc-bg-soft acc-text px-2 py-0.5 text-[10px]"
+                        >
+                          {t}
+                        </span>
                       ))}
-                    </select>
-                  </div>
+                    </div>
+                  )}
                 </div>
-                {idea.description && (
-                  <p className="mt-1.5 text-xs text-muted-foreground leading-relaxed">{idea.description}</p>
-                )}
-                {tags.length > 0 && (
-                  <div className="mt-2 flex flex-wrap gap-1.5">
-                    {tags.map((t) => (
-                      <span key={t} className="rounded-full acc-bg-soft acc-text px-2 py-0.5 text-[10px]">
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </div>
               );
             })}
           </div>

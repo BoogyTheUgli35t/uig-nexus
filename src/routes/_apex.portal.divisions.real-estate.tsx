@@ -1,5 +1,19 @@
 import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
-import { ArrowLeft, Lock, LayoutGrid, Building2, DoorOpen, Users, TrendingUp, Kanban, BarChart3, Settings, Wrench, Users2, Upload } from "lucide-react";
+import {
+  ArrowLeft,
+  Lock,
+  LayoutGrid,
+  Building2,
+  DoorOpen,
+  Users,
+  TrendingUp,
+  Kanban,
+  BarChart3,
+  Settings,
+  Wrench,
+  Users2,
+  Upload,
+} from "lucide-react";
 import { getDivision } from "@/lib/divisions";
 import { useDivisionAccess, useIsDivisionAdmin } from "@/hooks/use-division-access";
 import { HeroBanner, EmptyState } from "@/components/portal/blocks";
@@ -71,7 +85,8 @@ function RealEstateLayout() {
 
       <nav className="flex flex-wrap gap-1 rounded-xl border border-border bg-surface p-1.5">
         {TABS.map((tab) => {
-          const active = "exact" in tab && tab.exact ? pathname === tab.to : pathname.startsWith(tab.to);
+          const active =
+            "exact" in tab && tab.exact ? pathname === tab.to : pathname.startsWith(tab.to);
           return (
             <Link
               key={tab.to}
@@ -85,7 +100,7 @@ function RealEstateLayout() {
             </Link>
           );
         })}
-              {isDivisionAdmin && (
+        {isDivisionAdmin && (
           <Link
             to="/portal/divisions/real-estate/team"
             className={cn(

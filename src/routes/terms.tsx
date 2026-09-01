@@ -8,7 +8,8 @@ export const Route = createFileRoute("/terms")({
       { title: "Terms of Service — UIG" },
       {
         name: "description",
-        content: "The terms that govern your use of Unified Innovations Group products and the Apex Portal.",
+        content:
+          "The terms that govern your use of Unified Innovations Group products and the Apex Portal.",
       },
       { name: "robots", content: "index, follow" },
     ],
@@ -21,7 +22,11 @@ const LAST_UPDATED = "July 2026";
 function TermsPage() {
   return (
     <SiteLayout>
-      <PageHero eyebrow="Legal" title="Terms of Service" subtitle={`Last updated: ${LAST_UPDATED}`} />
+      <PageHero
+        eyebrow="Legal"
+        title="Terms of Service"
+        subtitle={`Last updated: ${LAST_UPDATED}`}
+      />
       <Section>
         <div className="mx-auto max-w-3xl space-y-10 text-muted-foreground leading-relaxed">
           <div>
@@ -68,8 +73,8 @@ function TermsPage() {
             <p className="mt-3">
               Some UIG products use AI models to generate suggestions, summaries, checklists or
               insights (for example, the Intelligence division's assistant and Innovation Lab's MVP
-              checklist generator). These outputs are provided for informational purposes and may
-              be inaccurate or incomplete — you're responsible for reviewing and validating any
+              checklist generator). These outputs are provided for informational purposes and may be
+              inaccurate or incomplete — you're responsible for reviewing and validating any
               AI-generated content before relying on it.
             </p>
           </div>

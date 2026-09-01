@@ -2,9 +2,30 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { ArrowLeft, MapPin, MapPinned, Image as ImageIcon, Trash2, AlertTriangle, Camera } from "lucide-react";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
-import { getFieldDetail, addFieldImage, removeFieldImage, IMAGE_SOURCES } from "@/lib/agritech.functions";
+import {
+  ArrowLeft,
+  MapPin,
+  MapPinned,
+  Image as ImageIcon,
+  Trash2,
+  AlertTriangle,
+  Camera,
+} from "lucide-react";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+import {
+  getFieldDetail,
+  addFieldImage,
+  removeFieldImage,
+  IMAGE_SOURCES,
+} from "@/lib/agritech.functions";
 import { authHeaders } from "@/lib/auth-headers";
 import { supabase } from "@/integrations/supabase/client";
 import { DataPanel, EmptyState, StatusBadge } from "@/components/portal/blocks";
@@ -118,8 +139,17 @@ function FieldDetailPage() {
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={chartData} margin={{ top: 8, right: 8, left: -16, bottom: 0 }}>
                     <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
-                    <XAxis dataKey="time" tick={{ fontSize: 11, fill: "var(--muted-foreground)" }} axisLine={false} tickLine={false} />
-                    <YAxis tick={{ fontSize: 11, fill: "var(--muted-foreground)" }} axisLine={false} tickLine={false} />
+                    <XAxis
+                      dataKey="time"
+                      tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
+                      axisLine={false}
+                      tickLine={false}
+                    />
+                    <YAxis
+                      tick={{ fontSize: 11, fill: "var(--muted-foreground)" }}
+                      axisLine={false}
+                      tickLine={false}
+                    />
                     <Tooltip
                       contentStyle={{
                         background: "var(--surface)",
@@ -128,8 +158,20 @@ function FieldDetailPage() {
                         fontSize: 12,
                       }}
                     />
-                    <Line type="monotone" dataKey="moisture" stroke="var(--acc, var(--gold))" strokeWidth={2} dot={false} />
-                    <Line type="monotone" dataKey="temp" stroke="var(--muted-foreground)" strokeWidth={2} dot={false} />
+                    <Line
+                      type="monotone"
+                      dataKey="moisture"
+                      stroke="var(--acc, var(--gold))"
+                      strokeWidth={2}
+                      dot={false}
+                    />
+                    <Line
+                      type="monotone"
+                      dataKey="temp"
+                      stroke="var(--muted-foreground)"
+                      strokeWidth={2}
+                      dot={false}
+                    />
                   </LineChart>
                 </ResponsiveContainer>
               </div>
@@ -149,7 +191,14 @@ function FieldDetailPage() {
                   </option>
                 ))}
               </select>
-              <Input type="file" accept="image/*" multiple onChange={onUpload} disabled={uploading} className="max-w-xs" />
+              <Input
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={onUpload}
+                disabled={uploading}
+                className="max-w-xs"
+              />
               {uploading && <span className="text-xs text-muted-foreground">Uploading…</span>}
             </div>
 
@@ -160,10 +209,19 @@ function FieldDetailPage() {
             ) : (
               <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
                 {data.images.map((img) => (
-                  <div key={img.id} className="group relative overflow-hidden rounded-lg border border-border">
-                    <img src={imgUrl(img.storage_path)} alt={img.caption ?? ""} className="h-28 w-full object-cover" />
+                  <div
+                    key={img.id}
+                    className="group relative overflow-hidden rounded-lg border border-border"
+                  >
+                    <img
+                      src={imgUrl(img.storage_path)}
+                      alt={img.caption ?? ""}
+                      className="h-28 w-full object-cover"
+                    />
                     <div className="absolute left-1.5 top-1.5 rounded bg-background/80 px-1.5 py-0.5 text-[10px] capitalize">
-                      {img.source === "drone" ? <Camera className="mr-0.5 inline h-2.5 w-2.5" /> : null}
+                      {img.source === "drone" ? (
+                        <Camera className="mr-0.5 inline h-2.5 w-2.5" />
+                      ) : null}
                       {img.source}
                     </div>
                     <button
@@ -205,4 +263,3 @@ function FieldDetailPage() {
     </div>
   );
 }
-

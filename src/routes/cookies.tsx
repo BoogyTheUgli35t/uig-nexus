@@ -6,7 +6,10 @@ export const Route = createFileRoute("/cookies")({
   head: () => ({
     meta: [
       { title: "Cookie Policy — UIG" },
-      { name: "description", content: "How UIG uses cookies across our websites and the Apex Portal." },
+      {
+        name: "description",
+        content: "How UIG uses cookies across our websites and the Apex Portal.",
+      },
       { name: "robots", content: "index, follow" },
     ],
   }),
@@ -40,15 +43,15 @@ function CookiesPage() {
       <Section>
         <div className="mx-auto max-w-3xl space-y-8 text-muted-foreground leading-relaxed">
           <p>
-            This policy explains how Unified Innovations Group uses cookies and similar
-            technologies on our websites and in the Apex Portal.
+            This policy explains how Unified Innovations Group uses cookies and similar technologies
+            on our websites and in the Apex Portal.
           </p>
 
           <div>
             <h2 className="text-xl font-semibold text-foreground">What are cookies?</h2>
             <p className="mt-3">
-              Cookies are small text files stored on your device that let us recognize your
-              browser, keep you signed in, and remember your preferences between visits.
+              Cookies are small text files stored on your device that let us recognize your browser,
+              keep you signed in, and remember your preferences between visits.
             </p>
           </div>
 

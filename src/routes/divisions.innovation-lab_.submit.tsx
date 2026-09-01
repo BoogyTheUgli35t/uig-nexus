@@ -92,8 +92,8 @@ function SubmitIdeaPage() {
               <CheckCircle2 className="mx-auto h-10 w-10 text-gold" />
               <h2 className="mt-4 text-xl font-bold">Idea submitted.</h2>
               <p className="mt-2 text-muted-foreground">
-                Thanks, {fullName.split(" ")[0] || "there"} — the Innovation Lab team will review
-                "{ideaTitle}" and reach out at {email} if it's a fit.
+                Thanks, {fullName.split(" ")[0] || "there"} — the Innovation Lab team will review "
+                {ideaTitle}" and reach out at {email} if it's a fit.
               </p>
               <Link
                 to="/divisions/innovation-lab"
@@ -140,7 +140,11 @@ function SubmitIdeaPage() {
 
               <label className="block">
                 <span className="text-xs text-muted-foreground">Phone (optional)</span>
-                <Input className="mt-1.5" value={phone} onChange={(e) => setPhone(e.target.value)} />
+                <Input
+                  className="mt-1.5"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                />
               </label>
 
               {/* Honeypot — display:none hides it from real visitors while still
@@ -201,7 +205,9 @@ function SubmitIdeaPage() {
 
               {mutation.isError && (
                 <p className="text-sm text-destructive">
-                  {mutation.error instanceof Error ? mutation.error.message : "Something went wrong — try again."}
+                  {mutation.error instanceof Error
+                    ? mutation.error.message
+                    : "Something went wrong — try again."}
                 </p>
               )}
 

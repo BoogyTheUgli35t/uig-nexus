@@ -21,11 +21,7 @@ const LAST_UPDATED = "July 2026";
 function PrivacyPage() {
   return (
     <SiteLayout>
-      <PageHero
-        eyebrow="Legal"
-        title="Privacy Policy"
-        subtitle={`Last updated: ${LAST_UPDATED}`}
-      />
+      <PageHero eyebrow="Legal" title="Privacy Policy" subtitle={`Last updated: ${LAST_UPDATED}`} />
       <Section>
         <div className="mx-auto max-w-3xl space-y-10 text-muted-foreground leading-relaxed">
           <div>
@@ -65,8 +61,8 @@ function PrivacyPage() {
             <p className="mt-3">
               Where required by law, we process your data on the basis of your consent, the
               necessity of processing to perform a contract with you (e.g. operating your portal
-              account), our legitimate interests in running and securing our services, or
-              compliance with a legal obligation.
+              account), our legitimate interests in running and securing our services, or compliance
+              with a legal obligation.
             </p>
           </div>
 

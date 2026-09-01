@@ -65,7 +65,9 @@ export const getMyTenancy = createServerFn({ method: "GET" })
         : Promise.resolve({ data: null }),
       supabase
         .from("maintenance_requests")
-        .select("id, title, description, category, priority, status, staff_notes, created_at, resolved_at")
+        .select(
+          "id, title, description, category, priority, status, staff_notes, created_at, resolved_at",
+        )
         .eq("tenant_id", tenant.id)
         .order("created_at", { ascending: false }),
     ]);
@@ -74,8 +76,7 @@ export const getMyTenancy = createServerFn({ method: "GET" })
     // dates shown next to it.
     const now = Date.now();
     const endMs = tenant.lease_end ? new Date(tenant.lease_end).getTime() : null;
-    const daysRemaining =
-      endMs === null ? null : Math.ceil((endMs - now) / (1000 * 60 * 60 * 24));
+    const daysRemaining = endMs === null ? null : Math.ceil((endMs - now) / (1000 * 60 * 60 * 24));
 
     const openRequests = (requests ?? []).filter(
       (r) => !["resolved", "closed"].includes(r.status),

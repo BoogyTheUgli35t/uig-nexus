@@ -24,7 +24,9 @@ const ROLE_OPTIONS = ["client", "investor", "farmer", "driver", "staff", "admin"
 
 function AccessRequestsPage() {
   const qc = useQueryClient();
-  const [selections, setSelections] = useState<Record<string, { role: string; divisions: string[] }>>({});
+  const [selections, setSelections] = useState<
+    Record<string, { role: string; divisions: string[] }>
+  >({});
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["access-requests"],
@@ -37,7 +39,11 @@ function AccessRequestsPage() {
     mutationFn: async (id: string) => {
       const sel = selections[id] ?? { role: "client", divisions: [] };
       return approveAccessRequest({
-        data: { id, role: sel.role as (typeof ROLE_OPTIONS)[number], division_slugs: sel.divisions },
+        data: {
+          id,
+          role: sel.role as (typeof ROLE_OPTIONS)[number],
+          division_slugs: sel.divisions,
+        },
         headers: await authHeaders(),
       });
     },
@@ -53,7 +59,8 @@ function AccessRequestsPage() {
   });
 
   const rejectMut = useMutation({
-    mutationFn: async (id: string) => rejectAccessRequest({ data: { id }, headers: await authHeaders() }),
+    mutationFn: async (id: string) =>
+      rejectAccessRequest({ data: { id }, headers: await authHeaders() }),
     onSuccess: () => {
       toast.success("Request declined");
       invalidate();
@@ -78,7 +85,10 @@ function AccessRequestsPage() {
       const has = cur.divisions.includes(slug);
       return {
         ...s,
-        [id]: { ...cur, divisions: has ? cur.divisions.filter((d) => d !== slug) : [...cur.divisions, slug] },
+        [id]: {
+          ...cur,
+          divisions: has ? cur.divisions.filter((d) => d !== slug) : [...cur.divisions, slug],
+        },
       };
     });
   }
@@ -159,7 +169,11 @@ function AccessRequestsPage() {
                       >
                         <X className="mr-1.5 h-3.5 w-3.5" /> Decline
                       </Button>
-                      <Button size="sm" disabled={approveMut.isPending} onClick={() => approveMut.mutate(r.id)}>
+                      <Button
+                        size="sm"
+                        disabled={approveMut.isPending}
+                        onClick={() => approveMut.mutate(r.id)}
+                      >
                         <Check className="mr-1.5 h-3.5 w-3.5" /> Approve
                       </Button>
                     </div>

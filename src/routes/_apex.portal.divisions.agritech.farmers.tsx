@@ -50,7 +50,8 @@ function FarmersPage() {
         <div>
           <h2 className="text-lg font-semibold">Farmers</h2>
           <p className="text-sm text-muted-foreground">
-            {data?.farmers.length ?? 0} farmer{(data?.farmers.length ?? 0) === 1 ? "" : "s"} on file.
+            {data?.farmers.length ?? 0} farmer{(data?.farmers.length ?? 0) === 1 ? "" : "s"} on
+            file.
           </p>
         </div>
         <Button onClick={() => setWizardOpen(true)}>
@@ -66,7 +67,10 @@ function FarmersPage() {
         <DataPanel title="Directory">
           <div className="divide-y divide-border">
             {(data?.farmers ?? []).map((f) => (
-              <div key={f.id} className="flex flex-wrap items-center justify-between gap-3 py-3 first:pt-0 last:pb-0">
+              <div
+                key={f.id}
+                className="flex flex-wrap items-center justify-between gap-3 py-3 first:pt-0 last:pb-0"
+              >
                 <div className="min-w-0">
                   <div className="text-sm font-medium">{f.full_name}</div>
                   <div className="mt-1 flex flex-wrap gap-3 text-xs text-muted-foreground">
@@ -84,7 +88,9 @@ function FarmersPage() {
                   </div>
                 </div>
                 <div className="shrink-0 text-right">
-                  <div className="text-sm">{f.hectares} ha · {f.primary_crop ?? "—"}</div>
+                  <div className="text-sm">
+                    {f.hectares} ha · {f.primary_crop ?? "—"}
+                  </div>
                   <div className="mt-1">
                     <StatusBadge status={f.status} />
                   </div>
@@ -105,7 +111,9 @@ function FarmersPage() {
                           size="sm"
                           className="h-7 text-xs"
                           disabled={!linkEmail.trim() || linkMut.isPending}
-                          onClick={() => linkMut.mutate({ farmer_id: f.id, email: linkEmail.trim() })}
+                          onClick={() =>
+                            linkMut.mutate({ farmer_id: f.id, email: linkEmail.trim() })
+                          }
                         >
                           Link
                         </Button>
@@ -198,7 +206,11 @@ function OnboardWizard({ onClose }: { onClose: () => void }) {
             </div>
             <div className="space-y-1.5">
               <Label className="text-xs">Location (state)</Label>
-              <Input value={location} onChange={(e) => setLocation(e.target.value)} maxLength={150} />
+              <Input
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                maxLength={150}
+              />
             </div>
           </div>
         )}
@@ -207,7 +219,11 @@ function OnboardWizard({ onClose }: { onClose: () => void }) {
           <div className="space-y-3">
             <div className="space-y-1.5">
               <Label className="text-xs">Cooperative</Label>
-              <Input value={cooperative} onChange={(e) => setCooperative(e.target.value)} maxLength={150} />
+              <Input
+                value={cooperative}
+                onChange={(e) => setCooperative(e.target.value)}
+                maxLength={150}
+              />
             </div>
             <div className="space-y-1.5">
               <Label className="text-xs">Primary crop</Label>
@@ -215,7 +231,12 @@ function OnboardWizard({ onClose }: { onClose: () => void }) {
             </div>
             <div className="space-y-1.5">
               <Label className="text-xs">Total hectares</Label>
-              <Input type="number" min={0} value={hectares} onChange={(e) => setHectares(e.target.value)} />
+              <Input
+                type="number"
+                min={0}
+                value={hectares}
+                onChange={(e) => setHectares(e.target.value)}
+              />
             </div>
           </div>
         )}
@@ -251,7 +272,11 @@ function OnboardWizard({ onClose }: { onClose: () => void }) {
               Next <ChevronRight className="ml-1.5 h-4 w-4" />
             </Button>
           ) : (
-            <Button type="button" disabled={onboardMut.isPending} onClick={() => onboardMut.mutate()}>
+            <Button
+              type="button"
+              disabled={onboardMut.isPending}
+              onClick={() => onboardMut.mutate()}
+            >
               <Check className="mr-1.5 h-4 w-4" /> Finish
             </Button>
           )}

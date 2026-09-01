@@ -41,9 +41,7 @@ export function NotificationBell() {
     let cancelled = false;
     // Unique topic per mount: a shared topic name is reused by supabase-js,
     // so a second mount would try to add callbacks after subscribe().
-    const channel = supabase.channel(
-      `notifications:${Math.random().toString(36).slice(2)}`,
-    );
+    const channel = supabase.channel(`notifications:${Math.random().toString(36).slice(2)}`);
 
     const init = async () => {
       await fetchNotifications();
@@ -76,7 +74,6 @@ export function NotificationBell() {
       supabase.removeChannel(channel);
     };
   }, []);
-
 
   const unreadCount = notifications.filter((n) => !n.read_at).length;
 

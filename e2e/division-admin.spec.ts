@@ -27,8 +27,14 @@ test.describe("Division admin", () => {
     await page.getByRole("button", { name: /sign in/i }).click();
     await expect(page).toHaveURL(/\/portal\/(dashboard|choose-division)/, { timeout: 20_000 });
     if (page.url().includes("choose-division")) {
-      await page.getByRole("button", { name: /real estate/i }).first().click();
-      await page.getByRole("button", { name: /continue|finish|go to/i }).first().click();
+      await page
+        .getByRole("button", { name: /real estate/i })
+        .first()
+        .click();
+      await page
+        .getByRole("button", { name: /continue|finish|go to/i })
+        .first()
+        .click();
     }
   }
 
@@ -39,18 +45,17 @@ test.describe("Division admin", () => {
   for (const slug of DIVISIONS) {
     test(`team route loads for ${slug}`, async ({ page }) => {
       await page.goto(`/portal/divisions/${slug}/team`);
-      await expect(
-        page
-          .getByText(/Add a teammate|Division admins only/i)
-          .first(),
-      ).toBeVisible({ timeout: 20_000 });
+      await expect(page.getByText(/Add a teammate|Division admins only/i).first()).toBeVisible({
+        timeout: 20_000,
+      });
     });
   }
 
   test("team panel shows members, requests and activity", async ({ page }) => {
     await page.goto("/portal/divisions/real-estate/team");
     const gate = page.getByText(/Division admins only/i);
-    if (await gate.isVisible().catch(() => false)) test.skip(true, "Account is not a division admin");
+    if (await gate.isVisible().catch(() => false))
+      test.skip(true, "Account is not a division admin");
 
     await expect(page.getByText(/^Members/i).first()).toBeVisible({ timeout: 20_000 });
     await expect(page.getByText(/Pending access requests/i)).toBeVisible();
@@ -76,7 +81,10 @@ test.describe("Division admin", () => {
     await expect(page).toHaveURL(/\/edit$/, { timeout: 20_000 });
     const title = page.getByLabel(/title/i).first();
     await title.fill(`E2E edited ${Date.now()}`);
-    await page.getByRole("button", { name: /save|update/i }).first().click();
+    await page
+      .getByRole("button", { name: /save|update/i })
+      .first()
+      .click();
     await expect(page.getByText(/updated/i).first()).toBeVisible({ timeout: 20_000 });
   });
 

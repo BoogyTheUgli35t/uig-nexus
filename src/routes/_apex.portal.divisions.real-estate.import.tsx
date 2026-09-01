@@ -19,10 +19,7 @@ import { Textarea } from "@/components/ui/textarea";
 
 export const Route = createFileRoute("/_apex/portal/divisions/real-estate/import")({
   head: () => ({
-    meta: [
-      { title: "Bulk import — UIG Real Estate" },
-      { name: "robots", content: "noindex" },
-    ],
+    meta: [{ title: "Bulk import — UIG Real Estate" }, { name: "robots", content: "noindex" }],
   }),
   component: ImportPage,
 });
@@ -128,7 +125,9 @@ function ImportPage() {
       </DataPanel>
 
       {preview && (
-        <DataPanel title={`Preview — ${preview.validCount} valid, ${preview.errorCount} with errors`}>
+        <DataPanel
+          title={`Preview — ${preview.validCount} valid, ${preview.errorCount} with errors`}
+        >
           <div className="space-y-4">
             {preview.missingRequired.length > 0 && (
               <p className="flex items-center gap-2 text-sm text-destructive">
@@ -147,8 +146,12 @@ function ImportPage() {
                 <caption className="sr-only">Rows parsed from the uploaded CSV</caption>
                 <thead className="bg-surface">
                   <tr>
-                    <th scope="col" className="px-3 py-2">Line</th>
-                    <th scope="col" className="px-3 py-2">Status</th>
+                    <th scope="col" className="px-3 py-2">
+                      Line
+                    </th>
+                    <th scope="col" className="px-3 py-2">
+                      Status
+                    </th>
                     {preview.headers
                       .filter((h) => h)
                       .map((h) => (

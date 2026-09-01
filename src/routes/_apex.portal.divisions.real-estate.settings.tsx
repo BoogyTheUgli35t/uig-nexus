@@ -15,7 +15,10 @@ export const Route = createFileRoute("/_apex/portal/divisions/real-estate/settin
 
 const LEASE_TEMPLATES = [
   { name: "Residential lease (12 months)", note: "Standard annual tenancy, Lagos/Abuja clauses." },
-  { name: "Commercial lease (24 months)", note: "Grade-A office space with service-charge schedule." },
+  {
+    name: "Commercial lease (24 months)",
+    note: "Grade-A office space with service-charge schedule.",
+  },
   { name: "Short-let agreement", note: "Furnished short-stay terms with caution deposit." },
 ] as const;
 
@@ -41,16 +44,31 @@ function SettingsPage() {
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <KpiStat icon={Building2} label="Properties" value={propertyCount} hint="in the portfolio" />
-        <KpiStat icon={Palette} label="Division accent" value="Real Estate" hint="acc-realestate token" />
-        <KpiStat icon={FileText} label="Lease templates" value={LEASE_TEMPLATES.length} hint="available" />
+        <KpiStat
+          icon={Building2}
+          label="Properties"
+          value={propertyCount}
+          hint="in the portfolio"
+        />
+        <KpiStat
+          icon={Palette}
+          label="Division accent"
+          value="Real Estate"
+          hint="acc-realestate token"
+        />
+        <KpiStat
+          icon={FileText}
+          label="Lease templates"
+          value={LEASE_TEMPLATES.length}
+          hint="available"
+        />
       </div>
 
       <DataPanel title="Sample data">
         <p className="text-sm text-muted-foreground">
-          Seed the workspace with a realistic Nigerian portfolio — properties across Lagos, Abuja and
-          Port Harcourt with tenants, leads and pipeline activity. Seeding is idempotent: existing
-          records are never duplicated.
+          Seed the workspace with a realistic Nigerian portfolio — properties across Lagos, Abuja
+          and Port Harcourt with tenants, leads and pipeline activity. Seeding is idempotent:
+          existing records are never duplicated.
         </p>
         <Button
           className="mt-4"
@@ -66,8 +84,8 @@ function SettingsPage() {
       <DataPanel title="Listing gallery">
         <p className="text-sm text-muted-foreground">
           Property photography is managed per listing — covers, ordering and captions live on each
-          property's detail page. Public listing pages label AI-generated imagery automatically until
-          real photos replace it.
+          property's detail page. Public listing pages label AI-generated imagery automatically
+          until real photos replace it.
         </p>
         <Link
           to="/portal/divisions/real-estate/properties"
@@ -86,15 +104,17 @@ function SettingsPage() {
                   <div className="text-sm font-medium">{t.name}</div>
                   <div className="mt-0.5 text-xs text-muted-foreground">{t.note}</div>
                 </div>
-                <span className="rounded-full acc-bg-soft acc-text px-2 py-0.5 text-[10px]">Template</span>
+                <span className="rounded-full acc-bg-soft acc-text px-2 py-0.5 text-[10px]">
+                  Template
+                </span>
               </div>
             </div>
           ))}
         </div>
         <p className="mt-4 rounded-lg border border-dashed border-border p-3 text-xs text-muted-foreground">
           <Sparkles className="mr-1 inline h-3.5 w-3.5" />
-          Templates attach to leases from a tenant's unit page. eSign (DocuSign) integration is stubbed
-          via the lease signature flow and activates when the connector is configured.
+          Templates attach to leases from a tenant's unit page. eSign (DocuSign) integration is
+          stubbed via the lease signature flow and activates when the connector is configured.
         </p>
       </DataPanel>
     </div>

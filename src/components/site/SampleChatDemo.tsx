@@ -20,8 +20,8 @@ export function SampleChatDemo() {
         <MessageSquare className="h-4 w-4 text-gold" /> Sample conversation · Nigerian Pidgin
       </div>
       <p className="mt-1 text-xs text-muted-foreground">
-        An illustrative transcript, not a live model — this is what a customer-service bot built
-        on native-language understanding sounds like.
+        An illustrative transcript, not a live model — this is what a customer-service bot built on
+        native-language understanding sounds like.
       </p>
 
       <div className="mt-5 space-y-3">

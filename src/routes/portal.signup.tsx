@@ -66,12 +66,18 @@ function SignupPage() {
     setLoading(false);
     if (error) {
       const refId = "UIG-" + Math.random().toString(36).slice(2, 8).toUpperCase();
-      logPortalEvent({ data: { event_type: "access_denied", email, metadata: { reason: error.message, stage: "sign_up", ref_id: refId } } }).catch(() => {});
+      logPortalEvent({
+        data: {
+          event_type: "access_denied",
+          email,
+          metadata: { reason: error.message, stage: "sign_up", ref_id: refId },
+        },
+      }).catch(() => {});
       const friendly = /already registered|already exists/i.test(error.message)
         ? "An account with this email already exists. Try signing in."
         : /password/i.test(error.message)
-        ? "Password doesn't meet requirements (min 8 characters)."
-        : "We couldn't create your account. Please try again.";
+          ? "Password doesn't meet requirements (min 8 characters)."
+          : "We couldn't create your account. Please try again.";
       return toast.error(`${friendly} Reference: ${refId}`);
     }
     if (data.session) {
@@ -104,7 +110,8 @@ function SignupPage() {
           <h1 className="mt-8 text-2xl font-bold">Check your email</h1>
           <p className="mt-4 text-sm text-muted-foreground">
             We've sent a confirmation link to <strong>{email}</strong>.
-            <br />Click the link to verify your account, then you'll choose your workspace.
+            <br />
+            Click the link to verify your account, then you'll choose your workspace.
           </p>
           <div className="mt-8">
             <Link to="/portal/login" className="text-sm text-gold hover:underline">
@@ -136,18 +143,38 @@ function SignupPage() {
           </div>
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
+            <Input
+              id="email"
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
           </div>
           <div className="space-y-2">
             <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" required minLength={8} value={password} onChange={(e) => setPassword(e.target.value)} />
+            <Input
+              id="password"
+              type="password"
+              required
+              minLength={8}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
           </div>
-          <Button type="submit" disabled={loading} className="w-full bg-gold text-gold-foreground hover:bg-gold/90">
+          <Button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-gold text-gold-foreground hover:bg-gold/90"
+          >
             {loading ? "Creating…" : "Create account"}
           </Button>
         </form>
         <p className="mt-6 text-sm text-muted-foreground text-center">
-          Have an account? <Link to="/portal/login" className="text-gold hover:underline">Sign in</Link>
+          Have an account?{" "}
+          <Link to="/portal/login" className="text-gold hover:underline">
+            Sign in
+          </Link>
         </p>
       </div>
     </div>

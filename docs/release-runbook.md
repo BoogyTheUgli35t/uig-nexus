@@ -4,11 +4,11 @@ Status: living document · Last reviewed: 2026-07-17
 
 ## What ships where
 
-| Environment | Trigger | URL | Database |
-|---|---|---|---|
-| Local dev | `npm run dev` | http://localhost:8080 | live Supabase project |
-| Preview | Lovable branch preview | Lovable-assigned | live Supabase project |
-| Production | push to `main` (Lovable auto-deploy) | production domain | live Supabase project |
+| Environment | Trigger                              | URL                   | Database              |
+| ----------- | ------------------------------------ | --------------------- | --------------------- |
+| Local dev   | `npm run dev`                        | http://localhost:8080 | live Supabase project |
+| Preview     | Lovable branch preview               | Lovable-assigned      | live Supabase project |
+| Production  | push to `main` (Lovable auto-deploy) | production domain     | live Supabase project |
 
 **There is one database.** Dev, preview and production all point at Supabase
 project `djocumwhwbncrpbnsfsy`. Treat every local run as touching production
@@ -39,12 +39,12 @@ Set as environment variables in the deploy environment. Unset = enabled, so a
 missing variable fails toward the shipped experience rather than silently
 hiding a division.
 
-| Variable | Gates |
-|---|---|
+| Variable                         | Gates                                                      |
+| -------------------------------- | ---------------------------------------------------------- |
 | `VITE_FLAG_REAL_ESTATE_LISTINGS` | Public listings browse (`/divisions/real-estate/listings`) |
-| `VITE_FLAG_INNOVATION_INTAKE` | Public idea submission form |
-| `VITE_FLAG_STATUS_PAGE` | Public status page |
-| `VITE_FLAG_SELF_SERVE_SIGNUP` | Portal signup (vs. access-request only) |
+| `VITE_FLAG_INNOVATION_INTAKE`    | Public idea submission form                                |
+| `VITE_FLAG_STATUS_PAGE`          | Public status page                                         |
+| `VITE_FLAG_SELF_SERVE_SIGNUP`    | Portal signup (vs. access-request only)                    |
 
 Set to `off` to disable; the route redirects to its parent instead of 404ing,
 so links stay valid, and the page drops out of `/sitemap.xml` so crawlers
@@ -100,7 +100,7 @@ that reverses it, rather than editing or deleting the original.
 
 ## Known operational gaps
 
-Honest list of what is *not* production-hardened yet:
+Honest list of what is _not_ production-hardened yet:
 
 1. **Single shared database** across all environments (see above).
 2. **No staging environment** distinct from preview.
@@ -114,15 +114,15 @@ Honest list of what is *not* production-hardened yet:
 
 ## Dependency vulnerabilities
 
-Current state (verified with `npm audit` *after* a clean reinstall, which is
+Current state (verified with `npm audit` _after_ a clean reinstall, which is
 the only number worth trusting — see the warning below):
 
-| Severity | Package | Fix available? |
-|---|---|---|
-| high | `undici` | only by downgrading `@cloudflare/vite-plugin` 1.51 → 1.12 |
-| moderate | `@cloudflare/vite-plugin`, `miniflare` | same major downgrade |
-| moderate | `@lovable.dev/mcp-js`, `@modelcontextprotocol/sdk`, `@hono/node-server` | none published |
-| low | `esbuild` | yes, but pulled back in transitively |
+| Severity | Package                                                                 | Fix available?                                            |
+| -------- | ----------------------------------------------------------------------- | --------------------------------------------------------- |
+| high     | `undici`                                                                | only by downgrading `@cloudflare/vite-plugin` 1.51 → 1.12 |
+| moderate | `@cloudflare/vite-plugin`, `miniflare`                                  | same major downgrade                                      |
+| moderate | `@lovable.dev/mcp-js`, `@modelcontextprotocol/sdk`, `@hono/node-server` | none published                                            |
+| low      | `esbuild`                                                               | yes, but pulled back in transitively                      |
 
 **Why the high severity is accepted for now.** `undici` reaches the tree only
 through `@cloudflare/vite-plugin → miniflare/wrangler` — the local Workers
@@ -136,5 +136,5 @@ not worth taking. Revisit when Cloudflare ships a patched miniflare.
 later plain `npm install` can re-resolve ranges and silently undo part of it —
 this repo went 20 → 4 → back to 14 that way, and the regression was only caught
 because GitHub's Dependabot count disagreed with the local one. Always re-run
-`npm install` *then* `npm audit` before believing a number, and prefer
+`npm install` _then_ `npm audit` before believing a number, and prefer
 `overrides` in package.json for anything that keeps reverting.

@@ -3,11 +3,7 @@ import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Plus, Search, X } from "lucide-react";
-import {
-  listTechProjects,
-  updateTechProjectStatus,
-  PROJECT_STATUSES,
-} from "@/lib/tech.functions";
+import { listTechProjects, updateTechProjectStatus, PROJECT_STATUSES } from "@/lib/tech.functions";
 import { authHeaders } from "@/lib/auth-headers";
 import { EmptyState } from "@/components/portal/blocks";
 import { Button } from "@/components/ui/button";
@@ -112,7 +108,9 @@ function ProjectsBoard() {
                         >
                           <div className="text-sm font-medium leading-snug">{p.title}</div>
                           {p.client_name && (
-                            <div className="mt-0.5 text-xs text-muted-foreground">{p.client_name}</div>
+                            <div className="mt-0.5 text-xs text-muted-foreground">
+                              {p.client_name}
+                            </div>
                           )}
                         </Link>
                         <Progress value={p.progress} className="mt-3 h-1.5" />

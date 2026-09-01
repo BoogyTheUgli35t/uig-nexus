@@ -64,9 +64,7 @@ function ListingDetailPage() {
         <Section>
           <div className="rounded-xl border border-border bg-surface/40 p-10 text-center">
             <Building2 className="mx-auto h-8 w-8 text-muted-foreground" />
-            <p className="mt-3 text-muted-foreground">
-              This listing is no longer available.
-            </p>
+            <p className="mt-3 text-muted-foreground">This listing is no longer available.</p>
             <Link
               to="/divisions/real-estate/listings"
               className="mt-4 inline-flex items-center gap-1.5 text-sm text-gold hover:underline"
@@ -119,9 +117,13 @@ function ListingDetailPage() {
       price: property.price,
       priceCurrency: "NGN",
       availability:
-        property.status === "available" ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
+        property.status === "available"
+          ? "https://schema.org/InStock"
+          : "https://schema.org/OutOfStock",
       businessFunction:
-        property.listing_type === "rent" ? "https://schema.org/LeaseOut" : "https://schema.org/Sell",
+        property.listing_type === "rent"
+          ? "https://schema.org/LeaseOut"
+          : "https://schema.org/Sell",
     },
   };
 
@@ -189,7 +191,9 @@ function ListingDetailPage() {
                     onClick={() => setActiveImage(i)}
                     className={cn(
                       "aspect-square overflow-hidden rounded-lg border-2 transition",
-                      i === activeImage ? "border-gold" : "border-transparent opacity-70 hover:opacity-100",
+                      i === activeImage
+                        ? "border-gold"
+                        : "border-transparent opacity-70 hover:opacity-100",
                     )}
                   >
                     {img.storage_path && (
@@ -214,7 +218,9 @@ function ListingDetailPage() {
             <span
               className={cn(
                 "inline-block rounded-full px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide",
-                property.listing_type === "rent" ? "bg-surface-elevated border border-border" : "bg-gold text-gold-foreground",
+                property.listing_type === "rent"
+                  ? "bg-surface-elevated border border-border"
+                  : "bg-gold text-gold-foreground",
               )}
             >
               {property.listing_type === "rent" ? "For rent" : "For sale"}
@@ -225,7 +231,9 @@ function ListingDetailPage() {
             </p>
             <div className="mt-4 text-3xl font-bold text-gradient-gold">
               {naira(Number(property.price))}
-              {property.listing_type === "rent" && <span className="text-base text-muted-foreground"> /year</span>}
+              {property.listing_type === "rent" && (
+                <span className="text-base text-muted-foreground"> /year</span>
+              )}
             </div>
 
             <div className="mt-6 flex flex-wrap gap-4 rounded-xl border border-border bg-surface/60 p-4 text-sm">
@@ -264,7 +272,9 @@ function ListingDetailPage() {
 
             {Array.isArray(property.amenities) && property.amenities.length > 0 && (
               <div className="mt-6">
-                <div className="text-xs uppercase tracking-wider text-muted-foreground">Amenities</div>
+                <div className="text-xs uppercase tracking-wider text-muted-foreground">
+                  Amenities
+                </div>
                 <div className="mt-2 flex flex-wrap gap-1.5">
                   {(property.amenities as string[]).map((a) => (
                     <span
@@ -334,7 +344,9 @@ function ListingDetailPage() {
                   </div>
                   <div className="p-3">
                     <div className="font-semibold text-sm truncate">{s.title}</div>
-                    <div className="text-xs text-gold font-medium mt-0.5">{naira(Number(s.price))}</div>
+                    <div className="text-xs text-gold font-medium mt-0.5">
+                      {naira(Number(s.price))}
+                    </div>
                   </div>
                 </Link>
               );

@@ -153,7 +153,9 @@ export function DivisionPage(props: DivisionPageProps) {
       {props.caseStudies && (
         <Section className="!pt-0">
           <Eyebrow>{props.caseStudies.eyebrow}</Eyebrow>
-          <h2 className="mt-5 text-3xl sm:text-4xl font-bold max-w-2xl">{props.caseStudies.title}</h2>
+          <h2 className="mt-5 text-3xl sm:text-4xl font-bold max-w-2xl">
+            {props.caseStudies.title}
+          </h2>
           {props.caseStudies.note && (
             <p className="mt-3 text-xs text-muted-foreground max-w-2xl">{props.caseStudies.note}</p>
           )}

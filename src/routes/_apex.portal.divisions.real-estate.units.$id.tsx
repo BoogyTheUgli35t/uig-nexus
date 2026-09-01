@@ -200,7 +200,11 @@ function UnitDetailPage() {
           </div>
         ) : (
           <div className="space-y-4">
-            <EmptyState icon={UserPlus} title="No tenant assigned" description="Assign an existing tenant or add a new one." />
+            <EmptyState
+              icon={UserPlus}
+              title="No tenant assigned"
+              description="Assign an existing tenant or add a new one."
+            />
             {unassignedTenants.length > 0 && (
               <div className="flex flex-wrap gap-2">
                 <select
@@ -254,11 +258,19 @@ function UnitDetailPage() {
                 </div>
                 <div className="space-y-1.5">
                   <Label>Lease start</Label>
-                  <Input type="date" value={leaseStart} onChange={(e) => setLeaseStart(e.target.value)} />
+                  <Input
+                    type="date"
+                    value={leaseStart}
+                    onChange={(e) => setLeaseStart(e.target.value)}
+                  />
                 </div>
                 <div className="space-y-1.5">
                   <Label>Lease end</Label>
-                  <Input type="date" value={leaseEnd} onChange={(e) => setLeaseEnd(e.target.value)} />
+                  <Input
+                    type="date"
+                    value={leaseEnd}
+                    onChange={(e) => setLeaseEnd(e.target.value)}
+                  />
                 </div>
                 <div className="sm:col-span-2 flex justify-end gap-2">
                   <Button type="button" variant="ghost" onClick={() => setShowNewTenant(false)}>
@@ -273,7 +285,12 @@ function UnitDetailPage() {
           </div>
         )}
       </DataPanel>
-      <RecordDocuments recordTable="property_units" recordId={id} division="real-estate" title="Unit documents" />
+      <RecordDocuments
+        recordTable="property_units"
+        recordId={id}
+        division="real-estate"
+        title="Unit documents"
+      />
     </div>
   );
 }

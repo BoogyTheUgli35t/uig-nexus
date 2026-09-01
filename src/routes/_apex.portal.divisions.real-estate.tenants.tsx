@@ -2,7 +2,17 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Users, Search, FileSignature, Mail, Phone, Send, CheckCircle2, XCircle, Upload } from "lucide-react";
+import {
+  Users,
+  Search,
+  FileSignature,
+  Mail,
+  Phone,
+  Send,
+  CheckCircle2,
+  XCircle,
+  Upload,
+} from "lucide-react";
 import {
   getRealEstateWorkspace,
   updateTenantPaymentStatus,
@@ -74,7 +84,8 @@ function TenantsPage() {
   });
 
   const sendMut = useMutation({
-    mutationFn: async (id: string) => sendLeaseForSignature({ data: { id }, headers: await authHeaders() }),
+    mutationFn: async (id: string) =>
+      sendLeaseForSignature({ data: { id }, headers: await authHeaders() }),
     onSuccess: () => {
       toast.success("Lease sent for signature");
       invalidate();
@@ -111,7 +122,10 @@ function TenantsPage() {
       const path = `${tenantId}/${Date.now()}-${file.name}`;
       const { error: upErr } = await supabase.storage.from("lease-documents").upload(path, file);
       if (upErr) throw upErr;
-      await attachLeaseDocument({ data: { id: tenantId, file_path: path }, headers: await authHeaders() });
+      await attachLeaseDocument({
+        data: { id: tenantId, file_path: path },
+        headers: await authHeaders(),
+      });
       toast.success("Lease document attached");
       invalidate();
     } catch (err) {
@@ -123,7 +137,9 @@ function TenantsPage() {
   }
 
   async function onDownloadLease(path: string) {
-    const { data, error } = await supabase.storage.from("lease-documents").createSignedUrl(path, 60);
+    const { data, error } = await supabase.storage
+      .from("lease-documents")
+      .createSignedUrl(path, 60);
     if (error || !data) {
       toast.error(error?.message ?? "Couldn't generate download link");
       return;
@@ -162,7 +178,13 @@ function TenantsPage() {
               <div key={t.id} className="py-4 first:pt-0 last:pb-0">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="min-w-0">
-                    <Link to="/portal/divisions/real-estate/tenants/$id" params={{ id: t.id }} className="font-medium hover:underline">{t.full_name}</Link>
+                    <Link
+                      to="/portal/divisions/real-estate/tenants/$id"
+                      params={{ id: t.id }}
+                      className="font-medium hover:underline"
+                    >
+                      {t.full_name}
+                    </Link>
                     <div className="mt-0.5 text-xs text-muted-foreground">
                       {t.property_id ? (propertyTitle.get(t.property_id) ?? "—") : "—"}
                     </div>
@@ -202,7 +224,9 @@ function TenantsPage() {
                 </div>
 
                 <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-border pt-3">
-                  <StatusBadge status={LEASE_BADGE[t.lease_signature_status] ?? t.lease_signature_status} />
+                  <StatusBadge
+                    status={LEASE_BADGE[t.lease_signature_status] ?? t.lease_signature_status}
+                  />
                   <span className="text-xs capitalize text-muted-foreground">
                     Lease: {t.lease_signature_status}
                     {t.lease_signature_status === "sent" && t.lease_sent_at
@@ -215,7 +239,12 @@ function TenantsPage() {
 
                   <div className="ml-auto flex flex-wrap items-center gap-1.5">
                     {t.lease_document_path ? (
-                      <Button size="sm" variant="outline" className="text-xs" onClick={() => onDownloadLease(t.lease_document_path!)}>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="text-xs"
+                        onClick={() => onDownloadLease(t.lease_document_path!)}
+                      >
                         <FileSignature className="mr-1.5 h-3.5 w-3.5" /> View lease
                       </Button>
                     ) : (
@@ -232,13 +261,24 @@ function TenantsPage() {
                     )}
 
                     {t.lease_signature_status === "draft" && (
-                      <Button size="sm" variant="outline" className="text-xs" disabled={sendMut.isPending} onClick={() => sendMut.mutate(t.id)}>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="text-xs"
+                        disabled={sendMut.isPending}
+                        onClick={() => sendMut.mutate(t.id)}
+                      >
                         <Send className="mr-1.5 h-3.5 w-3.5" /> Send for signature
                       </Button>
                     )}
 
                     {t.lease_signature_status === "sent" && signingId !== t.id && (
-                      <Button size="sm" variant="outline" className="text-xs" onClick={() => setSigningId(t.id)}>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="text-xs"
+                        onClick={() => setSigningId(t.id)}
+                      >
                         <CheckCircle2 className="mr-1.5 h-3.5 w-3.5" /> Record signature
                       </Button>
                     )}
@@ -255,14 +295,17 @@ function TenantsPage() {
                         <Button
                           size="sm"
                           disabled={!signedName.trim() || signMut.isPending}
-                          onClick={() => signMut.mutate({ id: t.id, signed_name: signedName.trim() })}
+                          onClick={() =>
+                            signMut.mutate({ id: t.id, signed_name: signedName.trim() })
+                          }
                         >
                           Confirm
                         </Button>
                       </div>
                     )}
 
-                    {(t.lease_signature_status === "sent" || t.lease_signature_status === "draft") && (
+                    {(t.lease_signature_status === "sent" ||
+                      t.lease_signature_status === "draft") && (
                       <Button
                         size="sm"
                         variant="outline"

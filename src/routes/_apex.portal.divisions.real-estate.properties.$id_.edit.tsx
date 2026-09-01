@@ -108,11 +108,11 @@ function EditPropertyPage() {
 
   function validate(values: FormState) {
     const next: Record<string, string> = {};
-    if (!values.title.trim()) next['title'] = "Title is required";
+    if (!values.title.trim()) next["title"] = "Title is required";
     if (Number(values.price) < 0 || Number.isNaN(Number(values.price)))
-      next['price'] = "Enter a valid price";
+      next["price"] = "Enter a valid price";
     if (values.year_built && (Number(values.year_built) < 1900 || Number(values.year_built) > 2100))
-      next['year_built'] = "Year must be between 1900 and 2100";
+      next["year_built"] = "Year must be between 1900 and 2100";
     setErrors(next);
     return Object.keys(next).length === 0;
   }
@@ -142,13 +142,13 @@ function EditPropertyPage() {
           <Input
             id="title"
             value={form.title}
-            aria-invalid={!!errors['title']}
-            aria-describedby={errors['title'] ? "title-error" : undefined}
+            aria-invalid={!!errors["title"]}
+            aria-describedby={errors["title"] ? "title-error" : undefined}
             onChange={(e) => set("title", e.target.value)}
           />
-          {errors['title'] && (
+          {errors["title"] && (
             <p id="title-error" className="text-xs text-destructive">
-              {errors['title']}
+              {errors["title"]}
             </p>
           )}
         </div>
@@ -191,7 +191,11 @@ function EditPropertyPage() {
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="address">Address</Label>
-          <Input id="address" value={form.address} onChange={(e) => set("address", e.target.value)} />
+          <Input
+            id="address"
+            value={form.address}
+            onChange={(e) => set("address", e.target.value)}
+          />
         </div>
 
         <div className="space-y-1.5">
@@ -201,10 +205,10 @@ function EditPropertyPage() {
             type="number"
             min={0}
             value={form.price}
-            aria-invalid={!!errors['price']}
+            aria-invalid={!!errors["price"]}
             onChange={(e) => set("price", e.target.value)}
           />
-          {errors['price'] && <p className="text-xs text-destructive">{errors['price']}</p>}
+          {errors["price"] && <p className="text-xs text-destructive">{errors["price"]}</p>}
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="area">Area (m²)</Label>
@@ -242,11 +246,11 @@ function EditPropertyPage() {
             id="year_built"
             type="number"
             value={form.year_built}
-            aria-invalid={!!errors['year_built']}
+            aria-invalid={!!errors["year_built"]}
             onChange={(e) => set("year_built", e.target.value)}
           />
-          {errors['year_built'] && (
-            <p className="text-xs text-destructive">{errors['year_built']}</p>
+          {errors["year_built"] && (
+            <p className="text-xs text-destructive">{errors["year_built"]}</p>
           )}
         </div>
 
@@ -280,7 +284,9 @@ function EditPropertyPage() {
                 <label
                   key={a}
                   className={`cursor-pointer rounded-full border px-3 py-1 text-xs capitalize transition ${
-                    checked ? "border-gold bg-gold/10 text-gold" : "border-border text-muted-foreground"
+                    checked
+                      ? "border-gold bg-gold/10 text-gold"
+                      : "border-border text-muted-foreground"
                   }`}
                 >
                   <input
@@ -290,9 +296,7 @@ function EditPropertyPage() {
                     onChange={() =>
                       set(
                         "amenities",
-                        checked
-                          ? form!.amenities.filter((x) => x !== a)
-                          : [...form!.amenities, a],
+                        checked ? form!.amenities.filter((x) => x !== a) : [...form!.amenities, a],
                       )
                     }
                   />

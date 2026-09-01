@@ -348,7 +348,8 @@ export const listLeadsPaged = createServerFn({ method: "GET" })
     if (data.stage) query = query.eq("stage", data.stage);
     if (data.search) {
       const term = safeLike(data.search);
-      if (term) query = query.or(`full_name.ilike.%${term}%,email.ilike.%${term}%,phone.ilike.%${term}%`);
+      if (term)
+        query = query.or(`full_name.ilike.%${term}%,email.ilike.%${term}%,phone.ilike.%${term}%`);
     }
 
     const { data: rows, count, error } = await query;

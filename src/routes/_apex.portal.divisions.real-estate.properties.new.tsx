@@ -101,9 +101,7 @@ function NewPropertyWizard() {
       for (let i = 0; i < files.length; i++) {
         const file = files[i];
         const path = `${propertyId}/${Date.now()}-${i}-${file.name}`;
-        const { error: upErr } = await supabase.storage
-          .from("property-images")
-          .upload(path, file);
+        const { error: upErr } = await supabase.storage.from("property-images").upload(path, file);
         if (upErr) throw upErr;
         const { error: dbErr } = await supabase.from("property_images").insert({
           property_id: propertyId,
@@ -203,7 +201,10 @@ function NewPropertyWizard() {
             </div>
             <div className="space-y-2">
               <Label>City</Label>
-              <Input value={basics.city} onChange={(e) => setBasics({ ...basics, city: e.target.value })} />
+              <Input
+                value={basics.city}
+                onChange={(e) => setBasics({ ...basics, city: e.target.value })}
+              />
             </div>
             <div className="space-y-2 sm:col-span-2">
               <Label>Address</Label>
@@ -352,9 +353,14 @@ function NewPropertyWizard() {
           {uploadedImages.length > 0 && (
             <div className="grid grid-cols-3 gap-3 sm:grid-cols-4">
               {uploadedImages.map((img) => (
-                <div key={img.path} className="group relative aspect-square overflow-hidden rounded-lg border border-border">
+                <div
+                  key={img.path}
+                  className="group relative aspect-square overflow-hidden rounded-lg border border-border"
+                >
                   <img
-                    src={supabase.storage.from("property-images").getPublicUrl(img.path).data.publicUrl}
+                    src={
+                      supabase.storage.from("property-images").getPublicUrl(img.path).data.publicUrl
+                    }
                     alt={img.name}
                     className="h-full w-full object-cover"
                   />

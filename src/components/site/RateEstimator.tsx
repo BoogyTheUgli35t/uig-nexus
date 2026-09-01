@@ -110,7 +110,8 @@ export function RateEstimator() {
                 : "flex w-full items-center justify-center gap-1.5 rounded-md border border-border px-3 py-2 text-sm text-muted-foreground hover:text-foreground transition"
             }
           >
-            <Zap className="h-3.5 w-3.5" /> {express ? "Express selected" : "Standard (click for express)"}
+            <Zap className="h-3.5 w-3.5" />{" "}
+            {express ? "Express selected" : "Standard (click for express)"}
           </button>
         </div>
       </div>

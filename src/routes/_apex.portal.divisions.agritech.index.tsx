@@ -46,7 +46,10 @@ function AgritechOverview() {
       </div>
 
       {openAlerts.length > 0 && (
-        <DataPanel title="Open alerts" action={{ to: "/portal/divisions/agritech/alerts", label: "View all" }}>
+        <DataPanel
+          title="Open alerts"
+          action={{ to: "/portal/divisions/agritech/alerts", label: "View all" }}
+        >
           <div className="space-y-2">
             {openAlerts.map((a) => (
               <div
@@ -66,7 +69,9 @@ function AgritechOverview() {
         action={
           <Link
             to="/portal/divisions/intelligence/assistant"
-            search={{ ask: "Looking at UIG AgriTech's yield forecast, what should we watch for next season?" }}
+            search={{
+              ask: "Looking at UIG AgriTech's yield forecast, what should we watch for next season?",
+            }}
             className="text-sm text-gold hover:underline"
           >
             Ask Intelligence AI
@@ -107,7 +112,10 @@ function AgritechOverview() {
         )}
       </DataPanel>
 
-      <DataPanel title="Recent farmers" action={{ to: "/portal/divisions/agritech/farmers", label: "View all" }}>
+      <DataPanel
+        title="Recent farmers"
+        action={{ to: "/portal/divisions/agritech/farmers", label: "View all" }}
+      >
         {(data?.farmers.length ?? 0) === 0 ? (
           <EmptyState icon={Users} title="No farmers onboarded yet" />
         ) : (

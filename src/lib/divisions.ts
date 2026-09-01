@@ -1,12 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import {
-  Cpu,
-  Sprout,
-  Building2,
-  Truck,
-  BrainCircuit,
-  FlaskConical,
-} from "lucide-react";
+import { Cpu, Sprout, Building2, Truck, BrainCircuit, FlaskConical } from "lucide-react";
 
 // Bundled division photography — always available, no CDN dependency. Each hero
 // is upgraded to its Cloudinary-generated counterpart via divisionHero() once
@@ -80,10 +73,26 @@ export const DIVISIONS: Division[] = [
     hero: heroTechnology,
     gallery: divisionGallery("technology"),
     modules: [
-      { label: "Project board", description: "Kanban + timeline across every client engagement.", status: "live" },
-      { label: "Client portal", description: "Live project status, invoices and documents.", status: "live" },
-      { label: "Automation engine", description: "Trigger-based workflow rules and run history.", status: "live" },
-      { label: "Integration hub", description: "Connect and monitor third-party APIs and services.", status: "live" },
+      {
+        label: "Project board",
+        description: "Kanban + timeline across every client engagement.",
+        status: "live",
+      },
+      {
+        label: "Client portal",
+        description: "Live project status, invoices and documents.",
+        status: "live",
+      },
+      {
+        label: "Automation engine",
+        description: "Trigger-based workflow rules and run history.",
+        status: "live",
+      },
+      {
+        label: "Integration hub",
+        description: "Connect and monitor third-party APIs and services.",
+        status: "live",
+      },
     ],
   },
   {
@@ -99,10 +108,26 @@ export const DIVISIONS: Division[] = [
     hero: heroAgritech,
     gallery: divisionGallery("agritech"),
     modules: [
-      { label: "Farmer onboarding", description: "Register farmers and cooperatives in minutes.", status: "live" },
-      { label: "Field dashboard", description: "Map view with live sensor and drone data.", status: "live" },
-      { label: "Yield prediction", description: "AI-forecasted yields by field and season.", status: "live" },
-      { label: "Cooperative management", description: "Group farmers, share inputs, track output.", status: "live" },
+      {
+        label: "Farmer onboarding",
+        description: "Register farmers and cooperatives in minutes.",
+        status: "live",
+      },
+      {
+        label: "Field dashboard",
+        description: "Map view with live sensor and drone data.",
+        status: "live",
+      },
+      {
+        label: "Yield prediction",
+        description: "AI-forecasted yields by field and season.",
+        status: "live",
+      },
+      {
+        label: "Cooperative management",
+        description: "Group farmers, share inputs, track output.",
+        status: "live",
+      },
     ],
   },
   {
@@ -118,9 +143,21 @@ export const DIVISIONS: Division[] = [
     hero: heroRealEstate,
     gallery: divisionGallery("real-estate"),
     modules: [
-      { label: "Property listings", description: "Manage the full portfolio with rich detail.", status: "live" },
-      { label: "Tenant portal", description: "Payments, documents and maintenance requests.", status: "live" },
-      { label: "Investor dashboard", description: "Portfolio value, ROI and distributions.", status: "live" },
+      {
+        label: "Property listings",
+        description: "Manage the full portfolio with rich detail.",
+        status: "live",
+      },
+      {
+        label: "Tenant portal",
+        description: "Payments, documents and maintenance requests.",
+        status: "live",
+      },
+      {
+        label: "Investor dashboard",
+        description: "Portfolio value, ROI and distributions.",
+        status: "live",
+      },
       { label: "CRM pipeline", description: "Track leads from enquiry to close.", status: "live" },
     ],
   },
@@ -137,10 +174,26 @@ export const DIVISIONS: Division[] = [
     hero: heroLogistics,
     gallery: divisionGallery("logistics"),
     modules: [
-      { label: "Shipment tracking", description: "Live status board and map view.", status: "live" },
-      { label: "Driver tasks", description: "Mobile-friendly assignments and proof of delivery.", status: "live" },
-      { label: "Fleet management", description: "Vehicles, capacity and maintenance records.", status: "live" },
-      { label: "Route optimization", description: "Smart routing across multiple waypoints.", status: "live" },
+      {
+        label: "Shipment tracking",
+        description: "Live status board and map view.",
+        status: "live",
+      },
+      {
+        label: "Driver tasks",
+        description: "Mobile-friendly assignments and proof of delivery.",
+        status: "live",
+      },
+      {
+        label: "Fleet management",
+        description: "Vehicles, capacity and maintenance records.",
+        status: "live",
+      },
+      {
+        label: "Route optimization",
+        description: "Smart routing across multiple waypoints.",
+        status: "live",
+      },
     ],
   },
   {
@@ -156,10 +209,26 @@ export const DIVISIONS: Division[] = [
     hero: heroIntelligence,
     gallery: divisionGallery("intelligence"),
     modules: [
-      { label: "AI assistant", description: "Chat with UIG's models for insight on demand.", status: "live" },
-      { label: "Predictive analytics", description: "Forecasts and trends across the group.", status: "live" },
-      { label: "Model Trainer", description: "Upload datasets, train and deploy models.", status: "live" },
-      { label: "Datasets", description: "Secure dataset library for every division.", status: "live" },
+      {
+        label: "AI assistant",
+        description: "Chat with UIG's models for insight on demand.",
+        status: "live",
+      },
+      {
+        label: "Predictive analytics",
+        description: "Forecasts and trends across the group.",
+        status: "live",
+      },
+      {
+        label: "Model Trainer",
+        description: "Upload datasets, train and deploy models.",
+        status: "live",
+      },
+      {
+        label: "Datasets",
+        description: "Secure dataset library for every division.",
+        status: "live",
+      },
     ],
   },
   {
@@ -175,10 +244,26 @@ export const DIVISIONS: Division[] = [
     hero: heroInnovationLab,
     gallery: divisionGallery("innovation-lab"),
     modules: [
-      { label: "Idea submission", description: "Capture ideas from every division.", status: "live" },
-      { label: "Prototype tracker", description: "Status board from concept to demo.", status: "live" },
-      { label: "Partner collaboration", description: "Co-build with partners and investors.", status: "live" },
-      { label: "Experiment log", description: "Run AI experiments via the Model Trainer.", status: "live" },
+      {
+        label: "Idea submission",
+        description: "Capture ideas from every division.",
+        status: "live",
+      },
+      {
+        label: "Prototype tracker",
+        description: "Status board from concept to demo.",
+        status: "live",
+      },
+      {
+        label: "Partner collaboration",
+        description: "Co-build with partners and investors.",
+        status: "live",
+      },
+      {
+        label: "Experiment log",
+        description: "Run AI experiments via the Model Trainer.",
+        status: "live",
+      },
     ],
   },
 ];

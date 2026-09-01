@@ -25,7 +25,8 @@ function AlertsPage() {
   });
 
   const ackMut = useMutation({
-    mutationFn: async (id: string) => acknowledgeAlert({ data: { id }, headers: await authHeaders() }),
+    mutationFn: async (id: string) =>
+      acknowledgeAlert({ data: { id }, headers: await authHeaders() }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["agri-workspace"] }),
     onError: (e: Error) => toast.error(e.message),
   });
@@ -49,7 +50,11 @@ function AlertsPage() {
         <>
           <DataPanel title={`Open (${open.length})`}>
             {open.length === 0 ? (
-              <EmptyState icon={CheckCircle2} title="No open alerts" description="All fields are healthy." />
+              <EmptyState
+                icon={CheckCircle2}
+                title="No open alerts"
+                description="All fields are healthy."
+              />
             ) : (
               <div className="space-y-2">
                 {open.map((a) => (
@@ -70,7 +75,12 @@ function AlertsPage() {
                         </Link>
                       </div>
                     </div>
-                    <Button size="sm" variant="outline" onClick={() => ackMut.mutate(a.id)} disabled={ackMut.isPending}>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => ackMut.mutate(a.id)}
+                      disabled={ackMut.isPending}
+                    >
                       Acknowledge
                     </Button>
                   </div>

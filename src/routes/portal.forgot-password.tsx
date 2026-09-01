@@ -94,7 +94,10 @@ function ForgotPasswordPage() {
           )}
 
           <p className="mt-6 text-sm text-muted-foreground text-center">
-            <Link to="/portal/login" className="inline-flex items-center gap-1 text-gold hover:underline">
+            <Link
+              to="/portal/login"
+              className="inline-flex items-center gap-1 text-gold hover:underline"
+            >
               <ArrowLeft className="h-3.5 w-3.5" /> Back to sign in
             </Link>
           </p>

@@ -138,7 +138,8 @@ export const Route = createFileRoute("/divisions/intelligence")({
               "Manual fraud review couldn't keep pace with transaction volume, and false positives were blocking legitimate customers.",
             solution:
               "A custom fraud-scoring model trained on the bank's historical transaction data, integrated directly into their approval flow.",
-            result: "Flagged transactions for manual review dropped while catching more true fraud.",
+            result:
+              "Flagged transactions for manual review dropped while catching more true fraud.",
             metric: "45% fewer false positives",
           },
           {

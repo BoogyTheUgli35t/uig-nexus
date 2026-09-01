@@ -12,33 +12,38 @@ export const getAgriWorkspace = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     const { supabase } = context;
-    const [{ data: farmers }, { data: fields }, { data: sensors }, { data: predictions }, { data: alerts }] =
-      await Promise.all([
-        supabase
-          .from("farmers")
-          .select(
-            "id, full_name, location, cooperative, primary_crop, hectares, status, phone, updated_at, user_id",
-          )
-          .order("created_at", { ascending: false }),
-        supabase
-          .from("fields")
-          .select("id, farmer_id, name, crop, hectares, health, status, lat, lng, updated_at")
-          .order("created_at", { ascending: true }),
-        supabase
-          .from("sensor_data")
-          .select("id, field_id, soil_moisture, temperature, humidity, recorded_at")
-          .order("recorded_at", { ascending: false })
-          .limit(300),
-        supabase
-          .from("yield_predictions")
-          .select("id, field_id, season, predicted_yield_tons, confidence")
-          .order("created_at", { ascending: true }),
-        supabase
-          .from("agri_alerts")
-          .select("id, field_id, severity, message, acknowledged, created_at")
-          .order("created_at", { ascending: false })
-          .limit(50),
-      ]);
+    const [
+      { data: farmers },
+      { data: fields },
+      { data: sensors },
+      { data: predictions },
+      { data: alerts },
+    ] = await Promise.all([
+      supabase
+        .from("farmers")
+        .select(
+          "id, full_name, location, cooperative, primary_crop, hectares, status, phone, updated_at, user_id",
+        )
+        .order("created_at", { ascending: false }),
+      supabase
+        .from("fields")
+        .select("id, farmer_id, name, crop, hectares, health, status, lat, lng, updated_at")
+        .order("created_at", { ascending: true }),
+      supabase
+        .from("sensor_data")
+        .select("id, field_id, soil_moisture, temperature, humidity, recorded_at")
+        .order("recorded_at", { ascending: false })
+        .limit(300),
+      supabase
+        .from("yield_predictions")
+        .select("id, field_id, season, predicted_yield_tons, confidence")
+        .order("created_at", { ascending: true }),
+      supabase
+        .from("agri_alerts")
+        .select("id, field_id, severity, message, acknowledged, created_at")
+        .order("created_at", { ascending: false })
+        .limit(50),
+    ]);
 
     const farmerRows = farmers ?? [];
     const fieldRows = fields ?? [];
@@ -216,25 +221,30 @@ export const getFieldDetail = createServerFn({ method: "GET" })
       .single();
     if (error) throw new Error(error.message);
 
-    const [{ data: farmer }, { data: readings }, { data: images }, { data: alerts }] = await Promise.all([
-      context.supabase.from("farmers").select("id, full_name, phone").eq("id", field.farmer_id).single(),
-      context.supabase
-        .from("sensor_data")
-        .select("id, soil_moisture, temperature, humidity, recorded_at")
-        .eq("field_id", data.id)
-        .order("recorded_at", { ascending: true })
-        .limit(60),
-      context.supabase
-        .from("field_images")
-        .select("id, storage_path, caption, source, created_at")
-        .eq("field_id", data.id)
-        .order("created_at", { ascending: false }),
-      context.supabase
-        .from("agri_alerts")
-        .select("id, severity, message, acknowledged, created_at")
-        .eq("field_id", data.id)
-        .order("created_at", { ascending: false }),
-    ]);
+    const [{ data: farmer }, { data: readings }, { data: images }, { data: alerts }] =
+      await Promise.all([
+        context.supabase
+          .from("farmers")
+          .select("id, full_name, phone")
+          .eq("id", field.farmer_id)
+          .single(),
+        context.supabase
+          .from("sensor_data")
+          .select("id, soil_moisture, temperature, humidity, recorded_at")
+          .eq("field_id", data.id)
+          .order("recorded_at", { ascending: true })
+          .limit(60),
+        context.supabase
+          .from("field_images")
+          .select("id, storage_path, caption, source, created_at")
+          .eq("field_id", data.id)
+          .order("created_at", { ascending: false }),
+        context.supabase
+          .from("agri_alerts")
+          .select("id, severity, message, acknowledged, created_at")
+          .eq("field_id", data.id)
+          .order("created_at", { ascending: false }),
+      ]);
 
     return {
       field,

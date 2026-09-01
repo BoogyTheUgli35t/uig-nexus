@@ -1,15 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import {
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  CartesianGrid,
-} from "recharts";
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from "recharts";
 import { CloudSun, TrendingUp, Gauge, Sparkles } from "lucide-react";
 import { getAgriWorkspace } from "@/lib/agritech.functions";
 import { authHeaders } from "@/lib/auth-headers";
@@ -35,21 +27,46 @@ function PredictionsPage() {
     for (const p of predictions) {
       m.set(p.season, (m.get(p.season) ?? 0) + Number(p.predicted_yield_tons ?? 0));
     }
-    return Array.from(m.entries()).map(([season, tons]) => ({ season, tons: Math.round(tons * 10) / 10 }));
+    return Array.from(m.entries()).map(([season, tons]) => ({
+      season,
+      tons: Math.round(tons * 10) / 10,
+    }));
   }, [predictions]);
 
   const totalTons = predictions.reduce((s, p) => s + Number(p.predicted_yield_tons ?? 0), 0);
   const avgConfidence = predictions.length
-    ? Math.round(predictions.reduce((s, p) => s + Number(p.confidence ?? 0), 0) / predictions.length)
+    ? Math.round(
+        predictions.reduce((s, p) => s + Number(p.confidence ?? 0), 0) / predictions.length,
+      )
     : 0;
 
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <KpiStat icon={CloudSun} label="Predictions" value={isLoading ? "—" : predictions.length} hint="across all fields" />
-        <KpiStat icon={TrendingUp} label="Forecast total" value={isLoading ? "—" : `${Math.round(totalTons * 10) / 10}t`} hint="predicted yield" />
-        <KpiStat icon={Gauge} label="Avg confidence" value={isLoading ? "—" : `${avgConfidence}%`} hint="model certainty" />
-        <KpiStat icon={Sparkles} label="Seasons" value={isLoading ? "—" : bySeason.length} hint="under forecast" />
+        <KpiStat
+          icon={CloudSun}
+          label="Predictions"
+          value={isLoading ? "—" : predictions.length}
+          hint="across all fields"
+        />
+        <KpiStat
+          icon={TrendingUp}
+          label="Forecast total"
+          value={isLoading ? "—" : `${Math.round(totalTons * 10) / 10}t`}
+          hint="predicted yield"
+        />
+        <KpiStat
+          icon={Gauge}
+          label="Avg confidence"
+          value={isLoading ? "—" : `${avgConfidence}%`}
+          hint="model certainty"
+        />
+        <KpiStat
+          icon={Sparkles}
+          label="Seasons"
+          value={isLoading ? "—" : bySeason.length}
+          hint="under forecast"
+        />
       </div>
 
       <DataPanel
@@ -57,7 +74,9 @@ function PredictionsPage() {
         action={
           <Link
             to="/portal/divisions/intelligence/assistant"
-            search={{ ask: "Looking at UIG AgriTech's yield forecast, what should we watch for next season?" }}
+            search={{
+              ask: "Looking at UIG AgriTech's yield forecast, what should we watch for next season?",
+            }}
             className="text-sm acc-text hover:underline"
           >
             Ask Intelligence AI
@@ -67,7 +86,11 @@ function PredictionsPage() {
         {isLoading ? (
           <div className="text-sm text-muted-foreground">Loading predictions…</div>
         ) : bySeason.length === 0 ? (
-          <EmptyState icon={CloudSun} title="No predictions yet" description="Run a yield model from UIG Intelligence to populate forecasts." />
+          <EmptyState
+            icon={CloudSun}
+            title="No predictions yet"
+            description="Run a yield model from UIG Intelligence to populate forecasts."
+          />
         ) : (
           <div className="h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
@@ -132,7 +155,10 @@ function PredictionsPage() {
                       <td className="py-2.5">
                         <div className="flex items-center gap-2">
                           <div className="h-1.5 w-24 rounded-full bg-muted">
-                            <div className="h-1.5 rounded-full acc-bg" style={{ width: `${conf}%` }} />
+                            <div
+                              className="h-1.5 rounded-full acc-bg"
+                              style={{ width: `${conf}%` }}
+                            />
                           </div>
                           <span className="text-xs text-muted-foreground">{conf}%</span>
                         </div>

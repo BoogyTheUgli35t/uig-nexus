@@ -148,7 +148,10 @@ function ShipmentsBoard() {
                           ? SHIPMENT_STATUSES[idx + 1]
                           : null;
                       return (
-                        <div key={s.id} className="rounded-lg border border-border bg-background p-3">
+                        <div
+                          key={s.id}
+                          className="rounded-lg border border-border bg-background p-3"
+                        >
                           <Link
                             to="/portal/divisions/logistics/shipments/$id"
                             params={{ id: s.id }}
@@ -158,11 +161,16 @@ function ShipmentsBoard() {
                               <span className="font-mono text-[11px] text-muted-foreground">
                                 {s.reference}
                               </span>
-                              <span className="font-mono text-[10px] acc-text">{s.tracking_code}</span>
+                              <span className="font-mono text-[10px] acc-text">
+                                {s.tracking_code}
+                              </span>
                             </div>
-                            <div className="mt-1 text-sm font-medium leading-snug">{s.customer}</div>
+                            <div className="mt-1 text-sm font-medium leading-snug">
+                              {s.customer}
+                            </div>
                             <div className="mt-1 flex items-center gap-1 text-[11px] text-muted-foreground">
-                              <MapPin className="h-3 w-3" /> {s.pickup_city ?? "—"} → {s.dropoff_city ?? "—"}
+                              <MapPin className="h-3 w-3" /> {s.pickup_city ?? "—"} →{" "}
+                              {s.dropoff_city ?? "—"}
                             </div>
                             <div className="mt-1 flex flex-wrap items-center gap-2 text-[11px]">
                               {s.priority !== "standard" && (

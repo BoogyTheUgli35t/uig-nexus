@@ -44,7 +44,11 @@ function coverUrl(path: string | null) {
 }
 
 function ListingsHubPage() {
-  const { data: locations, isLoading, isError } = useQuery({
+  const {
+    data: locations,
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ["public-listing-locations"],
     queryFn: () => getListingLocations(),
     retry: 1,
@@ -71,7 +75,10 @@ function ListingsHubPage() {
         {isLoading && (
           <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {Array.from({ length: 5 }).map((_, i) => (
-              <div key={i} className="h-64 animate-pulse rounded-xl bg-surface/60 border border-border" />
+              <div
+                key={i}
+                className="h-64 animate-pulse rounded-xl bg-surface/60 border border-border"
+              />
             ))}
           </div>
         )}
@@ -130,7 +137,8 @@ function ListingsHubPage() {
                         {loc.totalListings} listing{loc.totalListings === 1 ? "" : "s"}
                       </span>
                       <span className="inline-flex items-center gap-1 text-gold font-medium">
-                        View <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" />
+                        View{" "}
+                        <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" />
                       </span>
                     </div>
                     <div className="mt-3 flex flex-wrap gap-1.5 text-[11px]">

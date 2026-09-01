@@ -12,6 +12,7 @@ npm run test:e2e
 it, unless `E2E_BASE_URL` is set (e.g. to run against a deployed preview).
 
 Covers:
+
 - Public site: home, divisions index, legal pages, tracking page, contact
   form shell, cookie consent banner.
 - Portal auth: login form renders, bad credentials surface an error, forgot

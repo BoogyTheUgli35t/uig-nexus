@@ -48,7 +48,8 @@ export function YieldCalculator() {
         <Sprout className="h-4 w-4 text-gold" /> Yield & ROI estimator
       </div>
       <p className="mt-1 text-xs text-muted-foreground">
-        Indicative starting points, not a live price feed — adjust the numbers to your local market before deciding anything.
+        Indicative starting points, not a live price feed — adjust the numbers to your local market
+        before deciding anything.
       </p>
 
       <div className="mt-5 flex flex-wrap gap-1.5">
@@ -130,13 +131,16 @@ export function YieldCalculator() {
           </div>
           <div>
             <div className="text-xs text-muted-foreground">Net profit</div>
-            <div className={`mt-1 font-bold ${result.netProfit >= 0 ? "text-gradient-gold" : "text-destructive"}`}>
+            <div
+              className={`mt-1 font-bold ${result.netProfit >= 0 ? "text-gradient-gold" : "text-destructive"}`}
+            >
               {naira(result.netProfit)}
             </div>
           </div>
         </div>
         <div className="mt-4 border-t border-gold/20 pt-3 text-sm">
-          Estimated ROI: <span className="font-bold text-gold">{result.roi.toFixed(1)}%</span> per season
+          Estimated ROI: <span className="font-bold text-gold">{result.roi.toFixed(1)}%</span> per
+          season
         </div>
       </div>
     </div>

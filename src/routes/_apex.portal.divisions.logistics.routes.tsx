@@ -2,7 +2,15 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Route as RouteIcon, Gauge, Boxes, Navigation, Plus, MapPin, CheckCircle2 } from "lucide-react";
+import {
+  Route as RouteIcon,
+  Gauge,
+  Boxes,
+  Navigation,
+  Plus,
+  MapPin,
+  CheckCircle2,
+} from "lucide-react";
 import {
   getLogisticsWorkspace,
   listRouteStops,
@@ -120,7 +128,8 @@ function RouteStopsDialog({
   });
 
   const routeStops = useMemo(
-    () => (stops ?? []).filter((s) => s.route_id === routeId).sort((a, b) => a.sequence - b.sequence),
+    () =>
+      (stops ?? []).filter((s) => s.route_id === routeId).sort((a, b) => a.sequence - b.sequence),
     [stops, routeId],
   );
 

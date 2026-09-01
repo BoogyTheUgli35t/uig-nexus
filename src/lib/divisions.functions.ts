@@ -33,9 +33,7 @@ export const getMyWorkspace = createServerFn({ method: "GET" })
     // Division admins always reach their own workspace, even without a
     // user_divisions row (appointment implies access).
     const granted = (userDivisions ?? []).map((d) => d.division_slug);
-    const slugs = isAdmin
-      ? [...DIVISION_SLUGS]
-      : Array.from(new Set([...granted, ...adminOf]));
+    const slugs = isAdmin ? [...DIVISION_SLUGS] : Array.from(new Set([...granted, ...adminOf]));
     return {
       userId,
       roles: roleList,

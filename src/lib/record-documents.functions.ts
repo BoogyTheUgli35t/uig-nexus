@@ -51,7 +51,12 @@ const AttachSchema = RecordRefSchema.extend({
   description: z.string().trim().max(1000).optional().or(z.literal("")),
   file_path: z.string().min(1).max(400),
   file_type: z.string().max(120).optional().or(z.literal("")),
-  size_bytes: z.coerce.number().int().min(0).max(200 * 1024 * 1024).optional(),
+  size_bytes: z.coerce
+    .number()
+    .int()
+    .min(0)
+    .max(200 * 1024 * 1024)
+    .optional(),
 });
 
 export const attachRecordDocument = createServerFn({ method: "POST" })

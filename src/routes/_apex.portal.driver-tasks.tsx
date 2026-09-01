@@ -85,7 +85,8 @@ function DriverTasksPage() {
           <div>
             <h1 className="text-xl font-bold">{profile.full_name}</h1>
             <p className="text-sm text-muted-foreground">
-              {profile.deliveries_completed.toLocaleString()} deliveries completed · {Number(profile.rating).toFixed(1)}★
+              {profile.deliveries_completed.toLocaleString()} deliveries completed ·{" "}
+              {Number(profile.rating).toFixed(1)}★
             </p>
           </div>
           <div className="flex gap-1.5">
@@ -220,7 +221,12 @@ function DeliveryCard({
       {!showPod ? (
         <div className="mt-3 flex flex-wrap gap-2">
           {next && (
-            <Button size="sm" variant="outline" disabled={advancing} onClick={() => onAdvance(next)}>
+            <Button
+              size="sm"
+              variant="outline"
+              disabled={advancing}
+              onClick={() => onAdvance(next)}
+            >
               Move to {next.replace(/_/g, " ")}
             </Button>
           )}
@@ -240,7 +246,11 @@ function DeliveryCard({
         >
           <Input type="file" accept="image/*" onChange={onPhotoSelected} disabled={uploading} />
           {photoPath && (
-            <img src={podUrl(photoPath)} alt="" className="h-20 w-20 rounded-lg border border-border object-cover" />
+            <img
+              src={podUrl(photoPath)}
+              alt=""
+              className="h-20 w-20 rounded-lg border border-border object-cover"
+            />
           )}
           <Input
             placeholder="Recipient signature name"

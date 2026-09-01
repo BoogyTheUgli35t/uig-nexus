@@ -30,7 +30,8 @@ async function verifyStripeSignature(payload: string, header: string, secret: st
   // constant-time compare
   if (expected.length !== parts.v1.length) return false;
   let mismatch = 0;
-  for (let i = 0; i < expected.length; i++) mismatch |= expected.charCodeAt(i) ^ parts.v1.charCodeAt(i);
+  for (let i = 0; i < expected.length; i++)
+    mismatch |= expected.charCodeAt(i) ^ parts.v1.charCodeAt(i);
   return mismatch === 0;
 }
 

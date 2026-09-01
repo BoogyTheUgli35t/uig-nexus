@@ -91,7 +91,9 @@ function MaintenancePage() {
         : r.status === statusFilter,
   );
 
-  const openCount = rows.filter((r) => (OPEN_STATUSES as readonly string[]).includes(r.status)).length;
+  const openCount = rows.filter((r) =>
+    (OPEN_STATUSES as readonly string[]).includes(r.status),
+  ).length;
   const urgentOpen = rows.filter(
     (r) => r.priority === "urgent" && (OPEN_STATUSES as readonly string[]).includes(r.status),
   ).length;
@@ -166,7 +168,8 @@ function MaintenancePage() {
                       <div className="text-sm font-medium">{r.title}</div>
                       <div className="mt-0.5 text-xs text-muted-foreground">
                         {r.tenant_id ? (tenantName.get(r.tenant_id) ?? "Tenant") : "Tenant"} ·{" "}
-                        <span className="capitalize">{r.category}</span> · raised {fmtDate(r.created_at)}
+                        <span className="capitalize">{r.category}</span> · raised{" "}
+                        {fmtDate(r.created_at)}
                         {isOpen && age > 7 && (
                           <span className="ml-1 text-amber-600">· open {age} days</span>
                         )}

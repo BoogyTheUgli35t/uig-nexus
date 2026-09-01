@@ -187,7 +187,8 @@ async function callLovableAI(messages: { role: string; content: string }[]) {
     body: JSON.stringify({ model: "google/gemini-3-flash-preview", messages }),
   });
   if (res.status === 429) throw new Error("AI rate limit reached. Please try again in a moment.");
-  if (res.status === 402) throw new Error("AI credits exhausted. Add credits in your workspace to continue.");
+  if (res.status === 402)
+    throw new Error("AI credits exhausted. Add credits in your workspace to continue.");
   if (!res.ok) throw new Error(`AI request failed (${res.status}).`);
   const json = (await res.json()) as { choices?: { message?: { content?: string } }[] };
   return json.choices?.[0]?.message?.content?.trim() ?? "";
@@ -235,7 +236,12 @@ export const generateMvpChecklist = createServerFn({ method: "POST" })
 
     const tasks = raw
       .split("\n")
-      .map((line) => line.replace(/^\s*\d+[.)]\s*/, "").replace(/^[-*]\s*/, "").trim())
+      .map((line) =>
+        line
+          .replace(/^\s*\d+[.)]\s*/, "")
+          .replace(/^[-*]\s*/, "")
+          .trim(),
+      )
       .filter(Boolean)
       .slice(0, 10);
 
@@ -425,7 +431,9 @@ export const reviewSubmission = createServerFn({ method: "POST" })
       .from("innovation_submissions")
       .update({
         status: data.status,
-        ...(data.reviewer_notes !== undefined ? { reviewer_notes: data.reviewer_notes || null } : {}),
+        ...(data.reviewer_notes !== undefined
+          ? { reviewer_notes: data.reviewer_notes || null }
+          : {}),
         reviewed_at: new Date().toISOString(),
       })
       .eq("id", data.id);
@@ -468,7 +476,9 @@ export const toggleIdeaVote = createServerFn({ method: "POST" })
       return { voted: false };
     }
 
-    const { error } = await supabase.from("idea_votes").insert({ idea_id: data.idea_id, user_id: userId });
+    const { error } = await supabase
+      .from("idea_votes")
+      .insert({ idea_id: data.idea_id, user_id: userId });
     if (error) throw new Error(error.message);
     return { voted: true };
   });

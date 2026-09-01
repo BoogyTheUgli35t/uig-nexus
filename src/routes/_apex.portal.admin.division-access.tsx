@@ -138,7 +138,9 @@ function DivisionAccessAdminPage() {
             {(admins.data ?? []).map((a) => (
               <li key={a.id} className="flex items-center justify-between gap-4 py-3">
                 <div className="min-w-0">
-                  <p className="truncate text-sm font-medium">{a.fullName || a.email || a.userId}</p>
+                  <p className="truncate text-sm font-medium">
+                    {a.fullName || a.email || a.userId}
+                  </p>
                   <p className="truncate text-xs text-muted-foreground">
                     {a.email} ·{" "}
                     {DIVISIONS.find((d) => d.slug === a.divisionSlug)?.name ?? a.divisionSlug}

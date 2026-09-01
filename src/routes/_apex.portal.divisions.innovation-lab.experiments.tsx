@@ -63,8 +63,11 @@ function ExperimentsPage() {
   });
 
   const updateMut = useMutation({
-    mutationFn: async (v: { id: string; status?: (typeof EXPERIMENT_STATUSES)[number]; result?: string }) =>
-      updateExperiment({ data: v, headers: await authHeaders() }),
+    mutationFn: async (v: {
+      id: string;
+      status?: (typeof EXPERIMENT_STATUSES)[number];
+      result?: string;
+    }) => updateExperiment({ data: v, headers: await authHeaders() }),
     onSuccess: invalidate,
     onError: (e: Error) => toast.error(e.message),
   });
@@ -186,7 +189,8 @@ function ExperimentsPage() {
                     onSubmit={(e) => {
                       e.preventDefault();
                       const draft = resultDrafts[ex.id]?.trim();
-                      if (draft) updateMut.mutate({ id: ex.id, result: draft, status: "concluded" });
+                      if (draft)
+                        updateMut.mutate({ id: ex.id, result: draft, status: "concluded" });
                     }}
                   >
                     <Textarea

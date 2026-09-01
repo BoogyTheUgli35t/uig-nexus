@@ -1,6 +1,13 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { PackageCheck, Gauge, Truck, Route as RouteIcon, AlertTriangle, MapPin } from "lucide-react";
+import {
+  PackageCheck,
+  Gauge,
+  Truck,
+  Route as RouteIcon,
+  AlertTriangle,
+  MapPin,
+} from "lucide-react";
 import { getLogisticsWorkspace } from "@/lib/logistics.functions";
 import { authHeaders } from "@/lib/auth-headers";
 import { DataPanel, EmptyState, StatusBadge, KpiStat } from "@/components/portal/blocks";
@@ -17,14 +24,17 @@ function LogisticsOverview() {
 
   const stats = data?.stats;
   const recent = (data?.shipments ?? []).slice(0, 6);
-  const alertCount = (stats?.serviceDue ?? 0) + (stats?.insuranceDue ?? 0) + (stats?.licenseDue ?? 0);
+  const alertCount =
+    (stats?.serviceDue ?? 0) + (stats?.insuranceDue ?? 0) + (stats?.licenseDue ?? 0);
 
   return (
     <div className="space-y-8">
       <div className="flex justify-end">
         <Link
           to="/portal/divisions/intelligence/assistant"
-          search={{ ask: `We have ${stats?.active ?? 0} active shipments and an on-time rate of ${stats?.onTimeRate ?? 0}%. Any patterns or risks worth flagging?` }}
+          search={{
+            ask: `We have ${stats?.active ?? 0} active shipments and an on-time rate of ${stats?.onTimeRate ?? 0}%. Any patterns or risks worth flagging?`,
+          }}
           className="text-sm text-gold hover:underline"
         >
           Ask Intelligence AI about logistics
@@ -61,13 +71,21 @@ function LogisticsOverview() {
         <div className="flex items-start gap-2 rounded-lg border border-destructive/30 bg-destructive/5 px-4 py-3 text-sm">
           <AlertTriangle className="h-4 w-4 shrink-0 text-destructive mt-0.5" />
           <div className="text-muted-foreground">
-            <span className="font-medium text-foreground">{alertCount} item{alertCount === 1 ? "" : "s"}</span>{" "}
+            <span className="font-medium text-foreground">
+              {alertCount} item{alertCount === 1 ? "" : "s"}
+            </span>{" "}
             need attention in the next 30 days:{" "}
-            {stats?.serviceDue ? `${stats.serviceDue} vehicle service${stats.serviceDue === 1 ? "" : "s"} due` : ""}
+            {stats?.serviceDue
+              ? `${stats.serviceDue} vehicle service${stats.serviceDue === 1 ? "" : "s"} due`
+              : ""}
             {stats?.serviceDue && (stats?.insuranceDue || stats?.licenseDue) ? " · " : ""}
-            {stats?.insuranceDue ? `${stats.insuranceDue} insurance renewal${stats.insuranceDue === 1 ? "" : "s"}` : ""}
+            {stats?.insuranceDue
+              ? `${stats.insuranceDue} insurance renewal${stats.insuranceDue === 1 ? "" : "s"}`
+              : ""}
             {stats?.insuranceDue && stats?.licenseDue ? " · " : ""}
-            {stats?.licenseDue ? `${stats.licenseDue} driver license${stats.licenseDue === 1 ? "" : "s"} expiring` : ""}
+            {stats?.licenseDue
+              ? `${stats.licenseDue} driver license${stats.licenseDue === 1 ? "" : "s"} expiring`
+              : ""}
             {" — see the "}
             <Link to="/portal/divisions/logistics/fleet" className="text-gold hover:underline">
               Fleet
@@ -81,7 +99,10 @@ function LogisticsOverview() {
         </div>
       )}
 
-      <DataPanel title="Recent shipments" action={{ to: "/portal/divisions/logistics/shipments", label: "View all" }}>
+      <DataPanel
+        title="Recent shipments"
+        action={{ to: "/portal/divisions/logistics/shipments", label: "View all" }}
+      >
         {isLoading ? (
           <div className="text-sm text-muted-foreground">Loading…</div>
         ) : recent.length === 0 ? (
