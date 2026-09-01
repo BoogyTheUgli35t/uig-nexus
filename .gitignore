@@ -20,12 +20,20 @@ dist-ssr
 .wrangler/
 .dev.vars
 
-# Env files (this project's .env currently holds the Supabase anon key + project ref —
-# harmless if leaked since RLS gates data access, but SUPABASE_SERVICE_ROLE_KEY must
-# never end up in a file like this; keep it in Cloudflare/Lovable Cloud secrets only)
-.env
+# Env files.
+#
+# `.env` is deliberately COMMITTED during development: it holds only the public
+# Supabase URL + publishable (anon) key, which RLS gates and which already ship
+# in the browser bundle. That keeps `git clone && npm i && npm run dev` working
+# with no setup, locally and in CI.
+#
+# Secrets live in `.env.local`, which stays ignored — above all
+# SUPABASE_SERVICE_ROLE_KEY, which bypasses RLS entirely. Also STRIPE_SECRET_KEY,
+# STRIPE_WEBHOOK_SECRET, LOVABLE_API_KEY, SUPER_ADMIN_PASSWORD, CLOUDINARY_URL
+# and the E2E credentials. See .env.local.example.
 .env.*
 !.env.example
+!.env.local.example
 
 # Editor directories and files
 .vscode/*
