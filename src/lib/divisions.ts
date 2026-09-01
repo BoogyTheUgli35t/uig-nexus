@@ -82,7 +82,7 @@ export const DIVISIONS: Division[] = [
     modules: [
       { label: "Project board", description: "Kanban + timeline across every client engagement.", status: "live" },
       { label: "Client portal", description: "Live project status, invoices and documents.", status: "live" },
-      { label: "Automation engine", description: "Trigger-based workflow rules and run history.", status: "soon" },
+      { label: "Automation engine", description: "Trigger-based workflow rules and run history.", status: "live" },
       { label: "Integration hub", description: "Connect and monitor third-party APIs and services.", status: "live" },
     ],
   },
@@ -102,7 +102,7 @@ export const DIVISIONS: Division[] = [
       { label: "Farmer onboarding", description: "Register farmers and cooperatives in minutes.", status: "live" },
       { label: "Field dashboard", description: "Map view with live sensor and drone data.", status: "live" },
       { label: "Yield prediction", description: "AI-forecasted yields by field and season.", status: "live" },
-      { label: "Cooperative management", description: "Group farmers, share inputs, track output.", status: "soon" },
+      { label: "Cooperative management", description: "Group farmers, share inputs, track output.", status: "live" },
     ],
   },
   {

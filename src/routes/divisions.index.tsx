@@ -26,6 +26,7 @@ const divisions = DIVISIONS.map((d) => ({
   icon: d.icon,
   hero: d.hero,
   blurb: d.tagline,
+  modules: d.modules,
 }));
 
 function DivisionsPage() {

@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { installGlobalErrorReporting } from "@/lib/report-error";
 import { Toaster } from "@/components/ui/sonner";
+import { BackendBanner } from "@/components/site/BackendBanner";
 
 import appCss from "../styles.css?url";
 
@@ -117,5 +118,10 @@ function RootComponent() {
     installGlobalErrorReporting();
   }, []);
 
-  return <Outlet />;
+  return (
+    <>
+      <BackendBanner />
+      <Outlet />
+    </>
+  );
 }
