@@ -117,5 +117,10 @@ function RootComponent() {
     installGlobalErrorReporting();
   }, []);
 
-  return <Outlet />;
+  return (
+    <>
+      <BackendBanner />
+      <Outlet />
+    </>
+  );
 }
