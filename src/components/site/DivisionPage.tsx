@@ -1,6 +1,6 @@
 import type { ComponentType, ReactNode } from "react";
 import type { LucideIcon } from "lucide-react";
-import { Check, ArrowRight } from "lucide-react";
+import { Check, ArrowRight, Clock } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { PageHero, Section, Eyebrow, CTABand, FeatureCard } from "@/components/site/sections";
@@ -282,6 +282,49 @@ export function DivisionPage(props: DivisionPageProps) {
                 <div className="text-3xl font-bold text-gradient-gold">{m.value}</div>
                 <div className="mt-2 text-xs text-muted-foreground uppercase tracking-wider">
                   {m.label}
+                </div>
+              </div>
+            ))}
+          </div>
+        </Section>
+      )}
+
+      {division && division.modules.length > 0 && (
+        <Section>
+          <Eyebrow>Inside the workspace</Eyebrow>
+          <h2 className="mt-5 text-3xl sm:text-4xl font-bold">What this division runs on.</h2>
+          <p className="mt-4 max-w-2xl text-muted-foreground">
+            Every module below is a real screen inside the UIG Apex Portal — not a roadmap slide.
+          </p>
+          <div className="mt-10 grid gap-4 sm:grid-cols-2">
+            {division.modules.map((m) => (
+              <div
+                key={m.label}
+                className={`${division.accentClass} flex gap-4 rounded-xl border border-border bg-surface/60 p-5`}
+              >
+                <div
+                  className={`mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${
+                    m.status === "live"
+                      ? "acc-bg-soft acc-text"
+                      : "bg-surface-elevated text-muted-foreground"
+                  }`}
+                >
+                  {m.status === "live" ? (
+                    <Check className="h-4 w-4" aria-hidden="true" />
+                  ) : (
+                    <Clock className="h-4 w-4" aria-hidden="true" />
+                  )}
+                </div>
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h3 className="font-semibold">{m.label}</h3>
+                    {m.status === "soon" && (
+                      <span className="rounded-full border border-border px-2 py-0.5 text-[10px] uppercase tracking-wider text-muted-foreground">
+                        In build
+                      </span>
+                    )}
+                  </div>
+                  <p className="mt-1.5 text-sm text-muted-foreground">{m.description}</p>
                 </div>
               </div>
             ))}

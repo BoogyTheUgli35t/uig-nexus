@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Check, Clock } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { PageHero, Section, CTABand } from "@/components/site/sections";
 import { DIVISIONS } from "@/lib/divisions";
@@ -65,6 +65,37 @@ function DivisionsPage() {
               <div className="p-8 pt-6">
                 <h3 className="font-display text-xl font-semibold">{d.title}</h3>
                 <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{d.blurb}</p>
+
+                {/* What each division actually runs inside the Apex Portal, so a
+                    visitor can see the capability rather than take the tagline
+                    on trust. Sourced from DIVISIONS[].modules. */}
+                <ul className="mt-5 space-y-1.5 border-t border-border pt-5">
+                  {d.modules.map((m) => (
+                    <li key={m.label} className="flex items-center gap-2 text-xs">
+                      {m.status === "live" ? (
+                        <Check className="h-3.5 w-3.5 shrink-0 text-gold" aria-hidden="true" />
+                      ) : (
+                        <Clock
+                          className="h-3.5 w-3.5 shrink-0 text-muted-foreground"
+                          aria-hidden="true"
+                        />
+                      )}
+                      <span
+                        className={
+                          m.status === "live" ? "text-muted-foreground" : "text-muted-foreground/60"
+                        }
+                      >
+                        {m.label}
+                      </span>
+                      {m.status === "soon" && (
+                        <span className="ml-auto shrink-0 rounded-full border border-border px-1.5 py-0.5 text-[10px] uppercase tracking-wider text-muted-foreground/70">
+                          Soon
+                        </span>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+
                 <div className="mt-6 inline-flex items-center text-sm text-gold">
                   Explore{" "}
                   <ArrowRight className="ml-1 h-4 w-4 transition group-hover:translate-x-1" />
