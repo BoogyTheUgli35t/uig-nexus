@@ -175,22 +175,22 @@ export const MCP_DIVISIONS: McpDivision[] = [
       {
         label: "Idea submission",
         description: "Capture ideas from every division.",
-        status: "soon",
+        status: "live",
       },
       {
         label: "Prototype tracker",
         description: "Status board from concept to demo.",
-        status: "soon",
+        status: "live",
       },
       {
         label: "Partner collaboration",
         description: "Co-build with partners and investors.",
-        status: "soon",
+        status: "live",
       },
       {
         label: "Experiment log",
         description: "Run AI experiments via the Model Trainer.",
-        status: "soon",
+        status: "live",
       },
     ],
   },
