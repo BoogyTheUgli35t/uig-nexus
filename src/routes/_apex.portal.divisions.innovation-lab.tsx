@@ -1,5 +1,14 @@
 import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
-import { ArrowLeft, Lock, LayoutGrid, Lightbulb, Cpu, FlaskConical, Users2 } from "lucide-react";
+import {
+  ArrowLeft,
+  Lock,
+  LayoutGrid,
+  Lightbulb,
+  Cpu,
+  FlaskConical,
+  Handshake,
+  Users2,
+} from "lucide-react";
 import { getDivision } from "@/lib/divisions";
 import { useDivisionAccess, useIsDivisionAdmin } from "@/hooks/use-division-access";
 import { HeroBanner, EmptyState } from "@/components/portal/blocks";
@@ -18,6 +27,7 @@ const TABS = [
   { to: "/portal/divisions/innovation-lab/ideas", label: "Ideas", icon: Lightbulb },
   { to: "/portal/divisions/innovation-lab/prototypes", label: "Prototypes", icon: Cpu },
   { to: "/portal/divisions/innovation-lab/experiments", label: "Experiments", icon: FlaskConical },
+  { to: "/portal/divisions/innovation-lab/partners", label: "Partners", icon: Handshake },
 ] as const;
 
 function InnovationLabLayout() {

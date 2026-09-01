@@ -482,3 +482,130 @@ export const toggleIdeaVote = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { voted: true };
   });
+
+// =============== Ecosystem partners ===============
+//
+// Partner records are managed on their own workspace tab
+// (/portal/divisions/innovation-lab/partners). Every write below runs on the
+// caller's RLS-scoped client, so the "innovation members manage partners"
+// policy is what actually authorises it — no service-role client involved.
+
+export const PARTNER_TYPES = [
+  "corporate",
+  "academic",
+  "venture_capital",
+  "incubator",
+  "government",
+  "ngo",
+] as const;
+
+export type PartnerType = (typeof PARTNER_TYPES)[number];
+
+/** Every partner, newest first. */
+export const listPartners = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data, error } = await context.supabase
+      .from("partners")
+      .select("*")
+      .order("created_at", { ascending: false });
+    if (error) throw new Error(error.message);
+    return data ?? [];
+  });
+
+const UpdatePartnerSchema = z.object({
+  id: z.string().uuid(),
+  name: z.string().trim().min(1).max(150),
+  type: z.string().trim().max(100).optional().or(z.literal("")),
+  contact: z.string().trim().max(200).optional().or(z.literal("")),
+});
+
+export const updatePartner = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((i: unknown) => UpdatePartnerSchema.parse(i))
+  .handler(async ({ context, data }) => {
+    const { error } = await context.supabase
+      .from("partners")
+      .update({
+        name: data.name,
+        type: data.type || null,
+        contact: data.contact || null,
+      })
+      .eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+const RemovePartnerSchema = z.object({ id: z.string().uuid() });
+
+export const removePartner = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((i: unknown) => RemovePartnerSchema.parse(i))
+  .handler(async ({ context, data }) => {
+    const { error } = await context.supabase.from("partners").delete().eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+// =============== Public submission -> venture pipeline ===============
+
+const PromoteSubmissionSchema = z.object({ id: z.string().uuid() });
+
+/** Turn a public idea submission into a real `ideas` row.
+ *
+ * Until now the only route from the public form into the venture pipeline was
+ * a reviewer retyping the idea by hand, which is why the overview carried a
+ * comment saying exactly that. Promotion is idempotent: the submission's
+ * reviewer_notes carries a `[promoted:<idea id>]` marker, and a second call
+ * returns that same id instead of creating a duplicate idea. */
+export const promoteSubmission = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((i: unknown) => PromoteSubmissionSchema.parse(i))
+  .handler(async ({ context, data }) => {
+    const { supabase, userId } = context;
+
+    const { data: submission, error: readErr } = await supabase
+      .from("innovation_submissions")
+      .select("*")
+      .eq("id", data.id)
+      .maybeSingle();
+    if (readErr) throw new Error(readErr.message);
+    if (!submission) throw new Error("Submission not found");
+
+    const alreadyPromoted = /\[promoted:([0-9a-f-]{36})\]/.exec(submission.reviewer_notes ?? "");
+    if (alreadyPromoted) {
+      return { ok: true, ideaId: alreadyPromoted[1], alreadyPromoted: true };
+    }
+
+    const { data: idea, error: insErr } = await supabase
+      .from("ideas")
+      .insert({
+        title: submission.idea_title.slice(0, 150),
+        description: submission.idea_description,
+        tags: submission.category ? [submission.category] : [],
+        status: "concept",
+        submitted_by: userId,
+      })
+      .select("id")
+      .single();
+    if (insErr) throw new Error(insErr.message);
+
+    const note = [
+      submission.reviewer_notes?.trim(),
+      `Promoted from public submission by ${submission.full_name} <${submission.email}>. [promoted:${idea.id}]`,
+    ]
+      .filter(Boolean)
+      .join("\n");
+
+    const { error: updErr } = await supabase
+      .from("innovation_submissions")
+      .update({
+        status: "accepted",
+        reviewer_notes: note.slice(0, 2000),
+        reviewed_at: new Date().toISOString(),
+      })
+      .eq("id", data.id);
+    if (updErr) throw new Error(updErr.message);
+
+    return { ok: true, ideaId: idea.id, alreadyPromoted: false };
+  });

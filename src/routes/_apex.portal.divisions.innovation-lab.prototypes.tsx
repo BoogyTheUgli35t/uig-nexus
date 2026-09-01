@@ -1,12 +1,14 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, Cpu, GitBranch, Globe } from "lucide-react";
+import { Plus, Cpu, GitBranch, Globe, ImagePlus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 import {
   getInnovationWorkspace,
   createPrototype,
   updatePrototypeStatus,
+  addPrototypeScreenshot,
+  removePrototypeScreenshot,
   PROTOTYPE_STATUSES,
 } from "@/lib/innovation.functions";
 import { authHeaders } from "@/lib/auth-headers";
@@ -37,6 +39,9 @@ function PrototypesPage() {
   const [protoIdeaId, setProtoIdeaId] = useState("");
   const [protoRepo, setProtoRepo] = useState("");
   const [protoDemo, setProtoDemo] = useState("");
+  // Screenshot upload used to exist only on the workspace overview, so this
+  // board could show shots but never add one. It belongs on the card.
+  const [uploadingProto, setUploadingProto] = useState<string | null>(null);
 
   const { data, isLoading } = useQuery({
     queryKey: ["innovation-workspace"],
@@ -67,6 +72,36 @@ function PrototypesPage() {
     onSuccess: invalidate,
     onError: (e: Error) => toast.error(e.message),
   });
+
+  const removeShotMut = useMutation({
+    mutationFn: async (v: { prototype_id: string; storage_path: string }) =>
+      removePrototypeScreenshot({ data: v, headers: await authHeaders() }),
+    onSuccess: invalidate,
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  async function onUploadScreenshot(prototypeId: string, e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingProto(prototypeId);
+    try {
+      const safeName = file.name.replace(/[^\w.-]+/g, "_");
+      const path = `${prototypeId}/${Date.now()}-${safeName}`;
+      const { error: upErr } = await supabase.storage.from("prototype-images").upload(path, file);
+      if (upErr) throw upErr;
+      await addPrototypeScreenshot({
+        data: { prototype_id: prototypeId, storage_path: path },
+        headers: await authHeaders(),
+      });
+      toast.success("Screenshot added");
+      invalidate();
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Upload failed");
+    } finally {
+      setUploadingProto(null);
+      e.target.value = "";
+    }
+  }
 
   const ideas = data?.ideas ?? [];
   const prototypes = data?.prototypes ?? [];
@@ -148,17 +183,42 @@ function PrototypesPage() {
                           </div>
                           {shots.length > 0 && (
                             <div className="mt-2 grid grid-cols-2 gap-1">
-                              {shots.slice(0, 2).map((s) => (
-                                <img
-                                  key={s}
-                                  src={shotUrl(s)}
-                                  alt="Prototype screenshot"
-                                  loading="lazy"
-                                  className="aspect-video rounded object-cover"
-                                />
+                              {shots.slice(0, 4).map((s) => (
+                                <div key={s} className="group relative">
+                                  <img
+                                    src={shotUrl(s)}
+                                    alt="Prototype screenshot"
+                                    loading="lazy"
+                                    className="aspect-video w-full rounded object-cover"
+                                  />
+                                  <button
+                                    type="button"
+                                    aria-label="Remove screenshot"
+                                    onClick={() =>
+                                      removeShotMut.mutate({
+                                        prototype_id: p.id,
+                                        storage_path: s,
+                                      })
+                                    }
+                                    className="absolute right-0.5 top-0.5 rounded bg-background/80 p-0.5 opacity-0 transition group-hover:opacity-100 focus:opacity-100"
+                                  >
+                                    <Trash2 className="h-3 w-3 text-destructive" />
+                                  </button>
+                                </div>
                               ))}
                             </div>
                           )}
+                          <label className="mt-2 inline-flex cursor-pointer items-center gap-1 text-[11px] text-muted-foreground transition hover:acc-text">
+                            <ImagePlus className="h-3 w-3" />
+                            {uploadingProto === p.id ? "Uploading…" : "Add screenshot"}
+                            <input
+                              type="file"
+                              accept="image/*"
+                              className="hidden"
+                              disabled={uploadingProto === p.id}
+                              onChange={(ev) => onUploadScreenshot(p.id, ev)}
+                            />
+                          </label>
                           <div className="mt-2 flex flex-wrap gap-2 text-[11px]">
                             {p.repo_link && (
                               <a

@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, Lightbulb, ChevronUp } from "lucide-react";
+import { Plus, Lightbulb, ChevronUp, ListChecks, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import {
   getInnovationWorkspace,
@@ -9,6 +9,9 @@ import {
   updateIdeaStatus,
   listIdeaVotes,
   toggleIdeaVote,
+  listChecklist,
+  generateMvpChecklist,
+  toggleChecklistItem,
   IDEA_STATUSES,
 } from "@/lib/innovation.functions";
 import { authHeaders } from "@/lib/auth-headers";
@@ -29,6 +32,10 @@ function IdeasPage() {
   const [ideaTags, setIdeaTags] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [sortBy, setSortBy] = useState<"votes" | "recent">("votes");
+  // Which idea's MVP checklist is expanded. The checklist used to live only on
+  // the workspace overview, where it was unreachable from the idea list people
+  // actually work in — it belongs next to the idea it plans.
+  const [checklistIdea, setChecklistIdea] = useState<string | null>(null);
 
   const { data, isLoading } = useQuery({
     queryKey: ["innovation-workspace"],
@@ -76,6 +83,30 @@ function IdeasPage() {
     mutationFn: async (v: { id: string; status: (typeof IDEA_STATUSES)[number] }) =>
       updateIdeaStatus({ data: v, headers: await authHeaders() }),
     onSuccess: invalidate,
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const { data: checklist, isLoading: checklistLoading } = useQuery({
+    queryKey: ["innovation-checklist", checklistIdea],
+    queryFn: async () =>
+      listChecklist({ headers: await authHeaders(), data: { idea_id: checklistIdea! } }),
+    enabled: Boolean(checklistIdea),
+  });
+
+  const genChecklistMut = useMutation({
+    mutationFn: async (ideaId: string) =>
+      generateMvpChecklist({ data: { idea_id: ideaId }, headers: await authHeaders() }),
+    onSuccess: (r) => {
+      toast.success(`Generated ${r.count} checklist item${r.count === 1 ? "" : "s"}`);
+      qc.invalidateQueries({ queryKey: ["innovation-checklist", checklistIdea] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const toggleChecklistMut = useMutation({
+    mutationFn: async (v: { id: string; done: boolean }) =>
+      toggleChecklistItem({ data: v, headers: await authHeaders() }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["innovation-checklist", checklistIdea] }),
     onError: (e: Error) => toast.error(e.message),
   });
 
@@ -239,6 +270,72 @@ function IdeasPage() {
                       ))}
                     </div>
                   )}
+
+                  <div className="mt-3 border-t border-border pt-2.5">
+                    <button
+                      type="button"
+                      onClick={() => setChecklistIdea(checklistIdea === idea.id ? null : idea.id)}
+                      aria-expanded={checklistIdea === idea.id}
+                      className="inline-flex items-center gap-1.5 rounded border border-border px-2 py-1 text-[11px] text-muted-foreground transition hover:border-gold hover:text-foreground"
+                    >
+                      <ListChecks className="h-3 w-3" />
+                      {checklistIdea === idea.id ? "Hide MVP checklist" : "MVP checklist"}
+                    </button>
+
+                    {checklistIdea === idea.id && (
+                      <div className="mt-2 rounded-lg border border-border bg-surface p-3">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-xs font-semibold uppercase text-muted-foreground">
+                            MVP checklist
+                          </span>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="h-7 text-[11px]"
+                            disabled={genChecklistMut.isPending}
+                            onClick={() => genChecklistMut.mutate(idea.id)}
+                          >
+                            <Sparkles className="mr-1 h-3 w-3" />
+                            {genChecklistMut.isPending ? "Generating…" : "Generate with AI"}
+                          </Button>
+                        </div>
+                        {checklistLoading ? (
+                          <p className="mt-2 text-xs text-muted-foreground">Loading…</p>
+                        ) : (checklist?.length ?? 0) === 0 ? (
+                          <p className="mt-2 text-xs text-muted-foreground">
+                            No checklist yet — generate one from this idea's description.
+                          </p>
+                        ) : (
+                          <ul className="mt-2 space-y-1.5">
+                            {(checklist ?? []).map((item) => (
+                              <li key={item.id} className="flex items-start gap-2 text-xs">
+                                <input
+                                  id={`chk-${item.id}`}
+                                  type="checkbox"
+                                  className="mt-0.5"
+                                  checked={item.done}
+                                  onChange={(e) =>
+                                    toggleChecklistMut.mutate({
+                                      id: item.id,
+                                      done: e.target.checked,
+                                    })
+                                  }
+                                />
+                                <label
+                                  htmlFor={`chk-${item.id}`}
+                                  className={
+                                    item.done ? "text-muted-foreground line-through" : undefined
+                                  }
+                                >
+                                  {item.task}
+                                </label>
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                    )}
+                  </div>
                 </div>
               );
             })}
