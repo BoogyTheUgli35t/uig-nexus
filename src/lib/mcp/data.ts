@@ -39,7 +39,7 @@ export const MCP_DIVISIONS: McpDivision[] = [
       {
         label: "Automation engine",
         description: "Trigger-based workflow rules and run history.",
-        status: "soon",
+        status: "live",
       },
       {
         label: "Integration hub",
@@ -74,7 +74,7 @@ export const MCP_DIVISIONS: McpDivision[] = [
       {
         label: "Cooperative management",
         description: "Group farmers, share inputs, track output.",
-        status: "soon",
+        status: "live",
       },
     ],
   },
