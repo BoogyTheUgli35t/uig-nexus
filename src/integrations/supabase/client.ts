@@ -37,23 +37,28 @@ const NOT_CONFIGURED = {
 
 /** Stand-in client used only when no credentials exist: every call resolves to
  * an error result instead of throwing, so React trees stay mounted. */
-function createUnconfiguredClient(): ReturnType<typeof createSupabaseClient> {
-  const result = Promise.resolve({ data: null, error: NOT_CONFIGURED });
-  const handler: ProxyHandler<Record<string, unknown>> = {
+function createUnconfiguredClient(): unknown {
+  // Any property access returns this same callable proxy, and awaiting it
+  // yields `{ data: null, error }` — so `supabase.from("x").select()` and
+  // `supabase.auth.getUser()` both settle instead of blowing up.
+  const target = function stub() {
+    return proxy;
+  } as unknown as Record<string, unknown>;
+  const proxy: unknown = new Proxy(target, {
     get(_t, prop) {
-      if (prop === "then") return undefined; // never look like a thenable
-      return new Proxy(Object.assign(() => stub, {}) as never, handler);
+      if (prop === "then") {
+        return (onFulfilled: (v: unknown) => unknown) =>
+          Promise.resolve({ data: null, error: NOT_CONFIGURED }).then(onFulfilled);
+      }
+      return proxy;
     },
     apply() {
-      return stub;
+      return proxy;
     },
-  };
-  const stub: never = new Proxy(
-    Object.assign(() => undefined, { then: result.then.bind(result) }) as never,
-    handler,
-  );
-  return stub;
+  });
+  return proxy;
 }
+
 
 function createSupabaseClient() {
   const { url, key } = readEnv();
