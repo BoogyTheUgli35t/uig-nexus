@@ -5,7 +5,9 @@
   "auth": {
     "type": "oauth",
     "issuer": "https://djocumwhwbncrpbnsfsy.supabase.co/auth/v1",
-    "accepted_audiences": ["authenticated"]
+    "accepted_audiences": [
+      "authenticated"
+    ]
   },
   "mcp": {
     "server": {
@@ -49,7 +51,9 @@
               "description": "The division slug, e.g. technology, agritech, real-estate, logistics, intelligence, innovation-lab."
             }
           },
-          "required": ["slug"]
+          "required": [
+            "slug"
+          ]
         },
         "outputSchema": null
       }
