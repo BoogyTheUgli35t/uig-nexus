@@ -33,6 +33,7 @@ import { Route as DivisionsIntelligenceRouteImport } from './routes/divisions.in
 import { Route as DivisionsLogisticsRouteImport } from './routes/divisions.logistics'
 import { Route as DivisionsRealEstateRouteImport } from './routes/divisions.real-estate'
 import { Route as DivisionsTechnologyRouteImport } from './routes/divisions.technology'
+import { Route as InsightsIndexRouteImport } from './routes/insights.index'
 import { Route as InsightsSlugRouteImport } from './routes/insights.$slug'
 import { Route as PortalIndexRouteImport } from './routes/portal.index'
 import { Route as PortalChooseDivisionRouteImport } from './routes/portal.choose-division'
@@ -48,6 +49,7 @@ import { Route as ApexPortalDashboardRouteImport } from './routes/_apex.portal.d
 import { Route as ApexPortalDocumentsRouteImport } from './routes/_apex.portal.documents'
 import { Route as ApexPortalDriverTasksRouteImport } from './routes/_apex.portal.driver-tasks'
 import { Route as ApexPortalMessagesRouteImport } from './routes/_apex.portal.messages'
+import { Route as ApexPortalMyFarmRouteImport } from './routes/_apex.portal.my-farm'
 import { Route as ApexPortalMyInvestmentsRouteImport } from './routes/_apex.portal.my-investments'
 import { Route as ApexPortalMyTenancyRouteImport } from './routes/_apex.portal.my-tenancy'
 import { Route as ApexPortalSettingsRouteImport } from './routes/_apex.portal.settings'
@@ -109,6 +111,7 @@ import { Route as ApexPortalDivisionsRealEstateTenantsRouteImport } from './rout
 import { Route as ApexPortalDivisionsTechnologyIndexRouteImport } from './routes/_apex.portal.divisions.technology.index'
 import { Route as ApexPortalDivisionsTechnologyAutomationRouteImport } from './routes/_apex.portal.divisions.technology.automation'
 import { Route as ApexPortalDivisionsTechnologyIntegrationsRouteImport } from './routes/_apex.portal.divisions.technology.integrations'
+import { Route as ApexPortalDivisionsTechnologyOperationsRouteImport } from './routes/_apex.portal.divisions.technology.operations'
 import { Route as ApexPortalDivisionsTechnologyTeamRouteImport } from './routes/_apex.portal.divisions.technology.team'
 import { Route as DivisionsRealEstateListingsStateIndexRouteImport } from './routes/divisions.real-estate_.listings.$state.index'
 import { Route as DivisionsRealEstateListingsStateIdRouteImport } from './routes/divisions.real-estate_.listings.$state.$id'
@@ -116,8 +119,10 @@ import { Route as ApexPortalDivisionsAgritechFieldsIndexRouteImport } from './ro
 import { Route as ApexPortalDivisionsAgritechFieldsIdRouteImport } from './routes/_apex.portal.divisions.agritech.fields.$id'
 import { Route as ApexPortalDivisionsIntelligenceModelsIndexRouteImport } from './routes/_apex.portal.divisions.intelligence.models.index'
 import { Route as ApexPortalDivisionsIntelligenceModelsIdRouteImport } from './routes/_apex.portal.divisions.intelligence.models.$id'
+import { Route as ApexPortalDivisionsLogisticsDriversIdRouteImport } from './routes/_apex.portal.divisions.logistics.drivers.$id'
 import { Route as ApexPortalDivisionsLogisticsShipmentsIndexRouteImport } from './routes/_apex.portal.divisions.logistics.shipments.index'
 import { Route as ApexPortalDivisionsLogisticsShipmentsIdRouteImport } from './routes/_apex.portal.divisions.logistics.shipments.$id'
+import { Route as ApexPortalDivisionsRealEstateInvestorsIdRouteImport } from './routes/_apex.portal.divisions.real-estate.investors_.$id'
 import { Route as ApexPortalDivisionsRealEstateLeadsIdRouteImport } from './routes/_apex.portal.divisions.real-estate.leads_.$id'
 import { Route as ApexPortalDivisionsRealEstatePropertiesIndexRouteImport } from './routes/_apex.portal.divisions.real-estate.properties.index'
 import { Route as ApexPortalDivisionsRealEstatePropertiesIdRouteImport } from './routes/_apex.portal.divisions.real-estate.properties.$id'
@@ -252,6 +257,11 @@ const DivisionsTechnologyRoute = DivisionsTechnologyRouteImport.update({
   path: '/divisions/technology',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InsightsIndexRoute = InsightsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => InsightsRoute,
+} as any)
 const InsightsSlugRoute = InsightsSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
@@ -326,6 +336,11 @@ const ApexPortalDriverTasksRoute = ApexPortalDriverTasksRouteImport.update({
 const ApexPortalMessagesRoute = ApexPortalMessagesRouteImport.update({
   id: '/portal/messages',
   path: '/portal/messages',
+  getParentRoute: () => ApexRoute,
+} as any)
+const ApexPortalMyFarmRoute = ApexPortalMyFarmRouteImport.update({
+  id: '/portal/my-farm',
+  path: '/portal/my-farm',
   getParentRoute: () => ApexRoute,
 } as any)
 const ApexPortalMyInvestmentsRoute = ApexPortalMyInvestmentsRouteImport.update({
@@ -679,6 +694,12 @@ const ApexPortalDivisionsTechnologyIntegrationsRoute =
     path: '/integrations',
     getParentRoute: () => ApexPortalDivisionsTechnologyRoute,
   } as any)
+const ApexPortalDivisionsTechnologyOperationsRoute =
+  ApexPortalDivisionsTechnologyOperationsRouteImport.update({
+    id: '/operations',
+    path: '/operations',
+    getParentRoute: () => ApexPortalDivisionsTechnologyRoute,
+  } as any)
 const ApexPortalDivisionsTechnologyTeamRoute =
   ApexPortalDivisionsTechnologyTeamRouteImport.update({
     id: '/team',
@@ -721,6 +742,12 @@ const ApexPortalDivisionsIntelligenceModelsIdRoute =
     path: '/models/$id',
     getParentRoute: () => ApexPortalDivisionsIntelligenceRoute,
   } as any)
+const ApexPortalDivisionsLogisticsDriversIdRoute =
+  ApexPortalDivisionsLogisticsDriversIdRouteImport.update({
+    id: '/$id',
+    path: '/$id',
+    getParentRoute: () => ApexPortalDivisionsLogisticsDriversRoute,
+  } as any)
 const ApexPortalDivisionsLogisticsShipmentsIndexRoute =
   ApexPortalDivisionsLogisticsShipmentsIndexRouteImport.update({
     id: '/shipments/',
@@ -732,6 +759,12 @@ const ApexPortalDivisionsLogisticsShipmentsIdRoute =
     id: '/shipments/$id',
     path: '/shipments/$id',
     getParentRoute: () => ApexPortalDivisionsLogisticsRoute,
+  } as any)
+const ApexPortalDivisionsRealEstateInvestorsIdRoute =
+  ApexPortalDivisionsRealEstateInvestorsIdRouteImport.update({
+    id: '/investors_/$id',
+    path: '/investors/$id',
+    getParentRoute: () => ApexPortalDivisionsRealEstateRoute,
   } as any)
 const ApexPortalDivisionsRealEstateLeadsIdRoute =
   ApexPortalDivisionsRealEstateLeadsIdRouteImport.update({
@@ -836,6 +869,7 @@ export interface FileRoutesByFullPath {
   '/portal/reset-password': typeof PortalResetPasswordRoute
   '/portal/signup': typeof PortalSignupRoute
   '/divisions/': typeof DivisionsIndexRoute
+  '/insights/': typeof InsightsIndexRoute
   '/portal/': typeof PortalIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -845,6 +879,7 @@ export interface FileRoutesByFullPath {
   '/portal/documents': typeof ApexPortalDocumentsRoute
   '/portal/driver-tasks': typeof ApexPortalDriverTasksRoute
   '/portal/messages': typeof ApexPortalMessagesRoute
+  '/portal/my-farm': typeof ApexPortalMyFarmRoute
   '/portal/my-investments': typeof ApexPortalMyInvestmentsRoute
   '/portal/my-tenancy': typeof ApexPortalMyTenancyRoute
   '/portal/settings': typeof ApexPortalSettingsRoute
@@ -886,7 +921,7 @@ export interface FileRoutesByFullPath {
   '/portal/divisions/intelligence/datasets': typeof ApexPortalDivisionsIntelligenceDatasetsRoute
   '/portal/divisions/intelligence/integrations': typeof ApexPortalDivisionsIntelligenceIntegrationsRoute
   '/portal/divisions/intelligence/team': typeof ApexPortalDivisionsIntelligenceTeamRoute
-  '/portal/divisions/logistics/drivers': typeof ApexPortalDivisionsLogisticsDriversRoute
+  '/portal/divisions/logistics/drivers': typeof ApexPortalDivisionsLogisticsDriversRouteWithChildren
   '/portal/divisions/logistics/fleet': typeof ApexPortalDivisionsLogisticsFleetRoute
   '/portal/divisions/logistics/routes': typeof ApexPortalDivisionsLogisticsRoutesRoute
   '/portal/divisions/logistics/team': typeof ApexPortalDivisionsLogisticsTeamRoute
@@ -900,6 +935,7 @@ export interface FileRoutesByFullPath {
   '/portal/divisions/real-estate/tenants': typeof ApexPortalDivisionsRealEstateTenantsRoute
   '/portal/divisions/technology/automation': typeof ApexPortalDivisionsTechnologyAutomationRoute
   '/portal/divisions/technology/integrations': typeof ApexPortalDivisionsTechnologyIntegrationsRoute
+  '/portal/divisions/technology/operations': typeof ApexPortalDivisionsTechnologyOperationsRoute
   '/portal/divisions/technology/team': typeof ApexPortalDivisionsTechnologyTeamRoute
   '/divisions/real-estate/listings/$state/$id': typeof DivisionsRealEstateListingsStateIdRoute
   '/portal/divisions/agritech/': typeof ApexPortalDivisionsAgritechIndexRoute
@@ -911,7 +947,9 @@ export interface FileRoutesByFullPath {
   '/divisions/real-estate/listings/$state/': typeof DivisionsRealEstateListingsStateIndexRoute
   '/portal/divisions/agritech/fields/$id': typeof ApexPortalDivisionsAgritechFieldsIdRoute
   '/portal/divisions/intelligence/models/$id': typeof ApexPortalDivisionsIntelligenceModelsIdRoute
+  '/portal/divisions/logistics/drivers/$id': typeof ApexPortalDivisionsLogisticsDriversIdRoute
   '/portal/divisions/logistics/shipments/$id': typeof ApexPortalDivisionsLogisticsShipmentsIdRoute
+  '/portal/divisions/real-estate/investors/$id': typeof ApexPortalDivisionsRealEstateInvestorsIdRoute
   '/portal/divisions/real-estate/leads/$id': typeof ApexPortalDivisionsRealEstateLeadsIdRoute
   '/portal/divisions/real-estate/properties/$id': typeof ApexPortalDivisionsRealEstatePropertiesIdRoute
   '/portal/divisions/real-estate/properties/new': typeof ApexPortalDivisionsRealEstatePropertiesNewRoute
@@ -934,7 +972,6 @@ export interface FileRoutesByTo {
   '/careers': typeof CareersRoute
   '/contact': typeof ContactRoute
   '/cookies': typeof CookiesRoute
-  '/insights': typeof InsightsRouteWithChildren
   '/mcp': typeof McpRoute
   '/privacy': typeof PrivacyRoute
   '/services': typeof ServicesRoute
@@ -957,6 +994,7 @@ export interface FileRoutesByTo {
   '/portal/reset-password': typeof PortalResetPasswordRoute
   '/portal/signup': typeof PortalSignupRoute
   '/divisions': typeof DivisionsIndexRoute
+  '/insights': typeof InsightsIndexRoute
   '/portal': typeof PortalIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -966,6 +1004,7 @@ export interface FileRoutesByTo {
   '/portal/documents': typeof ApexPortalDocumentsRoute
   '/portal/driver-tasks': typeof ApexPortalDriverTasksRoute
   '/portal/messages': typeof ApexPortalMessagesRoute
+  '/portal/my-farm': typeof ApexPortalMyFarmRoute
   '/portal/my-investments': typeof ApexPortalMyInvestmentsRoute
   '/portal/my-tenancy': typeof ApexPortalMyTenancyRoute
   '/portal/settings': typeof ApexPortalSettingsRoute
@@ -1001,7 +1040,7 @@ export interface FileRoutesByTo {
   '/portal/divisions/intelligence/datasets': typeof ApexPortalDivisionsIntelligenceDatasetsRoute
   '/portal/divisions/intelligence/integrations': typeof ApexPortalDivisionsIntelligenceIntegrationsRoute
   '/portal/divisions/intelligence/team': typeof ApexPortalDivisionsIntelligenceTeamRoute
-  '/portal/divisions/logistics/drivers': typeof ApexPortalDivisionsLogisticsDriversRoute
+  '/portal/divisions/logistics/drivers': typeof ApexPortalDivisionsLogisticsDriversRouteWithChildren
   '/portal/divisions/logistics/fleet': typeof ApexPortalDivisionsLogisticsFleetRoute
   '/portal/divisions/logistics/routes': typeof ApexPortalDivisionsLogisticsRoutesRoute
   '/portal/divisions/logistics/team': typeof ApexPortalDivisionsLogisticsTeamRoute
@@ -1015,6 +1054,7 @@ export interface FileRoutesByTo {
   '/portal/divisions/real-estate/tenants': typeof ApexPortalDivisionsRealEstateTenantsRoute
   '/portal/divisions/technology/automation': typeof ApexPortalDivisionsTechnologyAutomationRoute
   '/portal/divisions/technology/integrations': typeof ApexPortalDivisionsTechnologyIntegrationsRoute
+  '/portal/divisions/technology/operations': typeof ApexPortalDivisionsTechnologyOperationsRoute
   '/portal/divisions/technology/team': typeof ApexPortalDivisionsTechnologyTeamRoute
   '/divisions/real-estate/listings/$state/$id': typeof DivisionsRealEstateListingsStateIdRoute
   '/portal/divisions/agritech': typeof ApexPortalDivisionsAgritechIndexRoute
@@ -1026,7 +1066,9 @@ export interface FileRoutesByTo {
   '/divisions/real-estate/listings/$state': typeof DivisionsRealEstateListingsStateIndexRoute
   '/portal/divisions/agritech/fields/$id': typeof ApexPortalDivisionsAgritechFieldsIdRoute
   '/portal/divisions/intelligence/models/$id': typeof ApexPortalDivisionsIntelligenceModelsIdRoute
+  '/portal/divisions/logistics/drivers/$id': typeof ApexPortalDivisionsLogisticsDriversIdRoute
   '/portal/divisions/logistics/shipments/$id': typeof ApexPortalDivisionsLogisticsShipmentsIdRoute
+  '/portal/divisions/real-estate/investors/$id': typeof ApexPortalDivisionsRealEstateInvestorsIdRoute
   '/portal/divisions/real-estate/leads/$id': typeof ApexPortalDivisionsRealEstateLeadsIdRoute
   '/portal/divisions/real-estate/properties/$id': typeof ApexPortalDivisionsRealEstatePropertiesIdRoute
   '/portal/divisions/real-estate/properties/new': typeof ApexPortalDivisionsRealEstatePropertiesNewRoute
@@ -1075,6 +1117,7 @@ export interface FileRoutesById {
   '/portal/reset-password': typeof PortalResetPasswordRoute
   '/portal/signup': typeof PortalSignupRoute
   '/divisions/': typeof DivisionsIndexRoute
+  '/insights/': typeof InsightsIndexRoute
   '/portal/': typeof PortalIndexRoute
   '/.lovable/oauth/consent': typeof DotlovableOauthConsentRoute
   '/.mcp/invoke-tool/$tool': typeof Char91DotmcpChar93InvokeToolToolRoute
@@ -1084,6 +1127,7 @@ export interface FileRoutesById {
   '/_apex/portal/documents': typeof ApexPortalDocumentsRoute
   '/_apex/portal/driver-tasks': typeof ApexPortalDriverTasksRoute
   '/_apex/portal/messages': typeof ApexPortalMessagesRoute
+  '/_apex/portal/my-farm': typeof ApexPortalMyFarmRoute
   '/_apex/portal/my-investments': typeof ApexPortalMyInvestmentsRoute
   '/_apex/portal/my-tenancy': typeof ApexPortalMyTenancyRoute
   '/_apex/portal/settings': typeof ApexPortalSettingsRoute
@@ -1125,7 +1169,7 @@ export interface FileRoutesById {
   '/_apex/portal/divisions/intelligence/datasets': typeof ApexPortalDivisionsIntelligenceDatasetsRoute
   '/_apex/portal/divisions/intelligence/integrations': typeof ApexPortalDivisionsIntelligenceIntegrationsRoute
   '/_apex/portal/divisions/intelligence/team': typeof ApexPortalDivisionsIntelligenceTeamRoute
-  '/_apex/portal/divisions/logistics/drivers': typeof ApexPortalDivisionsLogisticsDriversRoute
+  '/_apex/portal/divisions/logistics/drivers': typeof ApexPortalDivisionsLogisticsDriversRouteWithChildren
   '/_apex/portal/divisions/logistics/fleet': typeof ApexPortalDivisionsLogisticsFleetRoute
   '/_apex/portal/divisions/logistics/routes': typeof ApexPortalDivisionsLogisticsRoutesRoute
   '/_apex/portal/divisions/logistics/team': typeof ApexPortalDivisionsLogisticsTeamRoute
@@ -1139,6 +1183,7 @@ export interface FileRoutesById {
   '/_apex/portal/divisions/real-estate/tenants': typeof ApexPortalDivisionsRealEstateTenantsRoute
   '/_apex/portal/divisions/technology/automation': typeof ApexPortalDivisionsTechnologyAutomationRoute
   '/_apex/portal/divisions/technology/integrations': typeof ApexPortalDivisionsTechnologyIntegrationsRoute
+  '/_apex/portal/divisions/technology/operations': typeof ApexPortalDivisionsTechnologyOperationsRoute
   '/_apex/portal/divisions/technology/team': typeof ApexPortalDivisionsTechnologyTeamRoute
   '/divisions/real-estate_/listings/$state/$id': typeof DivisionsRealEstateListingsStateIdRoute
   '/_apex/portal/divisions/agritech/': typeof ApexPortalDivisionsAgritechIndexRoute
@@ -1150,7 +1195,9 @@ export interface FileRoutesById {
   '/divisions/real-estate_/listings/$state/': typeof DivisionsRealEstateListingsStateIndexRoute
   '/_apex/portal/divisions/agritech/fields/$id': typeof ApexPortalDivisionsAgritechFieldsIdRoute
   '/_apex/portal/divisions/intelligence/models/$id': typeof ApexPortalDivisionsIntelligenceModelsIdRoute
+  '/_apex/portal/divisions/logistics/drivers/$id': typeof ApexPortalDivisionsLogisticsDriversIdRoute
   '/_apex/portal/divisions/logistics/shipments/$id': typeof ApexPortalDivisionsLogisticsShipmentsIdRoute
+  '/_apex/portal/divisions/real-estate/investors_/$id': typeof ApexPortalDivisionsRealEstateInvestorsIdRoute
   '/_apex/portal/divisions/real-estate/leads_/$id': typeof ApexPortalDivisionsRealEstateLeadsIdRoute
   '/_apex/portal/divisions/real-estate/properties/$id': typeof ApexPortalDivisionsRealEstatePropertiesIdRoute
   '/_apex/portal/divisions/real-estate/properties/new': typeof ApexPortalDivisionsRealEstatePropertiesNewRoute
@@ -1199,6 +1246,7 @@ export interface FileRouteTypes {
     | '/portal/reset-password'
     | '/portal/signup'
     | '/divisions/'
+    | '/insights/'
     | '/portal/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
@@ -1208,6 +1256,7 @@ export interface FileRouteTypes {
     | '/portal/documents'
     | '/portal/driver-tasks'
     | '/portal/messages'
+    | '/portal/my-farm'
     | '/portal/my-investments'
     | '/portal/my-tenancy'
     | '/portal/settings'
@@ -1263,6 +1312,7 @@ export interface FileRouteTypes {
     | '/portal/divisions/real-estate/tenants'
     | '/portal/divisions/technology/automation'
     | '/portal/divisions/technology/integrations'
+    | '/portal/divisions/technology/operations'
     | '/portal/divisions/technology/team'
     | '/divisions/real-estate/listings/$state/$id'
     | '/portal/divisions/agritech/'
@@ -1274,7 +1324,9 @@ export interface FileRouteTypes {
     | '/divisions/real-estate/listings/$state/'
     | '/portal/divisions/agritech/fields/$id'
     | '/portal/divisions/intelligence/models/$id'
+    | '/portal/divisions/logistics/drivers/$id'
     | '/portal/divisions/logistics/shipments/$id'
+    | '/portal/divisions/real-estate/investors/$id'
     | '/portal/divisions/real-estate/leads/$id'
     | '/portal/divisions/real-estate/properties/$id'
     | '/portal/divisions/real-estate/properties/new'
@@ -1297,7 +1349,6 @@ export interface FileRouteTypes {
     | '/careers'
     | '/contact'
     | '/cookies'
-    | '/insights'
     | '/mcp'
     | '/privacy'
     | '/services'
@@ -1320,6 +1371,7 @@ export interface FileRouteTypes {
     | '/portal/reset-password'
     | '/portal/signup'
     | '/divisions'
+    | '/insights'
     | '/portal'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
@@ -1329,6 +1381,7 @@ export interface FileRouteTypes {
     | '/portal/documents'
     | '/portal/driver-tasks'
     | '/portal/messages'
+    | '/portal/my-farm'
     | '/portal/my-investments'
     | '/portal/my-tenancy'
     | '/portal/settings'
@@ -1378,6 +1431,7 @@ export interface FileRouteTypes {
     | '/portal/divisions/real-estate/tenants'
     | '/portal/divisions/technology/automation'
     | '/portal/divisions/technology/integrations'
+    | '/portal/divisions/technology/operations'
     | '/portal/divisions/technology/team'
     | '/divisions/real-estate/listings/$state/$id'
     | '/portal/divisions/agritech'
@@ -1389,7 +1443,9 @@ export interface FileRouteTypes {
     | '/divisions/real-estate/listings/$state'
     | '/portal/divisions/agritech/fields/$id'
     | '/portal/divisions/intelligence/models/$id'
+    | '/portal/divisions/logistics/drivers/$id'
     | '/portal/divisions/logistics/shipments/$id'
+    | '/portal/divisions/real-estate/investors/$id'
     | '/portal/divisions/real-estate/leads/$id'
     | '/portal/divisions/real-estate/properties/$id'
     | '/portal/divisions/real-estate/properties/new'
@@ -1437,6 +1493,7 @@ export interface FileRouteTypes {
     | '/portal/reset-password'
     | '/portal/signup'
     | '/divisions/'
+    | '/insights/'
     | '/portal/'
     | '/.lovable/oauth/consent'
     | '/.mcp/invoke-tool/$tool'
@@ -1446,6 +1503,7 @@ export interface FileRouteTypes {
     | '/_apex/portal/documents'
     | '/_apex/portal/driver-tasks'
     | '/_apex/portal/messages'
+    | '/_apex/portal/my-farm'
     | '/_apex/portal/my-investments'
     | '/_apex/portal/my-tenancy'
     | '/_apex/portal/settings'
@@ -1501,6 +1559,7 @@ export interface FileRouteTypes {
     | '/_apex/portal/divisions/real-estate/tenants'
     | '/_apex/portal/divisions/technology/automation'
     | '/_apex/portal/divisions/technology/integrations'
+    | '/_apex/portal/divisions/technology/operations'
     | '/_apex/portal/divisions/technology/team'
     | '/divisions/real-estate_/listings/$state/$id'
     | '/_apex/portal/divisions/agritech/'
@@ -1512,7 +1571,9 @@ export interface FileRouteTypes {
     | '/divisions/real-estate_/listings/$state/'
     | '/_apex/portal/divisions/agritech/fields/$id'
     | '/_apex/portal/divisions/intelligence/models/$id'
+    | '/_apex/portal/divisions/logistics/drivers/$id'
     | '/_apex/portal/divisions/logistics/shipments/$id'
+    | '/_apex/portal/divisions/real-estate/investors_/$id'
     | '/_apex/portal/divisions/real-estate/leads_/$id'
     | '/_apex/portal/divisions/real-estate/properties/$id'
     | '/_apex/portal/divisions/real-estate/properties/new'
@@ -1738,6 +1799,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DivisionsTechnologyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/insights/': {
+      id: '/insights/'
+      path: '/'
+      fullPath: '/insights/'
+      preLoaderRoute: typeof InsightsIndexRouteImport
+      parentRoute: typeof InsightsRoute
+    }
     '/insights/$slug': {
       id: '/insights/$slug'
       path: '/$slug'
@@ -1841,6 +1909,13 @@ declare module '@tanstack/react-router' {
       path: '/portal/messages'
       fullPath: '/portal/messages'
       preLoaderRoute: typeof ApexPortalMessagesRouteImport
+      parentRoute: typeof ApexRoute
+    }
+    '/_apex/portal/my-farm': {
+      id: '/_apex/portal/my-farm'
+      path: '/portal/my-farm'
+      fullPath: '/portal/my-farm'
+      preLoaderRoute: typeof ApexPortalMyFarmRouteImport
       parentRoute: typeof ApexRoute
     }
     '/_apex/portal/my-investments': {
@@ -2270,6 +2345,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApexPortalDivisionsTechnologyIntegrationsRouteImport
       parentRoute: typeof ApexPortalDivisionsTechnologyRoute
     }
+    '/_apex/portal/divisions/technology/operations': {
+      id: '/_apex/portal/divisions/technology/operations'
+      path: '/operations'
+      fullPath: '/portal/divisions/technology/operations'
+      preLoaderRoute: typeof ApexPortalDivisionsTechnologyOperationsRouteImport
+      parentRoute: typeof ApexPortalDivisionsTechnologyRoute
+    }
     '/_apex/portal/divisions/technology/team': {
       id: '/_apex/portal/divisions/technology/team'
       path: '/team'
@@ -2319,6 +2401,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApexPortalDivisionsIntelligenceModelsIdRouteImport
       parentRoute: typeof ApexPortalDivisionsIntelligenceRoute
     }
+    '/_apex/portal/divisions/logistics/drivers/$id': {
+      id: '/_apex/portal/divisions/logistics/drivers/$id'
+      path: '/$id'
+      fullPath: '/portal/divisions/logistics/drivers/$id'
+      preLoaderRoute: typeof ApexPortalDivisionsLogisticsDriversIdRouteImport
+      parentRoute: typeof ApexPortalDivisionsLogisticsDriversRoute
+    }
     '/_apex/portal/divisions/logistics/shipments/': {
       id: '/_apex/portal/divisions/logistics/shipments/'
       path: '/shipments'
@@ -2332,6 +2421,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/portal/divisions/logistics/shipments/$id'
       preLoaderRoute: typeof ApexPortalDivisionsLogisticsShipmentsIdRouteImport
       parentRoute: typeof ApexPortalDivisionsLogisticsRoute
+    }
+    '/_apex/portal/divisions/real-estate/investors_/$id': {
+      id: '/_apex/portal/divisions/real-estate/investors_/$id'
+      path: '/investors/$id'
+      fullPath: '/portal/divisions/real-estate/investors/$id'
+      preLoaderRoute: typeof ApexPortalDivisionsRealEstateInvestorsIdRouteImport
+      parentRoute: typeof ApexPortalDivisionsRealEstateRoute
     }
     '/_apex/portal/divisions/real-estate/leads_/$id': {
       id: '/_apex/portal/divisions/real-estate/leads_/$id'
@@ -2521,8 +2617,23 @@ const ApexPortalDivisionsIntelligenceRouteWithChildren =
     ApexPortalDivisionsIntelligenceRouteChildren,
   )
 
+interface ApexPortalDivisionsLogisticsDriversRouteChildren {
+  ApexPortalDivisionsLogisticsDriversIdRoute: typeof ApexPortalDivisionsLogisticsDriversIdRoute
+}
+
+const ApexPortalDivisionsLogisticsDriversRouteChildren: ApexPortalDivisionsLogisticsDriversRouteChildren =
+  {
+    ApexPortalDivisionsLogisticsDriversIdRoute:
+      ApexPortalDivisionsLogisticsDriversIdRoute,
+  }
+
+const ApexPortalDivisionsLogisticsDriversRouteWithChildren =
+  ApexPortalDivisionsLogisticsDriversRoute._addFileChildren(
+    ApexPortalDivisionsLogisticsDriversRouteChildren,
+  )
+
 interface ApexPortalDivisionsLogisticsRouteChildren {
-  ApexPortalDivisionsLogisticsDriversRoute: typeof ApexPortalDivisionsLogisticsDriversRoute
+  ApexPortalDivisionsLogisticsDriversRoute: typeof ApexPortalDivisionsLogisticsDriversRouteWithChildren
   ApexPortalDivisionsLogisticsFleetRoute: typeof ApexPortalDivisionsLogisticsFleetRoute
   ApexPortalDivisionsLogisticsRoutesRoute: typeof ApexPortalDivisionsLogisticsRoutesRoute
   ApexPortalDivisionsLogisticsTeamRoute: typeof ApexPortalDivisionsLogisticsTeamRoute
@@ -2534,7 +2645,7 @@ interface ApexPortalDivisionsLogisticsRouteChildren {
 const ApexPortalDivisionsLogisticsRouteChildren: ApexPortalDivisionsLogisticsRouteChildren =
   {
     ApexPortalDivisionsLogisticsDriversRoute:
-      ApexPortalDivisionsLogisticsDriversRoute,
+      ApexPortalDivisionsLogisticsDriversRouteWithChildren,
     ApexPortalDivisionsLogisticsFleetRoute:
       ApexPortalDivisionsLogisticsFleetRoute,
     ApexPortalDivisionsLogisticsRoutesRoute:
@@ -2564,6 +2675,7 @@ interface ApexPortalDivisionsRealEstateRouteChildren {
   ApexPortalDivisionsRealEstateTeamRoute: typeof ApexPortalDivisionsRealEstateTeamRoute
   ApexPortalDivisionsRealEstateTenantsRoute: typeof ApexPortalDivisionsRealEstateTenantsRoute
   ApexPortalDivisionsRealEstateIndexRoute: typeof ApexPortalDivisionsRealEstateIndexRoute
+  ApexPortalDivisionsRealEstateInvestorsIdRoute: typeof ApexPortalDivisionsRealEstateInvestorsIdRoute
   ApexPortalDivisionsRealEstateLeadsIdRoute: typeof ApexPortalDivisionsRealEstateLeadsIdRoute
   ApexPortalDivisionsRealEstatePropertiesIdRoute: typeof ApexPortalDivisionsRealEstatePropertiesIdRoute
   ApexPortalDivisionsRealEstatePropertiesNewRoute: typeof ApexPortalDivisionsRealEstatePropertiesNewRoute
@@ -2594,6 +2706,8 @@ const ApexPortalDivisionsRealEstateRouteChildren: ApexPortalDivisionsRealEstateR
       ApexPortalDivisionsRealEstateTenantsRoute,
     ApexPortalDivisionsRealEstateIndexRoute:
       ApexPortalDivisionsRealEstateIndexRoute,
+    ApexPortalDivisionsRealEstateInvestorsIdRoute:
+      ApexPortalDivisionsRealEstateInvestorsIdRoute,
     ApexPortalDivisionsRealEstateLeadsIdRoute:
       ApexPortalDivisionsRealEstateLeadsIdRoute,
     ApexPortalDivisionsRealEstatePropertiesIdRoute:
@@ -2620,6 +2734,7 @@ const ApexPortalDivisionsRealEstateRouteWithChildren =
 interface ApexPortalDivisionsTechnologyRouteChildren {
   ApexPortalDivisionsTechnologyAutomationRoute: typeof ApexPortalDivisionsTechnologyAutomationRoute
   ApexPortalDivisionsTechnologyIntegrationsRoute: typeof ApexPortalDivisionsTechnologyIntegrationsRoute
+  ApexPortalDivisionsTechnologyOperationsRoute: typeof ApexPortalDivisionsTechnologyOperationsRoute
   ApexPortalDivisionsTechnologyTeamRoute: typeof ApexPortalDivisionsTechnologyTeamRoute
   ApexPortalDivisionsTechnologyIndexRoute: typeof ApexPortalDivisionsTechnologyIndexRoute
   ApexPortalDivisionsTechnologyClientsNameRoute: typeof ApexPortalDivisionsTechnologyClientsNameRoute
@@ -2634,6 +2749,8 @@ const ApexPortalDivisionsTechnologyRouteChildren: ApexPortalDivisionsTechnologyR
       ApexPortalDivisionsTechnologyAutomationRoute,
     ApexPortalDivisionsTechnologyIntegrationsRoute:
       ApexPortalDivisionsTechnologyIntegrationsRoute,
+    ApexPortalDivisionsTechnologyOperationsRoute:
+      ApexPortalDivisionsTechnologyOperationsRoute,
     ApexPortalDivisionsTechnologyTeamRoute:
       ApexPortalDivisionsTechnologyTeamRoute,
     ApexPortalDivisionsTechnologyIndexRoute:
@@ -2660,6 +2777,7 @@ interface ApexRouteChildren {
   ApexPortalDocumentsRoute: typeof ApexPortalDocumentsRoute
   ApexPortalDriverTasksRoute: typeof ApexPortalDriverTasksRoute
   ApexPortalMessagesRoute: typeof ApexPortalMessagesRoute
+  ApexPortalMyFarmRoute: typeof ApexPortalMyFarmRoute
   ApexPortalMyInvestmentsRoute: typeof ApexPortalMyInvestmentsRoute
   ApexPortalMyTenancyRoute: typeof ApexPortalMyTenancyRoute
   ApexPortalSettingsRoute: typeof ApexPortalSettingsRoute
@@ -2688,6 +2806,7 @@ const ApexRouteChildren: ApexRouteChildren = {
   ApexPortalDocumentsRoute: ApexPortalDocumentsRoute,
   ApexPortalDriverTasksRoute: ApexPortalDriverTasksRoute,
   ApexPortalMessagesRoute: ApexPortalMessagesRoute,
+  ApexPortalMyFarmRoute: ApexPortalMyFarmRoute,
   ApexPortalMyInvestmentsRoute: ApexPortalMyInvestmentsRoute,
   ApexPortalMyTenancyRoute: ApexPortalMyTenancyRoute,
   ApexPortalSettingsRoute: ApexPortalSettingsRoute,
@@ -2719,10 +2838,12 @@ const ApexRouteWithChildren = ApexRoute._addFileChildren(ApexRouteChildren)
 
 interface InsightsRouteChildren {
   InsightsSlugRoute: typeof InsightsSlugRoute
+  InsightsIndexRoute: typeof InsightsIndexRoute
 }
 
 const InsightsRouteChildren: InsightsRouteChildren = {
   InsightsSlugRoute: InsightsSlugRoute,
+  InsightsIndexRoute: InsightsIndexRoute,
 }
 
 const InsightsRouteWithChildren = InsightsRoute._addFileChildren(
