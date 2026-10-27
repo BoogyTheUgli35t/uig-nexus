@@ -78,11 +78,19 @@ export function CTABand({
   subtitle,
   buttonText = "Get in touch",
   buttonTo = "/contact",
+  buttonSearch,
 }: {
   title: string;
   subtitle?: string;
   buttonText?: string;
   buttonTo?: string;
+  /**
+   * Query params to carry through, e.g. `{ interest: "logistics" }`.
+   * Passed separately rather than baked into `buttonTo` because a `?` inside
+   * a router `to` is treated as part of the path, not as search params — the
+   * link would 404 instead of prefilling.
+   */
+  buttonSearch?: Record<string, string>;
 }) {
   return (
     <Section>
@@ -98,7 +106,7 @@ export function CTABand({
             size="lg"
             className="bg-gold text-gold-foreground hover:bg-gold/90 shadow-gold"
           >
-            <Link to={buttonTo}>
+            <Link to={buttonTo} {...(buttonSearch ? { search: buttonSearch } : {})}>
               {buttonText} <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>

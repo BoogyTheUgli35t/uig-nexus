@@ -15,7 +15,7 @@ import {
   IDEA_STATUSES,
 } from "@/lib/innovation.functions";
 import { authHeaders } from "@/lib/auth-headers";
-import { DataPanel, EmptyState, StatusBadge } from "@/components/portal/blocks";
+import { DataPanel, EmptyState, QueryError, StatusBadge } from "@/components/portal/blocks";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -37,7 +37,7 @@ function IdeasPage() {
   // actually work in — it belongs next to the idea it plans.
   const [checklistIdea, setChecklistIdea] = useState<string | null>(null);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["innovation-workspace"],
     queryFn: async () => getInnovationWorkspace({ headers: await authHeaders() }),
   });
@@ -198,7 +198,9 @@ function IdeasPage() {
           </div>
         }
       >
-        {isLoading ? (
+        {error ? (
+          <QueryError error={error} onRetry={() => refetch()} />
+        ) : isLoading ? (
           <div className="text-sm text-muted-foreground">Loading ideas…</div>
         ) : ideas.length === 0 ? (
           <EmptyState

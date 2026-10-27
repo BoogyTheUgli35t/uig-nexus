@@ -1,5 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Logo } from "./Logo";
+import { FLAGS } from "@/lib/flags";
+import { CONTACT_EMAIL, HQ, SOCIAL_LINKS } from "@/lib/seo";
 
 export function Footer() {
   return (
@@ -12,7 +14,7 @@ export function Footer() {
             Steps Ahead.
           </p>
           <p className="mt-4 text-xs text-muted-foreground">
-            HQ: Victoria Island, Lagos, Nigeria
+            HQ: {HQ.locality}, {HQ.countryName}
             <br />
             Operations: Nigeria-wide · Pan-African · Global
           </p>
@@ -20,6 +22,11 @@ export function Footer() {
         <div>
           <h4 className="text-sm font-semibold text-foreground">Divisions</h4>
           <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
+            <li>
+              <Link to="/divisions" className="hover:text-gold transition">
+                All six divisions
+              </Link>
+            </li>
             <li>
               <Link to="/divisions/technology" className="hover:text-gold transition">
                 Technology
@@ -86,11 +93,8 @@ export function Footer() {
               </Link>
             </li>
             <li>
-              <a
-                href="mailto:hello@unifiedinnovationsgroup.online"
-                className="hover:text-gold transition break-all"
-              >
-                hello@unifiedinnovationsgroup.online
+              <a href={`mailto:${CONTACT_EMAIL}`} className="hover:text-gold transition break-all">
+                {CONTACT_EMAIL}
               </a>
             </li>
             <li>
@@ -103,11 +107,13 @@ export function Footer() {
                 Track a shipment
               </Link>
             </li>
-            <li>
-              <Link to="/status" className="hover:text-gold transition">
-                System status
-              </Link>
-            </li>
+            {FLAGS.statusPage && (
+              <li>
+                <Link to="/status" className="hover:text-gold transition">
+                  System status
+                </Link>
+              </li>
+            )}
           </ul>
         </div>
         <div>
@@ -134,17 +140,37 @@ export function Footer() {
       <div className="border-t border-border">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-muted-foreground">
           <p>© {new Date().getFullYear()} Unified Innovations Group. All rights reserved.</p>
-          <div className="flex gap-4">
-            <a href="#" className="hover:text-gold transition" aria-label="LinkedIn">
-              LinkedIn
-            </a>
-            <a href="#" className="hover:text-gold transition" aria-label="Twitter / X">
-              Twitter
-            </a>
-            <a href="#" className="hover:text-gold transition" aria-label="Instagram">
-              Instagram
-            </a>
-          </div>
+          {/* Rendered from SOCIAL_LINKS in lib/seo.ts. An entry with no URL
+              shows muted and non-clickable, because these were three
+              `href="#"` links that jumped to the top of whatever page you were
+              on — a dead link reads as a broken site, an unlinked label reads
+              as an account that isn't live yet. */}
+          {SOCIAL_LINKS.length > 0 && (
+            <div className="flex gap-4">
+              {SOCIAL_LINKS.map((s) =>
+                s.href ? (
+                  <a
+                    key={s.label}
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="transition hover:text-gold"
+                    aria-label={s.label}
+                  >
+                    {s.label}
+                  </a>
+                ) : (
+                  <span
+                    key={s.label}
+                    className="cursor-default text-muted-foreground/50"
+                    title={`${s.label} — coming soon`}
+                  >
+                    {s.label}
+                  </span>
+                ),
+              )}
+            </div>
+          )}
         </div>
       </div>
     </footer>

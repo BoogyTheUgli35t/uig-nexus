@@ -1,11 +1,30 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
-/** Seed sample data for Real Estate division */
+/**
+ * Seed sample data for the Real Estate division.
+ *
+ * Idempotent. This used to be a bare `.insert()`, so every call added another
+ * copy of everything: five runs between June and August left 46 property rows
+ * for 35 real properties, and 12 tenants, 12 investors and 13 leads for 4, 4
+ * and 5. The portal's Real Estate KPIs were reading roughly triple.
+ *
+ * Properties also carried no `state`, which is the column the public listings
+ * group on — so every seeded property was invisible at
+ * /divisions/real-estate/listings no matter how the page was written.
+ */
 export const seedRealEstateData = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     const { supabase, userId } = context;
+
+    const { data: seeded, error: checkError } = await supabase
+      .from("properties")
+      .select("id")
+      .eq("title", "Lekki Phase 1 Smart Villa")
+      .limit(1);
+    if (checkError) throw new Error(checkError.message);
+    if ((seeded ?? []).length > 0) return { success: true, skipped: true };
 
     // Properties
     const properties = [
@@ -13,6 +32,7 @@ export const seedRealEstateData = createServerFn({ method: "POST" })
         title: "Lekki Phase 1 Smart Villa",
         property_type: "residential",
         city: "Lagos",
+        state: "Lagos",
         address: "14 Admiralty Way, Lekki Phase 1",
         price: 285000000,
         bedrooms: 5,
@@ -27,6 +47,7 @@ export const seedRealEstateData = createServerFn({ method: "POST" })
         title: "Ikoyi Waterfront Penthouse",
         property_type: "residential",
         city: "Lagos",
+        state: "Lagos",
         address: "Banana Island Road, Ikoyi",
         price: 650000000,
         bedrooms: 4,
@@ -40,6 +61,9 @@ export const seedRealEstateData = createServerFn({ method: "POST" })
         title: "Maitama Executive Duplex",
         property_type: "residential",
         city: "Abuja",
+        // Matches the value the rest of the catalogue uses, so this property
+        // groups with the other FCT listings instead of forming its own bucket.
+        state: "FCT (Abuja)",
         address: "7 Gana Street, Maitama",
         price: 420000000,
         bedrooms: 4,
@@ -139,5 +163,5 @@ export const seedRealEstateData = createServerFn({ method: "POST" })
 
     if (investorError) throw new Error(investorError.message);
 
-    return { success: true };
+    return { success: true, skipped: false };
   });

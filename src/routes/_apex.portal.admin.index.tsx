@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { getAdminOverview } from "@/lib/portal.functions";
 import { authHeaders } from "@/lib/auth-headers";
-import { DataPanel, EmptyState, KpiStat } from "@/components/portal/blocks";
+import { DataPanel, EmptyState, KpiStat, QueryError } from "@/components/portal/blocks";
 
 export const Route = createFileRoute("/_apex/portal/admin/")({
   head: () => ({ meta: [{ title: "Admin — UIG Apex" }, { name: "robots", content: "noindex" }] }),
@@ -79,7 +79,7 @@ function AdminOverviewPage() {
     queryFn: async () => getAdminOverview({ headers: await authHeaders() }),
   });
 
-  if (error) return <div className="text-destructive text-sm">{(error as Error).message}</div>;
+  if (error) return <QueryError error={error} />;
 
   return (
     <div className="max-w-5xl space-y-8">

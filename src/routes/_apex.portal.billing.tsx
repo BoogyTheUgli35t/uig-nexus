@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { CreditCard, AlertCircle } from "lucide-react";
 import { listMyBilling, createCheckoutSession, paymentsConfigured } from "@/lib/billing.functions";
 import { authHeaders } from "@/lib/auth-headers";
-import { DataPanel, EmptyState, StatusBadge } from "@/components/portal/blocks";
+import { DataPanel, EmptyState, QueryError, StatusBadge } from "@/components/portal/blocks";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -32,7 +32,7 @@ function BillingPage() {
     queryFn: async () => paymentsConfigured(),
   });
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["my-billing"],
     queryFn: async () => listMyBilling({ headers: await authHeaders() }),
   });
@@ -121,7 +121,9 @@ function BillingPage() {
       </DataPanel>
 
       <DataPanel title="Transaction history">
-        {isLoading ? (
+        {error ? (
+          <QueryError error={error} onRetry={() => refetch()} />
+        ) : isLoading ? (
           <div className="text-sm text-muted-foreground">Loading…</div>
         ) : !data || data.length === 0 ? (
           <EmptyState icon={CreditCard} title="No transactions yet" />

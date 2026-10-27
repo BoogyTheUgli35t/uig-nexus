@@ -7,7 +7,7 @@ import { listDocuments, recordDocument, deleteDocument } from "@/lib/documents.f
 import { authHeaders } from "@/lib/auth-headers";
 import { supabase } from "@/integrations/supabase/client";
 import { DIVISIONS } from "@/lib/divisions";
-import { DataPanel, EmptyState } from "@/components/portal/blocks";
+import { DataPanel, EmptyState, QueryError } from "@/components/portal/blocks";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -114,7 +114,7 @@ function DocumentsPage() {
     a.click();
   }
 
-  if (error) return <div className="text-destructive text-sm">{(error as Error).message}</div>;
+  if (error) return <QueryError error={error} />;
 
   return (
     <div className="max-w-4xl space-y-8">

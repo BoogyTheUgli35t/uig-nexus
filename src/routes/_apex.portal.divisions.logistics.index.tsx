@@ -10,14 +10,20 @@ import {
 } from "lucide-react";
 import { getLogisticsWorkspace } from "@/lib/logistics.functions";
 import { authHeaders } from "@/lib/auth-headers";
-import { DataPanel, EmptyState, StatusBadge, KpiStat } from "@/components/portal/blocks";
+import {
+  DataPanel,
+  EmptyState,
+  KpiStat,
+  QueryError,
+  StatusBadge,
+} from "@/components/portal/blocks";
 
 export const Route = createFileRoute("/_apex/portal/divisions/logistics/")({
   component: LogisticsOverview,
 });
 
 function LogisticsOverview() {
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["logistics-workspace"],
     queryFn: async () => getLogisticsWorkspace({ headers: await authHeaders() }),
   });
@@ -103,7 +109,9 @@ function LogisticsOverview() {
         title="Recent shipments"
         action={{ to: "/portal/divisions/logistics/shipments", label: "View all" }}
       >
-        {isLoading ? (
+        {error ? (
+          <QueryError error={error} onRetry={() => refetch()} />
+        ) : isLoading ? (
           <div className="text-sm text-muted-foreground">Loading…</div>
         ) : recent.length === 0 ? (
           <EmptyState icon={PackageCheck} title="No shipments yet" />

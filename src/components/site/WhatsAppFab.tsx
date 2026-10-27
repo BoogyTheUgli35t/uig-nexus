@@ -1,12 +1,20 @@
 import { MessageCircle } from "lucide-react";
+import { whatsappHref } from "@/lib/seo";
 
-// Set VITE_WHATSAPP_NUMBER (E.164, digits only, e.g. 2348001234567) in your
-// environment to point this at the real UIG WhatsApp Business line.
-const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || "2348000000000";
 const DEFAULT_MESSAGE = "Hi UIG — I'd like to talk to someone about your divisions.";
 
+/**
+ * The floating WhatsApp button.
+ *
+ * Renders nothing when `VITE_WHATSAPP_NUMBER` is unset. It used to fall back
+ * to `2348000000000`, so a deploy configured from `.env.example` shipped a
+ * chat button on every public page that dialled a number nobody owns —
+ * strictly worse than having no button, because a visitor who taps it
+ * concludes UIG doesn't answer.
+ */
 export function WhatsAppFab() {
-  const href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(DEFAULT_MESSAGE)}`;
+  const href = whatsappHref(DEFAULT_MESSAGE);
+  if (!href) return null;
 
   return (
     <a

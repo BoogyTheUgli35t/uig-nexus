@@ -7,6 +7,16 @@ export const seedTechnologyData = createServerFn({ method: "POST" })
   .handler(async ({ context }) => {
     const { supabase, userId } = context;
 
+    // Idempotency guard — see realestate.seed.ts for what re-running a bare
+    // `.insert()` seeder did to the Real Estate catalogue.
+    const { data: seeded, error: checkError } = await supabase
+      .from("tech_projects")
+      .select("id")
+      .eq("title", "Pan-African Payments Platform")
+      .limit(1);
+    if (checkError) throw new Error(checkError.message);
+    if ((seeded ?? []).length > 0) return { success: true, skipped: true };
+
     // Projects
     const projects = [
       {
@@ -77,5 +87,5 @@ export const seedTechnologyData = createServerFn({ method: "POST" })
 
     if (integrationError) throw new Error(integrationError.message);
 
-    return { success: true };
+    return { success: true, skipped: false };
   });

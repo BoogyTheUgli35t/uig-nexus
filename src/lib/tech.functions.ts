@@ -273,6 +273,24 @@ export const addDeployment = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
+/** Recent deployments across every project, newest first.
+ *
+ * `addDeployment` and the `deployments` table have existed since the schema
+ * was written, but the only read was inside a single project's detail view —
+ * there was no way to see release activity across the division, which is what
+ * the public Technology page means by "real-time deployment monitoring". */
+export const listDeployments = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data, error } = await context.supabase
+      .from("deployments")
+      .select("id, tech_project_id, version, environment, status, notes, created_at")
+      .order("created_at", { ascending: false })
+      .limit(100);
+    if (error) throw new Error(error.message);
+    return data ?? [];
+  });
+
 // =============== Milestone invoices ===============
 
 const AddInvoiceSchema = z.object({

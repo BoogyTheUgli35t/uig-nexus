@@ -1,5 +1,4 @@
 import { createFileRoute, Link, redirect } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
 import {
   ArrowLeft,
   Bed,
@@ -12,15 +11,47 @@ import {
   Calendar,
 } from "lucide-react";
 import { getListingDetail } from "@/lib/public-listings.functions";
+
+type ListingDetail = Awaited<ReturnType<typeof getListingDetail>>;
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { FLAGS } from "@/lib/flags";
 import { Section } from "@/components/site/sections";
 import { MortgageCalculator } from "@/components/site/MortgageCalculator";
 import { JsonLd } from "@/components/site/JsonLd";
-import { SITE_URL } from "@/lib/seo";
+import { SITE_URL, canonical, whatsappHref } from "@/lib/seo";
 import { ListingGallery } from "@/components/site/ListingGallery";
 import { resolveImageUrl, cn } from "@/lib/utils";
 import { sizedImage } from "@/lib/media";
+
+const naira = (n: number) => `₦${Number(n).toLocaleString("en-NG")}`;
+
+function imgUrl(path: string) {
+  return resolveImageUrl("property-images", path);
+}
+
+/** One-line summary of a property, for the meta description and share cards. */
+function listingSummary(p: {
+  property_type: string;
+  listing_type: string;
+  bedrooms: number | null;
+  bathrooms: number | null;
+  area_sqm: number | null;
+  city: string | null;
+  state: string | null;
+  price: number | string;
+  description: string | null;
+}) {
+  if (p.description) return p.description.slice(0, 180);
+  const bits = [
+    p.property_type === "land"
+      ? "Land"
+      : [p.bedrooms ? `${p.bedrooms}-bedroom` : null, p.property_type].filter(Boolean).join(" "),
+    p.area_sqm ? `${p.area_sqm}m²` : null,
+    [p.city, p.state].filter(Boolean).join(", ") || null,
+    `${naira(Number(p.price))}${p.listing_type === "rent" ? " per year" : ""}`,
+  ].filter(Boolean);
+  return `${bits.join(" · ")}. Verified title, managed by UIG Real Estate.`;
+}
 
 export const Route = createFileRoute("/divisions/real-estate_/listings/$state/$id")({
   // Same VITE_FLAG_REAL_ESTATE_LISTINGS gate as the listings index. Repeated
@@ -28,37 +59,52 @@ export const Route = createFileRoute("/divisions/real-estate_/listings/$state/$i
   beforeLoad: () => {
     if (!FLAGS.realEstateListings) throw redirect({ to: "/divisions/real-estate" });
   },
-  head: ({ params }) => ({
-    meta: [{ title: `Property in ${params.state} — UIG Real Estate` }],
-  }),
+
+  // Fetched in the loader rather than with useQuery so `head` can see the
+  // property. Every listing in Lagos used to share the title "Property in
+  // Lagos — UIG Real Estate", with no description and no og: tags at all —
+  // these are the highest-intent URLs on the site and they were indexing and
+  // sharing as identical pages.
+  loader: ({ params }): Promise<ListingDetail> => getListingDetail({ data: { id: params.id } }),
+
+  head: ({ loaderData, params }) => {
+    const property = loaderData?.property;
+    if (!property) {
+      return {
+        meta: [
+          { title: "Listing unavailable — UIG Real Estate" },
+          { name: "robots", content: "noindex" },
+        ],
+      };
+    }
+    const title = `${property.title} — ${[property.city, property.state].filter(Boolean).join(", ")} | UIG Real Estate`;
+    const description = listingSummary(property);
+    const hero = loaderData?.images?.[0];
+    const image = hero ? imgUrl(hero.storage_path) : undefined;
+    return {
+      links: [canonical(`/divisions/real-estate/listings/${params.state}/${params.id}`)],
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        { property: "og:type", content: "website" },
+        ...(image ? [{ property: "og:image", content: image }] : []),
+        ...(image ? [{ name: "twitter:card", content: "summary_large_image" }] : []),
+      ],
+    };
+  },
+
   component: ListingDetailPage,
 });
 
-const naira = (n: number) => `₦${Number(n).toLocaleString("en-NG")}`;
-
-const WHATSAPP_NUMBER = import.meta.env.VITE_WHATSAPP_NUMBER || "2348000000000";
-
-function imgUrl(path: string) {
-  return resolveImageUrl("property-images", path);
-}
-
 function ListingDetailPage() {
-  const { state, id } = Route.useParams();
-
-  const { data, isLoading } = useQuery({
-    queryKey: ["public-listing-detail", id],
-    queryFn: () => getListingDetail({ data: { id } }),
-  });
-
-  if (isLoading) {
-    return (
-      <SiteLayout>
-        <Section>
-          <div className="h-96 animate-pulse rounded-xl bg-surface/60 border border-border" />
-        </Section>
-      </SiteLayout>
-    );
-  }
+  const { state } = Route.useParams();
+  // Annotated rather than inferred: `useLoaderData()` resolves through the
+  // generated route tree, which imports this file, so the inference is
+  // circular and silently widens to `any` — which only shows up as an
+  // implicit-any error after the route tree is regenerated.
+  const data = Route.useLoaderData() as ListingDetail;
 
   if (!data) {
     return (
@@ -83,7 +129,9 @@ function ListingDetailPage() {
   const isLand = property.property_type === "land";
 
   const waMessage = `Hi UIG — I'm interested in "${property.title}" (${property.city || state}, ${naira(Number(property.price))}${property.listing_type === "rent" ? "/yr" : ""}). Could you share more details?`;
-  const waHref = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(waMessage)}`;
+  // `null` when no WhatsApp line is configured — better to show only the
+  // contact-form route than a button that dials a number nobody owns.
+  const waHref = whatsappHref(waMessage);
 
   const listingJsonLd = {
     "@context": "https://schema.org",
@@ -227,18 +275,24 @@ function ListingDetailPage() {
               </div>
             )}
 
-            <a
-              href={waHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#25D366] px-6 py-3.5 font-semibold text-white shadow-lg transition hover:brightness-105"
-            >
-              <MessageCircle className="h-5 w-5" fill="currentColor" strokeWidth={0} />
-              Enquire on WhatsApp
-            </a>
+            {waHref && (
+              <a
+                href={waHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-[#25D366] px-6 py-3.5 font-semibold text-white shadow-lg transition hover:brightness-105"
+              >
+                <MessageCircle className="h-5 w-5" fill="currentColor" strokeWidth={0} />
+                Enquire on WhatsApp
+              </a>
+            )}
             <Link
               to="/contact"
-              className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border px-6 py-3.5 font-semibold text-foreground transition hover:border-gold/40"
+              search={{ interest: "real-estate", ref: property.title }}
+              className={cn(
+                "inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border px-6 py-3.5 font-semibold text-foreground transition hover:border-gold/40",
+                waHref ? "mt-3" : "mt-8",
+              )}
             >
               Speak to an Investment Advisor
             </Link>

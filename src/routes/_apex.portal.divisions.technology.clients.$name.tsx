@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ArrowLeft, Building2, Rocket } from "lucide-react";
 import { getClientProjects } from "@/lib/tech.functions";
 import { authHeaders } from "@/lib/auth-headers";
-import { DataPanel, EmptyState, StatusBadge } from "@/components/portal/blocks";
+import { DataPanel, EmptyState, QueryError, StatusBadge } from "@/components/portal/blocks";
 import { Progress } from "@/components/ui/progress";
 
 export const Route = createFileRoute("/_apex/portal/divisions/technology/clients/$name")({
@@ -21,7 +21,7 @@ function ClientView() {
   const { name } = Route.useParams();
   const clientName = name;
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["tech-client-projects", clientName],
     queryFn: async () =>
       getClientProjects({ headers: await authHeaders(), data: { client_name: clientName } }),
@@ -42,7 +42,9 @@ function ClientView() {
       </div>
 
       <DataPanel title="Projects">
-        {isLoading ? (
+        {error ? (
+          <QueryError error={error} onRetry={() => refetch()} />
+        ) : isLoading ? (
           <div className="text-sm text-muted-foreground">Loading…</div>
         ) : !data || data.projects.length === 0 ? (
           <EmptyState icon={Building2} title="No projects found for this client" />

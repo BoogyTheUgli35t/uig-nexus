@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Sprout, Building2, Truck, FlaskConical, ArrowRight, Share2, Rocket } from "lucide-react";
 import { getIntelligenceWorkspace } from "@/lib/intelligence.functions";
 import { authHeaders } from "@/lib/auth-headers";
-import { DataPanel, EmptyState, StatusBadge } from "@/components/portal/blocks";
+import { DataPanel, EmptyState, QueryError, StatusBadge } from "@/components/portal/blocks";
 
 export const Route = createFileRoute("/_apex/portal/divisions/intelligence/integrations")({
   head: () => ({ meta: [{ title: "Integrations — UIG Intelligence" }] }),
@@ -48,7 +48,7 @@ const DIVISION_ENDPOINTS = [
 ] as const;
 
 function IntegrationsPage() {
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["intelligence-workspace"],
     queryFn: async () => getIntelligenceWorkspace({ headers: await authHeaders() }),
   });
@@ -60,7 +60,9 @@ function IntegrationsPage() {
   return (
     <div className="space-y-6">
       <DataPanel title="Models in production">
-        {isLoading ? (
+        {error ? (
+          <QueryError error={error} onRetry={() => refetch()} />
+        ) : isLoading ? (
           <div className="text-sm text-muted-foreground">Loading models…</div>
         ) : servingModels.length === 0 ? (
           <EmptyState

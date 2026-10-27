@@ -11,9 +11,11 @@ import {
 } from "lucide-react";
 import { DivisionPage } from "@/components/site/DivisionPage";
 import { RateEstimator } from "@/components/site/RateEstimator";
+import { canonical } from "@/lib/seo";
 
 export const Route = createFileRoute("/divisions/logistics")({
   head: () => ({
+    links: [canonical("/divisions/logistics")],
     meta: [
       { title: "UIG Logistics — Moving Nigeria Forward" },
       {
@@ -124,8 +126,52 @@ export const Route = createFileRoute("/divisions/logistics")({
           "Pick your origin and destination cities, package weight and speed to get a ballpark price and delivery window.",
         component: <RateEstimator />,
       }}
+      outcome="A shipment you can see the whole way, a driver who knows their route before they set off, and proof of delivery that does not depend on a phone call."
+      process={{
+        title: "How a delivery runs.",
+        steps: [
+          {
+            name: "Book",
+            description:
+              "Origin, destination, weight and priority — from the portal, the rate estimator or an API call.",
+          },
+          {
+            name: "Plan",
+            description:
+              "Shipments are grouped into routes and sequenced by corridor, so a driver gets one ordered run rather than a list of addresses.",
+          },
+          {
+            name: "Dispatch",
+            description:
+              "The driver sees their stops in order on their own portal view and marks each one complete as they go.",
+          },
+          {
+            name: "Track",
+            description:
+              "Status changes are timestamped and visible to the customer on a public tracking page — no login, no phone call.",
+          },
+          {
+            name: "Prove",
+            description:
+              "Delivery is recorded against the shipment with time and note, so a disputed drop has an audit trail.",
+          },
+        ],
+      }}
+      why={{
+        title: "Why UIG Logistics.",
+        points: [
+          "Fleet, drivers, routing and tracking are one system — nothing is stitched together from three vendors.",
+          "Customers track shipments without an account, which removes the single biggest source of support calls.",
+          "Route sequencing assumes Lagos traffic, not a grid city.",
+          "Drivers have their own portal view, so the operations team is not relaying stops over the phone.",
+          "Vehicle service history and fuel are logged against each vehicle, so maintenance is scheduled rather than reactive.",
+          "Business accounts get fleet-level visibility in the same portal as the rest of their UIG services.",
+        ],
+      }}
       ctaTitle="Get a logistics quote."
-      ctaButton="Integrate Our Delivery API"
+      ctaButton="Talk to the logistics team"
+      ctaTo="/contact"
+      ctaSearch={{ interest: "logistics" }}
     />
   ),
 });

@@ -43,6 +43,7 @@ import { PageHero, Section, Eyebrow, CTABand, FeatureCard } from "@/components/s
 
 export const Route = createFileRoute("/services")({
   head: () => ({
+    links: [canonical("/services")],
     meta: [
       { title: "UIG Services — Every Capability of the Group, in One Place" },
       {
@@ -62,6 +63,7 @@ export const Route = createFileRoute("/services")({
 });
 
 import { ComponentType } from "react";
+import { canonical } from "@/lib/seo";
 
 type ServiceItem = {
   title: string;

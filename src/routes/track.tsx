@@ -2,20 +2,28 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Search, PackageCheck, MapPin, Clock, CheckCircle2 } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
-import { PageHero, Section } from "@/components/site/sections";
+import { PageHero, Section, CTABand } from "@/components/site/sections";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { StatusBadge, EmptyState } from "@/components/portal/blocks";
+import { SITE_URL, canonical } from "@/lib/seo";
 
 export const Route = createFileRoute("/track")({
   head: () => ({
+    links: [canonical("/track")],
     meta: [
       { title: "Track your shipment — UIG Logistics" },
       {
         name: "description",
         content: "Enter your UIG Logistics tracking code to see live shipment status.",
       },
+      { property: "og:title", content: "Track your shipment — UIG Logistics" },
+      {
+        property: "og:description",
+        content: "Enter your UIG Logistics tracking code to see live shipment status.",
+      },
+      { property: "og:url", content: `${SITE_URL}/track` },
     ],
   }),
   component: TrackPage,
@@ -155,6 +163,13 @@ function TrackPage() {
           </div>
         )}
       </Section>
+
+      <CTABand
+        title="Shipping regularly? There's a better way than a tracking box."
+        subtitle="UIG Logistics gives business accounts live fleet visibility, route planning and proof of delivery in the Apex Portal."
+        buttonText="See UIG Logistics"
+        buttonTo="/divisions/logistics"
+      />
     </SiteLayout>
   );
 }

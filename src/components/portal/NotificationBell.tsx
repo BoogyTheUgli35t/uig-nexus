@@ -1,41 +1,65 @@
 import { useEffect, useState } from "react";
+import { Link } from "@tanstack/react-router";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { Bell, Check, CheckCheck } from "lucide-react";
+import { formatDistanceToNow } from "date-fns";
 import { supabase } from "@/integrations/supabase/client";
+import {
+  listNotifications,
+  markNotificationRead,
+  markAllNotificationsRead,
+} from "@/lib/divisions.functions";
+import { authHeaders } from "@/lib/auth-headers";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Bell, Check } from "lucide-react";
-import { formatDistanceToNow } from "date-fns";
+import { cn } from "@/lib/utils";
 
-type Notification = {
-  id: string;
-  user_id: string;
-  title: string;
-  body: string | null;
-  division: string | null;
-  read_at: string | null;
-  created_at: string;
+/**
+ * Where each division's notifications lead. A notification that says a field
+ * went critical is only useful if it takes you to the field.
+ */
+const DIVISION_ROUTES: Record<string, string> = {
+  technology: "/portal/divisions/technology",
+  agritech: "/portal/divisions/agritech",
+  "real-estate": "/portal/divisions/real-estate",
+  logistics: "/portal/divisions/logistics",
+  intelligence: "/portal/divisions/intelligence",
+  "innovation-lab": "/portal/divisions/innovation-lab",
 };
 
+const DIVISION_LABELS: Record<string, string> = {
+  technology: "Technology",
+  agritech: "AgriTech",
+  "real-estate": "Real Estate",
+  logistics: "Logistics",
+  intelligence: "Intelligence",
+  "innovation-lab": "Innovation Lab",
+};
+
+/**
+ * The portal's notification bell.
+ *
+ * Reads and writes go through the `listNotifications` /
+ * `markNotificationRead` / `markAllNotificationsRead` server functions, which
+ * sit behind the auth middleware — the component previously queried Supabase
+ * straight from the browser and scoped rows by `user_id` itself, which meant
+ * the access rule lived in the client and the three purpose-built server
+ * functions had no caller at all.
+ *
+ * Realtime still needs the browser client: the channel only signals that
+ * something changed, and the refetch is what actually loads it.
+ */
 export function NotificationBell() {
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const qc = useQueryClient();
   const [open, setOpen] = useState(false);
   const [enabled, setEnabled] = useState(true);
 
-  const fetchNotifications = async () => {
-    const { data: userData } = await supabase.auth.getUser();
-    if (!userData.user) return;
-
-    const { data } = await supabase
-      .from("notifications")
-      .select("*")
-      .eq("user_id", userData.user.id)
-      .order("created_at", { ascending: false })
-      .limit(20);
-
-    if (data) {
-      setNotifications(data as Notification[]);
-    }
-  };
+  const { data: notifications = [] } = useQuery({
+    queryKey: ["portal-notifications"],
+    queryFn: async () => listNotifications({ headers: await authHeaders() }),
+  });
 
   useEffect(() => {
     let cancelled = false;
@@ -44,14 +68,12 @@ export function NotificationBell() {
     const channel = supabase.channel(`notifications:${Math.random().toString(36).slice(2)}`);
 
     const init = async () => {
-      await fetchNotifications();
       const {
         data: { user },
       } = await supabase.auth.getUser();
-      if (cancelled) return;
-      const meta = user?.user_metadata as { notif_portal?: boolean } | undefined;
+      if (cancelled || !user) return;
+      const meta = user.user_metadata as { notif_portal?: boolean } | undefined;
       if (typeof meta?.notif_portal === "boolean") setEnabled(meta.notif_portal);
-      if (!user) return;
       channel
         .on(
           "postgres_changes",
@@ -62,7 +84,7 @@ export function NotificationBell() {
             filter: `user_id=eq.${user.id}`,
           },
           () => {
-            fetchNotifications();
+            qc.invalidateQueries({ queryKey: ["portal-notifications"] });
           },
         )
         .subscribe();
@@ -73,53 +95,63 @@ export function NotificationBell() {
       cancelled = true;
       supabase.removeChannel(channel);
     };
-  }, []);
+  }, [qc]);
 
   const unreadCount = notifications.filter((n) => !n.read_at).length;
 
-  const markAllAsRead = async () => {
-    const { data: userData } = await supabase.auth.getUser();
-    if (!userData.user) return;
+  const unread = notifications.filter((n) => !n.read_at);
 
-    await supabase
-      .from("notifications")
-      .update({ read_at: new Date().toISOString() })
-      .eq("user_id", userData.user.id)
-      .is("read_at", null);
+  const readOneMut = useMutation({
+    mutationFn: async (id: string) =>
+      markNotificationRead({ data: { id }, headers: await authHeaders() }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["portal-notifications"] }),
+    onError: (e: Error) => toast.error(e.message),
+  });
 
-    fetchNotifications();
-  };
+  const readAllMut = useMutation({
+    mutationFn: async () => markAllNotificationsRead({ headers: await authHeaders() }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["portal-notifications"] }),
+    onError: (e: Error) => toast.error(e.message),
+  });
 
   if (!enabled) return null;
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button variant="ghost" size="icon" className="relative">
+        <Button
+          variant="ghost"
+          size="icon"
+          className="relative"
+          aria-label={
+            unread.length > 0 ? `Notifications, ${unread.length} unread` : "Notifications"
+          }
+        >
           <Bell className="h-5 w-5" />
-          {unreadCount > 0 && (
-            <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-red-500 ring-2 ring-background" />
+          {unread.length > 0 && (
+            <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-red-500 ring-2 ring-background" />
           )}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-80 p-0" align="end">
-        <div className="flex items-center justify-between p-4 border-b border-border">
+        <div className="flex items-center justify-between border-b border-border p-4">
           <div className="flex items-center gap-2">
-            <h4 className="font-semibold text-sm">Notifications</h4>
-            {unreadCount > 0 && (
-              <span className="text-[10px] font-bold bg-gold/20 text-gold px-1.5 py-0.5 rounded-full">
-                {unreadCount}
+            <h4 className="text-sm font-semibold">Notifications</h4>
+            {unread.length > 0 && (
+              <span className="rounded-full bg-gold/20 px-1.5 py-0.5 text-[10px] font-bold text-gold">
+                {unread.length}
               </span>
             )}
           </div>
-          {unreadCount > 0 && (
+          {unread.length > 0 && (
             <Button
               variant="ghost"
               size="sm"
-              onClick={markAllAsRead}
+              disabled={readAllMut.isPending}
+              onClick={() => readAllMut.mutate()}
               className="h-auto px-2 py-1 text-xs text-muted-foreground hover:text-foreground"
             >
-              <Check className="h-3.5 w-3.5 mr-1" />
+              <CheckCheck className="mr-1 h-3.5 w-3.5" />
               Mark all read
             </Button>
           )}
@@ -127,40 +159,77 @@ export function NotificationBell() {
         <ScrollArea className="h-80">
           {notifications.length === 0 ? (
             <div className="p-8 text-center">
-              <Bell className="h-8 w-8 text-muted-foreground/30 mx-auto mb-3" />
+              <Bell className="mx-auto mb-3 h-8 w-8 text-muted-foreground/30" />
               <p className="text-sm text-muted-foreground">No notifications yet</p>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Alerts from your divisions will appear here.
+              </p>
             </div>
           ) : (
-            <div className="flex flex-col divide-y divide-border">
-              {notifications.map((n) => (
-                <div
-                  key={n.id}
-                  className={`p-4 flex flex-col gap-1 transition-colors ${
-                    !n.read_at ? "bg-gold/5" : ""
-                  }`}
-                >
-                  <div className="flex justify-between items-start gap-2">
-                    <div className="flex items-center gap-2">
-                      {!n.read_at && (
-                        <span className="h-1.5 w-1.5 rounded-full bg-gold shrink-0 mt-1" />
-                      )}
-                      <span className="font-medium text-sm leading-tight">{n.title}</span>
+            <ul className="flex flex-col divide-y divide-border">
+              {notifications.map((n) => {
+                const route = n.division ? DIVISION_ROUTES[n.division] : undefined;
+                const body = (
+                  <>
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        {!n.read_at && (
+                          <span
+                            className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-gold"
+                            aria-hidden="true"
+                          />
+                        )}
+                        <span className="text-sm font-medium leading-tight">{n.title}</span>
+                      </div>
+                      <span className="mt-0.5 shrink-0 text-[10px] text-muted-foreground">
+                        {formatDistanceToNow(new Date(n.created_at), { addSuffix: true })}
+                      </span>
                     </div>
-                    <span className="text-[10px] text-muted-foreground shrink-0 mt-0.5">
-                      {formatDistanceToNow(new Date(n.created_at), { addSuffix: true })}
-                    </span>
-                  </div>
-                  {n.body && (
-                    <p className="text-xs text-muted-foreground line-clamp-2 pl-3.5">{n.body}</p>
-                  )}
-                  {n.division && (
-                    <span className="text-[10px] text-gold/70 uppercase tracking-wider pl-3.5">
-                      {n.division}
-                    </span>
-                  )}
-                </div>
-              ))}
-            </div>
+                    {n.body && (
+                      <p className="pl-3.5 text-xs text-muted-foreground line-clamp-2">{n.body}</p>
+                    )}
+                    {n.division && (
+                      <span className="pl-3.5 text-[10px] uppercase tracking-wider text-gold/70">
+                        {DIVISION_LABELS[n.division] ?? n.division}
+                      </span>
+                    )}
+                  </>
+                );
+
+                return (
+                  <li key={n.id} className={cn("group relative", !n.read_at && "bg-gold/5")}>
+                    {/* Opening a notification is what marks it read — the bell
+                        used to have no way to read one item, so the badge
+                        stayed lit until you cleared the whole list. */}
+                    {route ? (
+                      <Link
+                        to={route}
+                        onClick={() => {
+                          if (!n.read_at) readOneMut.mutate(n.id);
+                          setOpen(false);
+                        }}
+                        className="flex flex-col gap-1 p-4 pr-10 transition-colors hover:bg-surface-elevated"
+                      >
+                        {body}
+                      </Link>
+                    ) : (
+                      <div className="flex flex-col gap-1 p-4 pr-10">{body}</div>
+                    )}
+                    {!n.read_at && (
+                      <button
+                        onClick={() => readOneMut.mutate(n.id)}
+                        disabled={readOneMut.isPending}
+                        aria-label={`Mark "${n.title}" as read`}
+                        title="Mark as read"
+                        className="absolute right-3 top-3 rounded-md p-1.5 text-muted-foreground opacity-0 transition hover:bg-surface-elevated hover:text-foreground focus-visible:opacity-100 group-hover:opacity-100"
+                      >
+                        <Check className="h-3.5 w-3.5" />
+                      </button>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
           )}
         </ScrollArea>
       </PopoverContent>

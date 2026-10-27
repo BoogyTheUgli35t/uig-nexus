@@ -3,4 +3,4 @@ Allow: /
 Disallow: /portal/
 Disallow: /api/
 
-Sitemap: https://unifiedinnovationsgroup.online/sitemap.xml
+Sitemap: https://nexus.unifiedinnovationsgroup.online/sitemap.xml

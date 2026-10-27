@@ -337,5 +337,34 @@ export const getMyFarmerProfile = createServerFn({ method: "GET" })
       .select("id, name, crop, hectares, health, status, lat, lng, updated_at")
       .eq("farmer_id", farmer.id);
 
-    return { farmer, fields: fields ?? [] };
+    const fieldRows = fields ?? [];
+    const fieldIds = fieldRows.map((f) => f.id);
+
+    // A farmer's own yields and alerts, so the page answers the two questions
+    // they actually have — how much am I on track to harvest, and is anything
+    // wrong in a field right now.
+    const [{ data: predictions }, { data: alerts }] = await Promise.all([
+      fieldIds.length
+        ? context.supabase
+            .from("yield_predictions")
+            .select("id, field_id, season, predicted_yield_tons, confidence, created_at")
+            .in("field_id", fieldIds)
+            .order("created_at", { ascending: false })
+        : Promise.resolve({ data: [] as never[] }),
+      fieldIds.length
+        ? context.supabase
+            .from("agri_alerts")
+            .select("id, field_id, message, severity, acknowledged, created_at")
+            .in("field_id", fieldIds)
+            .order("created_at", { ascending: false })
+            .limit(50)
+        : Promise.resolve({ data: [] as never[] }),
+    ]);
+
+    return {
+      farmer,
+      fields: fieldRows,
+      predictions: predictions ?? [],
+      alerts: alerts ?? [],
+    };
   });

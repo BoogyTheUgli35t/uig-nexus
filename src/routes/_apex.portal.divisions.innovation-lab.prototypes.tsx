@@ -13,7 +13,7 @@ import {
 } from "@/lib/innovation.functions";
 import { authHeaders } from "@/lib/auth-headers";
 import { supabase } from "@/integrations/supabase/client";
-import { DataPanel, EmptyState } from "@/components/portal/blocks";
+import { DataPanel, EmptyState, QueryError } from "@/components/portal/blocks";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -43,7 +43,7 @@ function PrototypesPage() {
   // board could show shots but never add one. It belongs on the card.
   const [uploadingProto, setUploadingProto] = useState<string | null>(null);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["innovation-workspace"],
     queryFn: async () => getInnovationWorkspace({ headers: await authHeaders() }),
   });
@@ -147,7 +147,9 @@ function PrototypesPage() {
         </form>
       </DataPanel>
 
-      {isLoading ? (
+      {error ? (
+        <QueryError error={error} onRetry={() => refetch()} />
+      ) : isLoading ? (
         <div className="text-sm text-muted-foreground">Loading prototypes…</div>
       ) : prototypes.length === 0 ? (
         <EmptyState
@@ -168,7 +170,7 @@ function PrototypesPage() {
                 <div className="space-y-2">
                   {items.length === 0 ? (
                     <div className="rounded-lg border border-dashed border-border py-4 text-center text-[11px] text-muted-foreground">
-                      Empty
+                      No prototypes at this stage
                     </div>
                   ) : (
                     items.map((p) => {

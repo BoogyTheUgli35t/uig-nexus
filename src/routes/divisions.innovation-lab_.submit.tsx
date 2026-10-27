@@ -9,6 +9,7 @@ import { PageHero, Section } from "@/components/site/sections";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { SITE_URL, canonical } from "@/lib/seo";
 
 export const Route = createFileRoute("/divisions/innovation-lab_/submit")({
   // Gated by VITE_FLAG_INNOVATION_INTAKE — lets the public intake be closed
@@ -17,6 +18,7 @@ export const Route = createFileRoute("/divisions/innovation-lab_/submit")({
     if (!FLAGS.innovationIntake) throw redirect({ to: "/divisions/innovation-lab" });
   },
   head: () => ({
+    links: [canonical("/divisions/innovation-lab/submit")],
     meta: [
       { title: "Submit Your Idea — UIG Innovation Lab" },
       {
@@ -24,6 +26,13 @@ export const Route = createFileRoute("/divisions/innovation-lab_/submit")({
         content:
           "Pitch your startup idea to UIG Innovation Lab — incubation, acceleration and seed investment for Nigerian founders.",
       },
+      { property: "og:title", content: "Submit Your Idea — UIG Innovation Lab" },
+      {
+        property: "og:description",
+        content:
+          "Pitch your startup idea to UIG Innovation Lab — incubation, acceleration and seed investment for Nigerian founders.",
+      },
+      { property: "og:url", content: `${SITE_URL}/divisions/innovation-lab/submit` },
     ],
   }),
   component: SubmitIdeaPage,

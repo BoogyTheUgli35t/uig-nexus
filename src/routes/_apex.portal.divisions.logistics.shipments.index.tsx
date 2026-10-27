@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { Plus, MapPin, Zap } from "lucide-react";
+import { Plus, MapPin, Package, Zap } from "lucide-react";
 import {
   getLogisticsWorkspace,
   addShipment,
@@ -11,7 +11,7 @@ import {
   PRIORITY_LEVELS,
 } from "@/lib/logistics.functions";
 import { authHeaders } from "@/lib/auth-headers";
-import { StatusBadge } from "@/components/portal/blocks";
+import { EmptyState, QueryError, SkeletonRows, StatusBadge } from "@/components/portal/blocks";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -40,7 +40,7 @@ function ShipmentsBoard() {
   const [dropoff, setDropoff] = useState("");
   const [priority, setPriority] = useState<(typeof PRIORITY_LEVELS)[number]>("standard");
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["logistics-workspace"],
     queryFn: async () => getLogisticsWorkspace({ headers: await authHeaders() }),
   });
@@ -121,8 +121,25 @@ function ShipmentsBoard() {
         </Button>
       </form>
 
-      {isLoading ? (
-        <div className="text-sm text-muted-foreground">Loading shipments…</div>
+      {error ? (
+        <QueryError error={error} onRetry={() => refetch()} />
+      ) : isLoading && !data ? (
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+          {SHIPMENT_COLUMNS.map((col) => (
+            <div key={col.key} className="rounded-xl border border-border bg-surface p-3">
+              <div className="px-1 pb-2 text-xs font-medium text-muted-foreground">{col.label}</div>
+              <SkeletonRows rows={2} />
+            </div>
+          ))}
+        </div>
+      ) : (data?.shipments ?? []).length === 0 ? (
+        /* The only division list page with no board-level empty state: with
+           zero shipments it rendered five columns of "Empty" and no guidance. */
+        <EmptyState
+          icon={Package}
+          title="No shipments yet"
+          description="Book the first shipment above and it appears in Pending, then moves across the board as the driver updates it."
+        />
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
           {SHIPMENT_COLUMNS.map((col) => {
@@ -136,7 +153,7 @@ function ShipmentsBoard() {
                 <div className="space-y-2">
                   {items.length === 0 ? (
                     <div className="rounded-lg border border-dashed border-border py-4 text-center text-[11px] text-muted-foreground">
-                      Empty
+                      No shipments at this stage
                     </div>
                   ) : (
                     items.map((s) => {

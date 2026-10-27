@@ -13,7 +13,7 @@ import {
   ACTION_TYPES,
 } from "@/lib/tech.functions";
 import { authHeaders } from "@/lib/auth-headers";
-import { DataPanel, EmptyState } from "@/components/portal/blocks";
+import { DataPanel, EmptyState, QueryError } from "@/components/portal/blocks";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
@@ -29,7 +29,12 @@ function AutomationPage() {
   const [triggerType, setTriggerType] = useState<(typeof TRIGGER_TYPES)[number]>("manual");
   const [actionType, setActionType] = useState<(typeof ACTION_TYPES)[number]>("notify");
 
-  const { data: rules, isLoading } = useQuery({
+  const {
+    data: rules,
+    isLoading,
+    error: loadError,
+    refetch: reload,
+  } = useQuery({
     queryKey: ["automation-rules"],
     queryFn: async () => listAutomationRules({ headers: await authHeaders() }),
   });
@@ -77,6 +82,8 @@ function AutomationPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  if (loadError)
+    return <QueryError error={loadError} onRetry={() => reload()} label="your automation rules" />;
   return (
     <div className="space-y-6">
       <div>

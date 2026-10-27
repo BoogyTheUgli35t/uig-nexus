@@ -1,9 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Cpu, Workflow, Plug, Rocket, Cloud, Shield, ShoppingCart, Wrench } from "lucide-react";
 import { DivisionPage } from "@/components/site/DivisionPage";
+import { canonical } from "@/lib/seo";
+import { FLAGS } from "@/lib/flags";
 
 export const Route = createFileRoute("/divisions/technology")({
   head: () => ({
+    links: [canonical("/divisions/technology")],
     meta: [
       { title: "UIG Technology — Engineering Nigeria's Digital Future" },
       {
@@ -96,13 +99,17 @@ export const Route = createFileRoute("/divisions/technology")({
         { value: "98%", label: "Client retention" },
         { value: "6 wks", label: "Avg. deployment" },
       ]}
-      browseCta={{
-        title: "Uptime guarantees, verifiable.",
-        description:
-          "Live status for the web platform, portal, listings, payments and logistics API — updated by the team that runs them.",
-        buttonText: "View system status",
-        to: "/status",
-      }}
+      {...(FLAGS.statusPage
+        ? {
+            browseCta: {
+              title: "Uptime guarantees, verifiable.",
+              description:
+                "Live status for the web platform, portal, listings, payments and logistics API — updated by the team that runs them.",
+              buttonText: "View system status",
+              to: "/status",
+            },
+          }
+        : {})}
       caseStudies={{
         eyebrow: "Proof, not promises",
         title: "Recent engagements.",
@@ -138,6 +145,57 @@ export const Route = createFileRoute("/divisions/technology")({
             result: "40,000+ patient records migrated with zero data loss.",
             metric: "6-week full migration",
           },
+        ],
+      }}
+      problem={{
+        title: "Most Nigerian businesses are running on software that was never built for them.",
+        points: [
+          "Off-the-shelf tools assume reliable power, reliable bandwidth and a card-first customer — three assumptions that fail here.",
+          "Operations run on WhatsApp threads and spreadsheets that nobody owns, so nothing is auditable and nothing scales.",
+          "Integrations between Paystack, Flutterwave, a POS and a bank are rebuilt from scratch by every company that needs them.",
+          "Agencies deliver a build, invoice, and leave — so the second release never happens and the system rots.",
+        ],
+      }}
+      outcome="A system your team actually uses on Monday morning, that we still operate with you a year later — not a handover document."
+      process={{
+        title: "Six weeks from brief to production, then we stay.",
+        steps: [
+          {
+            name: "Discovery",
+            description:
+              "One week on site or on calls with the people who do the work, mapping what actually happens versus what the process document says.",
+          },
+          {
+            name: "Architecture",
+            description:
+              "A written plan you approve before a line is shipped: data model, integrations, rollout order, what we are deliberately not building.",
+          },
+          {
+            name: "Build",
+            description:
+              "Two-week increments, each one deployed to a staging environment you can open and click through yourself.",
+          },
+          {
+            name: "Rollout",
+            description:
+              "We train the operators, migrate the data, and run the old and new systems side by side until the new one is trusted.",
+          },
+          {
+            name: "Operate",
+            description:
+              "Monitoring, incidents and a release cadence. Uptime is published on our own status page, not asserted in a deck.",
+          },
+        ],
+      }}
+      why={{
+        title: "Why UIG Technology rather than an agency or an in-house hire.",
+        points: [
+          "We run six of our own businesses on this stack — the platform is proven by us before it is sold to you.",
+          "One team owns discovery, build and operations, so nobody can hand a problem sideways.",
+          "Integrations with Nigerian payment rails, POS hardware and banks are already written and in production.",
+          "A senior engineer is accountable by name for your system, not a rotating pool.",
+          "You get the code. No lock-in clause, no per-seat trap on your own data.",
+          "Our AI capability comes from UIG Intelligence in-house, not a reseller agreement.",
         ],
       }}
       ctaTitle="Start your digital transformation."

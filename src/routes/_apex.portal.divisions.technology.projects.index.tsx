@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { Plus, Search, X } from "lucide-react";
 import { listTechProjects, updateTechProjectStatus, PROJECT_STATUSES } from "@/lib/tech.functions";
 import { authHeaders } from "@/lib/auth-headers";
-import { EmptyState } from "@/components/portal/blocks";
+import { EmptyState, QueryError } from "@/components/portal/blocks";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
@@ -33,7 +33,7 @@ function ProjectsBoard() {
   const qc = useQueryClient();
   const [search, setSearch] = useState("");
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["tech-projects", search],
     queryFn: async () =>
       listTechProjects({ headers: await authHeaders(), data: { search: search || undefined } }),
@@ -79,7 +79,9 @@ function ProjectsBoard() {
         )}
       </div>
 
-      {isLoading ? (
+      {error ? (
+        <QueryError error={error} onRetry={() => refetch()} />
+      ) : isLoading ? (
         <div className="text-sm text-muted-foreground">Loading projects…</div>
       ) : projects.length === 0 ? (
         <EmptyState icon={Plus} title="No projects found" />
@@ -97,7 +99,9 @@ function ProjectsBoard() {
                 </div>
                 <div className="space-y-3">
                   {items.length === 0 ? (
-                    <p className="px-1 py-4 text-center text-xs text-muted-foreground">Empty</p>
+                    <p className="px-1 py-4 text-center text-xs text-muted-foreground">
+                      No projects at this stage
+                    </p>
                   ) : (
                     items.map((p) => (
                       <div key={p.id} className="rounded-lg border border-border bg-background p-3">

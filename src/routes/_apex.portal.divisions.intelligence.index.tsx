@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { BrainCircuit, Database, Rocket, Gauge, Cpu, Layers, ArrowRight } from "lucide-react";
 import { getIntelligenceWorkspace, MODEL_LIFECYCLE } from "@/lib/intelligence.functions";
 import { authHeaders } from "@/lib/auth-headers";
-import { KpiStat, DataPanel, EmptyState } from "@/components/portal/blocks";
+import { DataPanel, EmptyState, KpiStat, QueryError } from "@/components/portal/blocks";
 
 export const Route = createFileRoute("/_apex/portal/divisions/intelligence/")({
   component: IntelligenceOverview,
@@ -18,7 +18,7 @@ const STAGE_LABELS: Record<(typeof MODEL_LIFECYCLE)[number], string> = {
 };
 
 function IntelligenceOverview() {
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["intelligence-workspace"],
     queryFn: async () => getIntelligenceWorkspace({ headers: await authHeaders() }),
   });
@@ -67,7 +67,9 @@ function IntelligenceOverview() {
           </Link>
         }
       >
-        {isLoading ? (
+        {error ? (
+          <QueryError error={error} onRetry={() => refetch()} />
+        ) : isLoading ? (
           <div className="text-sm text-muted-foreground">Loading models…</div>
         ) : models.length === 0 ? (
           <EmptyState

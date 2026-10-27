@@ -24,11 +24,13 @@ import {
   getFieldDetail,
   addFieldImage,
   removeFieldImage,
+  updateFieldStatus,
+  FIELD_STATUSES,
   IMAGE_SOURCES,
 } from "@/lib/agritech.functions";
 import { authHeaders } from "@/lib/auth-headers";
 import { supabase } from "@/integrations/supabase/client";
-import { DataPanel, EmptyState, StatusBadge } from "@/components/portal/blocks";
+import { DataPanel, EmptyState, QueryError, StatusBadge } from "@/components/portal/blocks";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -47,12 +49,34 @@ function FieldDetailPage() {
   const [uploading, setUploading] = useState(false);
   const [source, setSource] = useState<(typeof IMAGE_SOURCES)[number]>("manual");
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["agri-field", id],
     queryFn: async () => getFieldDetail({ headers: await authHeaders(), data: { id } }),
   });
 
   const invalidate = () => qc.invalidateQueries({ queryKey: ["agri-field", id] });
+
+  /**
+   * Marking a field at risk was impossible from the UI, which meant the whole
+   * AgriTech alerting path could only ever be fed by seed data: the server
+   * function recomputes health, raises an `agri_alerts` row and notifies the
+   * farmer's account, and nothing called it.
+   */
+  const statusMut = useMutation({
+    mutationFn: async (status: (typeof FIELD_STATUSES)[number]) =>
+      updateFieldStatus({ data: { id, status }, headers: await authHeaders() }),
+    onSuccess: (_r, status) => {
+      toast.success(
+        status === "healthy"
+          ? "Field marked healthy"
+          : `Field marked ${status.replace(/_/g, " ")} — an alert has been raised`,
+      );
+      invalidate();
+      // The alerts panel and the division KPIs both read the workspace payload.
+      qc.invalidateQueries({ queryKey: ["agri-workspace"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
 
   const removeMut = useMutation({
     mutationFn: async (imageId: string) =>
@@ -85,6 +109,7 @@ function FieldDetailPage() {
     }
   }
 
+  if (error) return <QueryError error={error} onRetry={() => refetch()} />;
   if (isLoading) return <div className="text-sm text-muted-foreground">Loading field…</div>;
   if (!data?.field) return <EmptyState icon={MapPinned} title="Field not found" />;
 
@@ -104,14 +129,33 @@ function FieldDetailPage() {
         <ArrowLeft className="h-4 w-4" /> Fields
       </Link>
 
-      <div className="flex flex-wrap items-center justify-between gap-3">
+      <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold">{f.name}</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             {data.farmer?.full_name ?? "—"} · {f.hectares} ha · {f.crop ?? "—"}
           </p>
         </div>
-        <StatusBadge status={f.status} />
+        <div className="flex flex-col items-end gap-2">
+          <StatusBadge status={f.status} />
+          <div className="flex flex-wrap justify-end gap-1.5">
+            {FIELD_STATUSES.filter((s) => s !== f.status).map((s) => (
+              <Button
+                key={s}
+                size="sm"
+                variant="outline"
+                disabled={statusMut.isPending}
+                onClick={() => statusMut.mutate(s)}
+                className="h-7 px-2 text-xs capitalize"
+              >
+                Mark {s.replace(/_/g, " ")}
+              </Button>
+            ))}
+          </div>
+          <p className="max-w-[16rem] text-right text-[11px] text-muted-foreground">
+            Marking a field at risk or critical raises an alert and notifies the farmer.
+          </p>
+        </div>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
@@ -240,7 +284,12 @@ function FieldDetailPage() {
         <div className="space-y-6">
           <DataPanel title="Alerts">
             {data.alerts.length === 0 ? (
-              <p className="text-xs text-muted-foreground">No alerts for this field.</p>
+              <EmptyState
+                icon={AlertTriangle}
+                title="No alerts for this field"
+                description="Marking the field at risk or critical raises one here."
+                className="py-6"
+              />
             ) : (
               <div className="space-y-2">
                 {data.alerts.map((a) => (

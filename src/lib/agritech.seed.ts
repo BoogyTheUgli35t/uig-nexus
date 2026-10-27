@@ -7,6 +7,16 @@ export const seedAgriTechData = createServerFn({ method: "POST" })
   .handler(async ({ context }) => {
     const { supabase, userId } = context;
 
+    // Idempotency guard — see realestate.seed.ts for what re-running a bare
+    // `.insert()` seeder did to the Real Estate catalogue.
+    const { data: seeded, error: checkError } = await supabase
+      .from("farmers")
+      .select("id")
+      .eq("full_name", "Aliyu Bello")
+      .limit(1);
+    if (checkError) throw new Error(checkError.message);
+    if ((seeded ?? []).length > 0) return { success: true, skipped: true };
+
     // Farmers
     const farmers = [
       {
@@ -96,5 +106,5 @@ export const seedAgriTechData = createServerFn({ method: "POST" })
       if (yieldError) throw new Error(yieldError.message);
     }
 
-    return { success: true };
+    return { success: true, skipped: false };
   });

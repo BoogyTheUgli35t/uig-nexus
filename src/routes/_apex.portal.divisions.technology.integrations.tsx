@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { Plug, Cpu, RefreshCw } from "lucide-react";
 import { getTechWorkspace } from "@/lib/tech.functions";
 import { authHeaders } from "@/lib/auth-headers";
-import { DataPanel, EmptyState, StatusBadge } from "@/components/portal/blocks";
+import { DataPanel, EmptyState, QueryError, StatusBadge } from "@/components/portal/blocks";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/_apex/portal/divisions/technology/integrations")({
@@ -13,7 +13,7 @@ export const Route = createFileRoute("/_apex/portal/divisions/technology/integra
 });
 
 function IntegrationsPage() {
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["tech-workspace"],
     queryFn: async () => getTechWorkspace({ headers: await authHeaders() }),
   });
@@ -42,7 +42,9 @@ function IntegrationsPage() {
       </div>
 
       <DataPanel title="Connectors">
-        {isLoading ? (
+        {error ? (
+          <QueryError error={error} onRetry={() => refetch()} />
+        ) : isLoading ? (
           <div className="text-sm text-muted-foreground">Loading…</div>
         ) : integrations.length === 0 ? (
           <EmptyState icon={Plug} title="No integrations" />

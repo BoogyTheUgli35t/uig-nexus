@@ -11,9 +11,11 @@ import {
 } from "lucide-react";
 import { DivisionPage } from "@/components/site/DivisionPage";
 import { SampleChatDemo } from "@/components/site/SampleChatDemo";
+import { canonical } from "@/lib/seo";
 
 export const Route = createFileRoute("/divisions/intelligence")({
   head: () => ({
+    links: [canonical("/divisions/intelligence")],
     meta: [
       { title: "UIG Intelligence — AI Built for Africa" },
       {
@@ -152,6 +154,57 @@ export const Route = createFileRoute("/divisions/intelligence")({
             result: "Depots re-ordered against forecasts instead of guesswork within one season.",
             metric: "18% less spoilage waste",
           },
+        ],
+      }}
+      problem={{
+        title: "The models the world is building do not speak the languages most of Africa does.",
+        points: [
+          "Ask a frontier model a question in Yoruba and it often answers in English, in Pidgin, or in Yoruba no actual speaker would write.",
+          "That is not a bug, it is the training data: the open web is overwhelmingly Western and English.",
+          "So a bank that wants to serve customers in Hausa over WhatsApp has nothing off the shelf that works.",
+          "Businesses sitting on years of their own operational data have no route from that data to a model they can use.",
+        ],
+      }}
+      outcome="A model that answers in the language your customer actually asked in, trained on data from the market you actually operate in."
+      process={{
+        title: "From your data to a model in production.",
+        steps: [
+          {
+            name: "Scope",
+            description:
+              "The specific decision or interaction to automate, and the accuracy it has to hit to be worth deploying.",
+          },
+          {
+            name: "Data",
+            description:
+              "Auditing what you have, what is usable, and what needs collecting — with the gaps named honestly up front.",
+          },
+          {
+            name: "Train",
+            description:
+              "Fine-tuning on native-language and domain data, with intent recognition measured against the use cases that matter.",
+          },
+          {
+            name: "Evaluate",
+            description:
+              "Held-out testing plus review by native speakers. A model that scores well and reads wrong does not ship.",
+          },
+          {
+            name: "Serve",
+            description:
+              "Deployed behind an API into your channels — WhatsApp, IVR, in-app — and monitored in production.",
+          },
+        ],
+      }}
+      why={{
+        title: "Why UIG Intelligence.",
+        points: [
+          "Native-language corpora in Yoruba, Hausa and Igbo built deliberately, not scraped and hoped for.",
+          "Evaluation includes native speakers, because fluent-sounding and correct are different things.",
+          "The same team serves models to five other UIG divisions, so the infrastructure is load-bearing already.",
+          "Your data stays yours. We do not pool client data into a shared model.",
+          "Accuracy is reported per use case with the failure modes named, rather than as a single headline figure.",
+          "Deployment is part of the engagement — a model that never reaches production is not a deliverable.",
         ],
       }}
       ctaTitle="Explore AI solutions for your business."

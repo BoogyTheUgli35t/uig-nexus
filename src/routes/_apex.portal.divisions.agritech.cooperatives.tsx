@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { Layers, Pencil, Users } from "lucide-react";
 import { getAgriWorkspace, renameCooperative } from "@/lib/agritech.functions";
 import { authHeaders } from "@/lib/auth-headers";
-import { DataPanel, EmptyState } from "@/components/portal/blocks";
+import { DataPanel, EmptyState, QueryError } from "@/components/portal/blocks";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -18,7 +18,7 @@ function CooperativesPage() {
   const [editing, setEditing] = useState<string | null>(null);
   const [newName, setNewName] = useState("");
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["agri-workspace"],
     queryFn: async () => getAgriWorkspace({ headers: await authHeaders() }),
   });
@@ -56,7 +56,9 @@ function CooperativesPage() {
         </p>
       </div>
 
-      {isLoading ? (
+      {error ? (
+        <QueryError error={error} onRetry={() => refetch()} />
+      ) : isLoading ? (
         <div className="text-sm text-muted-foreground">Loading…</div>
       ) : groups.length === 0 ? (
         <EmptyState icon={Layers} title="No cooperatives yet" />

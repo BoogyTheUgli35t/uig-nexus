@@ -1,9 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { PageHero, Section } from "@/components/site/sections";
+import { SITE_URL, canonical } from "@/lib/seo";
 
 export const Route = createFileRoute("/privacy")({
   head: () => ({
+    links: [canonical("/privacy")],
     meta: [
       { title: "Privacy Policy — UIG" },
       {
@@ -11,6 +13,12 @@ export const Route = createFileRoute("/privacy")({
         content: "How Unified Innovations Group collects, uses and protects your data.",
       },
       { name: "robots", content: "index, follow" },
+      { property: "og:title", content: "Privacy Policy — UIG" },
+      {
+        property: "og:description",
+        content: "How Unified Innovations Group collects, uses and protects your data.",
+      },
+      { property: "og:url", content: `${SITE_URL}/privacy` },
     ],
   }),
   component: PrivacyPage,
@@ -110,9 +118,9 @@ function PrivacyPage() {
             <h2 className="text-xl font-semibold text-foreground">9. Cookies</h2>
             <p className="mt-3">
               We use essential cookies to keep you signed in and remember your preferences. See our{" "}
-              <a href="/cookies" className="text-gold hover:underline">
+              <Link to="/cookies" className="text-gold hover:underline">
                 Cookie Policy
-              </a>{" "}
+              </Link>{" "}
               for details.
             </p>
           </div>
@@ -129,9 +137,9 @@ function PrivacyPage() {
             <h2 className="text-xl font-semibold text-foreground">11. Contact</h2>
             <p className="mt-3">
               Questions about this policy or your data can be sent to us via our{" "}
-              <a href="/contact" className="text-gold hover:underline">
+              <Link to="/contact" className="text-gold hover:underline">
                 contact page
-              </a>
+              </Link>
               .
             </p>
           </div>

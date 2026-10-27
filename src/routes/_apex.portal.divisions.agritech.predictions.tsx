@@ -5,7 +5,7 @@ import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGri
 import { CloudSun, TrendingUp, Gauge, Sparkles } from "lucide-react";
 import { getAgriWorkspace } from "@/lib/agritech.functions";
 import { authHeaders } from "@/lib/auth-headers";
-import { KpiStat, DataPanel, EmptyState } from "@/components/portal/blocks";
+import { DataPanel, EmptyState, KpiStat, QueryError } from "@/components/portal/blocks";
 
 export const Route = createFileRoute("/_apex/portal/divisions/agritech/predictions")({
   head: () => ({ meta: [{ title: "Yield predictions — UIG AgriTech" }] }),
@@ -13,7 +13,7 @@ export const Route = createFileRoute("/_apex/portal/divisions/agritech/predictio
 });
 
 function PredictionsPage() {
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["agri-workspace"],
     queryFn: async () => getAgriWorkspace({ headers: await authHeaders() }),
   });
@@ -46,7 +46,15 @@ function PredictionsPage() {
         <KpiStat
           icon={CloudSun}
           label="Predictions"
-          value={isLoading ? "—" : predictions.length}
+          value={
+            error ? (
+              <QueryError error={error} onRetry={() => refetch()} />
+            ) : isLoading ? (
+              "—"
+            ) : (
+              predictions.length
+            )
+          }
           hint="across all fields"
         />
         <KpiStat

@@ -28,7 +28,13 @@ import {
 import { deleteProperty } from "@/lib/realestate-crud.functions";
 import { authHeaders } from "@/lib/auth-headers";
 import { supabase } from "@/integrations/supabase/client";
-import { DataPanel, EmptyState, StatusBadge, KpiStat } from "@/components/portal/blocks";
+import {
+  DataPanel,
+  EmptyState,
+  KpiStat,
+  QueryError,
+  StatusBadge,
+} from "@/components/portal/blocks";
 import { RecordDocuments } from "@/components/portal/RecordDocuments";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -66,7 +72,7 @@ function PropertyDetailPage() {
   const qc = useQueryClient();
   const navigate = useNavigate();
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["realestate-property", id],
     queryFn: async () => getPropertyDetail({ headers: await authHeaders(), data: { id } }),
   });
@@ -190,6 +196,7 @@ function PropertyDetailPage() {
     invalidate();
   }
 
+  if (error) return <QueryError error={error} onRetry={() => refetch()} />;
   if (isLoading) return <div className="text-sm text-muted-foreground">Loading property…</div>;
   if (!data) return <EmptyState icon={Building2} title="Property not found" />;
 
@@ -343,8 +350,22 @@ function PropertyDetailPage() {
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
+              {/* Two edit paths existed for the same property: this inline
+                  panel (description, price, amenities, featured) and a full
+                  edit route that nothing linked to — so title, city, area,
+                  type and status were only changeable at a URL you couldn't
+                  reach. Both are kept, but labelled for what they do. */}
               <Button size="sm" variant="ghost" onClick={startEditing}>
-                <Pencil className="mr-1 h-3.5 w-3.5" /> Edit
+                <Pencil className="mr-1 h-3.5 w-3.5" /> Quick edit
+              </Button>
+              <Button size="sm" variant="outline" asChild>
+                <Link
+                  to="/portal/divisions/real-estate/properties/$id/edit"
+                  params={{ id }}
+                  aria-label="Edit all property details"
+                >
+                  All details
+                </Link>
               </Button>
             </div>
           )

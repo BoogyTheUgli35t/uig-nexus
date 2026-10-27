@@ -11,7 +11,7 @@ import {
   updateExperiment,
 } from "@/lib/innovation.functions";
 import { authHeaders } from "@/lib/auth-headers";
-import { DataPanel, EmptyState, StatusBadge } from "@/components/portal/blocks";
+import { DataPanel, EmptyState, QueryError, StatusBadge } from "@/components/portal/blocks";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -29,7 +29,11 @@ function ExperimentsPage() {
   const [expModelId, setExpModelId] = useState("");
   const [resultDrafts, setResultDrafts] = useState<Record<string, string>>({});
 
-  const { data: workspace } = useQuery({
+  const {
+    data: workspace,
+    error: loadError,
+    refetch: reload,
+  } = useQuery({
     queryKey: ["innovation-workspace"],
     queryFn: async () => getInnovationWorkspace({ headers: await authHeaders() }),
   });
@@ -76,6 +80,10 @@ function ExperimentsPage() {
   const ideaTitle = new Map(ideas.map((i) => [i.id, i.title]));
   const modelName = new Map((models ?? []).map((m) => [m.id, m.name]));
 
+  if (loadError)
+    return (
+      <QueryError error={loadError} onRetry={() => reload()} label="the Innovation Lab workspace" />
+    );
   return (
     <div className="space-y-6">
       <DataPanel

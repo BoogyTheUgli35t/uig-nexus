@@ -12,7 +12,7 @@ import {
   clearMyChat,
 } from "@/lib/intelligence.functions";
 import { authHeaders } from "@/lib/auth-headers";
-import { DataPanel } from "@/components/portal/blocks";
+import { DataPanel, QueryError } from "@/components/portal/blocks";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -33,7 +33,11 @@ function AssistantPage() {
   const chatEndRef = useRef<HTMLDivElement>(null);
   const sentAskRef = useRef(false);
 
-  const { data } = useQuery({
+  const {
+    data,
+    error: loadError,
+    refetch: reload,
+  } = useQuery({
     queryKey: ["intelligence-workspace"],
     queryFn: async () => getIntelligenceWorkspace({ headers: await authHeaders() }),
   });
@@ -82,6 +86,10 @@ function AssistantPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ask]);
 
+  if (loadError)
+    return (
+      <QueryError error={loadError} onRetry={() => reload()} label="the Intelligence workspace" />
+    );
   return (
     <div className="space-y-6">
       <DataPanel

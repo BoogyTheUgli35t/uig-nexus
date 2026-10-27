@@ -11,7 +11,7 @@ import {
   VEHICLE_STATUSES,
 } from "@/lib/logistics.functions";
 import { authHeaders } from "@/lib/auth-headers";
-import { DataPanel, EmptyState, StatusBadge } from "@/components/portal/blocks";
+import { DataPanel, EmptyState, QueryError, StatusBadge } from "@/components/portal/blocks";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -33,7 +33,7 @@ function FleetPage() {
   const qc = useQueryClient();
   const [logVehicle, setLogVehicle] = useState<string | null>(null);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["logistics-workspace"],
     queryFn: async () => getLogisticsWorkspace({ headers: await authHeaders() }),
   });
@@ -54,7 +54,9 @@ function FleetPage() {
         <p className="text-sm text-muted-foreground">Vehicles, capacity and maintenance records.</p>
       </div>
 
-      {isLoading ? (
+      {error ? (
+        <QueryError error={error} onRetry={() => refetch()} />
+      ) : isLoading ? (
         <div className="text-sm text-muted-foreground">Loading…</div>
       ) : (data?.vehicles.length ?? 0) === 0 ? (
         <EmptyState icon={Truck} title="No vehicles yet" />
@@ -236,7 +238,12 @@ function MaintenanceDialog({
 
         <div className="mt-2 max-h-56 space-y-2 overflow-y-auto border-t border-border pt-3">
           {vehicleLogs.length === 0 ? (
-            <p className="text-xs text-muted-foreground">No service history yet.</p>
+            <EmptyState
+              icon={Wrench}
+              title="No service history"
+              description="Log a service above and it appears here, newest first."
+              className="py-6"
+            />
           ) : (
             vehicleLogs.map((l) => (
               <div key={l.id} className="rounded-lg border border-border bg-background p-3 text-sm">

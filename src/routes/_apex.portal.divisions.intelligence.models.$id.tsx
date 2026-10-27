@@ -9,7 +9,7 @@ import {
   runPrediction,
 } from "@/lib/intelligence.functions";
 import { authHeaders } from "@/lib/auth-headers";
-import { DataPanel, EmptyState, StatusBadge } from "@/components/portal/blocks";
+import { DataPanel, EmptyState, QueryError, StatusBadge } from "@/components/portal/blocks";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -46,7 +46,7 @@ function ModelDetailPage() {
   const [predPrompt, setPredPrompt] = useState("");
   const [predResult, setPredResult] = useState<{ result: string; confidence: number } | null>(null);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["intelligence-workspace"],
     queryFn: async () => getIntelligenceWorkspace({ headers: await authHeaders() }),
   });
@@ -77,6 +77,7 @@ function ModelDetailPage() {
   const modelPredictions = (data?.predictions ?? []).filter((p) => p.model_id === id);
   const canPredict = model && ["trained", "deployed", "monitoring"].includes(model.status);
 
+  if (error) return <QueryError error={error} onRetry={() => refetch()} />;
   if (isLoading) return <div className="text-sm text-muted-foreground">Loading model…</div>;
 
   if (!model) {

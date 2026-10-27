@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { getRealEstateWorkspace } from "@/lib/realestate.functions";
 import { seedRealEstateData } from "@/lib/realestate.seed";
 import { authHeaders } from "@/lib/auth-headers";
-import { DataPanel, KpiStat } from "@/components/portal/blocks";
+import { DataPanel, KpiStat, QueryError } from "@/components/portal/blocks";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/_apex/portal/divisions/real-estate/settings")({
@@ -25,7 +25,11 @@ const LEASE_TEMPLATES = [
 function SettingsPage() {
   const qc = useQueryClient();
 
-  const { data } = useQuery({
+  const {
+    data,
+    error: loadError,
+    refetch: reload,
+  } = useQuery({
     queryKey: ["realestate-workspace"],
     queryFn: async () => getRealEstateWorkspace({ headers: await authHeaders() }),
   });
@@ -41,6 +45,8 @@ function SettingsPage() {
 
   const propertyCount = data?.properties?.length ?? 0;
 
+  if (loadError)
+    return <QueryError error={loadError} onRetry={() => reload()} label="your division settings" />;
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">

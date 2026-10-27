@@ -7,6 +7,16 @@ export const seedInnovationData = createServerFn({ method: "POST" })
   .handler(async ({ context }) => {
     const { supabase, userId } = context;
 
+    // Idempotency guard — see realestate.seed.ts for what re-running a bare
+    // `.insert()` seeder did to the Real Estate catalogue.
+    const { data: seeded, error: checkError } = await supabase
+      .from("ideas")
+      .select("id")
+      .eq("title", "AI-Powered Crop Disease Detection")
+      .limit(1);
+    if (checkError) throw new Error(checkError.message);
+    if ((seeded ?? []).length > 0) return { success: true, skipped: true };
+
     // Ideas
     const ideas = [
       {
@@ -74,5 +84,5 @@ export const seedInnovationData = createServerFn({ method: "POST" })
 
     if (partnerError) throw new Error(partnerError.message);
 
-    return { success: true };
+    return { success: true, skipped: false };
   });

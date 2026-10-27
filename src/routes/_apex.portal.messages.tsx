@@ -7,7 +7,7 @@ import { getMyWorkspace, listMessages, sendMessage } from "@/lib/divisions.funct
 import { authHeaders } from "@/lib/auth-headers";
 import { supabase } from "@/integrations/supabase/client";
 import { DIVISIONS } from "@/lib/divisions";
-import { DataPanel, EmptyState } from "@/components/portal/blocks";
+import { DataPanel, EmptyState, QueryError } from "@/components/portal/blocks";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -39,7 +39,12 @@ function MessagesPage() {
     if (workspace) setMyId(workspace.userId);
   }, [workspace, division]);
 
-  const { data: messages, isLoading } = useQuery({
+  const {
+    data: messages,
+    isLoading,
+    error: loadError,
+    refetch: reload,
+  } = useQuery({
     queryKey: ["messages", division, threadKey],
     queryFn: async () =>
       division
@@ -115,6 +120,8 @@ function MessagesPage() {
     sendMut.mutate();
   }
 
+  if (loadError)
+    return <QueryError error={loadError} onRetry={() => reload()} label="your messages" />;
   return (
     <div className="max-w-3xl space-y-6">
       <div>

@@ -7,6 +7,17 @@ export const seedLogisticsData = createServerFn({ method: "POST" })
   .handler(async ({ context }) => {
     const { supabase, userId } = context;
 
+    // Idempotency guard. Every division seeder was a bare `.insert()`, so a
+    // second call duplicated the whole batch — Real Estate ran five times and
+    // ended up with three copies of its catalogue. See realestate.seed.ts.
+    const { data: seeded, error: checkError } = await supabase
+      .from("vehicles")
+      .select("id")
+      .eq("plate", "LAG-241-KJA")
+      .limit(1);
+    if (checkError) throw new Error(checkError.message);
+    if ((seeded ?? []).length > 0) return { success: true, skipped: true };
+
     // Vehicles
     const vehicles = [
       {
@@ -131,5 +142,5 @@ export const seedLogisticsData = createServerFn({ method: "POST" })
       if (shipmentError) throw new Error(shipmentError.message);
     }
 
-    return { success: true };
+    return { success: true, skipped: false };
   });

@@ -10,9 +10,11 @@ import {
   Coins,
 } from "lucide-react";
 import { DivisionPage } from "@/components/site/DivisionPage";
+import { canonical } from "@/lib/seo";
 
 export const Route = createFileRoute("/divisions/innovation-lab")({
   head: () => ({
+    links: [canonical("/divisions/innovation-lab")],
     meta: [
       { title: "UIG Innovation Lab — Where Nigeria's Next Big Ideas Are Born" },
       {
@@ -115,8 +117,60 @@ export const Route = createFileRoute("/divisions/innovation-lab")({
         buttonText: "Submit your idea",
         to: "/divisions/innovation-lab/submit",
       }}
+      problem={{
+        title: "Nigeria produces more good founders than it produces routes to a first customer.",
+        points: [
+          "Early capital is available in small amounts and at terms that assume a Silicon Valley trajectory.",
+          "Most incubators offer mentorship and a demo day, then nothing operational once the cohort ends.",
+          "A first-time founder has to rebuild payments, auth, hosting and compliance that six other startups already built.",
+          "The shortest path to traction — a real enterprise pilot — is exactly the thing an unproven team cannot open on its own.",
+        ],
+      }}
+      outcome="A working prototype, a real pilot inside one of UIG's divisions or client accounts, and an operating team you can still call after demo day."
+      process={{
+        title: "From submission to pilot.",
+        steps: [
+          {
+            name: "Submit",
+            description:
+              "One form, no warm introduction required. Every submission is read by the Innovation Lab team.",
+          },
+          {
+            name: "Review",
+            description:
+              "We assess the problem, the team and whether UIG is genuinely the right partner. Strong ideas get a call.",
+          },
+          {
+            name: "Build",
+            description:
+              "A prototype in weeks, on UIG's shared stack, so you are not spending your first month on auth and hosting.",
+          },
+          {
+            name: "Pilot",
+            description:
+              "Wherever it fits, we run it inside a UIG division or a client account — a real user, real data, real feedback.",
+          },
+          {
+            name: "Back",
+            description:
+              "Seed investment and continued engineering support for what works, and an honest conversation about what does not.",
+          },
+        ],
+      }}
+      why={{
+        title: "Why build with the Innovation Lab.",
+        points: [
+          "You can pilot inside a real operating business rather than pitching for access to one.",
+          "The shared stack — payments, auth, hosting, AI — is available from day one.",
+          "Engineering support is from the team that runs UIG's own products, not a pool of part-time mentors.",
+          "We tell you when we are the wrong partner, early, instead of holding a place in a cohort.",
+          "Support does not stop at demo day; the divisions you piloted with are still there afterwards.",
+          "No warm introduction needed. The form is the front door.",
+        ],
+      }}
       ctaTitle="Apply to the incubation programme."
-      ctaButton="Visit the Innovation Hub"
+      ctaButton="Submit your idea"
+      ctaTo="/divisions/innovation-lab/submit"
     />
   ),
 });

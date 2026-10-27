@@ -394,6 +394,77 @@ export const assignRouteDriver = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
+/**
+ * One driver, with everything dispatch needs to answer "where is this person
+ * and what are they carrying".
+ *
+ * Drivers were a first-class entity with four server functions and no detail
+ * page: the list had no click-through, so a driver's open shipments, route
+ * assignments and delivery history were only reachable by cross-referencing
+ * three other pages.
+ */
+export const getDriverDetail = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((i: unknown) => z.object({ id: z.string().uuid() }).parse(i))
+  .handler(async ({ context, data }) => {
+    const { data: driver, error } = await context.supabase
+      .from("drivers")
+      .select("id, full_name, phone, status, rating, deliveries_completed, vehicle_id, user_id")
+      .eq("id", data.id)
+      .maybeSingle();
+    if (error) throw new Error(error.message);
+    if (!driver) throw new Error("Driver not found");
+
+    const [{ data: shipments }, { data: routes }, { data: vehicle }] = await Promise.all([
+      context.supabase
+        .from("shipments")
+        .select(
+          "id, reference, customer, pickup_city, dropoff_city, cargo, weight_kg, status, priority, eta, tracking_code, created_at",
+        )
+        .eq("driver_id", data.id)
+        .order("created_at", { ascending: false })
+        .limit(50),
+      context.supabase
+        .from("routes")
+        .select("id, name, origin, destination, status, stops, distance_km, est_hours")
+        .eq("assigned_driver_id", data.id)
+        .order("created_at", { ascending: false }),
+      driver.vehicle_id
+        ? context.supabase
+            .from("vehicles")
+            .select("id, plate, vehicle_type, status, capacity_kg, fuel_level")
+            .eq("id", driver.vehicle_id)
+            .maybeSingle()
+        : Promise.resolve({ data: null }),
+    ]);
+
+    return {
+      driver,
+      vehicle,
+      shipments: shipments ?? [],
+      routes: routes ?? [],
+    };
+  });
+
+const UpdateDriverStatusSchema = z.object({
+  id: z.string().uuid(),
+  status: z.enum(DRIVER_STATUSES),
+});
+
+/** Dispatch-side status change, as opposed to `updateMyDriverStatus` which the
+ * driver calls for their own record. */
+export const updateDriverStatus = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((i: unknown) => UpdateDriverStatusSchema.parse(i))
+  .handler(async ({ context, data }) => {
+    const { error } = await context.supabase
+      .from("drivers")
+      .update({ status: data.status })
+      .eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
 /** Links a driver record to a login (by email) so that user gets the "My tasks"
  * mobile driver view. Uses the admin API to look up the account — there's no
  * self-serve invite flow, so an admin performs this once per driver. */

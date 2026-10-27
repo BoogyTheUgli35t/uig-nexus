@@ -1,54 +1,73 @@
--- Self-service portal access for investors and farmers, mirroring the
--- existing driver pattern (drivers.user_id + "drivers read own..." policies):
--- an admin grants the 'investor'/'farmer' role via the Users page, then a
--- staff member links the specific investor/farmer record to that person's
--- portal account by email (linkInvestorAccount / linkFarmerAccount below).
--- All new policies are additive (OR'd with existing ones) — nothing here can
--- reduce access that staff/admin already have.
+-- SUPERSEDED — intentionally a no-op. Do not restore the SQL below.
+--
+-- This file was committed to GitHub but never applied to the production
+-- (Lovable Cloud) database: its schema_migrations table has no row for this
+-- version. The same changes reached production through Lovable's consolidated
+-- migration 20260714025147, which adds investors/farmers.user_id and recreates these policies with DROP POLICY IF EXISTS.
+--
+-- Replaying it on a fresh database is therefore wrong as well as redundant:
+-- CREATE POLICY "investors read own record" fails with 42710 "already exists", because 20260714025147 ran first, and `supabase db push` stops there.
+--
+-- Verified by replaying all migrations on a clean Postgres and diffing the
+-- result (tables, columns, constraints, indexes, policies, functions,
+-- triggers, grants) against the live production schema: with this file as a
+-- no-op the two match. The original SQL is kept below, commented out, for
+-- the record.
 
-ALTER TABLE public.investors ADD COLUMN IF NOT EXISTS user_id uuid REFERENCES auth.users(id) ON DELETE SET NULL;
-ALTER TABLE public.farmers ADD COLUMN IF NOT EXISTS user_id uuid REFERENCES auth.users(id) ON DELETE SET NULL;
+select 1;
 
-CREATE POLICY "investors read own record" ON public.investors
-  FOR SELECT TO authenticated
-  USING (user_id = auth.uid());
-
-CREATE POLICY "farmers read own record" ON public.farmers
-  FOR SELECT TO authenticated
-  USING (user_id = auth.uid());
-
-CREATE POLICY "farmers read own fields" ON public.fields
-  FOR SELECT TO authenticated
-  USING (
-    EXISTS (SELECT 1 FROM public.farmers f WHERE f.id = fields.farmer_id AND f.user_id = auth.uid())
-  );
-
-CREATE POLICY "farmers read own field images" ON public.field_images
-  FOR SELECT TO authenticated
-  USING (
-    EXISTS (
-      SELECT 1 FROM public.fields fl
-      JOIN public.farmers f ON f.id = fl.farmer_id
-      WHERE fl.id = field_images.field_id AND f.user_id = auth.uid()
-    )
-  );
-
-CREATE POLICY "farmers read own alerts" ON public.agri_alerts
-  FOR SELECT TO authenticated
-  USING (
-    EXISTS (
-      SELECT 1 FROM public.fields fl
-      JOIN public.farmers f ON f.id = fl.farmer_id
-      WHERE fl.id = agri_alerts.field_id AND f.user_id = auth.uid()
-    )
-  );
-
-CREATE POLICY "farmers read own sensor data" ON public.sensor_data
-  FOR SELECT TO authenticated
-  USING (
-    EXISTS (
-      SELECT 1 FROM public.fields fl
-      JOIN public.farmers f ON f.id = fl.farmer_id
-      WHERE fl.id = sensor_data.field_id AND f.user_id = auth.uid()
-    )
-  );
+-- | ---------------------------------------------------------------- original
+-- | -- Self-service portal access for investors and farmers, mirroring the
+-- | -- existing driver pattern (drivers.user_id + "drivers read own..." policies):
+-- | -- an admin grants the 'investor'/'farmer' role via the Users page, then a
+-- | -- staff member links the specific investor/farmer record to that person's
+-- | -- portal account by email (linkInvestorAccount / linkFarmerAccount below).
+-- | -- All new policies are additive (OR'd with existing ones) — nothing here can
+-- | -- reduce access that staff/admin already have.
+-- |
+-- | ALTER TABLE public.investors ADD COLUMN IF NOT EXISTS user_id uuid REFERENCES auth.users(id) ON DELETE SET NULL;
+-- | ALTER TABLE public.farmers ADD COLUMN IF NOT EXISTS user_id uuid REFERENCES auth.users(id) ON DELETE SET NULL;
+-- |
+-- | CREATE POLICY "investors read own record" ON public.investors
+-- |   FOR SELECT TO authenticated
+-- |   USING (user_id = auth.uid());
+-- |
+-- | CREATE POLICY "farmers read own record" ON public.farmers
+-- |   FOR SELECT TO authenticated
+-- |   USING (user_id = auth.uid());
+-- |
+-- | CREATE POLICY "farmers read own fields" ON public.fields
+-- |   FOR SELECT TO authenticated
+-- |   USING (
+-- |     EXISTS (SELECT 1 FROM public.farmers f WHERE f.id = fields.farmer_id AND f.user_id = auth.uid())
+-- |   );
+-- |
+-- | CREATE POLICY "farmers read own field images" ON public.field_images
+-- |   FOR SELECT TO authenticated
+-- |   USING (
+-- |     EXISTS (
+-- |       SELECT 1 FROM public.fields fl
+-- |       JOIN public.farmers f ON f.id = fl.farmer_id
+-- |       WHERE fl.id = field_images.field_id AND f.user_id = auth.uid()
+-- |     )
+-- |   );
+-- |
+-- | CREATE POLICY "farmers read own alerts" ON public.agri_alerts
+-- |   FOR SELECT TO authenticated
+-- |   USING (
+-- |     EXISTS (
+-- |       SELECT 1 FROM public.fields fl
+-- |       JOIN public.farmers f ON f.id = fl.farmer_id
+-- |       WHERE fl.id = agri_alerts.field_id AND f.user_id = auth.uid()
+-- |     )
+-- |   );
+-- |
+-- | CREATE POLICY "farmers read own sensor data" ON public.sensor_data
+-- |   FOR SELECT TO authenticated
+-- |   USING (
+-- |     EXISTS (
+-- |       SELECT 1 FROM public.fields fl
+-- |       JOIN public.farmers f ON f.id = fl.farmer_id
+-- |       WHERE fl.id = sensor_data.field_id AND f.user_id = auth.uid()
+-- |     )
+-- |   );

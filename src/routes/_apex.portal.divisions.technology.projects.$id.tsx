@@ -16,21 +16,28 @@ import {
   CreditCard,
 } from "lucide-react";
 import {
-  getTechProjectDetail,
-  updateTechProjectStatus,
-  addTechTask,
-  updateTechTaskStatus,
-  addDeployment,
-  addInvoice,
-  updateInvoiceStatus,
-  PROJECT_STATUSES,
   DEPLOY_ENVIRONMENTS,
   INVOICE_STATUSES,
+  PROJECT_STATUSES,
+  TASK_STATUSES,
+  addDeployment,
+  addInvoice,
+  addTechTask,
+  getTechProjectDetail,
+  updateInvoiceStatus,
+  updateTechProjectStatus,
+  updateTechTaskStatus,
 } from "@/lib/tech.functions";
 import { createCheckoutSession } from "@/lib/billing.functions";
 import { authHeaders } from "@/lib/auth-headers";
 import { supabase } from "@/integrations/supabase/client";
-import { DataPanel, EmptyState, StatusBadge, KpiStat } from "@/components/portal/blocks";
+import {
+  DataPanel,
+  EmptyState,
+  KpiStat,
+  QueryError,
+  StatusBadge,
+} from "@/components/portal/blocks";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -52,7 +59,7 @@ function ProjectDetailPage() {
   const { id } = Route.useParams();
   const qc = useQueryClient();
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["tech-project", id],
     queryFn: async () => getTechProjectDetail({ headers: await authHeaders(), data: { id } }),
   });
@@ -60,6 +67,7 @@ function ProjectDetailPage() {
   const invalidate = () => qc.invalidateQueries({ queryKey: ["tech-project", id] });
 
   const [taskTitle, setTaskTitle] = useState("");
+  const [taskFilter, setTaskFilter] = useState<"" | (typeof TASK_STATUSES)[number]>("");
   const [deployVersion, setDeployVersion] = useState("");
   const [deployEnv, setDeployEnv] = useState<(typeof DEPLOY_ENVIRONMENTS)[number]>("staging");
   const [deployNotes, setDeployNotes] = useState("");
@@ -219,10 +227,12 @@ function ProjectDetailPage() {
     invalidate();
   }
 
+  if (error) return <QueryError error={error} onRetry={() => refetch()} />;
   if (isLoading) return <div className="text-sm text-muted-foreground">Loading project…</div>;
   if (!data) return <EmptyState icon={FileText} title="Project not found" />;
 
   const { project, tasks, deployments, invoices, documents } = data;
+  const visibleTasks = taskFilter ? tasks.filter((t) => t.status === taskFilter) : tasks;
   const slaHoursLeft = project.due_date
     ? Math.round((new Date(project.due_date).getTime() - Date.now()) / (1000 * 60 * 60))
     : null;
@@ -323,13 +333,39 @@ function ProjectDetailPage() {
             <Plus className="mr-1.5 h-3.5 w-3.5" /> Add
           </Button>
         </form>
-        {tasks.length === 0 ? (
+        {tasks.length > 0 && (
+          <div className="mt-4 flex flex-wrap gap-1.5">
+            {(["", ...TASK_STATUSES] as const).map((st) => {
+              const count = st ? tasks.filter((t) => t.status === st).length : tasks.length;
+              return (
+                <button
+                  key={st || "all"}
+                  onClick={() => setTaskFilter(st)}
+                  className={`rounded-full border px-3 py-1 text-xs capitalize transition ${
+                    taskFilter === st
+                      ? "acc-border-soft acc-bg-soft acc-text"
+                      : "border-border text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {st ? st.replace(/_/g, " ") : "All"} ({count})
+                </button>
+              );
+            })}
+          </div>
+        )}
+        {visibleTasks.length === 0 ? (
           <div className="mt-4">
-            <EmptyState icon={CheckSquare} title="No tasks yet" />
+            <EmptyState
+              icon={CheckSquare}
+              title={taskFilter ? `Nothing ${taskFilter.replace(/_/g, " ")}` : "No tasks yet"}
+              description={
+                taskFilter ? undefined : "Add the first task above to start tracking this project."
+              }
+            />
           </div>
         ) : (
           <ul className="mt-4 space-y-1.5">
-            {tasks.map((t) => (
+            {visibleTasks.map((t) => (
               <li
                 key={t.id}
                 className="flex items-center justify-between gap-3 rounded-lg border border-border bg-background px-3 py-2"

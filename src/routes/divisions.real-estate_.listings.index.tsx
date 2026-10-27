@@ -8,6 +8,7 @@ import { NigeriaListingsMap } from "@/components/site/NigeriaListingsMap";
 import { resolveImageUrl } from "@/lib/utils";
 import { sizedImage } from "@/lib/media";
 import { FLAGS } from "@/lib/flags";
+import { SITE_URL, canonical } from "@/lib/seo";
 
 export const Route = createFileRoute("/divisions/real-estate_/listings/")({
   // Gated by VITE_FLAG_REAL_ESTATE_LISTINGS so the public browse experience can
@@ -19,6 +20,7 @@ export const Route = createFileRoute("/divisions/real-estate_/listings/")({
     if (!FLAGS.realEstateListings) throw redirect({ to: "/divisions/real-estate" });
   },
   head: () => ({
+    links: [canonical("/divisions/real-estate/listings")],
     meta: [
       { title: "Browse Listings by Location — UIG Real Estate" },
       {
@@ -26,6 +28,13 @@ export const Route = createFileRoute("/divisions/real-estate_/listings/")({
         content:
           "Explore houses, apartments and land for sale or rent across Lagos, Abuja, Port Harcourt, Enugu and Kano.",
       },
+      { property: "og:title", content: "Browse Listings by Location — UIG Real Estate" },
+      {
+        property: "og:description",
+        content:
+          "Explore houses, apartments and land for sale or rent across Lagos, Abuja, Port Harcourt, Enugu and Kano.",
+      },
+      { property: "og:url", content: `${SITE_URL}/divisions/real-estate/listings` },
     ],
   }),
   component: ListingsHubPage,
@@ -92,8 +101,20 @@ function ListingsHubPage() {
         )}
 
         {!isLoading && !isError && (!locations || locations.length === 0) && (
-          <div className="mt-10 rounded-xl border border-border bg-surface/40 p-10 text-center text-muted-foreground">
-            No listings are live yet — check back soon.
+          // "Check back soon" tells a buyer with intent to leave. Give them a
+          // person to talk to instead: off-market stock is real, it just isn't
+          // on the public site.
+          <div className="mt-10 rounded-xl border border-border bg-surface/40 p-10 text-center">
+            <p className="text-muted-foreground">
+              Nothing is listed publicly right now — but our best stock is often off-market.
+            </p>
+            <Link
+              to="/contact"
+              search={{ interest: "real-estate" }}
+              className="mt-5 inline-flex items-center justify-center rounded-lg bg-gold px-5 py-2.5 text-sm font-semibold text-gold-foreground transition hover:bg-gold/90"
+            >
+              Tell us what you're looking for
+            </Link>
           </div>
         )}
 

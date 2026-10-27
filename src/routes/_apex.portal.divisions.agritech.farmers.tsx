@@ -3,9 +3,15 @@ import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Plus, Users, Phone, MapPin, ChevronRight, ChevronLeft, Check, Link2 } from "lucide-react";
-import { getAgriWorkspace, onboardFarmer, linkFarmerAccount } from "@/lib/agritech.functions";
+import {
+  FARMER_STATUSES,
+  getAgriWorkspace,
+  onboardFarmer,
+  linkFarmerAccount,
+} from "@/lib/agritech.functions";
 import { authHeaders } from "@/lib/auth-headers";
-import { DataPanel, EmptyState, StatusBadge } from "@/components/portal/blocks";
+import { DataPanel, EmptyState, QueryError, StatusBadge } from "@/components/portal/blocks";
+import { ListToolbar } from "@/components/portal/ListToolbar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -26,8 +32,11 @@ function FarmersPage() {
   const [wizardOpen, setWizardOpen] = useState(false);
   const [linkingId, setLinkingId] = useState<string | null>(null);
   const [linkEmail, setLinkEmail] = useState("");
+  const [search, setSearch] = useState("");
+  const [status, setStatus] = useState("");
+  const [cooperative, setCooperative] = useState("");
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["agri-workspace"],
     queryFn: async () => getAgriWorkspace({ headers: await authHeaders() }),
   });
@@ -44,14 +53,42 @@ function FarmersPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const allFarmers = data?.farmers ?? [];
+
+  // Cooperatives come from the data rather than a constant: they're created by
+  // field officers, so a hardcoded list would go stale the first time one is.
+  const cooperatives = Array.from(
+    new Set(allFarmers.map((f) => f.cooperative).filter((c): c is string => Boolean(c))),
+  ).sort();
+
+  const term = search.trim().toLowerCase();
+  const farmers = allFarmers.filter(
+    (f) =>
+      (!status || f.status === status) &&
+      (!cooperative || f.cooperative === cooperative) &&
+      (!term ||
+        f.full_name.toLowerCase().includes(term) ||
+        (f.phone ?? "").toLowerCase().includes(term) ||
+        (f.location ?? "").toLowerCase().includes(term) ||
+        (f.primary_crop ?? "").toLowerCase().includes(term)),
+  );
+
+  const filtered = Boolean(term || status || cooperative);
+  const clear = () => {
+    setSearch("");
+    setStatus("");
+    setCooperative("");
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-lg font-semibold">Farmers</h2>
           <p className="text-sm text-muted-foreground">
-            {data?.farmers.length ?? 0} farmer{(data?.farmers.length ?? 0) === 1 ? "" : "s"} on
-            file.
+            {filtered
+              ? `${farmers.length} of ${allFarmers.length} farmers match.`
+              : `${allFarmers.length} farmer${allFarmers.length === 1 ? "" : "s"} on file.`}
           </p>
         </div>
         <Button onClick={() => setWizardOpen(true)}>
@@ -59,14 +96,66 @@ function FarmersPage() {
         </Button>
       </div>
 
-      {isLoading ? (
-        <div className="text-sm text-muted-foreground">Loading…</div>
-      ) : (data?.farmers.length ?? 0) === 0 ? (
-        <EmptyState icon={Users} title="No farmers onboarded yet" />
+      {allFarmers.length > 0 && (
+        <ListToolbar
+          search={{
+            id: "farmer-search",
+            label: "Search farmers",
+            placeholder: "Search by name, phone, location or crop…",
+            value: search,
+            onChange: setSearch,
+          }}
+          filters={[
+            {
+              id: "farmer-status",
+              label: "Status",
+              value: status,
+              onChange: setStatus,
+              options: FARMER_STATUSES,
+              allLabel: "All statuses",
+            },
+            ...(cooperatives.length > 0
+              ? [
+                  {
+                    id: "farmer-coop",
+                    label: "Cooperative",
+                    value: cooperative,
+                    onChange: setCooperative,
+                    options: cooperatives,
+                    allLabel: "All cooperatives",
+                  },
+                ]
+              : []),
+          ]}
+          onClear={clear}
+        />
+      )}
+
+      {error ? (
+        <QueryError error={error} onRetry={() => refetch()} label="the farmer directory" />
+      ) : isLoading && !data ? (
+        <div className="text-sm text-muted-foreground">Loading farmers…</div>
+      ) : farmers.length === 0 ? (
+        <EmptyState
+          icon={Users}
+          title={filtered ? "No farmers match your filters" : "No farmers onboarded yet"}
+          description={
+            filtered
+              ? "Try a different name, crop, cooperative or status."
+              : "Onboard the first farmer above — it takes four fields."
+          }
+          action={
+            filtered ? (
+              <Button variant="outline" size="sm" onClick={clear}>
+                Clear filters
+              </Button>
+            ) : undefined
+          }
+        />
       ) : (
         <DataPanel title="Directory">
           <div className="divide-y divide-border">
-            {(data?.farmers ?? []).map((f) => (
+            {farmers.map((f) => (
               <div
                 key={f.id}
                 className="flex flex-wrap items-center justify-between gap-3 py-3 first:pt-0 last:pb-0"

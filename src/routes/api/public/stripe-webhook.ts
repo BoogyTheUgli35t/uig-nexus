@@ -49,15 +49,53 @@ export const Route = createFileRoute("/api/public/stripe-webhook")({
           return new Response("Invalid signature", { status: 401 });
         }
 
-        const event = JSON.parse(body) as { type?: string; data?: { object?: unknown } };
+        const event = JSON.parse(body) as {
+          type?: string;
+          data?: {
+            object?: {
+              id?: string;
+              payment_status?: string;
+              payment_intent?: string | null;
+              metadata?: Record<string, string>;
+            };
+          };
+        };
+        const obj = event.data?.object ?? {};
+        const txId = obj.metadata?.transaction_id;
 
-        // Handle the events you care about here.
-        switch (event.type) {
-          case "checkout.session.completed":
-            // e.g. mark an order/subscription as paid using client_reference_id
-            break;
-          default:
-            break;
+        if (txId && event.type?.startsWith("checkout.session.")) {
+          const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+          const paid =
+            (event.type === "checkout.session.completed" && obj.payment_status === "paid") ||
+            event.type === "checkout.session.async_payment_succeeded";
+          const failed =
+            event.type === "checkout.session.async_payment_failed" ||
+            event.type === "checkout.session.expired";
+
+          if (paid || failed) {
+            const { data: tx } = await supabaseAdmin
+              .from("billing_transactions")
+              .update(
+                paid
+                  ? {
+                      status: "paid",
+                      paid_at: new Date().toISOString(),
+                      stripe_payment_intent: obj.payment_intent ?? null,
+                    }
+                  : { status: "failed" },
+              )
+              .eq("id", txId)
+              .select("related_table, related_id")
+              .maybeSingle();
+
+            // Rent paid → the tenant's record shows as paid in the portal.
+            if (paid && tx?.related_table === "tenants" && tx.related_id) {
+              await supabaseAdmin
+                .from("tenants")
+                .update({ payment_status: "paid" })
+                .eq("id", tx.related_id);
+            }
+          }
         }
 
         return new Response(JSON.stringify({ received: true }), {

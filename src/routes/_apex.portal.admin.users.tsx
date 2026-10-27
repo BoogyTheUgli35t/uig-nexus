@@ -6,7 +6,7 @@ import { Users, Search, Save } from "lucide-react";
 import { listAllPortalUsers, updateUserAccess } from "@/lib/portal.functions";
 import { authHeaders } from "@/lib/auth-headers";
 import { DIVISIONS } from "@/lib/divisions";
-import { DataPanel, EmptyState } from "@/components/portal/blocks";
+import { DataPanel, EmptyState, QueryError } from "@/components/portal/blocks";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -43,7 +43,7 @@ function UsersPage() {
     [data, search],
   );
 
-  if (error) return <div className="text-destructive text-sm">{(error as Error).message}</div>;
+  if (error) return <QueryError error={error} />;
 
   const editingRow = data?.find((u) => u.id === editingUser) ?? null;
 

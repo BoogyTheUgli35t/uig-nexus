@@ -25,6 +25,7 @@ import heroLogistics from "@/assets/divisions/hero-logistics.jpg";
 import heroIntelligence from "@/assets/divisions/hero-intelligence.jpg";
 import heroInnovationLab from "@/assets/divisions/hero-innovation-lab.jpg";
 import { media } from "@/lib/media";
+import { canonical } from "@/lib/seo";
 
 const STORY_IMAGES = [
   {
@@ -55,6 +56,7 @@ const STORY_IMAGES = [
 
 export const Route = createFileRoute("/")({
   head: () => ({
+    links: [canonical("/")],
     meta: [
       { title: "Unified Innovations Group — Two Steps Ahead." },
       {
