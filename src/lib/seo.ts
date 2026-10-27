@@ -1,7 +1,7 @@
 // Shared SEO + contact constants — keep in sync with sitemap.xml.ts's BASE_URL
 // and __root.tsx's og:image so structured data, sitemap and social meta all
 // point at the same canonical values.
-export const SITE_URL = "https://unifiedinnovationsgroup.online";
+export const SITE_URL = "https://nexus.unifiedinnovationsgroup.online";
 export const SITE_NAME = "Unified Innovations Group";
 export const SITE_LOGO =
   "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/e6b25550-beb6-4918-8631-81e4e441b36b";
