@@ -11,9 +11,11 @@ import {
 } from "lucide-react";
 import { DivisionPage } from "@/components/site/DivisionPage";
 import { YieldCalculator } from "@/components/site/YieldCalculator";
+import { canonical } from "@/lib/seo";
 
 export const Route = createFileRoute("/divisions/agritech")({
   head: () => ({
+    links: [canonical("/divisions/agritech")],
     meta: [
       { title: "UIG AgriTech — Feeding Africa Through Intelligence" },
       {
@@ -124,6 +126,48 @@ export const Route = createFileRoute("/divisions/agritech")({
         description:
           "A quick, editable model for prospective farmers and agribusiness investors — pick a crop, set your farm size, and adjust the numbers to your local market.",
         component: <YieldCalculator />,
+      }}
+      outcome="A farmer who knows what their field will yield before harvest, and a buyer who knows the produce exists before they pay for it."
+      process={{
+        title: "How a farm joins the network.",
+        steps: [
+          {
+            name: "Register",
+            description:
+              "A field officer visits, records the plot boundaries, crop and hectarage, and links the farmer to their own portal account.",
+          },
+          {
+            name: "Instrument",
+            description:
+              "Soil moisture and temperature sensors go in, and the plot enters the drone survey rotation.",
+          },
+          {
+            name: "Monitor",
+            description:
+              "Field health is scored continuously. Anything trending toward at-risk raises an alert to the farmer and the field officer at once.",
+          },
+          {
+            name: "Forecast",
+            description:
+              "Once there is a season of readings, yield prediction runs per field with a stated confidence — not a single optimistic number.",
+          },
+          {
+            name: "Sell",
+            description:
+              "Forecast volume is matched to buyers ahead of harvest, and the farmer is paid in Naira within 24 hours of delivery.",
+          },
+        ],
+      }}
+      why={{
+        title: "Why UIG AgriTech works where agritech pilots usually stall.",
+        points: [
+          "Alerts reach the farmer by SMS, because assuming a smartphone excludes most of the people who need them.",
+          "Hardware is chosen for Nigerian humidity and dust, not for a demo in a temperate climate.",
+          "Every farmer gets their own portal login — their fields, their forecasts, their alerts, not a report about them.",
+          "Field officers are ours. The data is collected by people we train and are accountable for.",
+          "Yield forecasts carry a confidence figure, so a low-confidence number can be treated as one.",
+          "Farm-to-market is part of the same system, so a good forecast turns into a sale rather than a spreadsheet.",
+        ],
       }}
       ctaTitle="Join the AgriTech network."
       ctaButton="Request a Farm Assessment"

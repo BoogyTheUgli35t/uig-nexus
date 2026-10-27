@@ -1,9 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { PageHero, Section } from "@/components/site/sections";
+import { SITE_URL, canonical } from "@/lib/seo";
 
 export const Route = createFileRoute("/terms")({
   head: () => ({
+    links: [canonical("/terms")],
     meta: [
       { title: "Terms of Service — UIG" },
       {
@@ -12,6 +14,13 @@ export const Route = createFileRoute("/terms")({
           "The terms that govern your use of Unified Innovations Group products and the Apex Portal.",
       },
       { name: "robots", content: "index, follow" },
+      { property: "og:title", content: "Terms of Service — UIG" },
+      {
+        property: "og:description",
+        content:
+          "The terms that govern your use of Unified Innovations Group products and the Apex Portal.",
+      },
+      { property: "og:url", content: `${SITE_URL}/terms` },
     ],
   }),
   component: TermsPage,
@@ -125,9 +134,9 @@ function TermsPage() {
             <h2 className="text-xl font-semibold text-foreground">11. Contact</h2>
             <p className="mt-3">
               Questions about these terms can be sent via our{" "}
-              <a href="/contact" className="text-gold hover:underline">
+              <Link to="/contact" className="text-gold hover:underline">
                 contact page
-              </a>
+              </Link>
               .
             </p>
           </div>

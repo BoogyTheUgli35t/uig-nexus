@@ -8,9 +8,11 @@ import {
   createModel,
   advanceModel,
   MODEL_LIFECYCLE,
+  MODEL_TYPES,
 } from "@/lib/intelligence.functions";
 import { authHeaders } from "@/lib/auth-headers";
-import { EmptyState } from "@/components/portal/blocks";
+import { EmptyState, QueryError } from "@/components/portal/blocks";
+import { ListToolbar } from "@/components/portal/ListToolbar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -37,8 +39,10 @@ const NEXT_LABEL: Record<string, string> = {
 function ModelsPage() {
   const qc = useQueryClient();
   const [modelName, setModelName] = useState("");
+  const [search, setSearch] = useState("");
+  const [modelType, setModelType] = useState("");
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["intelligence-workspace"],
     queryFn: async () => getIntelligenceWorkspace({ headers: await authHeaders() }),
   });
@@ -68,15 +72,30 @@ function ModelsPage() {
     return m;
   }, [data]);
 
+  // `MODEL_TYPES` was exported and referenced nowhere. Filtering the board by
+  // type is how you answer "where are our NLP models" without reading all
+  // five columns.
+  const term = search.trim().toLowerCase();
+  const visibleModels = useMemo(
+    () =>
+      (data?.models ?? []).filter(
+        (mo) =>
+          (!modelType || mo.model_type === modelType) &&
+          (!term || mo.name.toLowerCase().includes(term)),
+      ),
+    [data, modelType, term],
+  );
+  const filtered = Boolean(term || modelType);
+
   const modelsByStage = useMemo(() => {
     const m = new Map<string, NonNullable<typeof data>["models"]>();
     LIFECYCLE_COLUMNS.forEach((c) => m.set(c.key, []));
-    (data?.models ?? []).forEach((mo) => {
+    visibleModels.forEach((mo) => {
       if (!m.has(mo.status)) m.set(mo.status, []);
       m.get(mo.status)!.push(mo);
     });
     return m;
-  }, [data]);
+  }, [visibleModels]);
 
   return (
     <div className="space-y-6">
@@ -111,10 +130,44 @@ function ModelsPage() {
         </form>
       </div>
 
-      {isLoading ? (
+      {(data?.models.length ?? 0) > 0 && (
+        <ListToolbar
+          search={{
+            id: "model-search",
+            label: "Search models",
+            placeholder: "Search by model name…",
+            value: search,
+            onChange: setSearch,
+          }}
+          filters={[
+            {
+              id: "model-type",
+              label: "Type",
+              value: modelType,
+              onChange: setModelType,
+              options: MODEL_TYPES,
+              allLabel: "All types",
+            },
+          ]}
+          onClear={() => {
+            setSearch("");
+            setModelType("");
+          }}
+        />
+      )}
+
+      {error ? (
+        <QueryError error={error} onRetry={() => refetch()} label="your models" />
+      ) : isLoading && !data ? (
         <div className="text-sm text-muted-foreground">Loading models…</div>
-      ) : (data?.models.length ?? 0) === 0 ? (
-        <EmptyState icon={Cpu} title="No models yet" description="Create your first model above." />
+      ) : visibleModels.length === 0 ? (
+        <EmptyState
+          icon={Cpu}
+          title={filtered ? "No models match your filters" : "No models yet"}
+          description={
+            filtered ? "Try a different name or model type." : "Create your first model above."
+          }
+        />
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
           {LIFECYCLE_COLUMNS.map((col) => {
@@ -128,7 +181,7 @@ function ModelsPage() {
                 <div className="space-y-2">
                   {items.length === 0 ? (
                     <div className="rounded-lg border border-dashed border-border py-4 text-center text-[11px] text-muted-foreground">
-                      Empty
+                      No models at this stage
                     </div>
                   ) : (
                     items.map((mo) => (

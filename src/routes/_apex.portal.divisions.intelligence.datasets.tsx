@@ -1,11 +1,16 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Plus, Database } from "lucide-react";
 import { toast } from "sonner";
-import { getIntelligenceWorkspace, addDataset } from "@/lib/intelligence.functions";
+import {
+  DATASET_STATUSES,
+  getIntelligenceWorkspace,
+  addDataset,
+} from "@/lib/intelligence.functions";
 import { authHeaders } from "@/lib/auth-headers";
-import { DataPanel, EmptyState, StatusBadge } from "@/components/portal/blocks";
+import { DataPanel, EmptyState, QueryError, StatusBadge } from "@/components/portal/blocks";
+import { ListToolbar } from "@/components/portal/ListToolbar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -18,8 +23,11 @@ function DatasetsPage() {
   const qc = useQueryClient();
   const [datasetName, setDatasetName] = useState("");
   const [datasetRows, setDatasetRows] = useState("");
+  const [search, setSearch] = useState("");
+  const [status, setStatus] = useState("");
+  const [division, setDivision] = useState("");
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["intelligence-workspace"],
     queryFn: async () => getIntelligenceWorkspace({ headers: await authHeaders() }),
   });
@@ -39,8 +47,28 @@ function DatasetsPage() {
     onError: (e: Error) => toast.error(e.message),
   });
 
-  const datasets = data?.datasets ?? [];
+  const allDatasets = data?.datasets ?? [];
   const models = data?.models ?? [];
+
+  // `DATASET_STATUSES` was exported and referenced nowhere. A library with
+  // "processing" and "error" rows in it is exactly the kind of list you want
+  // to filter, since a failed upload otherwise hides among the ready ones.
+  const sourceDivisions = Array.from(new Set(allDatasets.map((d) => d.source_division))).sort();
+  const term = search.trim().toLowerCase();
+  const datasets = allDatasets.filter(
+    (d) =>
+      (!status || d.status === status) &&
+      (!division || d.source_division === division) &&
+      (!term ||
+        d.name.toLowerCase().includes(term) ||
+        (d.description ?? "").toLowerCase().includes(term)),
+  );
+  const filtered = Boolean(term || status || division);
+  const clear = () => {
+    setSearch("");
+    setStatus("");
+    setDivision("");
+  };
 
   return (
     <div className="space-y-6">
@@ -76,14 +104,61 @@ function DatasetsPage() {
         </form>
       </DataPanel>
 
-      <DataPanel title={`Dataset library (${datasets.length})`}>
-        {isLoading ? (
+      {allDatasets.length > 0 && (
+        <ListToolbar
+          search={{
+            id: "dataset-search",
+            label: "Search datasets",
+            placeholder: "Search by name or description…",
+            value: search,
+            onChange: setSearch,
+          }}
+          filters={[
+            {
+              id: "dataset-status",
+              label: "Status",
+              value: status,
+              onChange: setStatus,
+              options: DATASET_STATUSES,
+              allLabel: "All statuses",
+            },
+            ...(sourceDivisions.length > 1
+              ? [
+                  {
+                    id: "dataset-division",
+                    label: "Source",
+                    value: division,
+                    onChange: setDivision,
+                    options: sourceDivisions,
+                    allLabel: "All divisions",
+                  },
+                ]
+              : []),
+          ]}
+          onClear={clear}
+        />
+      )}
+
+      <DataPanel
+        title={
+          filtered
+            ? `Dataset library (${datasets.length} of ${allDatasets.length})`
+            : `Dataset library (${allDatasets.length})`
+        }
+      >
+        {error ? (
+          <QueryError error={error} onRetry={() => refetch()} label="the dataset library" />
+        ) : isLoading && !data ? (
           <div className="text-sm text-muted-foreground">Loading datasets…</div>
         ) : datasets.length === 0 ? (
           <EmptyState
             icon={Database}
-            title="No datasets yet"
-            description="Add a dataset above to feed model training."
+            title={filtered ? "No datasets match your filters" : "No datasets yet"}
+            description={
+              filtered
+                ? "Try a different name, status or source division."
+                : "Add a dataset above to feed model training."
+            }
           />
         ) : (
           <div className="space-y-3">
@@ -103,13 +178,17 @@ function DatasetsPage() {
                   </div>
                   {linkedModels.length > 0 && (
                     <div className="mt-2 flex flex-wrap gap-1.5">
+                      {/* These were non-clickable spans, even though the model
+                          detail route exists and the rows are already in hand. */}
                       {linkedModels.map((m) => (
-                        <span
+                        <Link
                           key={m.id}
-                          className="rounded-full acc-bg-soft acc-text px-2 py-0.5 text-[10px]"
+                          to="/portal/divisions/intelligence/models/$id"
+                          params={{ id: m.id }}
+                          className="rounded-full acc-bg-soft acc-text px-2 py-0.5 text-[10px] transition hover:brightness-125"
                         >
                           {m.name}
-                        </span>
+                        </Link>
                       ))}
                     </div>
                   )}

@@ -4,8 +4,9 @@ import { useQuery } from "@tanstack/react-query";
 import { CheckCircle2, AlertTriangle, AlertOctagon, Activity } from "lucide-react";
 import { getSystemStatus } from "@/lib/public-status.functions";
 import { SiteLayout } from "@/components/site/SiteLayout";
-import { PageHero, Section } from "@/components/site/sections";
+import { PageHero, Section, CTABand } from "@/components/site/sections";
 import { cn } from "@/lib/utils";
+import { SITE_URL, canonical } from "@/lib/seo";
 
 export const Route = createFileRoute("/status")({
   // Gated by VITE_FLAG_STATUS_PAGE. A status page that itself is broken or
@@ -15,6 +16,7 @@ export const Route = createFileRoute("/status")({
     if (!FLAGS.statusPage) throw redirect({ to: "/" });
   },
   head: () => ({
+    links: [canonical("/status")],
     meta: [
       { title: "System Status — UIG" },
       {
@@ -22,6 +24,13 @@ export const Route = createFileRoute("/status")({
         content:
           "Live status for UIG's web platform, portal, listings, payments and logistics API.",
       },
+      { property: "og:title", content: "UIG System Status" },
+      {
+        property: "og:description",
+        content:
+          "Live status for UIG's web platform, portal, listings, payments and logistics API.",
+      },
+      { property: "og:url", content: `${SITE_URL}/status` },
     ],
   }),
   component: StatusPage,
@@ -139,6 +148,13 @@ function StatusPage() {
           )}
         </div>
       </Section>
+
+      <CTABand
+        title="This is the same platform we build for clients."
+        subtitle="Uptime you can verify, incidents reported in the open. UIG Technology builds and runs it."
+        buttonText="See UIG Technology"
+        buttonTo="/divisions/technology"
+      />
     </SiteLayout>
   );
 }

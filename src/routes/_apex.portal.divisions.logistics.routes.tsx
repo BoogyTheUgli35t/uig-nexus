@@ -17,9 +17,11 @@ import {
   addRouteStop,
   toggleRouteStop,
   assignRouteDriver,
+  ROUTE_STATUSES,
 } from "@/lib/logistics.functions";
 import { authHeaders } from "@/lib/auth-headers";
-import { DataPanel, EmptyState, StatusBadge } from "@/components/portal/blocks";
+import { ListToolbar } from "@/components/portal/ListToolbar";
+import { DataPanel, EmptyState, QueryError, StatusBadge } from "@/components/portal/blocks";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -36,11 +38,32 @@ export const Route = createFileRoute("/_apex/portal/divisions/logistics/routes")
 
 function RoutesPage() {
   const [openRoute, setOpenRoute] = useState<string | null>(null);
+  const [search, setSearch] = useState("");
+  const [status, setStatus] = useState("");
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["logistics-workspace"],
     queryFn: async () => getLogisticsWorkspace({ headers: await authHeaders() }),
   });
+
+  // `ROUTE_STATUSES` was exported and referenced nowhere. Once a fleet has
+  // planned and suspended corridors mixed in with active ones, "show me the
+  // active runs" is the first thing dispatch asks for.
+  const allRoutes = data?.routes ?? [];
+  const term = search.trim().toLowerCase();
+  const routes = allRoutes.filter(
+    (r) =>
+      (!status || r.status === status) &&
+      (!term ||
+        r.name.toLowerCase().includes(term) ||
+        r.origin.toLowerCase().includes(term) ||
+        r.destination.toLowerCase().includes(term)),
+  );
+  const filtered = Boolean(term || status);
+  const clear = () => {
+    setSearch("");
+    setStatus("");
+  };
 
   return (
     <div className="space-y-6">
@@ -52,13 +75,46 @@ function RoutesPage() {
         </p>
       </div>
 
-      {isLoading ? (
-        <div className="text-sm text-muted-foreground">Loading…</div>
-      ) : (data?.routes.length ?? 0) === 0 ? (
-        <EmptyState icon={RouteIcon} title="No routes yet" />
+      {allRoutes.length > 0 && (
+        <ListToolbar
+          search={{
+            id: "route-search",
+            label: "Search routes",
+            placeholder: "Search by name, origin or destination…",
+            value: search,
+            onChange: setSearch,
+          }}
+          filters={[
+            {
+              id: "route-status",
+              label: "Status",
+              value: status,
+              onChange: setStatus,
+              options: ROUTE_STATUSES,
+              allLabel: "All statuses",
+            },
+          ]}
+          onClear={clear}
+        />
+      )}
+
+      {error ? (
+        <QueryError error={error} onRetry={() => refetch()} label="your routes" />
+      ) : isLoading && !data ? (
+        <div className="text-sm text-muted-foreground">Loading routes…</div>
+      ) : routes.length === 0 ? (
+        <EmptyState
+          icon={RouteIcon}
+          title={filtered ? "No routes match your filters" : "No routes yet"}
+          description={
+            filtered
+              ? "Try a different corridor or status."
+              : "Create a corridor and add its stops in order."
+          }
+        />
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {(data?.routes ?? []).map((r) => {
+          {routes.map((r) => {
             const driverName = data?.drivers.find((d) => d.id === r.assigned_driver_id)?.full_name;
             return (
               <button
@@ -220,7 +276,12 @@ function RouteStopsDialog({
 
         <div className="max-h-64 space-y-2 overflow-y-auto">
           {routeStops.length === 0 ? (
-            <p className="text-xs text-muted-foreground">No stops added yet.</p>
+            <EmptyState
+              icon={MapPin}
+              title="No stops on this route"
+              description="Add the first delivery address above to start building the run."
+              className="py-6"
+            />
           ) : (
             routeStops.map((stop, i) => (
               <button

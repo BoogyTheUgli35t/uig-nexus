@@ -12,6 +12,7 @@ import { FLAGS } from "@/lib/flags";
 import { PageHero, Section } from "@/components/site/sections";
 import { resolveImageUrl, cn } from "@/lib/utils";
 import { sizedImage } from "@/lib/media";
+import { SITE_URL, canonical } from "@/lib/seo";
 
 export const Route = createFileRoute("/divisions/real-estate_/listings/$state/")({
   // Same VITE_FLAG_REAL_ESTATE_LISTINGS gate as the listings index. Repeated
@@ -19,15 +20,23 @@ export const Route = createFileRoute("/divisions/real-estate_/listings/$state/")
   beforeLoad: () => {
     if (!FLAGS.realEstateListings) throw redirect({ to: "/divisions/real-estate" });
   },
-  head: ({ params }) => ({
-    meta: [
-      { title: `Properties in ${params.state} — UIG Real Estate` },
-      {
-        name: "description",
-        content: `Houses, apartments, commercial space and land for sale or rent in ${params.state}.`,
-      },
-    ],
-  }),
+  head: ({ params }) => {
+    const title = `Properties in ${params.state} — UIG Real Estate`;
+    const description = `Houses, apartments, commercial space and land for sale or rent in ${params.state}. Verified title, managed by UIG Real Estate.`;
+    return {
+      links: [canonical(`/divisions/real-estate/listings/${params.state}`)],
+      meta: [
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
+        {
+          property: "og:url",
+          content: `${SITE_URL}/divisions/real-estate/listings/${encodeURIComponent(params.state)}`,
+        },
+      ],
+    };
+  },
   component: LocationListingsPage,
 });
 

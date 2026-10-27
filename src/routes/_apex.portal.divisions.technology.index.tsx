@@ -12,7 +12,13 @@ import {
 } from "lucide-react";
 import { getTechWorkspace } from "@/lib/tech.functions";
 import { authHeaders } from "@/lib/auth-headers";
-import { KpiStat, DataPanel, EmptyState, StatusBadge } from "@/components/portal/blocks";
+import {
+  DataPanel,
+  EmptyState,
+  KpiStat,
+  QueryError,
+  StatusBadge,
+} from "@/components/portal/blocks";
 
 export const Route = createFileRoute("/_apex/portal/divisions/technology/")({
   component: TechnologyOverview,
@@ -26,7 +32,7 @@ const naira = (n: number) => {
 };
 
 function TechnologyOverview() {
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["tech-workspace"],
     queryFn: async () => getTechWorkspace({ headers: await authHeaders() }),
   });
@@ -94,7 +100,9 @@ function TechnologyOverview() {
         title="Recent projects"
         action={{ to: "/portal/divisions/technology/projects", label: "View all" }}
       >
-        {isLoading ? (
+        {error ? (
+          <QueryError error={error} onRetry={() => refetch()} />
+        ) : isLoading ? (
           <div className="text-sm text-muted-foreground">Loading…</div>
         ) : recent.length === 0 ? (
           <EmptyState

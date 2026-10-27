@@ -1,10 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { AlertTriangle, CheckCircle2 } from "lucide-react";
-import { getAgriWorkspace, acknowledgeAlert } from "@/lib/agritech.functions";
+import { ALERT_SEVERITIES, getAgriWorkspace, acknowledgeAlert } from "@/lib/agritech.functions";
 import { authHeaders } from "@/lib/auth-headers";
-import { DataPanel, EmptyState } from "@/components/portal/blocks";
+import { DataPanel, EmptyState, QueryError } from "@/components/portal/blocks";
+import { ListToolbar } from "@/components/portal/ListToolbar";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/_apex/portal/divisions/agritech/alerts")({
@@ -19,7 +21,9 @@ const SEVERITY_STYLE: Record<string, string> = {
 
 function AlertsPage() {
   const qc = useQueryClient();
-  const { data, isLoading } = useQuery({
+  const [search, setSearch] = useState("");
+  const [severity, setSeverity] = useState("");
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["agri-workspace"],
     queryFn: async () => getAgriWorkspace({ headers: await authHeaders() }),
   });
@@ -32,8 +36,20 @@ function AlertsPage() {
   });
 
   const fieldName = new Map((data?.fields ?? []).map((f) => [f.id, f.name]));
-  const open = (data?.alerts ?? []).filter((a) => !a.acknowledged);
-  const resolved = (data?.alerts ?? []).filter((a) => a.acknowledged);
+
+  // Triage is the whole point of an alerts page, and it had no severity
+  // filter — `ALERT_SEVERITIES` was exported and referenced nowhere.
+  const term = search.trim().toLowerCase();
+  const visible = (data?.alerts ?? []).filter(
+    (a) =>
+      (!severity || a.severity === severity) &&
+      (!term ||
+        a.message.toLowerCase().includes(term) ||
+        (fieldName.get(a.field_id) ?? "").toLowerCase().includes(term)),
+  );
+  const open = visible.filter((a) => !a.acknowledged);
+  const resolved = visible.filter((a) => a.acknowledged);
+  const filtered = Boolean(term || severity);
 
   return (
     <div className="space-y-6">
@@ -44,16 +60,46 @@ function AlertsPage() {
         </p>
       </div>
 
-      {isLoading ? (
-        <div className="text-sm text-muted-foreground">Loading…</div>
+      {(data?.alerts ?? []).length > 0 && (
+        <ListToolbar
+          search={{
+            id: "alert-search",
+            label: "Search alerts",
+            placeholder: "Search by message or field…",
+            value: search,
+            onChange: setSearch,
+          }}
+          filters={[
+            {
+              id: "alert-severity",
+              label: "Severity",
+              value: severity,
+              onChange: setSeverity,
+              options: ALERT_SEVERITIES,
+              allLabel: "All severities",
+            },
+          ]}
+          onClear={() => {
+            setSearch("");
+            setSeverity("");
+          }}
+        />
+      )}
+
+      {error ? (
+        <QueryError error={error} onRetry={() => refetch()} label="field alerts" />
+      ) : isLoading && !data ? (
+        <div className="text-sm text-muted-foreground">Loading alerts…</div>
       ) : (
         <>
           <DataPanel title={`Open (${open.length})`}>
             {open.length === 0 ? (
               <EmptyState
                 icon={CheckCircle2}
-                title="No open alerts"
-                description="All fields are healthy."
+                title={filtered ? "No open alerts match your filters" : "No open alerts"}
+                description={
+                  filtered ? "Try a different severity or search term." : "All fields are healthy."
+                }
               />
             ) : (
               <div className="space-y-2">

@@ -3,7 +3,13 @@ import { useQuery } from "@tanstack/react-query";
 import { Radio, Droplets, Thermometer, Wind, ArrowRight } from "lucide-react";
 import { getAgriWorkspace } from "@/lib/agritech.functions";
 import { authHeaders } from "@/lib/auth-headers";
-import { KpiStat, DataPanel, EmptyState, StatusBadge } from "@/components/portal/blocks";
+import {
+  DataPanel,
+  EmptyState,
+  KpiStat,
+  QueryError,
+  StatusBadge,
+} from "@/components/portal/blocks";
 
 export const Route = createFileRoute("/_apex/portal/divisions/agritech/sensors")({
   head: () => ({ meta: [{ title: "Sensors — UIG AgriTech" }] }),
@@ -18,7 +24,7 @@ function freshness(recordedAt: string) {
 }
 
 function SensorsPage() {
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["agri-workspace"],
     queryFn: async () => getAgriWorkspace({ headers: await authHeaders() }),
   });
@@ -41,7 +47,15 @@ function SensorsPage() {
         <KpiStat
           icon={Radio}
           label="Fields reporting"
-          value={isLoading ? "—" : reporting}
+          value={
+            error ? (
+              <QueryError error={error} onRetry={() => refetch()} />
+            ) : isLoading ? (
+              "—"
+            ) : (
+              reporting
+            )
+          }
           hint={`${silent} silent`}
         />
         <KpiStat

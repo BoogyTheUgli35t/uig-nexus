@@ -15,7 +15,7 @@ import {
 } from "recharts";
 import { getRealEstateReports, LEAD_STAGES } from "@/lib/realestate.functions";
 import { authHeaders } from "@/lib/auth-headers";
-import { DataPanel, EmptyState, KpiStat } from "@/components/portal/blocks";
+import { DataPanel, EmptyState, KpiStat, QueryError } from "@/components/portal/blocks";
 
 export const Route = createFileRoute("/_apex/portal/divisions/real-estate/reports")({
   component: ReportsPage,
@@ -38,11 +38,12 @@ const PIE_COLORS = [
 ];
 
 function ReportsPage() {
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["realestate-reports"],
     queryFn: async () => getRealEstateReports({ headers: await authHeaders() }),
   });
 
+  if (error) return <QueryError error={error} onRetry={() => refetch()} />;
   if (isLoading) return <div className="text-sm text-muted-foreground">Loading reports…</div>;
   if (!data) return <EmptyState icon={BarChart3} title="No data yet" />;
 

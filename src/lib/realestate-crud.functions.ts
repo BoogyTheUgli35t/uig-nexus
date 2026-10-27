@@ -229,6 +229,16 @@ const ListTenantsPagedSchema = z.object({
   paymentStatus: z.enum(["current", "due", "overdue"]).optional(),
 });
 
+/**
+ * The tenant list, paged and filtered server-side.
+ *
+ * The lease-signature columns and the resolved property title are part of the
+ * select because the Tenant portal page is the only caller and it renders the
+ * whole lease workflow inline — attach, send, record signature, void. Without
+ * them the page had to load the entire real-estate workspace and filter names
+ * client-side, which meant search missed email addresses and the list grew
+ * unbounded.
+ */
 export const listTenantsPaged = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .inputValidator((i: unknown) => ListTenantsPagedSchema.parse(i ?? {}))
@@ -237,10 +247,10 @@ export const listTenantsPaged = createServerFn({ method: "GET" })
     let query = context.supabase
       .from("tenants")
       .select(
-        "id, property_id, unit_id, full_name, email, phone, rent_amount, lease_start, lease_end, payment_status, lease_signature_status, created_at",
+        "id, property_id, unit_id, full_name, email, phone, rent_amount, lease_start, lease_end, payment_status, lease_signature_status, lease_document_path, lease_sent_at, lease_signed_at, lease_signed_name, created_at",
         { count: "exact" },
       )
-      .order(data.sortBy, { ascending: data.sortDir === "asc" })
+      .order(data.sortBy, { ascending: data.sortDir === "asc", nullsFirst: false })
       .range(from, from + data.pageSize - 1);
 
     if (data.paymentStatus) query = query.eq("payment_status", data.paymentStatus);
@@ -251,7 +261,25 @@ export const listTenantsPaged = createServerFn({ method: "GET" })
 
     const { data: rows, count, error } = await query;
     if (error) throw new Error(error.message);
-    return { rows: rows ?? [], total: count ?? 0, page: data.page, pageSize: data.pageSize };
+
+    const propertyIds = Array.from(
+      new Set((rows ?? []).map((r) => r.property_id).filter((v): v is string => !!v)),
+    );
+    const { data: properties } = propertyIds.length
+      ? await context.supabase.from("properties").select("id, title, city").in("id", propertyIds)
+      : { data: [] as { id: string; title: string; city: string | null }[] };
+    const propertyById = new Map((properties ?? []).map((p) => [p.id, p]));
+
+    return {
+      rows: (rows ?? []).map((r) => ({
+        ...r,
+        propertyTitle: r.property_id ? (propertyById.get(r.property_id)?.title ?? null) : null,
+        propertyCity: r.property_id ? (propertyById.get(r.property_id)?.city ?? null) : null,
+      })),
+      total: count ?? 0,
+      page: data.page,
+      pageSize: data.pageSize,
+    };
   });
 
 export const getTenantDetail = createServerFn({ method: "GET" })
@@ -410,6 +438,59 @@ export const updateLead = createServerFn({ method: "POST" })
         notes: data.notes || null,
       })
       .eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+// =============== Investors ===============
+
+/**
+ * One investor's record.
+ *
+ * Investors were the only core Real Estate entity without a detail route —
+ * properties, units, tenants and leads all had one. So an investor's figures
+ * were only editable in Supabase directly, and the relationship manager had
+ * nowhere to look at a single portfolio.
+ */
+export const getInvestorDetail = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((i: unknown) => z.object({ id: z.string().uuid() }).parse(i))
+  .handler(async ({ context, data }) => {
+    const { data: investor, error } = await context.supabase
+      .from("investors")
+      .select(
+        "id, full_name, email, phone, amount_invested, portfolio_value, expected_roi, user_id, created_at, updated_at",
+      )
+      .eq("id", data.id)
+      .maybeSingle();
+    if (error) throw new Error(error.message);
+    if (!investor) throw new Error("Investor not found");
+    return { investor };
+  });
+
+const UpdateInvestorSchema = z.object({
+  id: z.string().uuid(),
+  full_name: z.string().trim().min(1, "Name is required").max(150),
+  email: z.string().trim().email("Enter a valid email").max(180).optional().or(z.literal("")),
+  phone: z.string().trim().max(40).optional().or(z.literal("")),
+  amount_invested: z.coerce.number().min(0).max(1_000_000_000_000),
+  portfolio_value: z.coerce.number().min(0).max(1_000_000_000_000),
+  expected_roi: z.coerce.number().min(-100).max(1000),
+});
+
+export const updateInvestor = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((i: unknown) => UpdateInvestorSchema.parse(i))
+  .handler(async ({ context, data }) => {
+    const { id, ...rest } = data;
+    const { error } = await context.supabase
+      .from("investors")
+      .update({
+        ...rest,
+        email: rest.email || null,
+        phone: rest.phone || null,
+      })
+      .eq("id", id);
     if (error) throw new Error(error.message);
     return { ok: true };
   });

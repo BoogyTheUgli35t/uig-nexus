@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { MapPinned, Droplets, Thermometer, CloudSun } from "lucide-react";
 import { getAgriWorkspace } from "@/lib/agritech.functions";
 import { authHeaders } from "@/lib/auth-headers";
-import { EmptyState, StatusBadge } from "@/components/portal/blocks";
+import { EmptyState, QueryError, StatusBadge } from "@/components/portal/blocks";
 import { Progress } from "@/components/ui/progress";
 
 export const Route = createFileRoute("/_apex/portal/divisions/agritech/fields/")({
@@ -12,7 +12,7 @@ export const Route = createFileRoute("/_apex/portal/divisions/agritech/fields/")
 });
 
 function FieldsPage() {
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["agri-workspace"],
     queryFn: async () => getAgriWorkspace({ headers: await authHeaders() }),
   });
@@ -38,7 +38,9 @@ function FieldsPage() {
         </p>
       </div>
 
-      {isLoading ? (
+      {error ? (
+        <QueryError error={error} onRetry={() => refetch()} />
+      ) : isLoading ? (
         <div className="text-sm text-muted-foreground">Loading fields…</div>
       ) : (data?.fields.length ?? 0) === 0 ? (
         <EmptyState

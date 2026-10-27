@@ -10,7 +10,7 @@ import {
 } from "@/lib/portal.functions";
 import { authHeaders } from "@/lib/auth-headers";
 import { DIVISIONS } from "@/lib/divisions";
-import { DataPanel, EmptyState, StatusBadge } from "@/components/portal/blocks";
+import { DataPanel, EmptyState, QueryError, StatusBadge } from "@/components/portal/blocks";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/_apex/portal/admin/access-requests")({
@@ -93,7 +93,7 @@ function AccessRequestsPage() {
     });
   }
 
-  if (error) return <div className="text-destructive text-sm">{(error as Error).message}</div>;
+  if (error) return <QueryError error={error} />;
 
   return (
     <div className="max-w-4xl space-y-8">

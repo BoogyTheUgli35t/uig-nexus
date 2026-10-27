@@ -1,5 +1,14 @@
 import { createFileRoute, Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
-import { ArrowLeft, Lock, LayoutGrid, FolderKanban, Workflow, Plug, Users2 } from "lucide-react";
+import {
+  ArrowLeft,
+  Lock,
+  LayoutGrid,
+  FolderKanban,
+  Workflow,
+  Plug,
+  Activity,
+  Users2,
+} from "lucide-react";
 import { getDivision } from "@/lib/divisions";
 import { useDivisionAccess, useIsDivisionAdmin } from "@/hooks/use-division-access";
 import { HeroBanner, EmptyState } from "@/components/portal/blocks";
@@ -16,6 +25,7 @@ export const Route = createFileRoute("/_apex/portal/divisions/technology")({
 const TABS = [
   { to: "/portal/divisions/technology", label: "Overview", icon: LayoutGrid, exact: true },
   { to: "/portal/divisions/technology/projects", label: "Projects", icon: FolderKanban },
+  { to: "/portal/divisions/technology/operations", label: "Operations", icon: Activity },
   { to: "/portal/divisions/technology/automation", label: "Automation", icon: Workflow },
   { to: "/portal/divisions/technology/integrations", label: "Integrations", icon: Plug },
 ] as const;

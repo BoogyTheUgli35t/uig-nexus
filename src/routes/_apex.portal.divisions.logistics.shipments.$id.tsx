@@ -20,7 +20,7 @@ import {
 } from "@/lib/logistics.functions";
 import { authHeaders } from "@/lib/auth-headers";
 import { supabase } from "@/integrations/supabase/client";
-import { DataPanel, EmptyState, StatusBadge } from "@/components/portal/blocks";
+import { DataPanel, EmptyState, QueryError, StatusBadge } from "@/components/portal/blocks";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -43,7 +43,7 @@ function ShipmentDetailPage() {
   const [uploading, setUploading] = useState(false);
   const [photoPath, setPhotoPath] = useState<string | null>(null);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["logistics-shipment", id],
     queryFn: async () => getShipmentDetail({ headers: await authHeaders(), data: { id } }),
   });
@@ -106,6 +106,7 @@ function ShipmentDetailPage() {
     }
   }
 
+  if (error) return <QueryError error={error} onRetry={() => refetch()} />;
   if (isLoading) return <div className="text-sm text-muted-foreground">Loading shipment…</div>;
   if (!data?.shipment) return <EmptyState icon={Package} title="Shipment not found" />;
 

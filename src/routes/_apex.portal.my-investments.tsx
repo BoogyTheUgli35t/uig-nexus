@@ -4,7 +4,7 @@ import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGri
 import { TrendingUp, Wallet, PieChart, Percent } from "lucide-react";
 import { getMyInvestorProfile } from "@/lib/realestate.functions";
 import { authHeaders } from "@/lib/auth-headers";
-import { KpiStat, DataPanel, EmptyState } from "@/components/portal/blocks";
+import { DataPanel, EmptyState, KpiStat, QueryError } from "@/components/portal/blocks";
 
 export const Route = createFileRoute("/_apex/portal/my-investments")({
   head: () => ({
@@ -26,7 +26,7 @@ function MyInvestmentsPage() {
     queryFn: async () => getMyInvestorProfile({ headers: await authHeaders() }),
   });
 
-  if (error) return <div className="text-sm text-destructive">{(error as Error).message}</div>;
+  if (error) return <QueryError error={error} />;
   if (isLoading)
     return <div className="text-sm text-muted-foreground">Loading your portfolio…</div>;
 

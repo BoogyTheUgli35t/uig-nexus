@@ -1,11 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Users, Star, PackageCheck, Link2, AlertTriangle } from "lucide-react";
 import { getLogisticsWorkspace, linkDriverAccount } from "@/lib/logistics.functions";
 import { authHeaders } from "@/lib/auth-headers";
-import { DataPanel, EmptyState, StatusBadge } from "@/components/portal/blocks";
+import { DataPanel, EmptyState, QueryError, StatusBadge } from "@/components/portal/blocks";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -20,7 +20,7 @@ function DriversPage() {
   const [linking, setLinking] = useState<string | null>(null);
   const [email, setEmail] = useState("");
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["logistics-workspace"],
     queryFn: async () => getLogisticsWorkspace({ headers: await authHeaders() }),
   });
@@ -47,10 +47,16 @@ function DriversPage() {
         </p>
       </div>
 
-      {isLoading ? (
-        <div className="text-sm text-muted-foreground">Loading…</div>
+      {error ? (
+        <QueryError error={error} onRetry={() => refetch()} />
+      ) : isLoading && !data ? (
+        <div className="text-sm text-muted-foreground">Loading drivers…</div>
       ) : (data?.drivers.length ?? 0) === 0 ? (
-        <EmptyState icon={Users} title="No drivers yet" />
+        <EmptyState
+          icon={Users}
+          title="No drivers yet"
+          description="Add a driver and link their portal account so they can see their own stops."
+        />
       ) : (
         <DataPanel title="Drivers">
           <div className="divide-y divide-border">
@@ -62,7 +68,16 @@ function DriversPage() {
                   className="flex flex-wrap items-center justify-between gap-3 py-3 first:pt-0 last:pb-0"
                 >
                   <div className="min-w-0">
-                    <div className="truncate text-sm font-medium">{d.full_name}</div>
+                    {/* The list had no click-through at all, so a driver's open
+                        shipments and route assignments were only reachable by
+                        filtering the dispatch board by hand. */}
+                    <Link
+                      to="/portal/divisions/logistics/drivers/$id"
+                      params={{ id: d.id }}
+                      className="block truncate text-sm font-medium hover:underline"
+                    >
+                      {d.full_name}
+                    </Link>
                     <div className="truncate text-xs text-muted-foreground">
                       {d.phone ?? "—"} · {d.deliveries_completed.toLocaleString()} deliveries
                     </div>

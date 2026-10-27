@@ -3,9 +3,11 @@ import { ArrowRight, Check, Clock } from "lucide-react";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { PageHero, Section, CTABand } from "@/components/site/sections";
 import { DIVISIONS } from "@/lib/divisions";
+import { canonical } from "@/lib/seo";
 
 export const Route = createFileRoute("/divisions/")({
   head: () => ({
+    links: [canonical("/divisions")],
     meta: [
       { title: "UIG Divisions — Six Divisions, One Vision" },
       {

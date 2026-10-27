@@ -4,7 +4,7 @@ import { Activity, Users, TrendingUp, Layers } from "lucide-react";
 import { getSystemHealth } from "@/lib/admin.functions";
 import { authHeaders } from "@/lib/auth-headers";
 import { DIVISIONS } from "@/lib/divisions";
-import { KpiStat, DataPanel } from "@/components/portal/blocks";
+import { DataPanel, KpiStat, QueryError } from "@/components/portal/blocks";
 
 export const Route = createFileRoute("/_apex/portal/admin/system")({
   head: () => ({
@@ -19,7 +19,7 @@ function SystemPage() {
     queryFn: async () => getSystemHealth({ headers: await authHeaders() }),
   });
 
-  if (error) return <div className="text-destructive text-sm">{(error as Error).message}</div>;
+  if (error) return <QueryError error={error} />;
 
   return (
     <div className="max-w-6xl space-y-8">

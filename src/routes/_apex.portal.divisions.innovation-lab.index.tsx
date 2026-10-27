@@ -26,7 +26,13 @@ import {
   SUBMISSION_STATUSES,
 } from "@/lib/innovation.functions";
 import { authHeaders } from "@/lib/auth-headers";
-import { DataPanel, EmptyState, KpiStat, StatusBadge } from "@/components/portal/blocks";
+import {
+  DataPanel,
+  EmptyState,
+  KpiStat,
+  QueryError,
+  StatusBadge,
+} from "@/components/portal/blocks";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -51,7 +57,7 @@ function InnovationLabWorkspace() {
   const [slotDay, setSlotDay] = useState("");
   const [slotProto, setSlotProto] = useState("");
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["innovation-workspace"],
     queryFn: async () => getInnovationWorkspace({ headers: await authHeaders() }),
   });
@@ -223,7 +229,9 @@ function InnovationLabWorkspace() {
           title="Idea pipeline"
           action={{ to: "/portal/divisions/innovation-lab/ideas", label: "Open ideas" }}
         >
-          {isLoading ? (
+          {error ? (
+            <QueryError error={error} onRetry={() => refetch()} />
+          ) : isLoading ? (
             <p className="text-sm text-muted-foreground">Loading…</p>
           ) : ideas.length === 0 ? (
             <EmptyState icon={Lightbulb} title="No ideas yet" />

@@ -25,6 +25,7 @@ import {
   MessageSquare,
   CreditCard,
   Home,
+  Sprout,
   TrendingUp,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
@@ -369,6 +370,7 @@ const NAV_ITEMS: NavItem[] = [
     icon: TrendingUp,
     roles: ["investor", "admin", "staff"],
   },
+  { to: "/portal/my-farm", label: "My farm", icon: Sprout, roles: ["farmer", "admin", "staff"] },
   { to: "/portal/admin", label: "Admin", icon: ShieldCheck, roles: ["admin"] },
   {
     to: "/portal/admin/access-requests",

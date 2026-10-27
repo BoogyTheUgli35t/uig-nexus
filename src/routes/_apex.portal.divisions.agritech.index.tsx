@@ -4,14 +4,20 @@ import { Users, MapPinned, Sprout, Activity, CloudSun, AlertTriangle } from "luc
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { getAgriWorkspace } from "@/lib/agritech.functions";
 import { authHeaders } from "@/lib/auth-headers";
-import { DataPanel, EmptyState, KpiStat } from "@/components/portal/blocks";
+import {
+  DataPanel,
+  EmptyState,
+  KpiStat,
+  QueryError,
+  SkeletonRows,
+} from "@/components/portal/blocks";
 
 export const Route = createFileRoute("/_apex/portal/divisions/agritech/")({
   component: AgritechOverview,
 });
 
 function AgritechOverview() {
-  const { data } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["agri-workspace"],
     queryFn: async () => getAgriWorkspace({ headers: await authHeaders() }),
   });
@@ -30,6 +36,12 @@ function AgritechOverview() {
   })();
 
   const openAlerts = (data?.alerts ?? []).filter((a) => !a.acknowledged).slice(0, 4);
+
+  if (error) {
+    return <QueryError error={error} onRetry={() => refetch()} label="the AgriTech workspace" />;
+  }
+
+  const pending = isLoading && !data;
 
   return (
     <div className="space-y-8">
@@ -78,8 +90,14 @@ function AgritechOverview() {
           </Link>
         }
       >
-        {yieldBySeason.length === 0 ? (
-          <EmptyState icon={CloudSun} title="No predictions yet" />
+        {pending ? (
+          <SkeletonRows rows={4} />
+        ) : yieldBySeason.length === 0 ? (
+          <EmptyState
+            icon={CloudSun}
+            title="No predictions yet"
+            description="Forecasts appear once a field has a season's worth of sensor readings."
+          />
         ) : (
           <div className="h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">

@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
+import { keepPreviousData, useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import {
   Users,
@@ -12,19 +12,22 @@ import {
   CheckCircle2,
   XCircle,
   Upload,
+  X,
 } from "lucide-react";
 import {
-  getRealEstateWorkspace,
   updateTenantPaymentStatus,
   attachLeaseDocument,
   sendLeaseForSignature,
   recordLeaseSignature,
   voidLease,
 } from "@/lib/realestate.functions";
+import { listTenantsPaged, TENANT_SORTS } from "@/lib/realestate-crud.functions";
 import { authHeaders } from "@/lib/auth-headers";
 import { supabase } from "@/integrations/supabase/client";
-import { DataPanel, EmptyState, StatusBadge } from "@/components/portal/blocks";
+import { DataPanel, EmptyState, QueryError, StatusBadge } from "@/components/portal/blocks";
+import { Pagination } from "@/components/portal/Pagination";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/_apex/portal/divisions/real-estate/tenants")({
@@ -51,30 +54,57 @@ const LEASE_BADGE: Record<string, string> = {
   void: "error",
 };
 
+const PAYMENT_FILTERS = ["current", "due", "overdue"] as const;
+
+const SORT_LABEL: Record<(typeof TENANT_SORTS)[number], string> = {
+  full_name: "Name",
+  rent_amount: "Rent",
+  lease_end: "Lease end",
+  created_at: "Newest",
+};
+
 function TenantsPage() {
   const qc = useQueryClient();
   const [search, setSearch] = useState("");
+  const [paymentStatus, setPaymentStatus] = useState<"" | (typeof PAYMENT_FILTERS)[number]>("");
+  const [sortBy, setSortBy] = useState<(typeof TENANT_SORTS)[number]>("full_name");
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
+  const [page, setPage] = useState(1);
+  const pageSize = 12;
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["realestate-workspace"],
-    queryFn: async () => getRealEstateWorkspace({ headers: await authHeaders() }),
+  // Server-side search/filter/sort/page. The page used to pull the entire
+  // real-estate workspace and filter names in the browser, so searching for a
+  // tenant by email found nothing and every tenant in the portfolio was
+  // rendered at once.
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: ["realestate-tenants", search, paymentStatus, sortBy, sortDir, page],
+    placeholderData: keepPreviousData,
+    queryFn: async () =>
+      listTenantsPaged({
+        headers: await authHeaders(),
+        data: {
+          search: search || undefined,
+          paymentStatus: paymentStatus || undefined,
+          sortBy,
+          sortDir,
+          page,
+          pageSize,
+        },
+      }),
   });
 
-  const propertyTitle = useMemo(() => {
-    const m = new Map<string, string>();
-    (data?.properties ?? []).forEach((p) => m.set(p.id, p.title));
-    return m;
-  }, [data]);
-
-  const tenants = (data?.tenants ?? []).filter((t) =>
-    t.full_name.toLowerCase().includes(search.toLowerCase()),
-  );
+  const tenants = data?.rows ?? [];
+  const filtered = Boolean(search || paymentStatus);
 
   const [signingId, setSigningId] = useState<string | null>(null);
   const [signedName, setSignedName] = useState("");
   const [uploadingId, setUploadingId] = useState<string | null>(null);
 
-  const invalidate = () => qc.invalidateQueries({ queryKey: ["realestate-workspace"] });
+  const invalidate = () => {
+    qc.invalidateQueries({ queryKey: ["realestate-tenants"] });
+    // The workspace payload drives the division overview's tenant counts.
+    qc.invalidateQueries({ queryKey: ["realestate-workspace"] });
+  };
 
   const paymentMut = useMutation({
     mutationFn: async (v: { id: string; payment_status: "current" | "due" | "overdue" }) =>
@@ -149,29 +179,108 @@ function TenantsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h2 className="text-lg font-semibold">Tenant portal</h2>
-          <p className="text-sm text-muted-foreground">
-            {tenants.length} tenant{tenants.length === 1 ? "" : "s"} on file.
-          </p>
-        </div>
-        <div className="relative w-full max-w-xs">
+      <div>
+        <h2 className="text-lg font-semibold">Tenant portal</h2>
+        <p className="text-sm text-muted-foreground">
+          {data ? (
+            <>
+              {data.total} tenant{data.total === 1 ? "" : "s"}
+              {filtered ? " match your filters" : " on file"}.
+            </>
+          ) : (
+            "Leases, rent status and signatures for every tenant."
+          )}
+        </p>
+      </div>
+
+      <div className="flex flex-wrap items-end gap-3 rounded-xl border border-border bg-surface p-4">
+        <div className="relative min-w-[200px] flex-1">
+          <Label htmlFor="tenant-search" className="sr-only">
+            Search tenants
+          </Label>
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <Input
+            id="tenant-search"
             className="pl-9"
-            placeholder="Search tenants…"
+            placeholder="Search by name or email…"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => {
+              setSearch(e.target.value);
+              setPage(1);
+            }}
           />
         </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="tenant-payment">Rent status</Label>
+          <select
+            id="tenant-payment"
+            value={paymentStatus}
+            onChange={(e) => {
+              setPaymentStatus(e.target.value as typeof paymentStatus);
+              setPage(1);
+            }}
+            className="h-9 rounded-md border border-input bg-transparent px-3 text-sm capitalize"
+          >
+            <option value="">All statuses</option>
+            {PAYMENT_FILTERS.map((s) => (
+              <option key={s} value={s}>
+                {s}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="tenant-sort">Sort by</Label>
+          <select
+            id="tenant-sort"
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value as (typeof TENANT_SORTS)[number])}
+            className="h-9 rounded-md border border-input bg-transparent px-3 text-sm"
+          >
+            {TENANT_SORTS.map((s) => (
+              <option key={s} value={s}>
+                {SORT_LABEL[s]}
+              </option>
+            ))}
+          </select>
+        </div>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setSortDir((d) => (d === "asc" ? "desc" : "asc"))}
+        >
+          {sortDir === "asc" ? "Ascending" : "Descending"}
+        </Button>
+        {filtered && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              setSearch("");
+              setPaymentStatus("");
+              setPage(1);
+            }}
+          >
+            <X className="mr-1 h-3.5 w-3.5" /> Clear
+          </Button>
+        )}
       </div>
 
       <DataPanel title="Leases">
-        {isLoading ? (
-          <div className="text-sm text-muted-foreground">Loading…</div>
+        {error ? (
+          <QueryError error={error} onRetry={() => refetch()} label="your tenants" />
+        ) : isLoading && !data ? (
+          <div className="text-sm text-muted-foreground">Loading tenants…</div>
         ) : tenants.length === 0 ? (
-          <EmptyState icon={Users} title="No tenants found" />
+          <EmptyState
+            icon={Users}
+            title={filtered ? "No tenants match your filters" : "No tenants on file yet"}
+            description={
+              filtered
+                ? "Try a different name, email address or rent status."
+                : "Tenants are added against a property from its detail page."
+            }
+          />
         ) : (
           <div className="divide-y divide-border">
             {tenants.map((t) => (
@@ -186,7 +295,8 @@ function TenantsPage() {
                       {t.full_name}
                     </Link>
                     <div className="mt-0.5 text-xs text-muted-foreground">
-                      {t.property_id ? (propertyTitle.get(t.property_id) ?? "—") : "—"}
+                      {t.propertyTitle ?? "—"}
+                      {t.propertyCity ? ` · ${t.propertyCity}` : ""}
                     </div>
                     <div className="mt-1.5 flex flex-wrap gap-3 text-xs text-muted-foreground">
                       {t.email && (
@@ -320,6 +430,15 @@ function TenantsPage() {
                 </div>
               </div>
             ))}
+            <div className="pt-4">
+              <Pagination
+                page={data?.page ?? 1}
+                pageSize={data?.pageSize ?? pageSize}
+                total={data?.total ?? 0}
+                onPageChange={setPage}
+                label="tenants"
+              />
+            </div>
           </div>
         )}
       </DataPanel>

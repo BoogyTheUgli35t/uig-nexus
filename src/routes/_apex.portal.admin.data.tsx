@@ -20,7 +20,7 @@ import { seedLogisticsData } from "@/lib/logistics.seed";
 import { seedIntelligenceData } from "@/lib/intelligence.seed";
 import { seedInnovationData } from "@/lib/innovation.seed";
 import { authHeaders } from "@/lib/auth-headers";
-import { DataPanel, KpiStat } from "@/components/portal/blocks";
+import { DataPanel, KpiStat, QueryError } from "@/components/portal/blocks";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/_apex/portal/admin/data")({
@@ -108,7 +108,7 @@ function AdminDataPage() {
     onSettled: () => setSeeding(null),
   });
 
-  if (error) return <div className="text-sm text-destructive">{(error as Error).message}</div>;
+  if (error) return <QueryError error={error} />;
 
   const totals = data ? Object.values(data).reduce((s, d) => s + d.total, 0) : 0;
   const populated = data ? Object.values(data).filter((d) => d.total > 0).length : 0;

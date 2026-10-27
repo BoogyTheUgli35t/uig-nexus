@@ -7,6 +7,16 @@ export const seedIntelligenceData = createServerFn({ method: "POST" })
   .handler(async ({ context }) => {
     const { supabase, userId } = context;
 
+    // Idempotency guard — see realestate.seed.ts for what re-running a bare
+    // `.insert()` seeder did to the Real Estate catalogue.
+    const { data: seeded, error: checkError } = await supabase
+      .from("datasets")
+      .select("id")
+      .eq("name", "Real Estate Transactions — Lagos/Abuja")
+      .limit(1);
+    if (checkError) throw new Error(checkError.message);
+    if ((seeded ?? []).length > 0) return { success: true, skipped: true };
+
     // Datasets
     const datasets = [
       {
@@ -87,5 +97,5 @@ export const seedIntelligenceData = createServerFn({ method: "POST" })
       }
     }
 
-    return { success: true };
+    return { success: true, skipped: false };
   });

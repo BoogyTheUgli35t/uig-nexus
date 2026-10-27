@@ -1,9 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteLayout } from "@/components/site/SiteLayout";
 import { PageHero, Section } from "@/components/site/sections";
+import { SITE_URL, canonical } from "@/lib/seo";
 
 export const Route = createFileRoute("/cookies")({
   head: () => ({
+    links: [canonical("/cookies")],
     meta: [
       { title: "Cookie Policy — UIG" },
       {
@@ -11,6 +13,12 @@ export const Route = createFileRoute("/cookies")({
         content: "How UIG uses cookies across our websites and the Apex Portal.",
       },
       { name: "robots", content: "index, follow" },
+      { property: "og:title", content: "Cookie Policy — UIG" },
+      {
+        property: "og:description",
+        content: "How UIG uses cookies across our websites and the Apex Portal.",
+      },
+      { property: "og:url", content: `${SITE_URL}/cookies` },
     ],
   }),
   component: CookiesPage,
@@ -92,13 +100,13 @@ function CookiesPage() {
             <h2 className="text-xl font-semibold text-foreground">More information</h2>
             <p className="mt-3">
               See our{" "}
-              <a href="/privacy" className="text-gold hover:underline">
+              <Link to="/privacy" className="text-gold hover:underline">
                 Privacy Policy
-              </a>{" "}
+              </Link>{" "}
               for how we handle personal data more broadly, or reach us via our{" "}
-              <a href="/contact" className="text-gold hover:underline">
+              <Link to="/contact" className="text-gold hover:underline">
                 contact page
-              </a>
+              </Link>
               .
             </p>
           </div>

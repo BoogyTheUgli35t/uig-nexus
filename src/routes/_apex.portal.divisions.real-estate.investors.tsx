@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -15,7 +15,7 @@ import {
 } from "recharts";
 import { getRealEstateWorkspace, linkInvestorAccount } from "@/lib/realestate.functions";
 import { authHeaders } from "@/lib/auth-headers";
-import { DataPanel, EmptyState, KpiStat } from "@/components/portal/blocks";
+import { DataPanel, EmptyState, KpiStat, QueryError } from "@/components/portal/blocks";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
@@ -35,7 +35,7 @@ function InvestorsPage() {
   const [linkingId, setLinkingId] = useState<string | null>(null);
   const [linkEmail, setLinkEmail] = useState("");
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["realestate-workspace"],
     queryFn: async () => getRealEstateWorkspace({ headers: await authHeaders() }),
   });
@@ -88,7 +88,9 @@ function InvestorsPage() {
       </div>
 
       <DataPanel title="Invested vs. current value">
-        {isLoading ? (
+        {error ? (
+          <QueryError error={error} onRetry={() => refetch()} />
+        ) : isLoading ? (
           <div className="text-sm text-muted-foreground">Loading…</div>
         ) : investors.length === 0 ? (
           <EmptyState icon={TrendingUp} title="No investors yet" />
@@ -140,7 +142,11 @@ function InvestorsPage() {
 
       <DataPanel title="Investors">
         {investors.length === 0 ? (
-          <EmptyState icon={Wallet} title="No investors yet" />
+          <EmptyState
+            icon={Wallet}
+            title="No investors yet"
+            description="Add an investor and link their portal account so they can follow their own portfolio."
+          />
         ) : (
           <div className="space-y-3">
             {investors.map((i) => {
@@ -149,7 +155,16 @@ function InvestorsPage() {
                 <div key={i.id} className="rounded-lg border border-border bg-background p-3">
                   <div className="flex items-center justify-between gap-3">
                     <div className="min-w-0">
-                      <div className="truncate text-sm font-medium">{i.full_name}</div>
+                      {/* Investors was the only core Real Estate entity whose
+                          rows weren't clickable — the detail route didn't
+                          exist, so the figures were database-only. */}
+                      <Link
+                        to="/portal/divisions/real-estate/investors/$id"
+                        params={{ id: i.id }}
+                        className="block truncate text-sm font-medium hover:underline"
+                      >
+                        {i.full_name}
+                      </Link>
                       <div className="text-xs text-muted-foreground">
                         Invested {naira(Number(i.amount_invested))}
                       </div>
@@ -158,7 +173,14 @@ function InvestorsPage() {
                       <div className="text-sm font-medium acc-text">
                         {Number(i.expected_roi)}% ROI
                       </div>
-                      <div className="text-xs text-emerald-400">+{naira(gain)}</div>
+                      <div
+                        className={
+                          gain >= 0 ? "text-xs text-emerald-400" : "text-xs text-destructive"
+                        }
+                      >
+                        {gain >= 0 ? "+" : "−"}
+                        {naira(Math.abs(gain))}
+                      </div>
                     </div>
                   </div>
 

@@ -35,8 +35,11 @@ export type DivisionPageProps = {
   targetClients?: string[];
   metrics?: { value: string; label: string }[];
   ctaTitle: string;
+  ctaSubtitle?: string;
   ctaButton: string;
   ctaTo?: string;
+  /** Query params for the CTA link, e.g. `{ interest: "logistics" }`. */
+  ctaSearch?: Record<string, string>;
   browseCta?: { title: string; description: string; buttonText: string; to: string };
   tool?: { eyebrow: string; title: string; description?: string; component: ReactNode };
   caseStudies?: {
@@ -366,7 +369,9 @@ export function DivisionPage(props: DivisionPageProps) {
       <CTABand
         title={props.ctaTitle}
         buttonText={props.ctaButton}
+        {...(props.ctaSubtitle ? { subtitle: props.ctaSubtitle } : {})}
         {...(props.ctaTo ? { buttonTo: props.ctaTo } : {})}
+        {...(props.ctaSearch ? { buttonSearch: props.ctaSearch } : {})}
       />
     </SiteLayout>
   );

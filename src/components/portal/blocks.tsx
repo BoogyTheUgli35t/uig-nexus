@@ -1,7 +1,8 @@
 import type { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import type { LucideIcon } from "lucide-react";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Loader2, RefreshCw, TriangleAlert } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type { Division } from "@/lib/divisions";
 
@@ -110,16 +111,105 @@ export function EmptyState({
   icon: Icon,
   title,
   description,
+  action,
+  className,
 }: {
   icon?: LucideIcon;
   title: string;
   description?: string;
+  /** Optional call to action — a button or link that fills the empty state. */
+  action?: ReactNode;
+  className?: string;
 }) {
   return (
-    <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-border py-10 text-center">
+    <div
+      className={cn(
+        "flex flex-col items-center justify-center rounded-lg border border-dashed border-border px-6 py-10 text-center",
+        className,
+      )}
+    >
       {Icon && <Icon className="h-7 w-7 text-muted-foreground" />}
       <p className="mt-3 text-sm font-medium">{title}</p>
       {description && <p className="mt-1 max-w-sm text-xs text-muted-foreground">{description}</p>}
+      {action && <div className="mt-4">{action}</div>}
+    </div>
+  );
+}
+
+/**
+ * What a portal page shows when its data didn't load.
+ *
+ * Every division page destructured `data` and `isLoading` from `useQuery` and
+ * dropped `error` on the floor, so a failed fetch rendered as an empty
+ * workspace: zero farmers, zero shipments, an empty pipeline. Staff can't tell
+ * "nothing here yet" from "the request failed", and an empty workspace is the
+ * more dangerous of the two readings because it looks like data loss.
+ *
+ * So this says plainly that the load failed, shows the message for support to
+ * quote, and offers a retry — most of these failures are a dropped connection
+ * or an expired token, both of which a second attempt fixes.
+ */
+export function QueryError({
+  error,
+  onRetry,
+  label = "this page",
+}: {
+  error: unknown;
+  onRetry?: () => void;
+  /** What failed to load, e.g. "your shipments". Reads as "We couldn't load …". */
+  label?: string;
+}) {
+  const message = error instanceof Error ? error.message : String(error ?? "Unknown error");
+  return (
+    <div
+      role="alert"
+      className="rounded-xl border border-destructive/30 bg-destructive/5 p-6 text-left"
+    >
+      <div className="flex items-start gap-3">
+        <TriangleAlert className="mt-0.5 h-5 w-5 shrink-0 text-destructive" aria-hidden="true" />
+        <div className="min-w-0 flex-1">
+          <p className="font-semibold">We couldn&rsquo;t load {label}.</p>
+          <p className="mt-1 break-words text-sm text-muted-foreground">{message}</p>
+          <p className="mt-2 text-xs text-muted-foreground">
+            This is a loading failure, not an empty workspace — your data is still there. If it
+            keeps happening, quote the message above to UIG support.
+          </p>
+          {onRetry && (
+            <Button variant="outline" size="sm" onClick={onRetry} className="mt-4">
+              <RefreshCw className="mr-1.5 h-3.5 w-3.5" /> Try again
+            </Button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/** Consistent in-flight state, so a slow fetch never looks like an empty page. */
+export function LoadingPanel({ label = "Loading…" }: { label?: string }) {
+  return (
+    <div
+      className="flex items-center gap-2 py-10 text-sm text-muted-foreground"
+      role="status"
+      aria-live="polite"
+    >
+      <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+      {label}
+    </div>
+  );
+}
+
+/**
+ * Skeleton rows for a panel that is loading inside an already-rendered page.
+ * Preferred over `LoadingPanel` where the surrounding layout is already on
+ * screen, because it keeps the page from jumping when the data arrives.
+ */
+export function SkeletonRows({ rows = 3, className }: { rows?: number; className?: string }) {
+  return (
+    <div className={cn("space-y-2", className)} role="status" aria-label="Loading">
+      {Array.from({ length: rows }).map((_, i) => (
+        <div key={i} className="h-10 animate-pulse rounded-lg bg-surface-elevated" />
+      ))}
     </div>
   );
 }

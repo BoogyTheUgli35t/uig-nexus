@@ -8,6 +8,8 @@ import { Label } from "@/components/ui/label";
 import { Logo } from "@/components/site/Logo";
 import { toast } from "sonner";
 import { logPortalEvent } from "@/lib/portal.functions";
+import { getOnboardingState } from "@/lib/onboarding.functions";
+import { authHeaders } from "@/lib/auth-headers";
 
 export const Route = createFileRoute("/portal/login")({
   head: () => ({
@@ -27,7 +29,7 @@ export const Route = createFileRoute("/portal/login")({
     if (data.session) {
       const target = safeNext(search.next);
       if (target) throw redirect({ href: target });
-      throw redirect({ to: "/portal/dashboard" });
+      throw redirect({ to: await landingRoute() });
     }
   },
   component: LoginPage,
@@ -37,6 +39,27 @@ export const Route = createFileRoute("/portal/login")({
 function safeNext(next?: string) {
   if (!next || !next.startsWith("/") || next.startsWith("//")) return null;
   return next;
+}
+
+/**
+ * Where a signed-in user belongs: the dashboard, or back into onboarding.
+ *
+ * Signup already checked this, but login always went straight to the
+ * dashboard — so anyone who created an account, abandoned the division picker
+ * and came back later landed on a dashboard with no divisions, no workspace
+ * links in the sidebar, and no route back to finish setting up. That is what
+ * `getOnboardingState()` was written for; nothing called it.
+ *
+ * Falls back to the dashboard if the check fails. Sign-in must never hang on
+ * a background call.
+ */
+async function landingRoute(): Promise<"/portal/dashboard" | "/portal/choose-division"> {
+  try {
+    const state = await getOnboardingState({ headers: await authHeaders() });
+    return state.completed ? "/portal/dashboard" : "/portal/choose-division";
+  } catch {
+    return "/portal/dashboard";
+  }
 }
 
 function LoginPage() {
@@ -76,7 +99,7 @@ function LoginPage() {
       toast.success("Welcome back.");
       // Navigate immediately — the old 800ms setTimeout + full page reload made
       // sign-in feel like it hung before the workspace appeared.
-      const target = safeNext(next) ?? "/portal/dashboard";
+      const target = safeNext(next) ?? (await landingRoute());
       // useNavigate expects a `to` property. `href` was preventing navigation.
       navigate({ to: target, replace: true });
     }

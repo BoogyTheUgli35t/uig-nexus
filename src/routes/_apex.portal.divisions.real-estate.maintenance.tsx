@@ -11,7 +11,13 @@ import {
 } from "@/lib/tenant-portal.functions";
 import { getRealEstateWorkspace } from "@/lib/realestate.functions";
 import { authHeaders } from "@/lib/auth-headers";
-import { KpiStat, DataPanel, EmptyState, StatusBadge } from "@/components/portal/blocks";
+import {
+  DataPanel,
+  EmptyState,
+  KpiStat,
+  QueryError,
+  StatusBadge,
+} from "@/components/portal/blocks";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -38,7 +44,12 @@ function MaintenancePage() {
   const [linkTenantId, setLinkTenantId] = useState("");
   const [linkEmail, setLinkEmail] = useState("");
 
-  const { data: requests, isLoading } = useQuery({
+  const {
+    data: requests,
+    isLoading,
+    error: loadError,
+    refetch: reload,
+  } = useQuery({
     queryKey: ["maintenance-requests"],
     queryFn: async () => listMaintenanceRequests({ headers: await authHeaders() }),
   });
@@ -101,6 +112,8 @@ function MaintenancePage() {
     (r) => (OPEN_STATUSES as readonly string[]).includes(r.status) && ageDays(r.created_at) > 7,
   ).length;
 
+  if (loadError)
+    return <QueryError error={loadError} onRetry={() => reload()} label="maintenance requests" />;
   return (
     <div className="space-y-6">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">

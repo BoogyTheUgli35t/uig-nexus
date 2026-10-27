@@ -5,7 +5,7 @@ import { Building2, Plus, Search, X, Scale, BedDouble, Bath, Ruler, Star } from 
 import { PROPERTY_TYPES, PROPERTY_STATUSES } from "@/lib/realestate.functions";
 import { listPropertiesPaged, PROPERTY_SORTS } from "@/lib/realestate-crud.functions";
 import { authHeaders } from "@/lib/auth-headers";
-import { EmptyState, StatusBadge } from "@/components/portal/blocks";
+import { EmptyState, QueryError, StatusBadge } from "@/components/portal/blocks";
 import { Pagination } from "@/components/portal/Pagination";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -46,7 +46,7 @@ function PropertiesPage() {
   const pageSize = 12;
   const [compareIds, setCompareIds] = useState<string[]>([]);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["realestate-properties", search, type, status, city, sortBy, sortDir, page],
     placeholderData: keepPreviousData,
     queryFn: async () =>
@@ -249,7 +249,9 @@ function PropertiesPage() {
       )}
 
       {/* Grid */}
-      {isLoading ? (
+      {error ? (
+        <QueryError error={error} onRetry={() => refetch()} />
+      ) : isLoading ? (
         <div className="text-sm text-muted-foreground">Loading properties…</div>
       ) : properties.length === 0 ? (
         <EmptyState
