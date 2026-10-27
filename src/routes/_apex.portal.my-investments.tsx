@@ -106,6 +106,8 @@ function MyInvestmentsPage() {
         </div>
       </DataPanel>
 
+      <BuyAssetsPanel />
+
       <DataPanel title="Your details">
         <dl className="grid gap-4 text-sm sm:grid-cols-2">
           <div>

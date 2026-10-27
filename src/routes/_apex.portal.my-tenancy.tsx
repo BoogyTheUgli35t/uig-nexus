@@ -140,6 +140,8 @@ function MyTenancyPage() {
         <KpiStat icon={Wrench} label="Open requests" value={summary.openRequests} />
       </div>
 
+      <PayRentPanel annualRent={Number(tenant.rent_amount)} />
+
       <DataPanel title="Lease">
         <dl className="grid gap-4 sm:grid-cols-2 text-sm">
           <div>
