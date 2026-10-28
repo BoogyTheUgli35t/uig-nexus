@@ -11,6 +11,7 @@ import {
   Plus,
 } from "lucide-react";
 import { toast } from "sonner";
+import { PayRentPanel } from "@/components/portal/PortalPayments";
 import {
   getMyTenancy,
   raiseMaintenanceRequest,

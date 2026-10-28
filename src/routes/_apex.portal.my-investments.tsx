@@ -4,6 +4,7 @@ import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGri
 import { TrendingUp, Wallet, PieChart, Percent } from "lucide-react";
 import { getMyInvestorProfile } from "@/lib/realestate.functions";
 import { authHeaders } from "@/lib/auth-headers";
+import { BuyAssetsPanel } from "@/components/portal/PortalPayments";
 import { DataPanel, EmptyState, KpiStat, QueryError } from "@/components/portal/blocks";
 
 export const Route = createFileRoute("/_apex/portal/my-investments")({
