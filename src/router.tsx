@@ -3,7 +3,8 @@ import { createRouter, useRouter } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
 import { reportClientError } from "./lib/report-error";
 
-function DefaultErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
+function DefaultErrorComponent({ error: rawError, reset }: import("@tanstack/react-router").ErrorComponentProps  const error = rawError instanceof Error ? rawError : new Error(String(rawError));
+  void 0; {
   const router = useRouter();
 
   // Anything that reaches this screen is a real, user-visible failure — report
