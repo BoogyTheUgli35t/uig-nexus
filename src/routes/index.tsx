@@ -157,6 +157,9 @@ function HomePage() {
               </Link>
             </Button>
             <Button asChild size="lg" variant="outline">
+              <Link to="/portal/login">Sign in to UIG Nexus</Link>
+            </Button>
+            <Button asChild size="lg" variant="ghost">
               <Link to="/contact">Partner With UIG</Link>
             </Button>
           </div>

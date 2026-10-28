@@ -99,7 +99,8 @@ export const Route = createFileRoute("/_apex")({
   notFoundComponent: PortalNotFound,
 });
 
-function PortalErrorBoundary({ error, reset }: { error: Error; reset: () => void }) {
+function PortalErrorBoundary({ error: rawError, reset }: import("@tanstack/react-router").ErrorComponentProps) {
+  const error = rawError instanceof Error ? rawError : new Error(String(rawError));
   const router = useRouter();
   const navigate = useNavigate();
   const isAccessIssue = error.message?.includes("access");
