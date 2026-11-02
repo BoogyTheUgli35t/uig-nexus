@@ -585,6 +585,7 @@ export const promoteSubmission = createServerFn({ method: "POST" })
         tags: submission.category ? [submission.category] : [],
         status: "concept",
         submitted_by: userId,
+        source_submission_id: submission.id,
       })
       .select("id")
       .single();
@@ -608,4 +609,62 @@ export const promoteSubmission = createServerFn({ method: "POST" })
     if (updErr) throw new Error(updErr.message);
 
     return { ok: true, ideaId: idea.id, alreadyPromoted: false };
+  });
+
+
+// ---------------------------------------------------------------------------
+// Idea comments: Innovation Lab members (and staff speaking for a partner)
+// discuss ideas, including ones promoted from public submissions.
+const IdeaIdSchema = z.object({ idea_id: z.string().uuid() });
+
+export const listIdeaComments = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((i: unknown) => IdeaIdSchema.parse(i))
+  .handler(async ({ context, data }) => {
+    const { data: rows, error } = await context.supabase
+      .from("idea_comments")
+      .select("id, body, created_at, author_id, partner_id, partners(name)")
+      .eq("idea_id", data.idea_id)
+      .order("created_at", { ascending: true });
+    if (error) throw new Error(error.message);
+    return { userId: context.userId, comments: rows ?? [] };
+  });
+
+export const listIdeaCommentCounts = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data, error } = await context.supabase.from("idea_comments").select("idea_id");
+    if (error) throw new Error(error.message);
+    const counts: Record<string, number> = {};
+    for (const r of data ?? []) counts[r.idea_id] = (counts[r.idea_id] ?? 0) + 1;
+    return counts;
+  });
+
+const AddCommentSchema = z.object({
+  idea_id: z.string().uuid(),
+  body: z.string().trim().min(1).max(2000),
+  partner_id: z.string().uuid().nullable().optional(),
+});
+
+export const addIdeaComment = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((i: unknown) => AddCommentSchema.parse(i))
+  .handler(async ({ context, data }) => {
+    const { error } = await context.supabase.from("idea_comments").insert({
+      idea_id: data.idea_id,
+      body: data.body,
+      partner_id: data.partner_id ?? null,
+      author_id: context.userId,
+    });
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
+export const deleteIdeaComment = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((i: unknown) => z.object({ id: z.string().uuid() }).parse(i))
+  .handler(async ({ context, data }) => {
+    const { error } = await context.supabase.from("idea_comments").delete().eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true };
   });
