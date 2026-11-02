@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Plus, Lightbulb, ChevronUp, ListChecks, Sparkles } from "lucide-react";
+import { Plus, Lightbulb, ChevronUp, ListChecks, Sparkles, MessageSquare } from "lucide-react";
+import { IdeaComments } from "@/components/portal/IdeaComments";
 import { toast } from "sonner";
 import {
   getInnovationWorkspace,
@@ -12,6 +13,7 @@ import {
   listChecklist,
   generateMvpChecklist,
   toggleChecklistItem,
+  listIdeaCommentCounts,
   IDEA_STATUSES,
 } from "@/lib/innovation.functions";
 import { authHeaders } from "@/lib/auth-headers";
@@ -36,6 +38,11 @@ function IdeasPage() {
   // the workspace overview, where it was unreachable from the idea list people
   // actually work in — it belongs next to the idea it plans.
   const [checklistIdea, setChecklistIdea] = useState<string | null>(null);
+  const [commentsIdea, setCommentsIdea] = useState<string | null>(null);
+  const { data: commentCounts } = useQuery({
+    queryKey: ["idea-comment-counts"],
+    queryFn: async () => listIdeaCommentCounts({ headers: await authHeaders() }),
+  });
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["innovation-workspace"],
@@ -117,7 +124,9 @@ function IdeasPage() {
     .filter((i) => statusFilter === "all" || i.status === statusFilter)
     .slice()
     .sort((a, b) =>
-      sortBy === "votes"
+      sortBy === "recent" && Boolean(a.source_submission_id) !== Boolean(b.source_submission_id)
+        ? (b.source_submission_id ? 1 : -1)
+        : sortBy === "votes"
         ? voteCount(b.id) - voteCount(a.id)
         : new Date(b.created_at ?? 0).getTime() - new Date(a.created_at ?? 0).getTime(),
     );
@@ -233,6 +242,11 @@ function IdeasPage() {
                         <span className="font-medium tabular-nums">{voteCount(idea.id)}</span>
                       </button>
                       <div className="text-sm font-medium">{idea.title}</div>
+                      {idea.source_submission_id && (
+                        <span className="rounded-full border border-border px-2 py-0.5 text-[10px] text-muted-foreground">
+                          From submission
+                        </span>
+                      )}
                     </div>
 
                     <div className="flex items-center gap-2">
@@ -283,6 +297,21 @@ function IdeasPage() {
                       <ListChecks className="h-3 w-3" />
                       {checklistIdea === idea.id ? "Hide MVP checklist" : "MVP checklist"}
                     </button>
+                    <button
+                      type="button"
+                      onClick={() => setCommentsIdea(commentsIdea === idea.id ? null : idea.id)}
+                      aria-expanded={commentsIdea === idea.id}
+                      className="ml-2 inline-flex items-center gap-1.5 rounded border border-border px-2 py-1 text-[11px] text-muted-foreground transition hover:border-gold hover:text-foreground"
+                    >
+                      <MessageSquare className="h-3 w-3" />
+                      Comments ({commentCounts?.[idea.id] ?? 0})
+                    </button>
+                    {commentsIdea === idea.id && (
+                      <IdeaComments
+                        ideaId={idea.id}
+                        partners={(data?.partners ?? []).map((p) => ({ id: p.id, name: p.name }))}
+                      />
+                    )}
 
                     {checklistIdea === idea.id && (
                       <div className="mt-2 rounded-lg border border-border bg-surface p-3">
