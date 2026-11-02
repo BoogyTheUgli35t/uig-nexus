@@ -847,6 +847,48 @@ export type Database = {
           },
         ]
       }
+      idea_comments: {
+        Row: {
+          author_id: string
+          body: string
+          created_at: string
+          id: string
+          idea_id: string
+          partner_id: string | null
+        }
+        Insert: {
+          author_id?: string
+          body: string
+          created_at?: string
+          id?: string
+          idea_id: string
+          partner_id?: string | null
+        }
+        Update: {
+          author_id?: string
+          body?: string
+          created_at?: string
+          id?: string
+          idea_id?: string
+          partner_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "idea_comments_idea_id_fkey"
+            columns: ["idea_id"]
+            isOneToOne: false
+            referencedRelation: "ideas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "idea_comments_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "partners"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       idea_votes: {
         Row: {
           created_at: string
@@ -881,6 +923,8 @@ export type Database = {
           created_at: string | null
           description: string | null
           id: string
+          partner_id: string | null
+          source_submission_id: string | null
           status: string | null
           submitted_by: string | null
           tags: Json | null
@@ -890,6 +934,8 @@ export type Database = {
           created_at?: string | null
           description?: string | null
           id?: string
+          partner_id?: string | null
+          source_submission_id?: string | null
           status?: string | null
           submitted_by?: string | null
           tags?: Json | null
@@ -899,12 +945,29 @@ export type Database = {
           created_at?: string | null
           description?: string | null
           id?: string
+          partner_id?: string | null
+          source_submission_id?: string | null
           status?: string | null
           submitted_by?: string | null
           tags?: Json | null
           title?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "ideas_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "partners"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ideas_source_submission_id_fkey"
+            columns: ["source_submission_id"]
+            isOneToOne: false
+            referencedRelation: "innovation_submissions"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       innovation_submissions: {
         Row: {
