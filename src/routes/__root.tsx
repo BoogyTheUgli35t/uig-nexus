@@ -43,6 +43,7 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "google-site-verification", content: "dqtSi54MrSEOvXizRKZauTdPlqEKTDv25iG_6eJaou8" },
       { title: "Unified Innovations Group — Two Steps Ahead." },
       {
         name: "description",
